@@ -12,9 +12,9 @@ cur_arch_obj_dir = ${obj_dir}/${arch}-${kernel}
 cur_arch_lib_dir = ${lib_dir}/${arch}-${kernel}
 cur_arch_bin_dir = ${bin_dir}/${arch}-${kernel}
 
-arm_linux_obj_dir = ${obj_dir}/arm-linux
-arm_linux_lib_dir = ${lib_dir}/arm-linux
-arm_linux_bin_dir = ${bin_dir}/arm-linux
+arm_linux_obj_dir = ${obj_dir}/armv7l-linux
+arm_linux_lib_dir = ${lib_dir}/armv7l-linux
+arm_linux_bin_dir = ${bin_dir}/armv7l-linux
 
 ppc_linux_obj_dir = ${obj_dir}/ppc-linux
 ppc_linux_lib_dir = ${lib_dir}/ppc-linux
@@ -60,6 +60,33 @@ ${cur_arch_obj_dir}/sample-linux.o: sample-linux.c lab1.h
 	${compiler} -c -o ${cur_arch_obj_dir}/sample-linux.o sample-linux.c
 
 
+
+#######################################
+###### Cross compile Linuxarmv7l ######
+
+# commands
+arm_pthreads_lib_path = ${pthreads_path}/lib/Linuxarmv7l
+L_arm = -L${arm_pthreads_lib_path} -L${arm_linux_lib_dir}
+
+compiler_arm = arm-linux-gnueabihf-${CC} ${CFLAGS} ${CPPFLAGS} ${I}
+link_arm = arm-linux-gnueabihf-${CC} ${CFLAGS} ${CPPFLAGS} ${L}
+
+#executable
+${arm_linux_bin_dir}/sample-linux: ${arm_linux_obj_dir}/sample-linux.o ${arm_linux_lib_dir}/liblinux-lib.a
+	${link_arm} -o ${arm_linux_bin_dir}/sample-linux ${arm_linux_obj_dir}/sample-linux.o -lpthreads -llinux-lib
+
+
+# archive
+${arm_linux_lib_dir}/liblinux-lib.a: ${arm_linux_obj_dir}/linux-lib.o
+	ar rcs ${arm_linux_lib_dir}/liblinux-lib.a ${arm_linux_obj_dir}/linux-lib.o
+
+
+# object files
+${arm_linux_obj_dir}/linux-lib.o: linux-lib.c lab1.h
+	${compiler_arm} -c -o ${arm_linux_obj_dir}/linux-lib.o linux-lib.c
+
+${arm_linux_obj_dir}/sample-linux.o: sample-linux.c lab1.h
+	${compiler_arm} -c -o ${arm_linux_obj_dir}/sample-linux.o sample-linux.c
 
 
 
