@@ -17,3 +17,8 @@ $(info build_dir is ${build_dir})
 $(info obj_dir is ${obj_dir})
 $(info lib_dir is ${lib_dir})
 $(info bin_dir is ${bin_dir})
+
+.PHONY: clean
+
+clean:
+	rm -rf ${build_dir}
