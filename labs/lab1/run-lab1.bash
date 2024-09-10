@@ -13,8 +13,8 @@ case $(uname -m) in
         ./sample-linux-x86_64 "$1"
         ;;
     armv7l)
-        echo "Running sample-linux-armv7l"
-        ./sample-linux-armv7l "$1"
+        echo "Running sample-linux-arm"
+        ./sample-linux-arm "$1"
         ;;
     ppc)
         echo "Running sample-linux-ppc"
