@@ -90,6 +90,35 @@ ${arm_linux_obj_dir}/sample-linux.o: sample-linux.c lab1.h
 
 
 
+####################################
+###### Cross compile Linuxppc ######
+
+# commands
+ppc_pthreads_lib_path = ${pthreads_path}/lib/Linuxppc
+L_ppc = -L${ppc_pthreads_lib_path} -L${ppc_linux_lib_dir}
+
+compiler_ppc = powerpc-linux-gnu-gcc-10 ${CFLAGS} ${CPPFLAGS} ${I}
+link_ppc = powerpc-linux-gnu-gcc-10 ${CFLAGS} ${CPPFLAGS} ${L_ppc}
+
+#executable
+sample-linux-ppc: ${ppc_linux_obj_dir}/sample-linux.o ${ppc_linux_lib_dir}/liblinux-lib.a
+	${link_ppc} -o sample-linux-ppc ${ppc_linux_obj_dir}/sample-linux.o -lpthreads -llinux-lib
+
+
+# archive
+${ppc_linux_lib_dir}/liblinux-lib.a: ${ppc_linux_obj_dir}/linux-lib.o
+	ar rcs ${ppc_linux_lib_dir}/liblinux-lib.a ${ppc_linux_obj_dir}/linux-lib.o
+
+
+# object files
+${ppc_linux_obj_dir}/linux-lib.o: linux-lib.c lab1.h
+	${compiler_ppc} -c -o ${ppc_linux_obj_dir}/linux-lib.o linux-lib.c
+
+${ppc_linux_obj_dir}/sample-linux.o: sample-linux.c lab1.h
+	${compiler_ppc} -c -o ${ppc_linux_obj_dir}/sample-linux.o sample-linux.c
+
+
+
 
 #PHONY rules
 
