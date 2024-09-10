@@ -32,6 +32,10 @@ compiler = ${CC} ${CFLAGS} ${CPPFLAGS} ${I}
 
 
 
+.PHONY: clean clean_all mkdirs all
+
+all: mkdirs sample-linux-${arch} sample-linux-arm sample-linux-ppc
+
 
 
 ########################
@@ -121,8 +125,6 @@ ${ppc_linux_obj_dir}/sample-linux.o: sample-linux.c lab1.h
 
 
 #PHONY rules
-
-.PHONY: clean clean_all mkdirs
 
 mkdirs:
 	mkdir -p ${all_dirs}
