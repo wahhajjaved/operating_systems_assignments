@@ -2,56 +2,66 @@
 arch = $(shell uname -m)
 kernel = $(shell uname -s)
 
-# directories
+# build directories
 build_dir = ./build
-obj_dir = ${build_dir}/obj/${arch}-${kernel}
-lib_dir = ${build_dir}/lib/${arch}-${kernel}
-bin_dir = ${build_dir}/bin/${arch}-${kernel}
+obj_dir = ${build_dir}/obj
+lib_dir = ${build_dir}/lib
+bin_dir = ${build_dir}/bin
 
-# additional paths
+cur_arch_obj_dir = ${obj_dir}/${arch}-${kernel}
+cur_arch_lib_dir = ${lib_dir}/${arch}-${kernel}
+cur_arch_bin_dir = ${bin_dir}/${arch}-${kernel}
+
+arm_linux_obj_dir = ${obj_dir}/arm-linux
+arm_linux_lib_dir = ${lib_dir}/arm-linux
+arm_linux_bin_dir = ${bin_dir}/arm-linux
+
+ppc_linux_obj_dir = ${obj_dir}/ppc-linux
+ppc_linux_lib_dir = ${lib_dir}/ppc-linux
+ppc_linux_bin_dir = ${bin_dir}/ppc-linux
+
 pthreads_path = /student/cmpt332/pthreads
-pthreads_lib_path = ${pthreads_path}/lib/${kernel}${arch}
 
 
+# compiler arguments
 CC = gcc
 CFLAGS = -g
 CPPFLAGS = -std=gnu90 -Wall -Wextra -pedantic
+I = -I. -I${pthreads_path}
+compiler = ${CC} ${CFLAGS} ${CPPFLAGS} ${I}
+
+
+
+
+
+########################
+### Current Platform ###
 
 # commands
-I = -I. -I${pthreads_path}
-L = -L${pthreads_lib_path} -L${lib_dir}
-compile = ${CC} -c ${CFLAGS} ${CPPFLAGS} ${I}
+pthreads_lib_path = ${pthreads_path}/lib/${kernel}${arch}
+L = -L${pthreads_lib_path} -L${cur_arch_lib_dir}
 link = ${CC} ${CFLAGS} ${CPPFLAGS} ${L}
 
-
-
-
-
-#$(info INFO -- arch is ${arch})
-#$(info INFO -- kernel is ${kernel})
-#$(info INFO -- build_dir is ${build_dir})
-#$(info INFO -- obj_dir is ${obj_dir})
-#$(info INFO -- lib_dir is ${lib_dir})
-#$(info INFO -- bin_dir is ${bin_dir})
-
-
-${bin_dir}/sample-linux: ${obj_dir}/sample-linux.o ${lib_dir}/liblinux-lib.a
-	${link} -o ${bin_dir}/sample-linux ${obj_dir}/sample-linux.o -lpthreads -llinux-lib
+#executable
+${cur_arch_bin_dir}/sample-linux: ${cur_arch_obj_dir}/sample-linux.o ${cur_arch_lib_dir}/liblinux-lib.a
+	${link} -o ${cur_arch_bin_dir}/sample-linux ${cur_arch_obj_dir}/sample-linux.o -lpthreads -llinux-lib
 
 
 # archive
-
-${lib_dir}/liblinux-lib.a: ${obj_dir}/linux-lib.o
-	ar rcs ${lib_dir}/liblinux-lib.a ${obj_dir}/linux-lib.o
+${cur_arch_lib_dir}/liblinux-lib.a: ${cur_arch_obj_dir}/linux-lib.o
+	ar rcs ${cur_arch_lib_dir}/liblinux-lib.a ${cur_arch_obj_dir}/linux-lib.o
 
 
 # object files
+${cur_arch_obj_dir}/linux-lib.o: linux-lib.c lab1.h
+	${compiler} -c -o ${cur_arch_obj_dir}/linux-lib.o linux-lib.c
 
-${obj_dir}/linux-lib.o: linux-lib.c lab1.h
-	$(compile) -o ${obj_dir}/linux-lib.o linux-lib.c
+${cur_arch_obj_dir}/sample-linux.o: sample-linux.c lab1.h
+	${compiler} -c -o ${cur_arch_obj_dir}/sample-linux.o sample-linux.c
 
-${obj_dir}/sample-linux.o: sample-linux.c lab1.h
-	$(compile) -o ${obj_dir}/sample-linux.o sample-linux.c
+
+
+
 
 
 #PHONY rules
