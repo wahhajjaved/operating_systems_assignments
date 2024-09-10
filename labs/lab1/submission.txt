@@ -1,0 +1,5 @@
+Makefile
+run-lab1.bash
+git-log.txt
+vm-verification.txt
+python.txt
