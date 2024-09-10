@@ -6,19 +6,15 @@ kernel = $(shell uname -s)
 build_dir = ./build
 obj_dir = ${build_dir}/obj
 lib_dir = ${build_dir}/lib
-bin_dir = ${build_dir}/bin
 
 cur_arch_obj_dir = ${obj_dir}/${arch}-${kernel}
 cur_arch_lib_dir = ${lib_dir}/${arch}-${kernel}
-cur_arch_bin_dir = ${bin_dir}/${arch}-${kernel}
 
 arm_linux_obj_dir = ${obj_dir}/armv7l-linux
 arm_linux_lib_dir = ${lib_dir}/armv7l-linux
-arm_linux_bin_dir = ${bin_dir}/armv7l-linux
 
 ppc_linux_obj_dir = ${obj_dir}/ppc-linux
 ppc_linux_lib_dir = ${lib_dir}/ppc-linux
-ppc_linux_bin_dir = ${bin_dir}/ppc-linux
 
 pthreads_path = /student/cmpt332/pthreads
 
@@ -43,8 +39,8 @@ L = -L${pthreads_lib_path} -L${cur_arch_lib_dir}
 link = ${CC} ${CFLAGS} ${CPPFLAGS} ${L}
 
 #executable
-${cur_arch_bin_dir}/sample-linux: ${cur_arch_obj_dir}/sample-linux.o ${cur_arch_lib_dir}/liblinux-lib.a
-	${link} -o ${cur_arch_bin_dir}/sample-linux ${cur_arch_obj_dir}/sample-linux.o -lpthreads -llinux-lib
+sample-linux-${arch}: ${cur_arch_obj_dir}/sample-linux.o ${cur_arch_lib_dir}/liblinux-lib.a
+	${link} -o sample-linux-${arch} ${cur_arch_obj_dir}/sample-linux.o -lpthreads -llinux-lib
 
 
 # archive
@@ -72,8 +68,8 @@ compiler_arm = arm-linux-gnueabihf-${CC} ${CFLAGS} ${CPPFLAGS} ${I}
 link_arm = arm-linux-gnueabihf-${CC} ${CFLAGS} ${CPPFLAGS} ${L}
 
 #executable
-${arm_linux_bin_dir}/sample-linux: ${arm_linux_obj_dir}/sample-linux.o ${arm_linux_lib_dir}/liblinux-lib.a
-	${link_arm} -o ${arm_linux_bin_dir}/sample-linux ${arm_linux_obj_dir}/sample-linux.o -lpthreads -llinux-lib
+sample-linux-arm: ${arm_linux_obj_dir}/sample-linux.o ${arm_linux_lib_dir}/liblinux-lib.a
+	${link_arm} -o sample-linux-arm ${arm_linux_obj_dir}/sample-linux.o -lpthreads -llinux-lib
 
 
 # archive
@@ -96,7 +92,7 @@ ${arm_linux_obj_dir}/sample-linux.o: sample-linux.c lab1.h
 .PHONY: clean clean_all mkdirs
 
 mkdirs:
-	mkdir -p ${build_dir} ${obj_dir} ${lib_dir} ${bin_dir}
+	mkdir -p ${build_dir} ${obj_dir} ${lib_dir}
 
 clean:
 	find ${build_dir} -type f -delete
