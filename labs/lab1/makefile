@@ -16,7 +16,11 @@ arm_linux_lib_dir = ${lib_dir}/armv7l-linux
 ppc_linux_obj_dir = ${obj_dir}/ppc-linux
 ppc_linux_lib_dir = ${lib_dir}/ppc-linux
 
+all_dirs = ${build_dir} ${obj_dir} ${lib_dir} ${cur_arch_obj_dir} ${cur_arch_lib_dir} ${arm_linux_obj_dir} ${arm_linux_lib_dir} ${ppc_linux_obj_dir} ${ppc_linux_lib_dir}
+
+
 pthreads_path = /student/cmpt332/pthreads
+
 
 
 # compiler arguments
@@ -64,8 +68,8 @@ ${cur_arch_obj_dir}/sample-linux.o: sample-linux.c lab1.h
 arm_pthreads_lib_path = ${pthreads_path}/lib/Linuxarmv7l
 L_arm = -L${arm_pthreads_lib_path} -L${arm_linux_lib_dir}
 
-compiler_arm = arm-linux-gnueabihf-${CC} ${CFLAGS} ${CPPFLAGS} ${I}
-link_arm = arm-linux-gnueabihf-${CC} ${CFLAGS} ${CPPFLAGS} ${L}
+compiler_arm = arm-linux-gnueabihf-gcc-10 ${CFLAGS} ${CPPFLAGS} ${I}
+link_arm = arm-linux-gnueabihf-gcc-10 ${CFLAGS} ${CPPFLAGS} ${L_arm}
 
 #executable
 sample-linux-arm: ${arm_linux_obj_dir}/sample-linux.o ${arm_linux_lib_dir}/liblinux-lib.a
@@ -92,10 +96,10 @@ ${arm_linux_obj_dir}/sample-linux.o: sample-linux.c lab1.h
 .PHONY: clean clean_all mkdirs
 
 mkdirs:
-	mkdir -p ${build_dir} ${obj_dir} ${lib_dir}
+	mkdir -p ${all_dirs}
 
 clean:
-	find ${build_dir} -type f -delete
+	find ${build_dir} -type f -delete && rm -f sample-linux-x86_64 sample-linux-arm sample-linux-ppc
 
 clean_all:
-	rm -rf ${build_dir}
+	rm -rf ${build_dir} sample-linux-x86_64 sample-linux-arm sample-linux-ppc
