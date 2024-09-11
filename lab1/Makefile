@@ -16,6 +16,7 @@ BUILD_LIB=./build/lib
 BUILD_BIN=./build/bin
 ARM=/ARM/
 PPC=/PPC/
+LIN_64=/LINUX_64/
 
 OBJ_FILES: linux_lib.o sample-linux.o
 
@@ -31,7 +32,9 @@ directories:
 	mkdir -p $(BUILD_OBJ)$(PPC)
 	mkdir -p $(BUILD_LIB)$(PPC)
 	mkdir -p $(BUILD_BIN)$(PPC) 	
-
+	mkdir -p $(BUILD_OBJ)$(PPC)
+	mkdir -p $(BUILD_LIB)$(LIN_64)
+	mkdir -p $(BUILD_BIN)$(LIN_64)
 ## object files
 #normal
 linux_lib.o: linux-lib.c lab1.h
