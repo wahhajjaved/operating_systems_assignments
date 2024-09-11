@@ -32,18 +32,28 @@ directories:
 	mkdir -p $(BUILD_OBJ)$(PPC)
 	mkdir -p $(BUILD_LIB)$(PPC)
 	mkdir -p $(BUILD_BIN)$(PPC) 	
-	mkdir -p $(BUILD_OBJ)$(PPC)
+	mkdir -p $(BUILD_OBJ)$(LIN_64)
 	mkdir -p $(BUILD_LIB)$(LIN_64)
 	mkdir -p $(BUILD_BIN)$(LIN_64)
 ## object files
-#normal
-linux_lib.o: linux-lib.c lab1.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) 
+#linux
+$(BUILD_OBJ)$(LIN_64)linux_lib.o: linux-lib.c lab1.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(LIN_64)linux-lib.o
 
-sample-linux.o: sample-linux.c lab1.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c -o sample-linux.o sample-linux.c 
-#
+$(BUILD_OBJ)$(LIN_64)sample-linux.o: sample-linux.c lab1.h
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(LIN_64)sample-linux.o 
+#PPC
+$(BUILD_OBJ)$(PPC)PPC_lib.o: linux-lib.c lab1.h
+        $(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)PPC-lib.o
 
+$(BUILD_OBJ)$(PPC)sample-ppc.o: sample-linux.c lab1.h
+        $(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-ppc.o
+#PPC
+$(BUILD_OBJ)$(ARM)ARM_lib.o: linux-lib.c lab1.h
+        $(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)ARM-lib.o
+
+$(BUILD_OBJ)$(ARM)sample-ARM.o: sample-linux.c lab1.h
+        $(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-ARM.o
 
 
 
