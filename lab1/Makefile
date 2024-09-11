@@ -7,6 +7,9 @@
 CC=gcc
 CFLAGS=-g
 CPPFLAGS=-std= gnu90 -Wall -pedantic
+LDFLAGS=ar -c -s -R
+
+
 
 CROSS_COMPILE=arm-linux-gnueabihf-
 
@@ -35,6 +38,20 @@ directories:
 	mkdir -p $(BUILD_OBJ)$(LIN_64)
 	mkdir -p $(BUILD_LIB)$(LIN_64)
 	mkdir -p $(BUILD_BIN)$(LIN_64)
+
+## libraries
+
+#linux
+$(BUILD_LIB)$(LIN_64)linux-lib.a: $(BUILD_OBJ)$(LIN_64)linux-lib.o
+	$(LDFLAGS) $(BUILD_LIB)$(LIN_64)linux-lib.a $(BUILD_OBJ)$(LIN_64)linux-lib.o
+#linux
+$(BUILD_LIB)$(PPC)PPC-lib.a: $(BUILD_OBJ)$(PPC)PPC-lib.o
+        $(LDFLAGS) $(BUILD_LIB)$(PPC)PPC-lib.a $(BUILD_OBJ)$(PPC)PPC-lib.o
+#linux
+$(BUILD_LIB)$(ARM)linux-lib.a: $(BUILD_OBJ)$(ARM)ARM-lib.o
+        $(LDFLAGS) $(BUILD_LIB)$(ARM)ARM-lib.a $(BUILD_OBJ)$(ARM)ARM-lib.o
+
+
 ## object files
 #linux
 $(BUILD_OBJ)$(LIN_64)linux_lib.o: linux-lib.c lab1.h
