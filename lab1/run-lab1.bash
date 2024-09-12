@@ -11,11 +11,12 @@ else
 	echo "excetuting"
 	if [ $(uname -m) = "ppc" ]
 	then
-		
+		./build/bin/PPC/sample-linux-PPC	
 	elif [ $(uname -m) == "arm" ]
-		
+	then
+		./build/bin/PPC/sample-linux-ARM	
 	else
-		
+		./build/bin/LINUX_86/sample-linux-x86
 	fi
 	echo "finished excecuting"
 fi
