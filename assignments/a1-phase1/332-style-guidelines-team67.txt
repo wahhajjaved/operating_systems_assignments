@@ -1,0 +1,61 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+
+#naming conventions
+variable names: camel case
+function names: snake case
+structs: pascal case for typedef, camel case for tag
+enums: pascal case, camel case for tag
+unions: pascal case, camel case for tag
+macros: capital camel case
+pointer names: start with p
+
+
+
+#brackets
+opening brace: on same line
+closing brace: on new line
+parentheses: Space between elements, but not at the start or end
+operators: spaces between operator and operands
+
+
+
+#white space
+indentation: tabs
+tab width: 4
+multi-line lists: aligned to first element
+multi-line operators: aligned to first element. Operator at end of line
+
+
+
+# example
+void f(int param1, char longParamName) {
+    float x = 1;
+    int* pPointerToInt;
+}
+
+void long_function_name(int a, int b, int c, int d, int e,
+                        int f, int g) {
+    return a + b + c +
+           d + e + f +
+           g;
+}
+
+typedef struct studentRecord {
+    char name[];
+    char nsid[];
+    char studentNumber[];
+} StudentRecord;
+
+
+
+#documentation
+/* Summary
+*
+* Parameters
+*   type param1: description
+*   type param2: description
+*
+* Return
+*    Description of return values
+/
