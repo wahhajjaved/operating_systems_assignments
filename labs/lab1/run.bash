@@ -1,5 +1,8 @@
 #!/bin/bash
 
+#@author Wahhaj Javed, muj975, 11135711
+#@date 2024-09-12
+
 if [[ "$#" -ne 1 ]]; then
     echo "Incorrect number of arguments"
     echo "Usage: ./run-lab1.bash counter"
