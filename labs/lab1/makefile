@@ -1,3 +1,6 @@
+# @author Wahhaj Javed, muj975, 11135711
+# @date 2024-09-11
+
 # system information
 arch = $(shell uname -m)
 kernel = $(shell uname -s)

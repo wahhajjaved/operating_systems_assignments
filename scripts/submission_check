@@ -1,0 +1,45 @@
+#!/bin/bash
+
+# @author Wahhaj Javed, muj975, 11135711
+# @date 2024-09-11
+
+
+set -e
+
+NC='\033[0m' # No Color
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOOW='\033[1;32m'
+
+
+print_help() {
+    echo "Usage: ./submission_check <dir>"
+    echo "dir   The directory which contains submission files"
+}
+
+check_line_length() {
+    echo Checking "$1" max line length
+    l=$(wc -L < "$1")
+    if [[ l -gt 79 ]]; then
+        echo -e "${RED}${1} has lines greater than 79 chars${NC}"
+    else
+        echo -e "${GREEN}$1 passed line length check${NC}"
+    fi
+}
+
+if [[ "$#" -ne 1 ]]; then
+    print_help
+    exit 1
+fi
+
+
+cd "$1"
+
+for file in *; do
+    if [[ -f $file ]]; then
+        check_line_length "$file"
+    else
+        echo "$file" is not a file
+    fi
+
+done
