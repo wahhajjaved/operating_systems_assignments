@@ -7,9 +7,11 @@
 CC=gcc
 CFLAGS=-g
 CPPFLAGS=-std= gnu90 -Wall -pedantic
-LDFLAGS=ar -c -s -R
+LDFLAGS=ar -c -s -r
 
-
+LINK_86=-L./build/lib/X86/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxx86_64/ -l:libpthreads.a
+LINK_PPC=-L./build/lib/PPC/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxxppc/ -l:libpthreads.a
+LINK_RASPI=-L./build/lib/ARM/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxarmv6l/ -l:libpthreads.a
 
 CROSS_COMPILE=arm-linux-gnueabihf-
 
