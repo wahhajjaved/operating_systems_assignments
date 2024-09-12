@@ -1,5 +1,5 @@
 Makefile
-run-lab1.bash
+run.bash
 git-log.txt
 vm-verification.txt
 python.txt
