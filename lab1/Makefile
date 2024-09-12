@@ -6,14 +6,14 @@
 
 CC=gcc
 CFLAGS=-g
-CPPFLAGS=-std= gnu90 -Wall -pedantic
+CPPFLAGS=-std=gnu90 -Wall -pedantic
 LDFLAGS=ar -c -s -r
 
 LINK_86=-L./build/lib/X86/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxx86_64/ -l:libpthreads.a
 LINK_PPC=-L./build/lib/PPC/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxxppc/ -l:libpthreads.a
 LINK_RASPI=-L./build/lib/ARM/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxarmv6l/ -l:libpthreads.a
+CROSS-COMPILE=arm-linux-gnueabihf-
 
-CROSS_COMPILE=arm-linux-gnueabihf-
 
 #DIRECTORIES
 BUILD_OBJ=./build/obj
@@ -55,10 +55,10 @@ $(BUILD_LIB)$(LIN_86)linux-lib.a: $(BUILD_OBJ)$(LIN_86)linux-lib.o
 	$(LDFLAGS) $(BUILD_LIB)$(LIN_86)linux-lib.a $(BUILD_OBJ)$(LIN_86)linux-lib.o
 #ppc
 $(BUILD_LIB)$(PPC)PPC-lib.a: $(BUILD_OBJ)$(PPC)PPC-lib.o
-        $(LDFLAGS) $(BUILD_LIB)$(PPC)PPC-lib.a $(BUILD_OBJ)$(PPC)PPC-lib.o
+	$(LDFLAGS) $(BUILD_LIB)$(PPC)PPC-lib.a $(BUILD_OBJ)$(PPC)PPC-lib.o
 #arm
 $(BUILD_LIB)$(ARM)raspi-lib.a: $(BUILD_OBJ)$(ARM)raspi-lib.o
-        $(LDFLAGS) $(BUILD_LIB)$(ARM)raspi-lib.a $(BUILD_OBJ)$(ARM)raspi-lib.o
+	$(LDFLAGS) $(BUILD_LIB)$(ARM)raspi-lib.a $(BUILD_OBJ)$(ARM)raspi-lib.o
 
 
 ## object files
@@ -70,16 +70,16 @@ $(BUILD_OBJ)$(LIN_86)sample-linux.o: sample-linux.c lab1.h
 	$(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(LIN_86)sample-linux.o 
 #PPC
 $(BUILD_OBJ)$(PPC)PPC_lib.o: linux-lib.c lab1.h
-        $(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)PPC-lib.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)PPC-lib.o
 
 $(BUILD_OBJ)$(PPC)sample-ppc.o: sample-linux.c lab1.h
-        $(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-ppc.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-ppc.o
 #ARM
 $(BUILD_OBJ)$(ARM)raspi_lib.o: linux-lib.c lab1.h
-        $(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)raspi-lib.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)raspi-lib.o
 
 $(BUILD_OBJ)$(ARM)sample-raspi.o: sample-linux.c lab1.h
-        $(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-raspi.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-raspi.o
 
 
 
