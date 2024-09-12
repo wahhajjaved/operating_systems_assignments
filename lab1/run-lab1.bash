@@ -14,7 +14,7 @@ else
 		./build/bin/PPC/sample-linux-PPC	
 	elif [ $(uname -m) == "arm" ]
 	then
-		./build/bin/PPC/sample-linux-ARM	
+		./build/bin/arm/sample-linux-ARM	
 	else
 		./build/bin/LINUX_86/sample-linux-x86
 	fi
