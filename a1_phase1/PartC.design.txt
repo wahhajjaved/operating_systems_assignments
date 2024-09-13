@@ -8,6 +8,13 @@ PART C design document
 
 Struct
 
+to store all the list
+struct List dictionary[max]:
+
+struct dictionary:
+    list items[]
+    int size
+ 
 Node:
     vode *value
     Node *next
@@ -47,9 +54,49 @@ algorithm:
     list cursor prev = null
     return list head item
 test:
-    check if the item is right, the next pointer is right(head.next) and prev is null
+    check if the item is right, the next pointer is right(head.next) and prev
+ is null
 
 ____
 void *ListLast(list)
-desription:returns a pointer to the last item in list and makes the last item the current one.
+desription:returns a pointer to the last item in list and makes the last item
+ the current one.
+
+algorithm:
+    list.cursor= list tail
+    list cursor next = NULL
+    list cursor prev = list tail prev
+    return list last item
+test:
+    check if the item is right, the next pointer is null and prev is list 
+    tail.prev
+____
+void *ListNext(list) 
+description: goes to the next node in list, return the pointer to current 
+item or NULL if no current item
+
+algorithm:
+    if empty list OR list's last node then NULL
+    else list curser =curser next
+
+test: 
+    1. empty list
+    2. last node in list
+    3. first (it is diffrent from middle becuse prev is NULL)
+    4. middle
+____
+void *ListPrev(list)
+description: goes to the prev node in list, return the pointer to current
+item or NULL if no current item
+
+algorithm:
+    if empty list OR list's first node then return NULL
+    else list curser =curser prev
+    
+test:
+    1. empty list
+    2. first node in list
+    3. last node in list (it is diffrent from middle becuse next is NULL)
+    4. middle node in list
+
 
