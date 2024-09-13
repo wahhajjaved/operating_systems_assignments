@@ -1,0 +1,55 @@
+Authors: 
+Wahhaj Javed, muj975, 11135711
+Nakhba Mubashir, epl482, 11317060
+
+ASSIGNMENT 1: PHASE 1
+PART C design document
+
+
+Struct
+
+Node:
+    vode *value
+    Node *next
+    Node *prev   
+List:
+    Node *head
+    Node *tail
+    Node stroage // max no of nodes
+    int size     // size of the items in the list
+    Node *curser // the current item
+____________________________________________________
+FUNCTIONS:
+____
+LIST *ListCreate():
+description: creates a new empty list and return its reference or Null if fails
+
+
+algorithm: 
+    list size=0, storage=max
+    list head= allocate memory
+
+    if all list used: return Null
+    else return the pointer to the head of the list (pointer to the list
+     
+test:
+    1. calling the function to create new list for the first time
+    2. calling it when atleat one list alreay exist
+    3. calling it when max no. of list have been reaches
+____
+void *ListFirst(list)
+description: returns a pointer to the first item in list and makes the first
+ item the current item.
+
+algorithm:
+    list.cursor= list head 
+    list cursor next = head next
+    list cursor prev = null
+    return list head item
+test:
+    check if the item is right, the next pointer is right(head.next) and prev is null
+
+____
+void *ListLast(list)
+desription:returns a pointer to the last item in list and makes the last item the current one.
+
