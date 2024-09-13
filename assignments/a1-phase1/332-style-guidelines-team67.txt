@@ -7,7 +7,7 @@ function names: snake case
 structs: pascal case for typedef, camel case for tag
 enums: pascal case, camel case for tag
 unions: pascal case, camel case for tag
-macros: capital camel case
+macros: capital snake case
 pointer names: start with p
 
 
