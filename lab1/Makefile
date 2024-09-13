@@ -9,9 +9,12 @@ CFLAGS=-g
 CPPFLAGS=-std=gnu90 -Wall -pedantic -I. -I/student/cmpt332/pthreads
 LDFLAGS=ar -c -s -r
 
-LINK_86=-L./build/lib/LINUX_86/ -l:linux-lib.a -L/student/cmpt332/pthreads/lib/Linuxx86_64/ -l:libpthreads.a
-LINK_PPC=-L./build/lib/PPC/ -l:PPC-lib.a -L/student/cmpt332/pthreads/lib/Linuxxppc/ -l:libpthreads.a
-LINK_RASPI=-L./build/lib/ARM/ -l:raspi-lib.a -L/student/cmpt332/pthreads/lib/Linuxarmv6l/ -l:libpthreads.a
+LINK_86=-L./build/lib/LINUX_86/ -l:linux-lib.a \
+       	-L/student/cmpt332/pthreads/lib/Linuxx86_64/ -l:libpthreads.a
+LINK_PPC=-L./build/lib/PPC/ -l:PPC-lib.a \
+	-L/student/cmpt332/pthreads/lib/Linuxxppc/ -l:libpthreads.a
+LINK_RASPI=-L./build/lib/ARM/ -l:raspi-lib.a \
+       	-L/student/cmpt332/pthreads/lib/Linuxarmv6l/ -l:libpthreads.a
 ARM-CC=arm-linux-gnueabihf-gcc-10
 PPC-CC=poerpc-linux-gnu-gcc-10
 
@@ -38,19 +41,26 @@ direct:
 	mkdir -p $(BUILD_BIN)$(LIN_86)
 
 #excecutable for libraries
-sample_linux_x86: $(BUILD_OBJ)$(LIN_86)sample-linux.o $(BUILD_OBJ)$(LIN_86)linux-lib.o $(BUILD_LIB)$(LIN_86)linux-lib.a
-	$(CC) $(CFLAGS) -o $(BUILD_BIN)$(LIN_86)sample_linux_x86 $(BUILD_OBJ)$(LIN_86)sample-linux.o $(LINK_86)
+sample_linux_x86: $(BUILD_OBJ)$(LIN_86)sample-linux.o \
+	$(BUILD_OBJ)$(LIN_86)linux-lib.o $(BUILD_LIB)$(LIN_86)linux-lib.a
+	$(CC) $(CFLAGS) -o $(BUILD_BIN)$(LIN_86)sample_linux_x86 \
+		$(BUILD_OBJ)$(LIN_86)sample-linux.o $(LINK_86)
 
-sample_linux_PPC: $(BUILD_OBJ)$(PPC)sample-ppc.o $(BUILD_OBJ)$(PPC)PPC-lib.o $(BUILD_OBJ)$(PPC)PPC-lib.a
-	$(ARM-CC) $(CFLAGS) -o $(BUILD_BIN)$(PPC)sample_linux_PPC $(BUILD_OBJ)$(PPC)sample-ppc.o $(LINK_PPC)
+sample_linux_PPC: $(BUILD_OBJ)$(PPC)sample-ppc.o $(BUILD_OBJ)$(PPC)PPC-lib.o \
+	$(BUILD_OBJ)$(PPC)PPC-lib.a
+	$(ARM-CC) $(CFLAGS) -o $(BUILD_BIN)$(PPC)sample_linux_PPC \
+		$(BUILD_OBJ)$(PPC)sample-ppc.o $(LINK_PPC)
 
-sample_linux_ARM: $(BUILD_OBJ)$(ARM)sample-raspi.o $(BUILD_OBJ)$(ARM)raspi-lib.o $(BUILD_OBJ)$(ARM)raspi-lib.a
-	$(PCC-CC) $(CFLAGS) -o $(BUILD_BIN)$(ARM)sample_linux_ARM $(BUILD_OBJ)$(ARM)sample-raspi.o $(LINK_RASPI)
+sample_linux_ARM: $(BUILD_OBJ)$(ARM)sample-raspi.o \
+	$(BUILD_OBJ)$(ARM)raspi-lib.o $(BUILD_OBJ)$(ARM)raspi-lib.a
+	$(PCC-CC) $(CFLAGS) -o $(BUILD_BIN)$(ARM)sample_linux_ARM \
+		$(BUILD_OBJ)$(ARM)sample-raspi.o $(LINK_RASPI)
 
 ## libraries
 #linux
 $(BUILD_LIB)$(LIN_86)linux-lib.a: $(BUILD_OBJ)$(LIN_86)linux-lib.o
-	ar rcs $(BUILD_LIB)$(LIN_86)linux-lib.a $(BUILD_OBJ)$(LIN_86)linux-lib.o
+	ar rcs $(BUILD_LIB)$(LIN_86)linux-lib.a \
+		$(BUILD_OBJ)$(LIN_86)linux-lib.o
 #ppc
 $(BUILD_LIB)$(PPC)PPC-lib.a: $(BUILD_OBJ)$(PPC)PPC-lib.o
 	ar rcs $(BUILD_LIB)$(PPC)PPC-lib.a $(BUILD_OBJ)$(PPC)PPC-lib.o
@@ -61,26 +71,34 @@ $(BUILD_LIB)$(ARM)raspi-lib.a: $(BUILD_OBJ)$(ARM)raspi-lib.o
 ## object files
 #linux
 $(BUILD_OBJ)$(LIN_86)linux-lib.o: linux-lib.c lab1.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(LIN_86)linux-lib.o
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o \
+		$(BUILD_OBJ)$(LIN_86)linux-lib.o
 
 $(BUILD_OBJ)$(LIN_86)sample-linux.o: sample-linux.c lab1.h
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(LIN_86)sample-linux.o 
+	$(CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o \
+		$(BUILD_OBJ)$(LIN_86)sample-linux.o 
 #PPC
 $(BUILD_OBJ)$(PPC)PPC-lib.o: linux-lib.c lab1.h
-	$(PPC-CC) $(CROSS-COMPILE) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(PPC)PPC-lib.o
+	$(PPC-CC) $(CROSS-COMPILE) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o \
+		$(BUILD_OBJ)$(PPC)PPC-lib.o
 
 $(BUILD_OBJ)$(PPC)sample-ppc.o: sample-linux.c lab1.h
-	$(PPC-CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(PPC)sample-ppc.o
+	$(PPC-CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o \
+		$(BUILD_OBJ)$(PPC)sample-ppc.o
 #ARM
 $(BUILD_OBJ)$(ARM)raspi-lib.o: linux-lib.c lab1.h
-	$(ARM-CC) $(CROSS-COMPILE) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o $(BUILD_OBJ)$(ARM)raspi-lib.o
+	$(ARM-CC) $(CROSS-COMPILE) $(CFLAGS) $(CPPFLAGS) -c linux-lib.c -o \
+		$(BUILD_OBJ)$(ARM)raspi-lib.o
 
 $(BUILD_OBJ)$(ARM)sample-raspi.o: sample-linux.c lab1.h
-	$(ARM-CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o $(BUILD_OBJ)$(ARM)sample-raspi.o
+	$(ARM-CC) $(CFLAGS) $(CPPFLAGS) -c sample-linux.c -o \
+		$(BUILD_OBJ)$(ARM)sample-raspi.o
 
 clean:
 	rm -f all  
-	rm -f $(BUILD_OBJ)$(LIN_86)*.o $(BUILD_OBJ)$(PPC)*.o $(BUILD_OBJ)$(ARM)*.o
+	rm -f $(BUILD_OBJ)$(LIN_86)*.o $(BUILD_OBJ)$(PPC)*.o \
+		$(BUILD_OBJ)$(ARM)*.o
 	rm -f $(BUILD_BIN)$(LIN_86)* $(BUILD_BIN)$(PPC)* $(BUILD_BIN)$(ARM)*
-	rm -f $(BUILD_LIB)$(LIN_86)*.a $(BUILD_LIB)$(PPC)*.a $(BUILD_LIB)$(ARM)*.a
+	rm -f $(BUILD_LIB)$(LIN_86)*.a $(BUILD_LIB)$(PPC)*.a \
+		$(BUILD_LIB)$(ARM)*.a
 
