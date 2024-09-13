@@ -10,10 +10,6 @@ Struct
 
 to store all the list
 struct List dictionary[max]:
-
-struct dictionary:
-    list items[]
-    int size
  
 Node:
     vode *value
@@ -99,4 +95,5 @@ test:
     3. last node in list (it is diffrent from middle becuse next is NULL)
     4. middle node in list
 
+____
 
