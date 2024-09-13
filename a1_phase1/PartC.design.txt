@@ -12,7 +12,7 @@ to store all the list
 struct List dictionary[max]:
  
 Node:
-    vode *value
+    void *value
     Node *next
     Node *prev   
 List:
@@ -39,6 +39,20 @@ test:
     1. calling the function to create new list for the first time
     2. calling it when atleat one list alreay exist
     3. calling it when max no. of list have been reaches
+____
+ListCount
+description: it returns the number of items in the list
+
+algorithm: 
+    return list size
+
+test:
+    check the size of list that is
+        1. empty
+        2. lots of item
+        3. max
+
+
 ____
 void *ListFirst(list)
 description: returns a pointer to the first item in list and makes the first
