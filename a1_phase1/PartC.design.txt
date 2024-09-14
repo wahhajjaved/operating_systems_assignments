@@ -9,7 +9,7 @@ PART C design document
 Struct
 
 to store all the list
-struct List dictionary[max]:
+struct List list_dict[max]  //dictionary of lists
  
 Node:
     void *value
@@ -18,7 +18,6 @@ Node:
 List:
     Node *head
     Node *tail
-    Node stroage // max no of nodes
     int size     // size of the items in the list
     Node *curser // the current item
 ____________________________________________________
@@ -29,18 +28,19 @@ description: creates a new empty list and return its reference or Null if fails
 
 
 algorithm: 
-    list size=0, storage=max
-    list head= allocate memory
-
+    list size=0, 
+    add it dictionary
     if all list used: return Null
     else return the pointer to the head of the list (pointer to the list
+
+
      
 test:
     1. calling the function to create new list for the first time
     2. calling it when atleat one list alreay exist
     3. calling it when max no. of list have been reaches
 ____
-ListCount
+int ListCount(list)
 description: it returns the number of items in the list
 
 algorithm: 
@@ -110,4 +110,154 @@ test:
     4. middle node in list
 
 ____
+
+void *ListCurr(list) 
+description: returns a pointer to the current item in list
+
+algorithm: 
+    return curser.item
+
+test:
+    1. empty list
+    2. curser at null when not empty
+___
+int ListAdd(list, item)
+description:) adds the new item to list directly after the current item, 
+and makes the new item the current item. If the current pointer is at the 
+end of the list, the item is added at the end. Returns 0 on success, -1 
+on failure.
+
+algorithm:
+    //create new node
+    new node item = item
+    new node prev= current prev
+    new node next =curser 
+    new curser = new node
+    return 0
+
+test:
+    1. add at begining
+    2. add at ending
+    3. add at middle
+    4. add to empty
+    5. add to full
+
+___
+int ListAppend(list, item) 
+
+description:adds item to the end of list, and makes the new item the current 
+one. Returns 0 on success, -1 on failure.
+
+algorithm: 
+    new node item = item
+    new node prev= listlast()
+    new node next =null
+    new curser = new node
+
+test:
+    1. add at begining
+    2. add at ending
+    3. add at middle
+    4. add to empty
+    5. add to full
+
+___
+int ListPrepend(list, item)
+
+description:adds item to the start of list, and makes the new item the current
+one. Returns 0 on success, -1 on failure.
+
+algorithm:
+    new node item = item
+    new node prev= null
+    new node next =listFirst
+    new curser = new node
+
+test:
+    1. add at begining
+    2. add at ending
+    3. add at middle
+    4. add to empty
+    5. add to full
+
+
+___
+void *ListRemove(list)
+description:Return current item and take it out of list. Make the next item 
+the current one.
+
+algorithm:
+    if list not empty
+        Node prevcurrent next= node newcureent
+        node newcurrent prev = node prevcurrent
+        list size decrease by 1
+
+test:
+    1. remove from starting and check size
+    2. remove from ending and check size
+    3. remove from middle and check size
+    4. remove from empty and check size
+
+___
+void ListConcat(list1, list2)
+description:adds list2 to the end of list1. The current pointer is set to the
+ current pointer of list1. List2 no longer exists after the operation
+
+algorithm:
+    if list1 or list not empty
+        last node of list2 prev= list1 last node
+        remove l2 from list_dict
+
+test:
+    1. l1 empty
+    2. l2 empty
+    3. both l1 and l2 empty
+    4. both l1 and l2 size more than 0
+
+___
+void ListFree(list, itemFree)
+description:delete list. itemFree is a pointer to a routine that frees an item. It should be invoked (within ListFree) as: (*itemFree)(itemToBeFreed);
+algorithm:
+    iterate through the list, for each call (*itemFree)(itemToBeFreed)
+
+test:
+    1. emptylist
+    2. list with 1 item
+    3. list with more than 1 item
+
+___
+void *ListTrim(list)
+description:Return last item and take it out of list. The current pointer shall
+ be the new last item in the list.
+
+algorithm:
+    listLast(list)
+    listRemove(list)
+
+test:
+
+___
+void *ListSearch(list, comparator, comparisonArg)
+description:searches list starting at the current item until the end is reached
+or a match is found.
+
+algorithm:
+    if list not empty
+        listfirst(list)
+        if (*comparator)(list->current->item, comparisonArg) == 1
+		    	return list->current.item
+	    while list.current != list.tail	
+	    return null
+    else return NULL
+
+test:
+
+_____
+my own function:
+int list_dict_size(){list_dict)
+description: calculate the size of list dictionary
+
+algorithm:
+    return size of list_dict/list_dict[0]
+
 
