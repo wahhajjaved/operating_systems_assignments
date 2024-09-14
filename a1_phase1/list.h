@@ -12,16 +12,31 @@
 
 
 /*
- * Comparator pointer for the parameter for ListSearch() 
+ * comparator pointer for the parameter for ListSearch() 
  */
 typedef int (*COMPARATOR)(void *, void *);
 
 /*
- * Itemfree pointer used for the parameter to ListFree()
+ * itemfree pointer used for the parameter to ListFree()
  */
 typedef void (*ITEMFREE)(void *);
 
+/*
+ * array of list
+ */
 struct LIST dictionary[MAX_LIST]
+
+/*
+ * array of free list
+ */
+struct LIST freed_list[]
+
+/*
+ * array of free nodes
+ */
+struct NODE freed_node[]
+
+
 
 /*
  * STRUCT
