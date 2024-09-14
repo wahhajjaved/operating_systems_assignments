@@ -57,140 +57,168 @@ LIST *ListCreate();
  * Return: int size
  *
  */
-int ListCount(list);
+int ListCount(LIST *list);
 
 /*
  * returns a pointer to the first item in list and makes the first
  * item the current item.
  *
- * Parameter: struct List
- *
- * Return: pointer to first item
- *
- */
-void *ListFirst(list);
-
-/*
- *
- * Parameter: struct List
+ * Parameter: List list:    struct List
  *
  * Return: 
  *
  */
-void *ListLast(list);
+void *ListFirst(LIST *list);
 
 /*
+ * returns a pointer to the last item in list and makes the last item the 
+ * current one.
  *
- * Parameter: struct List
+ * Parameter: List list:    struct List
  *
  * Return: 
  *
  */
-void *ListNext(list);
+void *ListLast(LIST *list);
 
 /*
- *
- * Parameter: struct List
+ * advances the list's current node by one, and returns a pointer to the new 
+ * current item. If this operation attempts to advances the current item 
+ * beyond the end of the list, a NULL pointer is returned.
+ * 
+ * Parameter: List list:    struct List
  *
  * Return: 
  *
  */
-void *ListPrev(list);
+void *ListNext(LIST *list);
 
 /*
+ * backs up the list's current node by one, and returns a pointer to the new 
+ * current item.
  *
- * Parameter: struct List
+ * Parameter: List list:    struct List
  *
  * Return: 
  *
  */
-void *ListCurr(list);
+void *ListPrev(LIST *list);
 
 /*
+ * returns a pointer to the current item in list
  *
- * Parameter: struct List
+ * Parameter: List list:    struct List
  *
  * Return: 
  *
  */
-int ListAdd(list, item);
+void *ListCurr(LIST *list);
 
 /*
+ * adds the new item to list directly after the current item,
+ * and makes the new item the current item. If the current pointer is at the
+ * end of the list, the item is added at the end.
  *
- * Parameter: struct List
- *            item to be added
+ * Parameter: List list:    struct List
+ *            item:         item to be added
+ *
+ * Return: Returns 0 on success, -1 on failure.
+ *
+ */
+int ListAdd(LIST *list,void *item);
+
+/*
+ * adds item to list directly before the current item, and makes the new item 
+ * the current one.
+ *
+ * Parameter: List list:    struct List
+ *            item:         item to be added
+ *
+ * Return: Returns 0 on success, -1 on failure 
+ *
+ */
+int ListInsert(LIST *list,void *item);
+
+/*
+ * adds item to the end of list, and makes the new item the current
+ * one. Returns 0 on success, -1 on failure.
+ *
+ * Parameter: List list:    struct List
+ *            item:         item to be added
+ *
+ * Return:   Returns 0 on success, -1 on failure
+ *
+ */
+int ListAppend(LIST *list, void *item);
+
+/*
+ * adds item to the start of list, and makes the new item the current
+ * one. Returns 0 on success, -1 on failure.
+ *
+ * Parameter: LIST list: struct List
+ *            item:      pointer to the item to be added
+ *
+ * Return:   Returns 0 on success, -1 on failure 
+ *
+ */
+int ListPrepend(LIST *list,void *item);
+
+/*
+ * Return current item and take it out of list. Make the next item
+ * the current one.
+ *
+ * Parameter: LIST list: struct List
  *
  * Return: 
  *
  */
-int ListInsert(list, item);
+void *ListRemove(LIST *list);
 
 /*
+ * add l2 to the end of l1, current pointer is current pointer of l2
  *
- * Parameter: struct List
- *            item to be added
+ * Parameter: List list1: struct List
+ *            List list2: struct List
  *
  * Return: 
  *
  */
-int ListAppend(list, item);
+void ListConcat(LIST *list1, LIST *list2);
 
 /*
+ * Delete list
  *
- * Parameter: struct List
- *            item to be added
+ * Parameter: LIST list:             struct List
+ *            ITEMFREE itemFree:     item to be freed
  *
  * Return: 
  *
  */
-int ListPrepend(list, item);
+void ListFree(LIST *list, ITEMFREE *itemFree);
 
 /*
+ * Return last item and take it out of list. The current pointer shall
+ * be the new last item in the list.
  *
- * Parameter: struct List
- *            item to be added
+ * Parameter: LIST list:    struct List
  *
  * Return: 
  *
  */
-void *ListRemove(list);
+void *ListTrim(LIST *list);
 
 /*
+ * searches list starting at the current item until the end is reached
+ * or a match is found.
  *
- * Parameter: struct List
+ * Parameter:  LIST List:                   struct list
+ *             COMPARATOR *comparator:      to match
+ *             *comparisonArg :             match with
  *
  * Return: 
  *
  */
-void ListConcat(list1, list2);
-
-/*
- *
- * Parameter:struct List
- *            ITEMFREE itemFree: item to be freed
- *
- * Return: 
- *
- */
-void ListFree(list, itemFree);
-
-/*
- *
- * Parameter: struct List
- *
- * Return: 
- *
- */
-void *ListTrim(list);
-
-/*
- *
- * Parameter:  struct List
- *
- * Return: 
- *
- */
-void *ListSearch(list, comparator, comparisonArg);
+void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg);
 
 
 #endif
