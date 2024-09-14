@@ -6,11 +6,17 @@ ASSIGNMENT 1: PHASE 1
 PART C design document
 
 
-Struct
+
+int (*COMPARATOR)(void *, void *)
+void (*ITEMFREE)(void *)
+
+
 
 to store all the list
 struct List list_dict[max]  //dictionary of lists
- 
+
+
+struct
 Node:
     void *value
     Node *next
