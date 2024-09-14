@@ -30,7 +30,8 @@ ____________________________________________________
 FUNCTIONS:
 ____
 LIST *ListCreate():
-description: creates a new empty list and return its reference or Null if fails
+description: creates a new empty list and return its reference or 
+Null if fails
 
 
 algorithm: 
