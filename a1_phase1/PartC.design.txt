@@ -14,7 +14,8 @@ void (*ITEMFREE)(void *)
 
 to store all the list
 struct List list_dict[max]  //dictionary of lists
-
+struct List Freed_list[]    /// array of freed lists
+struct Node Freed_node      // array of freed of nodes
 
 struct
 Node:
@@ -221,6 +222,7 @@ algorithm:
         Node prevcurrent next= node newcureent
         node newcurrent prev = node prevcurrent
         list size decrease by 1
+        add it freed_node 
 
 test:
     1. remove from starting and check size
@@ -249,7 +251,7 @@ void ListFree(list, itemFree)
 description:delete list. itemFree is a pointer to a routine that frees an item. It should be invoked (within ListFree) as: (*itemFree)(itemToBeFreed);
 algorithm:
     iterate through the list, for each call (*itemFree)(itemToBeFreed)
-
+    add to freed_list
 test:
     1. emptylist
     2. list with 1 item
@@ -263,6 +265,7 @@ description:Return last item and take it out of list. The current pointer shall
 algorithm:
     listLast(list)
     listRemove(list)
+    add to freed_node
 
 test:
 
