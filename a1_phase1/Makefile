@@ -8,8 +8,10 @@ BUILD_PART_C=build/PartC/
 CC=gcc
 CFLAGS=-g -I.
 CPPFLAGS=-std=gnu90 -Wall -pedantic
-UNAME:$(shell uname)
+UNAME:=$(shell uname)
+all:all-$(UNAME)
 
+all-LInux: mytestlist
 
 #if the tarrget is linux
 ifeq ($(UNAME),Linux)
