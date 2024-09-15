@@ -4,6 +4,8 @@
 # @author Nakhba Mubashir, epl482, 11317060
 # @date 2024-09-14
 
+set -e
+
 print_help() {
     echo "./partB.bash version [<threads deadline size>...]"
     echo "version is one of partA1, partA2, or partA3. partA1 is windows only"
@@ -16,12 +18,75 @@ print_help() {
 
 if [[ $# -ne 1 ]]; then
     echo "Invalid number of arguments"
+    echo
     print_help
     exit 1
 fi
 
-while read -r line; do
-    echo "Processing line ${line}"
+
+case "$1" in
+    "partA1")
+        if [[ $(uname -s ) != "Windows" ]]; then
+            echo "partA1 only works on Windows"
+            echo
+            print_help
+            return 1
+        fi
+        exe=./partA1
+        ;;
+    "partA2")
+        if [[ $(uname -s ) != "Linux" ]]; then
+            echo "partA2 only works on Linux"
+            echo
+            print_help
+            return 1
+        fi
+        exe=./partA2
+        ;;
+    "partA3")
+        if [[ $(uname -s ) != "Linux" ]]; then
+            echo "partA3 only works on Linux"
+            echo
+            print_help
+            return 1
+        fi
+        exe=./partA3
+        ;;
+    *)
+        echo "Unknown value for version"
+        echo
+        print_help
+        return 1
+        ;;
+esac
+
+regex_int=^[0-9]+$
+regex_float=^[0-9]*\.?[0-9]+$
+
+while read -r -a line; do
+    if [[ ${#line[@]} -ne 3 ]]; then
+        echo "Invalid number of arguments. Must be threads deadline size"
+        continue
+    fi
+
+    threads="${line[0]}"
+    deadline="${line[1]}"
+    size="${line[2]}"
+
+    if [[ ! "$threads" =~ $regex_int ]]; then
+        echo "Number of threads must be a non-negative integer"
+        continue
+    fi
+    if [[ ! "$deadline" =~ $regex_float ]]; then
+        echo "Deadline must be a non-negative integer or float"
+        continue
+    fi
+    if [[ ! "$size" =~ $regex_int ]]; then
+        echo "size must be a non-negative integer"
+        continue
+    fi
+    echo "Processing line ${line[@]} using $exe"
+    # $exe "$threads" "$deadline" "$size"
 done
 
 echo "Exiting partB.bash"
