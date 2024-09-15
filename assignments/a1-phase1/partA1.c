@@ -99,7 +99,11 @@ int main(int argc, char* argv[]) {
 	}
 
 	Sleep(deadline*1000);
+	stopSquare = 1;
 
+	// potential segfault if child threads don't stop fast enough before the
+	// arrays are freed. A small delay before freeing shoudl prevent this.
+	Sleep(100);
 
 
 	free(threadHandles);

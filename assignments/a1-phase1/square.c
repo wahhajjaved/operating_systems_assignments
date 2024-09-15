@@ -13,7 +13,7 @@ int stopSquare = 0;
 
 int64_t square(int n) {
     int index = get_index();
-    if (n == 0){
+    if (n == 0 || stopSquare != 0){
 		return 0;
 	}
 	pSquareCount[index]++;
