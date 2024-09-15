@@ -1,7 +1,7 @@
 PartA.design.txt
-PartA1
-PartA2
-PartA3
+partA1.c
+myA1Test.txt
+PartA1.testResults.txt
 square.h
 square.c
 partB.bash
