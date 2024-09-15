@@ -7,6 +7,15 @@
 #include "square.h"
 
 
+int32_t *pSquareCount;
+int64_t *pStartTime;
+int stopSquare = 0;
 
-int square(int n) {
+int64_t square(int n) {
+    int index = get_index();
+    if (n == 0){
+		return 0;
+	}
+	pSquareCount[index]++;
+	return (Square(n - 1) + n + n - 1);
 }
