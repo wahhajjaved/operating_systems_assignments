@@ -1,0 +1,119 @@
+commit cf05fec246fa58751cdd0535355436ad8d9f878d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 19:39:35 2024 -0600
+
+    added the checks for correct type and correct parameter
+
+commit c25d54914a3591fa1cdc3a5c67920eed249e2adf
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 19:39:06 2024 -0600
+
+    added max list and max node
+
+commit a4fef774c1471d3201a4cbbe05cb3d7c4a01c544
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 18:26:25 2024 -0600
+
+    added the checks for correct type and correct parameter
+
+commit 819eebba162a3403c022f71bff4f898862e6c6f4
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 18:17:55 2024 -0600
+
+    added the checks for correct type and correct parameter
+
+commit d8075c1de53560d0f25b929ddfdf1425345af21d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 17:49:31 2024 -0600
+
+    added freed_list and frees_node
+
+commit 2a917e18e2a5f44a344104ed8d06e6da7ced5a6c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 17:47:59 2024 -0600
+
+    added free_list and freed_node array to store the deleted nodes and array
+
+commit f3e00259f3035f4749e938df7135bb066685450d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 13:45:19 2024 -0600
+
+    added listInsert which i missed before
+
+commit cfb9bd95b070a8acb85f37ca36469e51bc633d3a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 13:43:27 2024 -0600
+
+     added the author info and documentation
+
+commit bb41fd5f5de00e88a76455037f3fd9dd5a6bb4fa
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 14 13:40:29 2024 -0600
+
+     added the Makfefile for Part C
+
+commit 4c366c98bf639a4978c717c7538e356340b4836b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 22:31:10 2024 -0600
+
+    finished the documentations for each function
+
+commit cc0fcd1e3772cd8f83ef9353c31c64cda3d7c7c9
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 22:02:12 2024 -0600
+
+    added the prototype and the function parameter
+
+commit 99ea60079dc02a1bc54bfebbde0ccba50f51b637
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 22:01:27 2024 -0600
+
+    fixed minor problems
+
+commit 4274229db8cf7d958859847ed6287479757ee93e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 21:41:44 2024 -0600
+
+    added the function parameter for list search and list free
+
+commit 5a20b1c978c78ab26b560c1731c560bb7a1ce379
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 21:36:33 2024 -0600
+
+    added the rest of the functions
+
+commit 7332ec77e6ce5b560d816a3ac844807cfa49dd55
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 17:55:44 2024 -0600
+
+    added lisycount
+
+commit 727917448d85e3a7e6770d55ca30c4a334dd17ce
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 14:09:29 2024 -0600
+
+     added the list stuct will be stored in an array
+
+commit bb7d9ea54b3238bac05094fa7cce32e33685cf96
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 14:07:33 2024 -0600
+
+     added the list stuct will be stored in an array
+
+commit b2711236320645447391371f449c452168554c4e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 14:06:34 2024 -0600
+
+     added the structs and function prototypes
+
+commit 4f86130081f8f56c0b5731a85e42011aa2840dd0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Sep 13 09:21:50 2024 -0600
+
+    statrted the design, finished the sturctures, list create, list first item.
+
+commit 99120751c11268b481a06581a1f6c888659d2a2d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 12 22:08:05 2024 -0600
+
+     initiate commit
