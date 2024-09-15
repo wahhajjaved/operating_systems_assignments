@@ -8,6 +8,8 @@ BUILD_PART_C=build/PartC/
 CC=gcc
 CFLAGS=-g -I.
 CPPFLAGS=-std=gnu90 -Wall -pedantic
+UNAME:$(shell uname)
+
 
 #if the tarrget is linux
 ifeq ($(UNAME),Linux)
