@@ -19,7 +19,7 @@ int ListCount(LIST *list){
 
     if (list-> count <0){
         printf("ERROR: list count cannot be negative");
-
+    }
     /*TODO */
     return 0;
 }

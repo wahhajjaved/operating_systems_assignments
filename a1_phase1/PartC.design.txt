@@ -52,6 +52,7 @@ int ListCount(list)
 description: it returns the number of items in the list
 
 algorithm: 
+    check the size of list 
     return list size
 
 test:
@@ -67,6 +68,7 @@ description: returns a pointer to the first item in list and makes the first
  item the current item.
 
 algorithm:
+    check if the list is not empty
     list.cursor= list head 
     list cursor next = head next
     list cursor prev = null
@@ -81,6 +83,7 @@ desription:returns a pointer to the last item in list and makes the last item
  the current one.
 
 algorithm:
+    check if the list is not empty
     list.cursor= list tail
     list cursor next = NULL
     list cursor prev = list tail prev
@@ -123,6 +126,7 @@ void *ListCurr(list)
 description: returns a pointer to the current item in list
 
 algorithm: 
+    if list not empty
     return curser.item
 
 test:
@@ -284,6 +288,7 @@ algorithm:
     else return NULL
 
 test:
+    1. test with invalid parameter 
 
 _____
 my own function:
