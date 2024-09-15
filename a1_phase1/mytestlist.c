@@ -9,6 +9,8 @@ int main(void){
     LIST *L1;
     LIST *L2;
     void *I1;
+    int (*testCOMPARATOR)(void *V, void *I);
+    void (*testITEMFREE)(void *I);    
 
     L1= ListCreat();
 	printf("got to procedure ListCreate()\n");
@@ -52,10 +54,10 @@ int main(void){
 	I1 = ListTrim(L1);
 	printf("got to procedure ListTrim()\n");
 
-	ListFree(L2, &TestItemFree);
+	ListFree(L2, &testITEMFREE);
 	printf("got to procedure ListFree()\n");
 
-	I1 = ListSearch(L1, &TestComparator, I1);
+	I1 = ListSearch(L1, &testCOMPARATOR, I1);
 	printf("got to procedure ListSearch()\n");
 
 	return 0;
