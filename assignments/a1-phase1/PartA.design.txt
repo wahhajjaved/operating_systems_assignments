@@ -45,6 +45,11 @@ Solution
         GetThreadDescription(). Conversion to and from string to int will be
         required to use these functions.
 
+    - Threads should be created with the CREATE_SUSPENDED flag set so they
+        dont run immediately upon creation. This will give time for the
+        thread description to be set. Threads can be manually started using
+        ResumeThread()
+
     - On exit threads are also required to output elapsed time. The start time
         can be stored in a global array, similar to invocation count. It can
         be indexed using the value passed through SetThreadDescription().
