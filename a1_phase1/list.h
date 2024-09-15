@@ -10,7 +10,9 @@
 
 #include <stdlib.h> 
 
-
+int MAX_NODE 100
+int MAX_LIST 100
+int MAX_LIST_SIZE 100
 /*
  * comparator pointer for the parameter for ListSearch() 
  */
@@ -36,7 +38,7 @@ struct LIST freed_list[]
  */
 struct NODE freed_node[]
 
-
+int nodes_num;
 
 /*
  * STRUCT
@@ -45,6 +47,7 @@ typedef struct node {
     void *value;
     Node *next;
     Node *prev;
+
 } Node;
 
 typedef struct list {
