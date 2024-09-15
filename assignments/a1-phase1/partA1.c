@@ -1,0 +1,14 @@
+/*
+* @author Wahhaj Javed, muj975, 11135711
+* @author Nakhba Mubashir, epl482, 11317060
+* @date 2024-09-14
+*/
+
+#include <windows.h>
+#include <stdio.h>
+#include "square.h"
+
+
+int main(int argc, char* argv[]) {
+
+}
