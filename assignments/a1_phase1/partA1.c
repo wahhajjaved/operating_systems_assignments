@@ -80,8 +80,8 @@ int main(int argc, char* argv[]) {
 
 	threadHandles = (HANDLE *)malloc(sizeof(HANDLE) * threads);
 	threadIDs = (DWORD *)malloc(sizeof(DWORD) * threads);
-	pSquareCount = (int32_t *)malloc(sizeof(int32_t) * threads);
-	pStartTime = (int64_t *)malloc(sizeof(int64_t) * threads);
+	pSquareCount = (int32_t *)calloc(threads, sizeof(int32_t));
+	pStartTime = (int64_t *)calloc(threads, sizeof(int64_t));
 	
 	for(i=0; i<threads; i++) {
 		HANDLE handle;
@@ -121,7 +121,7 @@ int main(int argc, char* argv[]) {
 
 	/*potential segfault if child threads don't stop fast enough before the
 	arrays are freed. A small delay before freeing shoudl prevent this.*/
-	Sleep(100);
+	Sleep(1000);
 
 
 	free(threadHandles);
