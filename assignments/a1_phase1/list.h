@@ -9,10 +9,11 @@
 #define LIST_H
 
 #include <stdlib.h> 
+#include <stdio.h>
+#define MAX_NODE 100
+#define MAX_LIST 100
+#define MAX_LIST_SIZE 100
 
-int MAX_NODE 100
-int MAX_LIST 100
-int MAX_LIST_SIZE 100
 /*
  * comparator pointer for the parameter for ListSearch() 
  */
@@ -23,41 +24,42 @@ typedef int (*COMPARATOR)(void *, void *);
  */
 typedef void (*ITEMFREE)(void *);
 
-/*
- * array of list
- */
-struct LIST dictionary[MAX_LIST]
-
-/*
- * array of free list
- */
-struct LIST freed_list[]
-
-/*
- * array of free nodes
- */
-struct NODE freed_node[]
-
-int nodes_num;
-
+/*int nodes_num;
+*/
 /*
  * STRUCT
  */
 typedef struct node {
     void *value;
-    Node *next;
-    Node *prev;
+    struct node *next;
+    struct node *prev;
 
-} Node;
+} NODE;
 
 typedef struct list {
-    Node *head;
-    Node *tail
-    Node storage;
+    NODE *head;
+    NODE *tail;
+    NODE *curser;
+    int count;
     int size;
 } LIST;
 
 
+/*
+ * array of list
+ 
+ /LIST dictionary[MAX_LIST];
+
+ * array of free list
+ 
+ LIST freed_list[MAX_LIST_SIZE];
+
+
+ * array of free nodes
+ 
+
+/ NODE freed_node[MAX_NODE];
+*/
 /*
  * creates a new empty list and return its reference or Null if fails
  * 

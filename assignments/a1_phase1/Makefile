@@ -72,13 +72,13 @@ c_objects := $(obj_dir)/mytestlist.o $(obj_dir)/list_movers.o \
     $(obj_dir)/list_adders.o $(obj_dir)/list_removers.o
 
 #excecutable
-mytestlist: $(BUILD_PART_C)mytestlist.o $(BUILD_PART_C)liblist.a
+mytestlist: $(c_objects) $(lib_dir)/liblist.a
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o mytestlist $(obj_dir)/mytestlist.o \
     $(lib_dir)/liblist.a
 
 # library
 $(lib_dir)/liblist.a: $(c_objects)
-	ar -c -r -s $(lib_dir)/liblist.o $(c_objects)
+	ar -c -r -s $(lib_dir)/liblist.a $(c_objects)
 
 #object files
 $(obj_dir)/mytestlist.o: mytestlist.c list.h

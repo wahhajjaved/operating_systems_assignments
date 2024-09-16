@@ -5,19 +5,20 @@
  */
 
 #include "list.h"
-
+int nodes_num;
 
 int ListAdd(LIST *list,void *item){
-     // if the List struct pointer is not right
+     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    // check if the list size is less than max, or node is less than max
+    /* check if the list size is less than max, or node is less than max*/
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
-        return NULL;
-    if (item == NULL){
+        return -1;
+
+}    if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
@@ -27,15 +28,16 @@ int ListAdd(LIST *list,void *item){
 
 }
 int ListInsert(LIST *list,void *item){
-     // if the List struct pointer is not right
+     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    // check if the list size is less than max, or node is less than max
+    /* check if the list size is less than max, or node is less than max*/
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
-        return NULL;
+        return -1;
+}
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
@@ -47,16 +49,17 @@ int ListInsert(LIST *list,void *item){
 }
 
 int ListAppend(LIST *list, void *item){
-     // if the List struct pointer is not right
+     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    // check if the list size is less than max, or node is less than max
+    /* check if the list size is less than max, or node is less than max*/
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
-        return NULL;
-    if (item == NULL){
+        return -1;
+  }
+  if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
@@ -66,15 +69,16 @@ int ListAppend(LIST *list, void *item){
 
 }
 int ListPrepend(LIST *list,void *item){
-     // if the List struct pointer is not right
+     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    // check if the list size is less than max, or node is less than max
+    /* check if the list size is less than max, or node is less than max*/
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
-        return NULL;
+        return -1;
+}
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
@@ -85,11 +89,10 @@ int ListPrepend(LIST *list,void *item){
 }
 
 void ListConcat(LIST *list1, LIST *list2){
-     // if the List struct pointer is not right
+     /* if the List struct pointer is not right*/
     if (list1 == NULL || list2== NULL) {
         printf("ERROR: list1 OR list2 is NULL \n");
-        return NULL;
+        return ;
     }
    /*TODO */
-    return NULL
 }
