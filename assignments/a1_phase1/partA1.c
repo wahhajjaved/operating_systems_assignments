@@ -11,45 +11,59 @@
 #include "square.h"
 
 int get_index() {
-	PWSTR desc = NULL;
-	HRESULT result = GetThreadDescription(GetCurrentThread(), &desc);
+	PWSTR desc;
+	HRESULT result;
+	int index;
+	wchar_t *p;
+	
+	desc = NULL;
+	result = GetThreadDescription(GetCurrentThread(), &desc);
 	if(!SUCCEEDED(result)) {
 		printf("ERROR: Couldn't get thread description.\n");
 		return -1;
 	}
-	wchar_t *p = NULL;
-	int index = wcstol(desc, &p, 10);
+	p = NULL;
+	index = wcstol(desc, &p, 10);
 	return index;
 }
 
 DWORD WINAPI tmain(LPVOID lpParam) {
-	int n = *(int*)lpParam;
-	int index = get_index()
+	int n, index, elapsedTime;
+	LARGE_INTEGER frequency, startTime, endTime;
+	
+	n = *(int*)lpParam;
+	index = get_index();
 	if (index < 0){
 		printf("ERROR: Thread %d could not get index\n", index);
 
 	}
 
-	LARGE_INTEGER frequency, startTime; endTime;
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&startTime);
-	pStartTime[index] = (startTime.QuadPart * 1000000) / frequency.QuadPart;
+	pStartTime[index] = startTime.QuadPart / frequency.QuadPart;
 
-	int64_t result = square(n);
+	square(n);
 
 	QueryPerformanceCounter(&endTime);
-	endTime.QuadPart = (endTime.QuadPart * 1000000) / frequency.QuadPart;
+	endTime.QuadPart = endTime.QuadPart / frequency.QuadPart;
 
-	int64_t elapsedTime = endTime.QuadPart - pStartTime[index];
+	elapsedTime = endTime.QuadPart - pStartTime[index];
 
 	printf("Thread %d finished. Square called %d times. "
-		"Thread ran for %lli micro seconds.\n",
-		index, squareCount[index], elapsedTime.QuadPart);
+		"Thread ran for %d micro seconds.\n",
+		index, pSquareCount[index], elapsedTime);
 	return 0;
 
 }
 
 int main(int argc, char* argv[]) {
+	char *p;
+	int32_t threads, size;
+	double deadline;
+	HANDLE *threadHandles;
+	DWORD *threadIDs;
+	int i;
+	wchar_t desc[15];
 
 	if (argc != 4) {
 		printf("Invalid number of arguments.\n");
@@ -57,19 +71,22 @@ int main(int argc, char* argv[]) {
 		return 1;
 	}
 
-	char *p;
-	long threads = strtol(argv[1], &p, 10);
-	double deadline = strtod(argv[2], &p);
-	long size = strtol(argv[3], &p, 10);
+	
+	threads = strtol(argv[1], &p, 10);
+	deadline = strtod(argv[2], &p);
+	size = strtol(argv[3], &p, 10);
 	printf("threads %d, deadline %.2f, size %d\n", threads, deadline, size);
 
-	HANDLE threadHandles = (HANDLE *)malloc(sizeof(HANDLE) * threads);
-	DWORD threadIDs = (DWORD *)malloc(sizeof(DWORD) * threads);
+	threadHandles = (HANDLE *)malloc(sizeof(HANDLE) * threads);
+	threadIDs = (DWORD *)malloc(sizeof(DWORD) * threads);
 	pSquareCount = (int32_t *)malloc(sizeof(int32_t) * threads);
 	pStartTime = (int64_t *)malloc(sizeof(int64_t) * threads);
-
-	for(int i=0; i<threads; i++) {
-		HANDLE handle = CreateThread(
+	
+	for(i=0; i<threads; i++) {
+		HANDLE handle;
+		HRESULT result;
+		
+		handle = CreateThread(
 			NULL,
 			0,
 			tmain,
@@ -83,17 +100,16 @@ int main(int argc, char* argv[]) {
 			return 1;
 		}
 
-		//15 is enough to store each digit of int32 with some room to spare
-		wchar_t desc[15];
+		/*15 is enough to store each digit of int32 with some room to spare*/
 		swprintf(desc, 15, L"%d", i);
-		HRESULT result = SetThreadDescription(handle, desc);
+		result = SetThreadDescription(handle, desc);
 		if(!SUCCEEDED(result)) {
 			printf("ERROR: Couldn't set thread description.\n");
 			return 1;
 		}
 	}
 
-	for(int i = 0; i < threads; i++) {
+	for(i = 0; i < threads; i++) {
 		printf("Resuming thread %d\n", i);
 		ResumeThread(threadHandles[i]);
 	}
@@ -101,8 +117,8 @@ int main(int argc, char* argv[]) {
 	Sleep(deadline*1000);
 	stopSquare = 1;
 
-	// potential segfault if child threads don't stop fast enough before the
-	// arrays are freed. A small delay before freeing shoudl prevent this.
+	/*potential segfault if child threads don't stop fast enough before the
+	arrays are freed. A small delay before freeing shoudl prevent this.*/
 	Sleep(100);
 
 
@@ -110,5 +126,6 @@ int main(int argc, char* argv[]) {
 	free(threadIDs);
 	free(pSquareCount);
 	free(pStartTime);
-
+	
+	return 0;
 }

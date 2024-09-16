@@ -12,10 +12,11 @@ int64_t *pStartTime;
 int stopSquare = 0;
 
 int64_t square(int n) {
-    int index = get_index();
+	int index;
+    index = get_index();
     if (n == 0 || stopSquare != 0){
 		return 0;
 	}
 	pSquareCount[index]++;
-	return (Square(n - 1) + n + n - 1);
+	return (square(n - 1) + n + n - 1);
 }
