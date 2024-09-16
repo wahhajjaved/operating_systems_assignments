@@ -5,9 +5,9 @@
 
 kernel := $(shell uname -s)
 arch := $(shell uname -m)
-ifeq (${kernel}, Linux)
+ifeq ($(kernel), Linux)
     os = Linux
-else ifeq ($(findstring MINGW, ${kernel}), MINGW)
+else ifeq ($(findstring MINGW, $(kernel)), MINGW)
     os = Windows
 else
     $(error Only Window and Linux are supported in this make file)
@@ -16,8 +16,8 @@ endif
 #################################
 ########## Directories ##########
 build_dir = ./build
-obj_dir := ${build_dir}/obj
-lib_dir := ${build_dir}/lib
+obj_dir := $(build_dir)/obj/$(os)-$(arch)
+lib_dir := $(build_dir)/lib/$(os)-$(arch)
 
 
 
@@ -26,7 +26,7 @@ lib_dir := ${build_dir}/lib
 CC=gcc
 CFLAGS=-g -I.
 CPPFLAGS=-std=gnu90 -Wall -Wextra -pedantic
-compile = ${CC} ${CFLAGS} ${CPPFLAGS} ${I}
+compile = $(CC) $(CFLAGS) $(CPPFLAGS) $(I)
 
 ###########################
 ########## All ##########
@@ -41,26 +41,28 @@ endif
 $(info Making $(all_exes))
 
 .PHONY: all
-all: $(all_exes)
+all: mkdirs $(all_exes)
 	
 
 ############################
 ########## Part A ##########
 
-partA1: partA1.o square.o
-	${CC} ${CFLAGS} ${CPPFLAGS} -o partA1 partA1.o square.o
+
+a1_objects := $(obj_dir)/partA1.o $(obj_dir)/square.o
+partA1: $(a1_objects)
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o partA1 $(a1_objects)
 
 partA2:
-	$(error "Target partA2 not yet implemented.")
+	$(info "Target partA2 not yet implemented.")
 
 partA3:
-	$(error "Target partA3 not yet implemented.")
+	$(info "Target partA3 not yet implemented.")
 
-partA1.o: partA1.c square.h
-	${compile} -c partA1.c -o partA1.o
+$(obj_dir)/partA1.o: partA1.c square.h
+	$(compile) -c partA1.c -o $(obj_dir)/partA1.o
 
-square.o: square.c square.h
-	${compile} -c square.c -o square.o
+$(obj_dir)/square.o: square.c square.h
+	$(compile) -c square.c -o $(obj_dir)/square.o
 
 
 
@@ -106,5 +108,16 @@ square.o: square.c square.h
 # else
 # 	$(error "ERROR: it must be Linux to comple mytestlist.c")
 # endif
+
+.PHONY: clean clean_all mkdirs
+
+mkdirs:
+	mkdir -p $(obj_dir) $(lib_dir)
+
+clean:
+	find $(build_dir) -type f -delete && rm -f $(all_exes) partA1.exe
+
+clean_all:
+	rm -rf $(build_dir) $(all_exes) partA1.exe
 
 
