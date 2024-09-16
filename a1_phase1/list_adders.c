@@ -5,7 +5,7 @@
  */
 
 #include "list.h"
-
+int nodes_num;
 
 int ListAdd(LIST *list,void *item){
      // if the List struct pointer is not right
@@ -17,7 +17,8 @@ int ListAdd(LIST *list,void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return NULL;
-    if (item == NULL){
+
+}    if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
@@ -36,6 +37,7 @@ int ListInsert(LIST *list,void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return NULL;
+}
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
@@ -56,7 +58,8 @@ int ListAppend(LIST *list, void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return NULL;
-    if (item == NULL){
+  }
+  if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
@@ -75,6 +78,7 @@ int ListPrepend(LIST *list,void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return NULL;
+}
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
@@ -91,5 +95,5 @@ void ListConcat(LIST *list1, LIST *list2){
         return NULL;
     }
    /*TODO */
-    return NULL
+    return NULL;
 }

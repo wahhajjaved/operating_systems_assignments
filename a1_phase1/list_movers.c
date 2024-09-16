@@ -92,7 +92,7 @@ void *ListPrev(LIST *list){
     }
     
     // check if the curser is not list head
-    if (list -> curser == list -> headl) {         
+    if (list -> curser == list -> head) {         
         printf("ERROR: curser is list tail");
         return NULL;
     }

@@ -26,7 +26,7 @@ void *ListRemove(LIST *list){
 void ListFree(LIST *list, ITEMFREE *itemFree){
 
     // if the List struct pointer is not right
-    if (list == NULL || itemfree == NULL) {
+    if (list == NULL || itemFree == NULL) {
         printf("ERROR: list or itemfree is NULL \n");
         return NULL;
     }

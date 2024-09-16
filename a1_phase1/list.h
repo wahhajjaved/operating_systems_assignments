@@ -24,7 +24,7 @@ typedef int (*COMPARATOR)(void *, void *);
  */
 typedef void (*ITEMFREE)(void *);
 
-int nodes_num;
+//int nodes_num;
 
 /*
  * STRUCT
@@ -39,7 +39,8 @@ typedef struct node {
 typedef struct list {
     NODE *head;
     NODE *tail;
-    NODE storage;
+    NODE *curser;
+    int count;
     int size;
 } LIST;
 
@@ -47,17 +48,17 @@ typedef struct list {
 /*
  * array of list
  */
- LIST dictionary[MAX_LIST];
+ //LIST dictionary[MAX_LIST];
 
 /*
  * array of free list
  */
- LIST freed_list[MAX_LIST_SIZE];
+ //LIST freed_list[MAX_LIST_SIZE];
 
 /*
  * array of free nodes
  */
- NODE freed_node[MAX_NODE];
+// NODE freed_node[MAX_NODE];
 
 /*
  * creates a new empty list and return its reference or Null if fails
