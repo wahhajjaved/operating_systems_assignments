@@ -26,7 +26,7 @@ fi
 
 case "$1" in
     "partA1")
-        if [[ $(uname -s ) != "Windows" ]]; then
+        if [[ ! $(uname -s ) =~ "MINGW"  ]]; then
             echo "partA1 only works on Windows"
             echo
             print_help
