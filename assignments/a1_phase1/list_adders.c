@@ -1,8 +1,9 @@
-/* Authors
- *Wahhaj Javed, muj975, 11135711
- *Nakhba Mubashir, epl482, 11317060
- *
+/*
+ *@author Wahhaj Javed, muj975, 11135711
+ *@author Nakhba Mubashir, epl482, 11317060
+ *@date 2024-09-16
  */
+
 
 #include "list.h"
 int nodes_num;

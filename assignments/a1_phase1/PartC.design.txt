@@ -1,6 +1,6 @@
-Authors: 
-Wahhaj Javed, muj975, 11135711
-Nakhba Mubashir, epl482, 11317060
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-16
 
 ASSIGNMENT 1: PHASE 1
 PART C design document
@@ -252,7 +252,8 @@ test:
 
 ___
 void ListFree(list, itemFree)
-description:delete list. itemFree is a pointer to a routine that frees an item. It should be invoked (within ListFree) as: (*itemFree)(itemToBeFreed);
+description:delete list. itemFree is a pointer to a routine that frees an item.
+    It should be invoked (within ListFree) as: (*itemFree)(itemToBeFreed);
 algorithm:
     iterate through the list, for each call (*itemFree)(itemToBeFreed)
     add to freed_list
