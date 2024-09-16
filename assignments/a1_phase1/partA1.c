@@ -28,7 +28,8 @@ int get_index() {
 }
 
 DWORD WINAPI tmain(LPVOID lpParam) {
-	int n, index, elapsedTime;
+	int n, index, elapsedTimeMs;
+	double elapsedTime;
 	LARGE_INTEGER frequency, startTime, endTime;
 	
 	n = *(int*)lpParam;
@@ -40,17 +41,17 @@ DWORD WINAPI tmain(LPVOID lpParam) {
 
 	QueryPerformanceFrequency(&frequency);
 	QueryPerformanceCounter(&startTime);
-	pStartTime[index] = startTime.QuadPart / frequency.QuadPart;
+	pStartTime[index] = (startTime.QuadPart * 1000000) / frequency.QuadPart;
 
 	square(n);
 
 	QueryPerformanceCounter(&endTime);
-	endTime.QuadPart = endTime.QuadPart / frequency.QuadPart;
-	/*TODO change to double*/
-	elapsedTime = endTime.QuadPart - pStartTime[index];
+	endTime.QuadPart = (endTime.QuadPart * 1000000) / frequency.QuadPart;
+	elapsedTimeMs = endTime.QuadPart - pStartTime[index];
+	elapsedTime = elapsedTimeMs / 1000000.0;
 
 	printf("Thread %d finished. Square called %d times. "
-		"Thread ran for %d micro seconds.\n",
+		"Thread ran for %.10f seconds.\n",
 		index, pSquareCount[index], elapsedTime);
 	return 0;
 
