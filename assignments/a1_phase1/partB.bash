@@ -86,7 +86,8 @@ while read -r -a line; do
         continue
     fi
     echo "Processing line ${line[@]} using $exe"
-    # $exe "$threads" "$deadline" "$size"
+    $exe "$threads" "$deadline" "$size"
+    echo
 done
 
 echo "Exiting partB.bash"
