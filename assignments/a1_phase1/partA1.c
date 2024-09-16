@@ -46,7 +46,7 @@ DWORD WINAPI tmain(LPVOID lpParam) {
 
 	QueryPerformanceCounter(&endTime);
 	endTime.QuadPart = endTime.QuadPart / frequency.QuadPart;
-
+	/*TODO change to double*/
 	elapsedTime = endTime.QuadPart - pStartTime[index];
 
 	printf("Thread %d finished. Square called %d times. "
@@ -99,6 +99,7 @@ int main(int argc, char* argv[]) {
 			printf("CreateThread failed. Error: %lu\n", GetLastError());
 			return 1;
 		}
+		threadHandles[i] = handle;
 
 		/*15 is enough to store each digit of int32 with some room to spare*/
 		swprintf(desc, 15, L"%d", i);
