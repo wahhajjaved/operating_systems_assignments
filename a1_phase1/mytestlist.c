@@ -12,8 +12,11 @@ int main(void){
     int (*testCOMPARATOR)(void *V, void *I);
     void (*testITEMFREE)(void *I);    
 
-    L1= ListCreat();
+    L1= ListCreate();
 	printf("got to procedure ListCreate()\n");
+
+    L2= ListCreate();
+    printf("got to procedure ListCreate()\n");
 
 	ListCount(L1);
 	printf("got to procedure ListCount()\n");
