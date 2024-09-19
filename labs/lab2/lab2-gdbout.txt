@@ -35,4 +35,4 @@ $9 = 1
 $10 = (int *) 0x4052a0
 
 B1:
-
+kernel/main.c:44 scheduler()
