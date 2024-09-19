@@ -1,0 +1,65 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-09-19
+
+##############
+##### A1 #####
+
+Breakpoint 1, main (argc=1, argv=0x7fffffffd4a8) at program.c:39
+39                      x = numbers[i];
+(gdb) info locals
+i = 0
+x = 0
+y = 0
+arrSize = 50
+iPtr1 = 0x0
+iPtr2 = 0x0
+numbers = 0x4052a0
+heapNeighbour = 0x405370
+mallocBlk = 113
+
+
+
+##############
+##### A2 #####
+
+(gdb) p numbers + (arrSize -1)
+$1 = (int *) 0x405364
+
+Both iPtr1 and iPtr2 are 0x0 and lie outside of the numbers array because
+the array starts at adress 0x4052a0 and ends at 0x405364
+
+
+
+##############
+##### A3 #####
+
+(gdb) b 43 if iPtr2 > (numbers + arrSize - 1)
+Breakpoint 5 at 0x401292: file program.c, line 43.
+Breakpoint 5, main (argc=1, argv=0x7fffffffd4a8) at program.c:43
+43                      *iPtr2 = x;
+(gdb) info locals
+i = 2
+x = 5
+y = 40
+arrSize = 50
+iPtr1 = 0x4052b4
+iPtr2 = 0x405390
+numbers = 0x4052a0
+heapNeighbour = 0x405370
+mallocBlk = 113
+
+
+
+##############
+##### A4 #####
+
+(gdb) p iPtr2 - heapNeighbour
+$29 = 8
+
+Affected neighbour it at address iPtr2 = 0x405390
+
+
+
+
+
+
