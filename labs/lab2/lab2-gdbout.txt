@@ -11,6 +11,28 @@ heapNeighbour = 0x405370
 mallocBlk = 113
 
 A2:
-
 0
+
+A3:
+i = 0
+x = 0
+y = 0
+arrSize = 50
+iPtr1 = 0x4052a0
+iPtr2 = 0x0
+numbers = 0x4052a0
+heapNeighbour = 0x405370
+mallocBlk = 113
+
+A4:
+(gdb) print heapNeighbour
+$7 = (int *) 0x405370
+(gdb) print &heapNeighbour
+$8 = (int **) 0x7fffffffdb68
+(gdb) print *heapNeighbour
+$9 = 1
+(gdb) print iPtr1
+$10 = (int *) 0x4052a0
+
+B1:
 
