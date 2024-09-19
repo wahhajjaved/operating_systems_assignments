@@ -1,0 +1,36 @@
+commit 6c00fbc59efe1adc0042cb51290495566fadfd33
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 19 15:02:11 2024 -0600
+
+    added the B1 in file for backtracing of xv6
+
+commit f6fd0ad049029e4a3f690b4bc8cf5dd78556e895
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 19 11:58:23 2024 -0600
+
+    xv6 is running and added its screenshot
+
+commit 5692d58541d95cca1c80097ba0ec42edd444440a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 19 09:16:05 2024 -0600
+
+     edited A3 and A4
+
+commit 6a7928a608898434079077b22ef8df3125d75b53
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Sep 18 21:40:29 2024 -0600
+
+    added the part c group management skills part
+
+commit 417c505991c9a5bfc01d34b4acacfac6672ce38e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Sep 18 21:22:29 2024 -0600
+
+    debugged (gdb) according to the lab instruction
+
+commit 7dd68da1ba35a3a01cf681b2b1f880422f69d7bd
+Merge: 6a1bcab eb94345
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Sep 17 17:02:48 2024 -0600
+
+    add xv6
