@@ -9,8 +9,13 @@
 
 #include <stdlib.h> 
 #include <stdio.h>
+#include <err.h>
+
+
 #define MAX_NODE 100
 #define MAX_LIST 100
+#define MIN_LIST 2
+#define MIN_NODE 2
 #define MAX_LIST_SIZE 100
 
 /*
@@ -41,6 +46,7 @@ typedef struct list {
     NODE *curser;
     int count;
     int size;
+    struct list *nextfreeList;
 } LIST;
 
 
