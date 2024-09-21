@@ -6,11 +6,62 @@
 
 
 #include "list.h"
-int nodes_num;
+int nodesNum;
+int listNum;
+LIST *listDict= NULL; /* dict of lists*/
+LIST *aviableList=NULL;
+Node *aviableNode=NULL;
+
+/*
+ *Allocatingand initializing  memory for list
+ */
+void listInit(void){
+    int i;
+    for (i<
+}
+
+
+void Increse_List_Memory(){
+    int i;
+    listnum *=2
+    listDict= (LIST*) malloc ((listnum*2) * sizeof(LIST));
+
+    /* initialize the new list*/
+
+    for (i=(listNum/2); i<listNum; i++){
+        listDict[i].size=0;
+    }
+    
+}
+NODE *new_node(){
+    NODE newNode;
+
+    newNode= avaiableNode-> next;
+    avaiableNode= avaiableNode-> next;
+    return newNode;
+
+}
+
 
 LIST *ListCreate(){
     /*TODO */
-    return NULL;
+    LIST *newList;
+
+    if (list_dict == NULL){
+    listInit(); 
+    }
+    
+    /*get new list and initilize it */
+    newlist= aviable_list;
+    aviable_list= newList-> nextfreeList;
+    newList-> nextfreeList= NULL;
+    
+    newList -> head= NULL;
+    newList -> tail= NULL;
+    newList -> curser= NULL;
+    newList -> size= 0;
+
+    return newList;
 }
 
 
@@ -30,7 +81,10 @@ int ListAdd(LIST *list,void *item){
         return -1;
     }
 
-   /*TODO */
+    newNode= avaiableNode-> next;
+    avaiableNode= avaiableNode-> next;
+    newNode-> item=item;
+    newNode-> next=null;
     return -1;
 
 }
