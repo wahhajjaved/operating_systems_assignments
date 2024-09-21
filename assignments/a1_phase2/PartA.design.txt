@@ -1,0 +1,93 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+
+Description
+
+Windows program that uses multiple threads to compute squares of
+positive integers in parallel.
+
+Usage: ./partA1 threads deadline size.
+
+Parent Thread Functionality:
+    - Create M child threads
+    - Sleep until deadline
+    - Inform children to exit if deadlines is reached before
+        child threads finish
+
+Child Thread Functionality:
+    - compute Square(), provided in assignment
+    - Square() should count the number of times its been invoked
+    - On child thread exit, print:
+        -- elapsed time since child began
+        -- number of invocations of Square()
+
+
+
+Solution
+
+    - CreateThread() requires the function to be run in the form of
+        DWORD WINAPI MyThreadFunction( LPVOID lpParam ). Can't change
+        Square()'s parameters to match CreateThread()'s requirement so tmain()
+        will be used as the child thread's entry point, which in turn calls
+        Square()
+
+    - To signal child threads to stop, a global boolean variable can be
+        checked at the start of Square()
+
+     - Square()'s invocation count can be stored inside a global array. Each
+        thread gets one element in that array to store its count
+
+    - Can't pass count array index to Square() so indexing has to be done
+        another way. The assignment specs recommend thread id, but that is
+        a 32 bit integer, and would require some type of hashing to keep
+        the count array size small. Instead, SetThreadDescription() can be
+        used to set an index, which the thread can obtain using
+        GetThreadDescription(). Conversion to and from string to int will be
+        required to use these functions.
+
+    - Threads should be created with the CREATE_SUSPENDED flag set so they
+        dont run immediately upon creation. This will give time for the
+        thread description to be set. Threads can be manually started using
+        ResumeThread()
+
+    - On exit threads are also required to output elapsed time. The start time
+        can be stored in a global array, similar to invocation count. It can
+        be indexed using the value passed through SetThreadDescription().
+
+    - Assignment specs recommend GetSystemTime() to get the current time, but
+        this method is only accurate to miliseconds. Furthermore, it returns
+        a SYSTEMTIME struct, which does not support arithematic and makes
+        calculating elapsed time difficult. GetTickCount() is much simpler to
+        use for computing elapsed time, but it is only accurate to the 10 ms
+        range. Microsoft recommends using QueryPerformanceCounter() to
+        get a counter accurate in the microsecond range. This counter also
+        supports arithematic, making is easy to calculate elapsed time
+
+        Example code for using QueryPerformanceCounter given my Microsoft:
+
+            LARGE_INTEGER StartingTime, EndingTime, ElapsedMicroseconds;
+            LARGE_INTEGER Frequency;
+
+            QueryPerformanceFrequency(&Frequency);
+            QueryPerformanceCounter(&StartingTime);
+
+            // Activity to be timed
+
+            QueryPerformanceCounter(&EndingTime);
+            ElapsedMicroseconds.QuadPart = EndingTime.QuadPart -
+                                            StartingTime.QuadPart;
+
+
+            //
+            // We now have the elapsed number of ticks, along with the
+            // number of ticks-per-second. We use these values
+            // to convert to the number of elapsed microseconds.
+            // To guard against loss-of-precision, we convert
+            // to microseconds *before* dividing by ticks-per-second.
+            //
+
+            ElapsedMicroseconds.QuadPart *= 1000000;
+            ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+
+
+
