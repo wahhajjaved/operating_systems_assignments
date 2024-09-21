@@ -25,34 +25,42 @@ Child Thread Functionality:
 
 Solution
 
-    - CreateThread() requires the function to be run in the form of
-        DWORD WINAPI MyThreadFunction( LPVOID lpParam ). Can't change
-        Square()'s parameters to match CreateThread()'s requirement so tmain()
-        will be used as the child thread's entry point, which in turn calls
-        Square()
-
     - To signal child threads to stop, a global boolean variable can be
         checked at the start of Square()
+    
+    - Different platforms require different function signatures for the thread
+        entry point. Can't change Square() to match this func requirement 
+        on windows since CreateThread requires 
+        DWORD WINAPI MyThreadFunction( LPVOID lpParam ). So a wrapper function
+        can be used which calls Square()
+    
+    - This wrapper function will be platform specific but will call the same
+        Square() function
+        
+    - On exit threads are required to output elapsed time. The wrapper 
+        will get the start time before calling Square() and compute the elapsed
+        time after Square() returns.
+        
+     - On exit threads are required to output Square()'s invocation count. This
+        can be stored inside a global array. Each thread gets one element in 
+        that array to store its count. Square() will need to know the index to 
+        store data. Options are discussed below in the Data Storage section
+        
+    - Using thread local storage is the best option as it gets rid of the 
+        overhead of getting the thread ID every invocation of Square().
+    
+    
 
-     - Square()'s invocation count can be stored inside a global array. Each
-        thread gets one element in that array to store its count
-
-    - Can't pass count array index to Square() so indexing has to be done
-        another way. The assignment specs recommend thread id, but that is
-        a 32 bit integer, and would require some type of hashing to keep
-        the count array size small. Instead, SetThreadDescription() can be
-        used to set an index, which the thread can obtain using
-        GetThreadDescription(). Conversion to and from string to int will be
-        required to use these functions.
-
-    - Threads should be created with the CREATE_SUSPENDED flag set so they
-        dont run immediately upon creation. This will give time for the
-        thread description to be set. Threads can be manually started using
-        ResumeThread()
-
-    - On exit threads are also required to output elapsed time. The start time
-        can be stored in a global array, similar to invocation count. It can
-        be indexed using the value passed through SetThreadDescription().
+Part A1 Design
+    
+    - In windows, threads are created using CreateThread()
+    
+    - CreateThread() requires the function to be run in the form of 
+        DWORD WINAPI MyThreadFunction( LPVOID lpParam ). 
+    
+    - In windows, thread local variables are declared using 
+        __declspec( thread ) int tls_i;
+    
 
     - Assignment specs recommend GetSystemTime() to get the current time, but
         this method is only accurate to miliseconds. Furthermore, it returns
@@ -91,3 +99,45 @@ Solution
 
 
 
+Data Storage
+
+    n = number of threads
+    m = number of times Square is called
+    O(getThreadID) = Time complexity of the system call used get the thread
+        ID of the current thread.
+    
+    Data used by Square() is stored in an array called threadData.
+    This array has n elements.
+
+Option 1:
+    - On each invocation of Square()
+        Get thread id 
+        search through threadData to find a threadId match
+        update data
+    
+    
+    get index time complexity on each call of Square() = O(n) + O(getThreadID)
+
+
+
+Option 2:
+    - Index passed to wrapper and stored in a global variable using thread
+        local storage. Square() can then get the index from this variable.
+    
+    get index time complexity on each call of Square() = O(1)
+    
+
+
+Option 3:
+    - Use hashing to convert a threadid to an index. 
+    - On windows, thread IDs are guarenteed to be unique system wide while the
+        thread exists
+    - In pthreads, thread IDs are only guarenteed to be unique within a process
+    - Uniqueness means no collisions so the hash will have O(1) access time.
+    - Hash built by main thread. Square() gets the current thread ID and then 
+        gets the index by hashing it.
+    
+    
+    get index time complexity on each call of Square() = O(n) + O(getThreadID)
+    
+    
