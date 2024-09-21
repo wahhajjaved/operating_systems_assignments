@@ -8,6 +8,12 @@
 #include "list.h"
 int nodes_num;
 
+LIST *ListCreate(){
+    /*TODO */
+    return NULL;
+}
+
+
 int ListAdd(LIST *list,void *item){
      /* if the List struct pointer is not right*/
     if (list == NULL) {

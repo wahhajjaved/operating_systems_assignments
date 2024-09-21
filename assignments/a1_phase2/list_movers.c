@@ -6,10 +6,6 @@
 
 
 #include "list.h"
-LIST *ListCreate(){
-    /*TODO */
-    return NULL;
-}
 
 int ListCount(LIST *list){
     /* if the List struct pointer is not right*/
