@@ -132,6 +132,17 @@ Part A2 Design
         the thread, including whether it has finished and printed its output.
         If it hasn't, then the main thread can handle the printing. 
 
+    - StartETimer() and StopETimer() defined in os.h can be used to get elapsed
+        time. 
+    
+    - UBC pthreads do not have a mechanism for thread local storage. However,
+        each thread can be given a name. The index can be stored in this name.
+    
+
+Part A3
+
+    - 
+
     - The time can be obtained using clock_gettime() system call available
         in time.h. 
             int clock_gettime(clockid_t clk_id, struct timespec *tp);
