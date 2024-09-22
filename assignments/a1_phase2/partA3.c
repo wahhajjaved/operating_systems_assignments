@@ -19,32 +19,30 @@ int getIndex() {
 	return index;
 }
 
-/* Entry point of the thread
-	
-	Parameters
-		LPVOID lpParam: Array of ints. lpParam[0] is index of pSquareCount at
-			which Square()'s call count is stored. lpParam[0] is the value
-			passed to Square() when it is called
-	
-	Return
-		0. Return value doesn't mean anything. It only exists to conform with
-		the windows api
-*/
 void* tmain(void* lpParam) {
 	int32_t n, index;
 	int32_t* params;
+    uint64_t elapsedTime;
+	struct timespec startTime, endTime;
 	
+
 	params = (int32_t*)lpParam;
 	index = params[0];
 	n = params[1];
     
-	printf("tmain: index %d, n: %d\n", index, n);
 	pthread_setspecific(tlsKey, (void*)&index);
 
+    clock_gettime(CLOCK_MONOTONIC, &startTime);
 	Square(n);
+	clock_gettime(CLOCK_MONOTONIC, &endTime);
 
-	printf("Thread %d finished. Square called %d times. \n",
-		index, pSquareCount[index]);
+	elapsedTime = 1000000000L * (endTime.tv_sec - startTime.tv_sec) + 
+        endTime.tv_nsec - startTime.tv_nsec;
+	elapsedTime = elapsedTime / 1000;
+    printf("Thread %d finished. "
+        "Square called %d times. "
+        "Thread ran for %lu microseconds.\n",
+		index, pSquareCount[index], elapsedTime);
 	
 	return 0;
 
