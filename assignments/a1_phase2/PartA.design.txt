@@ -141,8 +141,21 @@ Part A2 Design
 
 Part A3
 
-    - 
-
+    - int pthread_create(pthread_t *restrict thread,
+                          const pthread_attr_t *restrict attr,
+                          void *(*start_routine)(void *),
+                          void *restrict arg);
+        
+        is used to create a pthread. 
+        pthread_create stores the thread id in thread
+        attr should be set to NULL for default attributes
+        start_routine is the entry point of thread
+        arg is the argument to start_routine
+    
+    - pthread_key_create() is used to create thread local storage. Then
+        pthread_setspecific() is used to set a variable and 
+        pthread_getspecific() to get that variable.
+        
     - The time can be obtained using clock_gettime() system call available
         in time.h. 
             int clock_gettime(clockid_t clk_id, struct timespec *tp);
