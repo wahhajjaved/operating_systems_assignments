@@ -36,7 +36,6 @@ DWORD WINAPI tmain(LPVOID lpParam) {
 	int n, index, elapsedTimeMs;
 	double elapsedTime;
 	LARGE_INTEGER frequency, startTime, endTime;
-	
 	int* params;
 	
 	params = (int*)lpParam;
@@ -70,6 +69,7 @@ int main(int argc, char* argv[]) {
 	HANDLE *threadHandles;
 	DWORD *threadIDs;
 	int i;
+	int32_t** threadParams;
 
 	if (argc != 4) {
 		printf("Invalid number of arguments.\n");
@@ -114,18 +114,18 @@ int main(int argc, char* argv[]) {
 	pStartTime = (int64_t *)calloc(threads, sizeof(int64_t));
 	
 	
-	
+	threadParams = malloc(threads * sizeof(int32_t*));
 	for(i=0; i<threads; i++) {
 		HANDLE handle;
-		int params[2];
+		threadParams[i] = malloc(sizeof(int32_t) * 2);
+		threadParams[i][0] = i;
+		threadParams[i][1] = size;
 		
-		params[0] = i;
-		params[1] = size;
 		handle = CreateThread(
 			NULL,
 			0,
 			tmain,
-			&params,
+			threadParams[i],
 			CREATE_SUSPENDED,
 			&threadIDs[i]
 		);
