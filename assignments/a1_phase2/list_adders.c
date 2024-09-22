@@ -120,9 +120,34 @@ int ListAdd(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;   }
 
+    /*get an unused node  */
+    Node *newNode=new_node();
+    if (newNode ==NULL) return -1;
+    
     newNode-> item=item;
     newNode-> next=null;
-    return -1;
+    
+    if (list->size==0){
+        newNode-> next =NULL;
+        list-> head= newNode;
+        list-> tail= newNode;
+    }
+    else if (list->cursor ==list->tail){
+        newNode->prev =list->tail;
+        list->tail->next =newNode;
+        list->tail=newNode;
+        }
+    else{
+        newNode->prev=list->curser;
+        newNode->next=list->curser->next;
+        list->curser->next->prev=newNode;
+        list->curser->next=newNode;
+    
+        }
+    list->curser=newNode;
+    list->size++;
+
+    return =;
 
 }
 int ListInsert(LIST *list,void *item){
