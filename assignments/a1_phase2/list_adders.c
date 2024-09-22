@@ -9,15 +9,41 @@
 int nodesNum;
 int listNum;
 LIST *listDict= NULL; /* dict of lists*/
+NODE *NodeDict= NULL; /* dict of all the nodes*/
 LIST *aviableList=NULL;
-Node *aviableNode=NULL;
+NODE *aviableNode=NULL;
 
 /*
  *Allocatingand initializing  memory for list
  */
 void listInit(void){
     int i;
-    for (i<
+
+    /* Allocating memory */
+    listDict= (LIST*) malloc ((MIN_LIST) * sizeof(LIST));
+    if (listDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED"); 
+
+    NodeDict= (NODE*) malloc ((MIN_NODE) * sizeof(NODE));
+    if (listNode ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED "); 
+
+    /* initialization */
+     aviableList=&listDict[0];
+     aviableNode=&nodeDict[0];
+    
+    for ( i=0; i<(MIN_LIST-1); i++){
+        listDict[i].size=0;
+        listDict[i].nextfreeList= &listDict[i+1];
+    }
+    listdict[i].nextfreeList= NULL; //last
+
+    for ( i=0; i<(MIN_NODE-1); i++){
+        listNode[i].next= &listNode[i+1];
+        if (i==0) listNode[i].prev= NULL;
+        else {
+             listNode[i].prev= &listNode[i-1];
+        }
+    }
+    listNode[i].next= NULL; //last
 }
 
 
@@ -33,6 +59,8 @@ void Increse_List_Memory(){
     }
     
 }
+
+
 NODE *new_node(){
     NODE newNode;
 
@@ -42,13 +70,25 @@ NODE *new_node(){
 
 }
 
+LIST *new_list(){
+    LIST newList;
+    
+    if (aviable_list==NULL) Increse_List_Memory();
+
+    newList= avaiableList-> next;
+    avaiableList= avaiableList-> nextfreeList;
+    newList-> nextfreeList= NULL;
+    return newList;
+
+}
+
 
 LIST *ListCreate(){
     /*TODO */
     LIST *newList;
 
     if (list_dict == NULL){
-    listInit(); 
+        listInit(); 
     }
     
     /*get new list and initilize it */
