@@ -52,49 +52,20 @@ void* tmain(void* lpParam) {
 
 
 int main(int argc, char* argv[]) {
-	char *p;
-	int32_t threads, size, deadline;
+	int32_t threads, size, deadline, *args;
 	pthread_t *threadIDs;
 	int i;
 	int32_t** threadParams;
 
-	if (argc != 4) {
-		printf("Invalid number of arguments.\n");
-		printf("Usage: ./partA1 threads deadline size.\n");
-		return 1;
-	}
-	
-	threads = strtol(argv[1], &p, 10);
-	deadline = strtol(argv[2], &p, 10);
-	size = strtol(argv[3], &p, 10);
-	
-	if (threads < 1){
-		printf("Invalid value %d for number of threads. Must be at least 1.\n",
-			threads
-		);
-		return 1;
-	}
-	if (deadline <= 0){
-		printf("Invalid value %d for deadline . Must be greater than 0\n",
-			deadline
-		 );
-		return 1;
-	}
-	if (size < 0){
-		printf("Invalid value %d for size. Must be at least 0\n", size);
-		return 1;
-	}
-
-	
-	printf("threads %d, deadline %d, size %d\n", threads, deadline, size);
-
+	args = parseArgs(argc, argv);
+    if (args == NULL){
+        return 1;
+    }
+    threads = args[0];
+	deadline = args[1];
+	size = args[2];
 
 	pthread_key_create(&tlsKey, NULL);
-    /*
-	if (tlsIndex == TLS_OUT_OF_INDEXES) {
-        printf("Failed to allocate TLS index\n");
-        return 1;
-    }*/
 	
 	threadIDs = malloc(sizeof(pthread_t) * threads);
 	pSquareCount = (int32_t *)calloc(threads, sizeof(int32_t));

@@ -15,5 +15,6 @@ extern int stopSquare;
 
 extern int getIndex();
 int64_t square(int n);
+int32_t* parseArgs(int argc, char* argv[]);
 
 #endif

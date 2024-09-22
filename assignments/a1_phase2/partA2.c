@@ -52,8 +52,6 @@ PROCESS parentThreadFunction(void* params){
 	deadline = args[1];
 	size = args[2];
 	
-	printf("parentThreadFunction: threads %d, deadline %d, size %d\n", threads, deadline, size);
-
 	threadIDs = (PID *)malloc(sizeof(PID) * threads);
 	pSquareCount = (int32_t *)calloc(threads, sizeof(int32_t));
 	pStartTime = (int64_t *)calloc(threads, sizeof(int64_t));
@@ -86,48 +84,17 @@ PROCESS parentThreadFunction(void* params){
 
 
 void mainp(int argc, char* argv[]) {
-	char *p;
-	int32_t threads, size, deadline;
-	int32_t* threadParams;
+	int32_t *args;
 
-	if (argc != 4) {
-		printf("Invalid number of arguments.\n");
-		printf("Usage: ./partA1 threads deadline size.\n");
-		return;
-	}
-	
-	threads = strtol(argv[1], &p, 10);
-	deadline = strtol(argv[2], &p, 10);
-	size = strtol(argv[3], &p, 10);
-	
-	threadParams = calloc(3, sizeof(int32_t));
-	threadParams[0] = threads;
-	threadParams[1] = deadline;
-	threadParams[2] = size;
-	
-	if (threads < 1){
-		printf("Invalid value %d for number of threads. Must be at least 1.\n",
-			threads
-		);
-		return;
-	}
-	if (deadline <= 0){
-		printf("Invalid value %d for deadline . Must be greater than 0\n",
-			deadline
-		 );
-		return;
-	}
-	if (size < 0){
-		printf("Invalid value %d for size. Must be at least 0\n", size);
-		return;
-	}
-	
-	printf("threads %d, deadline %d, size %d\n", threads, deadline, size);
+	args = parseArgs(argc, argv);
+    if (args == NULL){
+        return;
+    }
 	
 	 Create( (void(*)()) parentThreadFunction,
 		16000,
 		"a",
-		(void *) threadParams,
+		(void *) args,
 		NORM,
 		USR
 	);

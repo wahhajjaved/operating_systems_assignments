@@ -37,15 +37,19 @@ compile = $(CC) $(CFLAGS) $(CPPFLAGS) $(I)
 
 ifeq ($(os), Windows)
     all_exes = partA1
+	partA_exes = PartA1
 else ifeq ($(os), Linux)
     all_exes = partA2 partA3 mytestlist
+	partA_exes = partA2 partA3
 else
     $(error Only Window and Linux are supported in this make file)
 endif
 $(info Making $(all_exes))
 
-.PHONY: all
+.PHONY: all partA
 all: mkdirs $(all_exes)
+
+partA: mkdirs $(partA_exes)
 	
 
 ############################

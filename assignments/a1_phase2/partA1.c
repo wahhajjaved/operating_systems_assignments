@@ -63,7 +63,6 @@ DWORD WINAPI tmain(LPVOID lpParam) {
 }
 
 int main(int argc, char* argv[]) {
-	char *p;
 	int32_t threads, size;
 	double deadline;
 	HANDLE *threadHandles;
@@ -71,35 +70,13 @@ int main(int argc, char* argv[]) {
 	int i;
 	int32_t** threadParams;
 
-	if (argc != 4) {
-		printf("Invalid number of arguments.\n");
-		printf("Usage: ./partA1 threads deadline size.\n");
-		return 1;
-	}
-	
-	threads = strtol(argv[1], &p, 10);
-	deadline = strtod(argv[2], &p);
-	size = strtol(argv[3], &p, 10);
-	
-	if (threads < 1){
-		printf("Invalid value %d for number of threads. Must be at least 1.\n",
-			threads
-		);
-		return 1;
-	}
-	if (deadline <= 0){
-		printf("Invalid value %.2f for deadline . Must be greater than 0\n",
-			deadline
-		 );
-		return 1;
-	}
-	if (size < 0){
-		printf("Invalid value %d for size. Must be at least 0\n", size);
-		return 1;
-	}
-
-	
-	printf("threads %d, deadline %.2f, size %d\n", threads, deadline, size);
+	args = parseArgs(argc, argv);
+    if (args == NULL){
+        return 1;
+    }
+    threads = args[0];
+	deadline = args[1];
+	size = args[2];
 
 
 	tlsIndex = TlsAlloc();
