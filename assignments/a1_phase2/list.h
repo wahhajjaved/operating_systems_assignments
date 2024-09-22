@@ -34,7 +34,7 @@ typedef void (*ITEMFREE)(void *);
  * STRUCT
  */
 typedef struct node {
-    void *value;
+    void *item;
     struct node *next;
     struct node *prev;
 
