@@ -6,6 +6,7 @@ Test plan:
 - in main fuction printout if the fuction do as intended(test successful) and
   if the test fail print out the the parameter, list and intended output.
 
+- for create list printout the list;
 TEST cases:
 
 ListCreate():
