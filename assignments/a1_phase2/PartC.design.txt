@@ -1,6 +1,7 @@
 @author Wahhaj Javed, muj975, 11135711
 @author Nakhba Mubashir, epl482, 11317060
 @date 2024-09-16
+@updates: 204-09-22
 
 ASSIGNMENT 1: PHASE 1
 PART C design document
@@ -107,7 +108,7 @@ test:
     4. middle
 ____
 void *ListPrev(list)
-description: goes to the prev node in list, return the pointer to current
+desciption: goes to the prev node in list, return the pointer to current
 item or NULL if no current item
 
 algorithm:
@@ -272,8 +273,7 @@ algorithm:
     listRemove(list)
     add to freed_node
 
-test:
-
+test:test when list is empty and not empty
 ___
 void *ListSearch(list, comparator, comparisonArg)
 description:searches list starting at the current item until the end is reached
