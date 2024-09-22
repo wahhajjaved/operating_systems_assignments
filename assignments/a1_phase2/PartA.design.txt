@@ -98,6 +98,42 @@ Part A1 Design
             ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
 
 
+Part A2 Design
+
+    - UBC pthreads use the word process for threads
+    
+    - New processes are created using Create(). It is declared in os.h as
+        EXTERN PID  Create( void(*)(),  int, char *, void *, PPRIO, int );
+    
+    - The documentation on Canvas defines it as PID Create(void(*addr)(), 
+        int stksize, char *name, void *arg, PPRIO prio, int level)
+    
+    - The first argument is the function pointer to the entry point of the 
+        thread. Based on the documentation and how it was used in Lab 1, this
+        function pointer needs to be cast to one without any parameters
+        
+    - The parameters to the function are passed through the void *arg argument
+
+    - char *name is a user defined string attached to a thread. This can be
+        used to pass the index to the global array in which Square()'s call
+        count is stored. 
+    
+    - The other parameters can be set to how they are set in Lab 1 sample code
+    
+    - The assignment specs require that for this part, the parent explicitly
+        kill the child threads and print out the statistics for each child
+        that hasn't finished executing when the deadline occurs.
+    
+    - Kill() is used for killing child threads. It requires the PID of the
+        thread to be killed and returns the same PID if successfull and 
+        PNUL not.
+    
+    - Another option is that a structure can be used to store everything about
+        the thread, including whether it has finished and printed its output.
+        If it hasn't, then the main thread can handle the printing. 
+    
+    
+        
 
 Data Storage
 
