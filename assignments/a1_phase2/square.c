@@ -52,7 +52,7 @@ int32_t* parseArgs(int argc, char* argv[]) {
 	}
 	
 	threads = strtol(argv[1], NULL, 10);
-	deadline = strtod(argv[2], NULL);
+	deadline = strtol(argv[2], NULL, 10);
 	size = strtol(argv[3], NULL, 10);
 	
 	if (threads < 1){

@@ -1,0 +1,155 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-21
+
+
+Number: 1
+Description: Invalid number of arguments
+Input: 1 1 1 1
+Expected Output: Exit code = 1
+
+
+Number: 2
+Description: Num threads less than 1
+Input: 0 1 1 
+Expected Output: Exit code = 1
+
+
+Number: 3
+Description: Num threads non-integer
+Input: 1.1 1 1
+Expected Output: Exit code = 1
+
+
+Number: 4
+Description: Num threads non-number
+Input: a 1 1
+Expected Output: Exit code = 1
+
+
+Number: 5
+Description: deadline not greater than 0
+Input: 1 0 1
+Expected Output: Exit code = 1
+
+
+Number: 6
+Description: deadline non-integer
+Input: 1 1.1 1
+Expected Output: Exit code = 1
+
+
+Number: 7
+Description: deadline non-number
+Input: 1 a 1
+Expected Output: Exit code = 1
+
+
+Number: 8
+Description: size less than 1
+Input: 1 1 0
+Expected Output: Exit code = 1
+
+
+Number: 9
+Description: size non-integer
+Input: 1 1 1.1
+Expected Output: Exit code = 1
+
+
+Number: 10
+Description: size non-number
+Input: 1 1 a
+Expected Output: Exit code = 1
+
+
+Number: 11
+Description: Square call count accurate
+Input: 5 1000 0
+Expected Output: Square call count = 0
+
+
+Number: 12
+Description: Square call count accurate
+Input: 5 1000 1
+Expected Output: Square call count = 1
+
+
+Number: 13
+Description: Square call count accurate
+Input: 5 1000 2
+Expected Output: Square call count = 3
+
+
+Number: 14
+Description: Square call count accurate
+Input: 5 1000 3
+Expected Output: Square call count = 6
+
+
+Number: 15
+Description: Square call count accurate
+Input: 5 1000 100
+Expected Output: Square call count = 5050
+
+
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
+
+
+Number: 
+Description: 
+Input: 
+Expected Output: 
