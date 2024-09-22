@@ -54,6 +54,7 @@ all: mkdirs $(all_exes)
 
 a1_objects := $(obj_dir)/partA1.o $(obj_dir)/square.o
 a2_objects := $(obj_dir)/partA2.o $(obj_dir)/square.o
+a3_objects := $(obj_dir)/partA3.o $(obj_dir)/square.o
 
 partA1: $(a1_objects)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o partA1 $(a1_objects)
@@ -61,14 +62,17 @@ partA1: $(a1_objects)
 partA2: $(a2_objects)
 	$(compile)  -L$(ubc_pthreads_lib_dir) -o partA2 $(a2_objects) -lpthreads 
 
-partA3:
-	$(info "Target partA3 not yet implemented.")
+partA3: $(a3_objects)
+	$(compile) -o partA3 $(a3_objects) -lpthread
 
 $(obj_dir)/partA1.o: partA1.c square.h
 	$(compile) -c partA1.c -o $(obj_dir)/partA1.o
 
 $(obj_dir)/partA2.o: partA2.c square.h
 	$(compile) -I$(ubc_pthreads_dir) -c partA2.c -o $(obj_dir)/partA2.o
+
+$(obj_dir)/partA3.o: partA3.c square.h
+	$(compile) -c partA3.c -o $(obj_dir)/partA3.o
 	
 $(obj_dir)/square.o: square.c square.h
 	$(compile) -c square.c -o $(obj_dir)/square.o
