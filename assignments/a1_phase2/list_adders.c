@@ -118,11 +118,8 @@ int ListAdd(LIST *list,void *item){
 
 }    if (item == NULL){
         printf("ERROR: item is NULL");
-        return -1;
-    }
+        return -1;   }
 
-    newNode= avaiableNode-> next;
-    avaiableNode= avaiableNode-> next;
     newNode-> item=item;
     newNode-> next=null;
     return -1;

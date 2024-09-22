@@ -44,7 +44,6 @@ typedef struct list {
     NODE *head;
     NODE *tail;
     NODE *curser;
-    int count;
     int size;
     struct list *nextfreeList;
 } LIST;

@@ -11,12 +11,15 @@ PART C design document
 int (*COMPARATOR)(void *, void *)
 void (*ITEMFREE)(void *)
 
-
-
-to store all the list
-struct List list_dict[max]  //dictionary of lists
 struct List Freed_list[]    /// array of freed lists
 struct Node Freed_node      // array of freed of nodes
+
+int nodesNum;              // to keep track of number of nodes used
+int listNum;               // to keep track of number of lists used
+LIST *listDict= NULL;      // dict of lists
+NODE *NodeDict= NULL;      // dict of all the nodes
+LIST *aviableList=NULL;    // the next available list that can be used
+NODE *aviableNode=NULL;    // the next available node that can be used
 
 struct
 Node:
@@ -298,5 +301,18 @@ description: calculate the size of list dictionary
 
 algorithm:
     return size of list_dict/list_dict[0]
+
+void ListInit(void)"{
+    allocate memory to list and node by malloc
+    link the node and list to prev and next
+
+
+void increase_list_memory(){
+    reallocate the memory and initialize
+}
+
+
+// for now for organization purposes new list and new node are there own 
+function
 
 
