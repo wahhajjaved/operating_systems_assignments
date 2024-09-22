@@ -14,7 +14,7 @@ int ListCount(LIST *list){
         return 0;
     }
 
-    if (list-> count <0){
+    if (list-> size <0){
         printf("ERROR: list count cannot be negative");
     }
     /*TODO */
@@ -29,7 +29,7 @@ void *ListFirst(LIST *list){
         return NULL;
     }
     /* check if the list is empty or not*/
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }
@@ -45,11 +45,11 @@ void *ListLast(LIST *list){
         return NULL;
     }
     /* check if the list is empty or not*/
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     } 
-    list->curser=list->curser->tail;
+    list->curser=list->tail;
     return list->curser->item;
 }
 
@@ -61,7 +61,7 @@ void *ListNext(LIST *list){
         return NULL;
     }
     /* check if the list is empty or not*/
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }
@@ -84,7 +84,7 @@ void *ListPrev(LIST *list){
         return NULL;
     }
     /* check if the list is empty or not*/
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }
@@ -106,7 +106,7 @@ void *ListCurr(LIST *list){
         return NULL;
     }
     /* check if the list is not empty */
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }
@@ -121,7 +121,7 @@ void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
         return NULL;
     }
     /* check if the list is empty or not*/
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }    
