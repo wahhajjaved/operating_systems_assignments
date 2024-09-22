@@ -8,8 +8,6 @@
 #define __SQUARE__
 
 #include <stdint.h>
-#include <windows.h>
-
 
 extern int32_t *pSquareCount;
 extern int64_t *pStartTime;

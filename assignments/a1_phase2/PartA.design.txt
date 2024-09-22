@@ -58,9 +58,9 @@ Part A1 Design
     - CreateThread() requires the function to be run in the form of 
         DWORD WINAPI MyThreadFunction( LPVOID lpParam ). 
     
-    - In windows, thread local variables are declared using 
-        __declspec( thread ) int tls_i;
-    
+    - In windows, thread local variables are used by first getting an index 
+        using TlsAlloc() in the main thread. Then each child thread can use
+        TlsSetValue() and TlsGetValue() to set and get data. 
 
     - Assignment specs recommend GetSystemTime() to get the current time, but
         this method is only accurate to miliseconds. Furthermore, it returns
@@ -115,7 +115,6 @@ Option 1:
         search through threadData to find a threadId match
         update data
     
-    
     get index time complexity on each call of Square() = O(n) + O(getThreadID)
 
 
@@ -136,7 +135,6 @@ Option 3:
     - Uniqueness means no collisions so the hash will have O(1) access time.
     - Hash built by main thread. Square() gets the current thread ID and then 
         gets the index by hashing it.
-    
     
     get index time complexity on each call of Square() = O(n) + O(getThreadID)
     
