@@ -38,10 +38,10 @@ void* tmain(void* lpParam) {
 	index = params[0];
 	n = params[1];
     
-	printf("tmain: index %d, n %d\n", index, n);
+	printf("tmain: index %d, n: %d\n", index, n);
 	pthread_setspecific(tlsKey, (void*)&index);
 
-	square(n);
+	Square(n);
 
 	printf("Thread %d finished. Square called %d times. \n",
 		index, pSquareCount[index]);

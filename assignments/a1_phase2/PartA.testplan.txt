@@ -46,8 +46,8 @@ Expected Output: Exit code = 1
 
 
 Number: 8
-Description: size less than 1
-Input: 1 1 0
+Description: size less than 0
+Input: 1 1 -1
 Expected Output: Exit code = 1
 
 
@@ -65,31 +65,31 @@ Expected Output: Exit code = 1
 
 Number: 11
 Description: Square call count accurate
-Input: 5 1000 0
+Input: 2 5 0
 Expected Output: Square call count = 0
 
 
 Number: 12
 Description: Square call count accurate
-Input: 5 1000 1
+Input: 2 5 1
 Expected Output: Square call count = 1
 
 
 Number: 13
 Description: Square call count accurate
-Input: 5 1000 2
+Input: 2 5 2
 Expected Output: Square call count = 3
 
 
 Number: 14
 Description: Square call count accurate
-Input: 5 1000 3
+Input: 2 5 3
 Expected Output: Square call count = 6
 
 
 Number: 15
 Description: Square call count accurate
-Input: 5 1000 100
+Input: 2 5 100
 Expected Output: Square call count = 5050
 
 

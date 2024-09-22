@@ -4,8 +4,6 @@
 # @author Nakhba Mubashir, epl482, 11317060
 # @date 2024-09-14
 
-set -e
-
 print_help() {
     echo "./partB.bash version [<threads deadline size>...]"
     echo "version is one of partA1, partA2, or partA3. partA1 is windows only"

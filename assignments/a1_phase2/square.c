@@ -28,6 +28,17 @@ int64_t square(int n) {
 	return (square(n - 1) + n + n - 1);
 }
 
+int64_t Square(int n) {
+	int64_t r;
+	while(n >= 0){
+		r = square(n);
+		if (r < 0) {
+			return -1;
+		}
+		n--;
+	}
+	return 0;
+}
 
 
 /* Parse the command line arguments
@@ -44,6 +55,8 @@ int64_t square(int n) {
 int32_t* parseArgs(int argc, char* argv[]) {
 	int32_t* r;
 	int32_t threads, size, deadline;
+	char* endptr;
+
 
 	if (argc != 4) {
 		printf("Invalid number of arguments.\n");
@@ -51,28 +64,34 @@ int32_t* parseArgs(int argc, char* argv[]) {
 		return NULL;
 	}
 	
-	threads = strtol(argv[1], NULL, 10);
-	deadline = strtol(argv[2], NULL, 10);
-	size = strtol(argv[3], NULL, 10);
-	
-	if (threads < 1){
-		printf("Invalid value %d for number of threads. Must be at least 1.\n",
-			threads
+	threads = strtol(argv[1], &endptr, 10);
+	if (*endptr != '\0' || threads < 1){
+		printf("Invalid value %s for number of threads. "
+			"Must be an integer greater than 0.\n",
+			argv[1]
 		);
 		return NULL;
 	}
-	if (deadline <= 0){
-		printf("Invalid value %d for deadline . Must be greater than 0.\n",
-			deadline
+	
+	deadline = strtol(argv[2], &endptr, 10);
+	if (*endptr != '\0' || deadline <= 0){
+		printf("Invalid value %s for deadline. "
+			"Must be an integer greater than 0.\n",
+			argv[2]
 		 );
 		return NULL;
 	}
-	if (size < 0){
-		printf("Invalid value %d for size. Must be at least 0.\n", size);
+	
+	size = strtol(argv[3], &endptr, 10);
+	if (*endptr != '\0' || size < 0){
+		printf("Invalid value %s for size. "
+			"Must be non-negative integer.\n",
+			argv[3]
+		);
 		return NULL;
 	}
 	
-	printf("threads %d, deadline %d, size %d\n", threads, deadline, size);
+	printf("threads %d, deadline %d, size %d\n\n", threads, deadline, size);
 	
 	r = malloc(3 * sizeof(int32_t));
 	r[0] = threads;
