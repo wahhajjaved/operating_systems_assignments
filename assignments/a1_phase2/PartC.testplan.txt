@@ -1,0 +1,84 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-22
+
+Test plan:
+- in main fuction printout if the fuction do as intended(test successful) and
+  if the test fail print out the the parameter, list and intended output.
+
+TEST cases:
+
+ListCreate():
+    1. test to create new list for the first time
+    2. test when atleat one list alreay exist
+    3. test when max no. of list have been reaches(need to increase memory)
+
+ListCount(list):
+    1. test when list is empty
+    2. test when list is not empty
+
+ListFirst(list):
+    1. test when list is empty
+    2. test when list is not empty 
+
+ListLast(list)
+    1. test when list is empty
+    2. test when list is not empty
+
+ListNext(list)
+    1. test when list is empty
+    2. test when list is not empty and current node is last node
+    3. test when list is not empty and current node is first node
+    4. test when list is not empty and current node is middle node
+
+ListPrev(list)
+    1. test when list is empty
+    2. test when list is not empty and current node is last node
+    3. test when list is not empty and current node is first node
+    4. test when list is not empty and current node is middle node
+
+ListCurr(list)
+    1. test when list is empty
+    2. test when list is not empty 
+
+ListAdd(list, item)
+    1. test when list is empty
+    2. test when list is not empty and current node is last node
+    3. test when list is not empty and current node is first node
+
+ListInsert(list, item)
+    1. test when list is empty
+    2. test when list is not empty and current node is last node
+    3. test when list is not empty and current node is first node
+
+ListPrepend(list, item)
+    1. test when list is empty
+    2. test when list is not empty
+
+ListAppend(list, item)
+    1. test when list is empty
+    2. test when list is not empty
+
+ListRemove(list)
+    1. test when list is empty
+    2. test when list is not empty and current node is last node
+    3. test when list is not empty and current node is first node
+
+ListConcat(list1, list2)
+    1. test with both empty list
+    2. test with both non empty
+    3. test with one empty and other non empty
+
+ListFree(list, itemFree)
+    1. test when list is empty
+    2. test when list is not empty
+
+ListTrim(list)
+    1. test when list is empty
+    2. test when list is not empty
+
+ListSearch(list, comparator, comparisonArg)
+    1. test when item in list
+    2. test when item not in list
+
+
