@@ -16,7 +16,7 @@ void *ListRemove(LIST *list){
 
     /* check if the list is empty or not
 */
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }
@@ -36,7 +36,7 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
 
     /* check if the list is empty or not
     */
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return ;
     }
@@ -54,7 +54,7 @@ void *ListTrim(LIST *list){
     }
 
     /* check if the list is empty or not*/
-    if (list-> count ==0){
+    if (list-> size ==0){
         printf("ERROR: list empty");
         return NULL;
     }
