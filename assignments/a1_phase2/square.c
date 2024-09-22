@@ -8,24 +8,21 @@
 #include <stdio.h>
 
 
+
 int32_t *pSquareCount;
 int64_t *pStartTime;
 int stopSquare = 0;
 
 int64_t square(int n) {
+	int index;
 	if (n < 0){
 		printf("Invalid value %d for n. Must be at least 0\n", n);
 		return -1;
-	} 
-	printf("square() called with valid argument\n");
-	return 0;
-	/*
-	int index;
-    index = get_index();
+	}
     if (n == 0 || stopSquare != 0){
 		return 0;
 	}
+	index = getIndex();
 	pSquareCount[index]++;
 	return (square(n - 1) + n + n - 1);
-	*/
 }
