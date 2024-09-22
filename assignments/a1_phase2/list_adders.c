@@ -84,7 +84,7 @@ LIST *new_list(){
 
 
 LIST *ListCreate(){
-    /*TODO */
+
     LIST *newList;
 
     if (list_dict == NULL){
@@ -116,7 +116,8 @@ int ListAdd(LIST *list,void *item){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
 
-}    if (item == NULL){
+    }
+    if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;   }
 
@@ -124,15 +125,16 @@ int ListAdd(LIST *list,void *item){
     Node *newNode=new_node();
     if (newNode ==NULL) return -1;
     
+    /*initialize and add to list*/
     newNode-> item=item;
-    newNode-> next=null;
+    newNode-> next=NULL;
     
-    if (list->size==0){
+    if (list->size==0){ /* if list is empty */
         newNode-> next =NULL;
         list-> head= newNode;
         list-> tail= newNode;
     }
-    else if (list->cursor ==list->tail){
+    else if (list->cursor ==list->tail){ /*curser at tail */
         newNode->prev =list->tail;
         list->tail->next =newNode;
         list->tail=newNode;
@@ -142,12 +144,11 @@ int ListAdd(LIST *list,void *item){
         newNode->next=list->curser->next;
         list->curser->next->prev=newNode;
         list->curser->next=newNode;
-    
         }
     list->curser=newNode;
     list->size++;
 
-    return =;
+    return 0;
 
 }
 int ListInsert(LIST *list,void *item){
@@ -160,15 +161,40 @@ int ListInsert(LIST *list,void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
-}
+    }
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
 
-   /*TODO */
-    return -1;
+    /*get an unused node  */
+    Node *newNode=new_node();
+    if (newNode ==NULL) return -1;
 
+    /*initialize and add to list*/
+    newNode-> item=item;
+    newNode-> next=NULL;
+
+    if (list->size==0){ /* if list is empty */
+        newNode-> next =NULL;
+        list-> head= newNode;
+        list-> tail= newNode;
+    }
+    else if (list->cursor ==list->head){ /*curser at head */
+        newNode->next =list->head;
+        list->head->prev =newNode;
+        list->head=newNode;
+        }
+    else{
+        newNode->prev=list->curser->prev;
+        newNode->next=list->curser;
+        list->curser->prev->next=newNode;
+        list->curser->prev=newNode;
+        }
+    list->curser=newNode;
+    list->size++;
+
+    return 0;
 }
 
 int ListAppend(LIST *list, void *item){
@@ -181,14 +207,35 @@ int ListAppend(LIST *list, void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
-  }
-  if (item == NULL){
+    }
+    if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
 
-   /*TODO */
-    return -1;
+    /*get an unused node  */
+    Node *newNode=new_node();
+    if (newNode ==NULL) return -1;
+
+    /*initialize and add to list*/
+    newNode-> item=item;
+    newNode-> next=NULL;
+
+    if (list->size==0){ /* if list is empty */
+        newNode-> prev =NULL;
+        list-> head= newNode;
+        list-> tail= newNode;
+    }
+    else { /* list not empty */
+        newNode->prev =list->tail;
+        list->tail->next =newNode;
+        list->tail=newNode;
+        }
+    list->curser=newNode;
+    list->size++;
+
+    return 0;
+
 
 }
 int ListPrepend(LIST *list,void *item){
@@ -201,14 +248,33 @@ int ListPrepend(LIST *list,void *item){
     if (list-> size <MAX_LIST_SIZE || nodes_num > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
-}
+    }
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
     }
+        /*get an unused node  */
+    Node *newNode=new_node();
+    if (newNode ==NULL) return -1;
 
-   /*TODO */
-    return -1;
+    /*initialize and add to list*/
+    newNode-> item=item;
+    newNode-> next=NULL;
+
+    if (list->size==0){ /* if list is empty */
+        newNode-> next =NULL;
+        list-> head= newNode;
+        list-> tail= newNode;
+    }
+    else { /* list not empty */
+        newNode->next =list->head;
+        list->head->prev =newNode;
+        list->head=newNode;
+        }
+    list->curser=newNode;
+    list->size++;
+
+    return 0;
 }
 
 void ListConcat(LIST *list1, LIST *list2){
