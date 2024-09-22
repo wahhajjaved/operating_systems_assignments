@@ -314,5 +314,13 @@ void increase_list_memory(){
 
 // for now for organization purposes new list and new node are there own 
 function
+NODE *new_node():
+    creates new node 
 
+LIST *new_list():
+    creates new list
+
+
+void Print_List(LIST *list)
+    prints the list
 
