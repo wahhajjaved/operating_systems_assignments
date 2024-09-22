@@ -18,7 +18,7 @@ int ListCount(LIST *list){
         printf("ERROR: list count cannot be negative");
     }
     /*TODO */
-    return 0;
+    return list->size;
 }
 
 void *ListFirst(LIST *list){
@@ -33,8 +33,8 @@ void *ListFirst(LIST *list){
         printf("ERROR: list empty");
         return NULL;
     }
-
-    return NULL;
+    list->curser= list->head;
+    return list->curser->item;
 }
 
 
@@ -49,9 +49,8 @@ void *ListLast(LIST *list){
         printf("ERROR: list empty");
         return NULL;
     } 
-
-   /*TODO */
-    return NULL;
+    list->curser=list->curser->tail;
+    return list->curser->item;
 }
 
 
@@ -72,8 +71,9 @@ void *ListNext(LIST *list){
         printf("ERROR: curser is list tail");
         return NULL;
     }
-    /*TODO */
-    return NULL;
+    list->curser=list->curser->next;
+    return list->curser->item;
+
 }
 
 void *ListPrev(LIST *list){
@@ -94,8 +94,9 @@ void *ListPrev(LIST *list){
         printf("ERROR: curser is list tail");
         return NULL;
     }
-    /*TODO */
-    return NULL;
+    list->curser=list->curser->prev;
+    return list->curser->item;
+
 }
 
 void *ListCurr(LIST *list){
@@ -109,9 +110,8 @@ void *ListCurr(LIST *list){
         printf("ERROR: list empty");
         return NULL;
     }
+    return list->curser->item;
 
-    /*TODO */
-    return NULL;
 }
 
 void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
