@@ -7,17 +7,26 @@
 #include"list.h"
 
 int main(void){
-    LIST *L1;
-    LIST *L2;
-    void *I1;
+    LIST *L1, *L2, *L3, *L4;
+    int *I1, *I2, *I3;
+    int a, b,c;
+    a= 44;
+    b=55;
+    c=6;
+    I1=&a;
+    I2=&b;
+    I3=&c;    
+
     int (*testCOMPARATOR)(void *V, void *I);
     void (*testITEMFREE)(void *I);    
+    printf("____________TESTING PARTC: LIST LIBRARY_________\n");
 
+    printf("______ListCreate()________\n");
     L1= ListCreate();
-	printf("got to procedure ListCreate()\n");
-
     L2= ListCreate();
-    printf("got to procedure ListCreate()\n");
+    L3= ListCreate();
+    L4= ListCreate();
+    L5= ListCreate();
 
 	ListCount(L1);
 	printf("got to procedure ListCount()\n");
@@ -43,8 +52,13 @@ int main(void){
 	ListInsert(L1, I1);
 	printf("got to procedure ListInsert()\n");
 	
-	ListAppend(L1, I1);
-	printf("got to procedure ListAppend()\n");
+
+    printf("________ListAppend()___________\n");
+    printf("Empty lis()\n");
+	result=ListAppend(L1, I1);
+    if (result !=0) printf("ERROR : list append.\n"0
+    else printf("ListAppend() successful!!"
+
 
 	ListPrepend(L1, I1);
 	printf("got to procedure ListPrepend()\n");
