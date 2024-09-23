@@ -132,8 +132,13 @@ Part A2 Design
         the thread, including whether it has finished and printed its output.
         If it hasn't, then the main thread can handle the printing. 
 
-    - StartETimer() and StopETimer() defined in os.h can be used to get elapsed
-        time. 
+    - UBC pthreads have StartETimer() and StopETimer() defined in os.h which 
+        can be used to get elapsed time. However, there are only 32 timers
+        available to use with these methods and so won't work if the number of
+        threads is larger than 32
+    
+    - Since part A2 is only supposed to run on Linux, the timing method used
+        for part A3 can be used
     
     - UBC pthreads do not have a mechanism for thread local storage. However,
         each thread can be given a name. The index can be stored in this name.

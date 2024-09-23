@@ -30,13 +30,25 @@ int getIndex() {
 PROCESS childThreadFunction(void* threadParams){
 	int32_t n, index;
 	int32_t* params;
+	uint64_t elapsedTime;
+	struct timespec startTime, endTime;
+	
 	params = (int*)threadParams;
 	index = params[0];
 	n = params[1];
 	
+	clock_gettime(CLOCK_MONOTONIC, &startTime);
 	Square(n);
-	printf("Thread %d finished. Square called %d times. \n",
-		index, pSquareCount[index]);
+	clock_gettime(CLOCK_MONOTONIC, &endTime);
+	elapsedTime = 1000000000L * (endTime.tv_sec - startTime.tv_sec) + 
+        endTime.tv_nsec - startTime.tv_nsec;
+	elapsedTime = elapsedTime / 1000;
+	
+	printf("Thread %d finished. "
+        "Square called %d times. "
+        "Thread ran for %lu microseconds.\n",
+		index, pSquareCount[index], elapsedTime);
+		
 	return;
 }
 	
@@ -81,7 +93,12 @@ PROCESS parentThreadFunction(void* params){
 	
 	sleepTicks = deadline*1000000/TICKINTERVAL;
 	printf("Main thread sleeping for %d ticks. \n", sleepTicks);
-
+	
+	/* Sleep doesn't work properly yet. 
+		The main thread is supposed to use Kill() to kill child threads but 
+		not enough time to implement that yet.
+	*/
+	
 	while(sleepTicks > 0xffff) {
 		Sleep(0xffff);
 		sleepTicks -= 0xffff;
@@ -91,7 +108,7 @@ PROCESS parentThreadFunction(void* params){
 	}
 	printf("Main thread woken up.\n");
 	stopSquare = 1;
-	Sleep(100);
+	Sleep(200);
 }
 
 
