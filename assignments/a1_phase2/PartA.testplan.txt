@@ -95,56 +95,8 @@ Expected Output: Square call count = 5050
 
 Number: 16
 Description: Child threads exit when deadline is reached
-Input: 10 1 10000
+Input: 10 1 20000
 Expected Output: Each thread has different square call count 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
-
-
-Number: 
-Description: 
-Input: 
-Expected Output: 
 
 
 Number: 
