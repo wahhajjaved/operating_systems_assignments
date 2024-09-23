@@ -64,7 +64,8 @@ void Increse_List_Memory(){
 NODE *new_node(){
     NODE *newNode;
 
-    newNode= aviableNode-> next;
+
+    newNode= aviableNode;
     aviableNode= aviableNode-> next;
     return newNode;
 
@@ -90,7 +91,9 @@ LIST *ListCreate(){
     if (listDict == NULL){
         listInit(); 
     }
-    
+    if (aviableList==NULL) {
+        printf("ERROR:no aviableList\n");
+        return NULL;}
     /*get new list and initilize it */
     newList= aviableList;
     aviableList= newList-> nextfreeList;
@@ -107,17 +110,18 @@ LIST *ListCreate(){
 
 int ListAdd(LIST *list,void *item){
     NODE *newNode;
-     /* if the List struct pointer is not right*/
+/*    
+  if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    /* check if the list size is less than max, or node is less than max*/
+    /* check if the list size is less than max, or node is less than max
     if (list-> size <MAX_LIST_SIZE || nodesNum > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
 
-    }
+    }*/
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;   }
@@ -129,23 +133,27 @@ int ListAdd(LIST *list,void *item){
     /*initialize and add to list*/
     newNode-> item=item;
     newNode-> next=NULL;
+    newNode-> prev=NULL;
     
     if (list->size==0){ /* if list is empty */
         newNode-> next =NULL;
         list-> head= newNode;
         list-> tail= newNode;
+        list-> curser= newNode;
     }
     else if (list->curser ==list->tail){ /*curser at tail */
         newNode->prev =list->tail;
         list->tail->next =newNode;
         list->tail=newNode;
         }
-    else{
-        newNode->prev=list->curser;
+    else if (list->curser!=NULL&&list->curser->next!=NULL)
+       { newNode->prev=list->curser;
         newNode->next=list->curser->next;
         list->curser->next->prev=newNode;
         list->curser->next=newNode;
         }
+    else { printf("ERROR: wrong curser\n");
+    }
     list->curser=newNode;
     list->size++;
 
@@ -159,11 +167,11 @@ int ListInsert(LIST *list,void *item){
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    /* check if the list size is less than max, or node is less than max*/
+    /* check if the list size is less than max, or node is less than max
     if (list-> size <MAX_LIST_SIZE || nodesNum > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
-    }
+    }*/
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
@@ -206,11 +214,11 @@ int ListAppend(LIST *list, void *item){
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    /* check if the list size is less than max, or node is less than max*/
+    /* check if the list size is less than max, or node is less than max
     if (list-> size <MAX_LIST_SIZE || nodesNum > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
-    }
+    }*/
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;
@@ -248,11 +256,11 @@ int ListPrepend(LIST *list,void *item){
         printf("ERROR: list is NULL \n");
         return -1;
     }
-    /* check if the list size is less than max, or node is less than max*/
+    /* check if the list size is less than max, or node is less than max
     if (list-> size <MAX_LIST_SIZE || nodesNum > MAX_NODE ){
         printf("ERROR: list is full or max number of nodes have been reached");
         return -1;
-    }
+    }*/
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;

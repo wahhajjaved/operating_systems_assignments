@@ -66,11 +66,11 @@ void *ListNext(LIST *list){
         return NULL;
     }
 
-    /* check if the curser is not list last*/
+    /* check if the curser is not list last
     if (list -> curser == list -> tail) {
         printf("ERROR: curser is list tail");
         return NULL;
-    }
+    }*/
     list->curser=list->curser->next;
     return list->curser->item;
 
@@ -89,11 +89,11 @@ void *ListPrev(LIST *list){
         return NULL;
     }
     
-    /* check if the curser is not list head*/
+    /* check if the curser is not list head
     if (list -> curser == list -> head) {         
         printf("ERROR: curser is list tail");
         return NULL;
-    }
+    }*/
     list->curser=list->curser->prev;
     return list->curser->item;
 
