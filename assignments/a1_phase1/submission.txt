@@ -1,0 +1,16 @@
+PartA.design.txt
+partA1.c
+myA1Test.txt
+PartA1.testResults.txt
+square.h
+square.c
+partB.bash
+PartC.design.txt
+list.h
+list_adders.c
+list_movers.c
+list_removers.c
+mytestlist.c
+Makefile
+332-style-guidelines-team67.txt
+git-log.txt

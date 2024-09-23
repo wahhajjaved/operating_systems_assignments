@@ -1,0 +1,120 @@
+#!/bin/bash
+
+# @author Wahhaj Javed, muj975, 11135711
+# @date 2024-09-11
+
+
+set -e
+
+NC='\033[0m' # No Color
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+
+
+max_line_length=79
+author_wahhaj="@author Wahhaj Javed, muj975, 11135711"
+author_nakhba="@author Nakhba Mubashir, epl482, 11317060"
+
+print_help() {
+    echo "Usage: ./submission_check <dir> <lab|assignment>"
+    echo "dir   The directory which contains submission files"
+    echo "lab or assignment indicating whether the directory being check is for a lab or for an assignment"
+}
+
+check_line_length() {
+    l=($(awk -v n=$max_line_length '{ gsub(/\t/, "    "); if (length > n) print NR, length }' "$1"))
+
+    if [[ -n "$l" ]]; then
+        echo -e "${RED}${1} has ${#l[@]} lines greater than ${max_line_length} chars${NC}"
+        for (( i=0; i<${#l[@]}; i+=2)); do
+            echo "    ${l[$i]} ${l[$i+1]}"
+            if [[ ${i} -gt 5 ]]; then
+                echo "    .........."
+                break
+            fi
+        done
+
+    else
+        echo -e "${GREEN}$1 passed line length check${NC}"
+    fi
+}
+
+#1 = file path
+#2 = lab or assignment
+check_author() {
+    if [[ "$(basename "$1")" == "submission.txt" ]]; then
+        return
+    fi
+
+    if head -n 10 "$1" | grep -q "$author_wahhaj"; then
+        wahhaj_found=true
+    else
+        wahhaj_found=false
+    fi
+
+
+    if [[ "$2" == "assignment" ]]; then
+        if head -n 10 "$1" | grep -q "$author_nakhba"; then
+            nakhba_found=true
+        else
+            nakhba_found=false
+        fi
+    else
+        nakhba_found=true
+    fi
+
+
+    if $wahhaj_found && $nakhba_found; then
+        echo -e "${GREEN}Author information found in ${1}${NC}"
+    else
+        echo -e "${RED}Author information missing in ${1}${NC}"
+    fi
+
+}
+
+#1 file containing names of files to submit
+check_submission_requirements() {
+    while read -r line; do
+        if [[ -f "$line" ]]; then
+            echo -e "${GREEN}${line} found${NC}"
+        else
+            echo -e "${RED}${line} not found${NC}"
+        fi
+    done < "$1"
+
+
+}
+
+
+if [[ "$#" -ne 2 ]]; then
+    print_help
+    exit 1
+fi
+
+
+cd "$1" || { echo "ERROR could not change to directory $1"; exit 1;}
+# Get all .c .h .bash and .txt files in the current directory recursively
+files=($(find -name "*.c" -or -name "*.h" -or -name "Makefile" -or -name "*.bash" -or -name "*.txt" -type f))
+
+
+
+echo -e "${YELLOW}-------Checking line lengths-------${NC}"
+for file in "${files[@]}"; do
+    if [[ -f $file ]]; then
+        check_line_length "$file"
+    fi
+done
+
+echo
+echo -e "${YELLOW}-------Checking authors for ${2}-------${NC}"
+for file in "${files[@]}"; do
+    if [[ -f $file ]]; then
+        check_author "$file" "$2"
+    fi
+done
+
+echo
+echo -e "${YELLOW}-------Checking submissions-------${NC}"
+check_submission_requirements submission.txt
+
