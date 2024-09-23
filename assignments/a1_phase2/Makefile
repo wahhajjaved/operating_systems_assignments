@@ -119,7 +119,8 @@ mkdirs:
 	mkdir -p $(obj_dir) $(lib_dir)
 
 clean:
-	find $(build_dir) -type f -delete && rm -f $(all_exes) partA1.exe partA1 partA2 partA3
+	find $(build_dir) -type f -delete && rm -f $(all_exes) partA1.exe \
+	partA1 partA2 partA3
 
 clean_all:
 	rm -rf $(build_dir) $(all_exes) partA1.exe partA1 partA2 partA3

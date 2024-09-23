@@ -4,7 +4,6 @@ PartA.testresults.txt
 partA1.c
 partA2.c
 partA3.c
-myA1Test.txt
 square.h
 square.c
 partB.bash

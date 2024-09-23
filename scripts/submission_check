@@ -43,6 +43,10 @@ check_line_length() {
 #1 = file path
 #2 = lab or assignment
 check_author() {
+    if [[ "$(basename "$1")" == "submission.txt" ]]; then
+        return
+    fi
+
     if head -n 10 "$1" | grep -q "$author_wahhaj"; then
         wahhaj_found=true
     else
