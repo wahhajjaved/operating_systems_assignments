@@ -48,9 +48,11 @@ void listInit(void){
 
 
 void Increse_List_Memory(){
+    LIST newListDict;
     int i;
     listNum *=2;
-    listDict= (LIST*) malloc ((listNum*2) * sizeof(LIST));
+    
+    newListDict= realloc(listDict,(listNum*2 * sizeof(LIST));
 
     /* initialize the new list*/
 
@@ -60,6 +62,20 @@ void Increse_List_Memory(){
     
 }
 
+void Increse_node_Memory(){
+    int i;
+    nodeNum *=2;
+    nodeDict= (LIST*) malloc ((listNum*2) * sizeof(LIST));
+
+    /* initialize the new list*/
+
+    aviableNode= NULL;
+    for (i=nodeDict-1; i>= nodeDict; i--){
+        nodeDict[i].next= aviableNode;
+        aviableNode= &nodeDict[i];
+    }
+    
+}
 
 NODE *new_node(){
     NODE *newNode;
