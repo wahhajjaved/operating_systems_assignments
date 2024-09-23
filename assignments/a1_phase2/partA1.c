@@ -47,7 +47,7 @@ DWORD WINAPI tmain(LPVOID lpParam) {
 	QueryPerformanceCounter(&startTime);
 	pStartTime[index] = (startTime.QuadPart * 1000000) / frequency.QuadPart;
 
-	square(n);
+	Square(n);
 
 	QueryPerformanceCounter(&endTime);
 	endTime.QuadPart = (endTime.QuadPart * 1000000) / frequency.QuadPart;
@@ -63,8 +63,7 @@ DWORD WINAPI tmain(LPVOID lpParam) {
 }
 
 int main(int argc, char* argv[]) {
-	int32_t threads, size;
-	double deadline;
+	int32_t threads, size, deadline, *args;
 	HANDLE *threadHandles;
 	DWORD *threadIDs;
 	int i;
@@ -115,7 +114,6 @@ int main(int argc, char* argv[]) {
 	}
 
 	for(i = 0; i < threads; i++) {
-		printf("Resuming thread %d\n", i);
 		ResumeThread(threadHandles[i]);
 	}
 
