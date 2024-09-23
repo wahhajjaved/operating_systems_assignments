@@ -9,8 +9,13 @@
 
 #include <stdlib.h> 
 #include <stdio.h>
+#include <err.h>
+
+
 #define MAX_NODE 100
 #define MAX_LIST 100
+#define MIN_LIST 10
+#define MIN_NODE 10
 #define MAX_LIST_SIZE 100
 
 /*
@@ -29,7 +34,7 @@ typedef void (*ITEMFREE)(void *);
  * STRUCT
  */
 typedef struct node {
-    void *value;
+    void *item;
     struct node *next;
     struct node *prev;
 
@@ -39,8 +44,8 @@ typedef struct list {
     NODE *head;
     NODE *tail;
     NODE *curser;
-    int count;
     int size;
+    struct list *nextfreeList;
 } LIST;
 
 

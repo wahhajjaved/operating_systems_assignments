@@ -1,6 +1,7 @@
 @author Wahhaj Javed, muj975, 11135711
 @author Nakhba Mubashir, epl482, 11317060
 @date 2024-09-16
+@updates: 204-09-22
 
 ASSIGNMENT 1: PHASE 1
 PART C design document
@@ -10,12 +11,15 @@ PART C design document
 int (*COMPARATOR)(void *, void *)
 void (*ITEMFREE)(void *)
 
-
-
-to store all the list
-struct List list_dict[max]  //dictionary of lists
 struct List Freed_list[]    /// array of freed lists
 struct Node Freed_node      // array of freed of nodes
+
+int nodesNum;              // to keep track of number of nodes used
+int listNum;               // to keep track of number of lists used
+LIST *listDict= NULL;      // dict of lists
+NODE *NodeDict= NULL;      // dict of all the nodes
+LIST *aviableList=NULL;    // the next available list that can be used
+NODE *aviableNode=NULL;    // the next available node that can be used
 
 struct
 Node:
@@ -107,7 +111,7 @@ test:
     4. middle
 ____
 void *ListPrev(list)
-description: goes to the prev node in list, return the pointer to current
+desciption: goes to the prev node in list, return the pointer to current
 item or NULL if no current item
 
 algorithm:
@@ -272,8 +276,7 @@ algorithm:
     listRemove(list)
     add to freed_node
 
-test:
-
+test:test when list is empty and not empty
 ___
 void *ListSearch(list, comparator, comparisonArg)
 description:searches list starting at the current item until the end is reached
@@ -299,4 +302,25 @@ description: calculate the size of list dictionary
 algorithm:
     return size of list_dict/list_dict[0]
 
+void ListInit(void)"{
+    allocate memory to list and node by malloc
+    link the node and list to prev and next
+
+
+void increase_list_memory(){
+    reallocate the memory and initialize
+}
+
+
+// for now for organization purposes new list and new node are there own 
+function
+NODE *new_node():
+    creates new node 
+
+LIST *new_list():
+    creates new list
+
+
+void Print_List(LIST *list)
+    prints the list
 
