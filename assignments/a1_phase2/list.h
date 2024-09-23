@@ -14,8 +14,8 @@
 
 #define MAX_NODE 100
 #define MAX_LIST 100
-#define MIN_LIST 2
-#define MIN_NODE 2
+#define MIN_LIST 10
+#define MIN_NODE 10
 #define MAX_LIST_SIZE 100
 
 /*
