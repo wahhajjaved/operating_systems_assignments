@@ -34,14 +34,14 @@ PROCESS childThreadFunction(void* threadParams){
 	index = params[0];
 	n = params[1];
 	
-	square(n);
+	Square(n);
 	printf("Thread %d finished. Square called %d times. \n",
 		index, pSquareCount[index]);
 	return;
 }
 	
 PROCESS parentThreadFunction(void* params){
-	int32_t threads, size, deadline, *args;
+	int32_t threads, size, deadline, *args, sleepTicks;
 	int i;
 	int32_t** threadParams;
 	PID* threadIDs;
@@ -79,6 +79,19 @@ PROCESS parentThreadFunction(void* params){
 		threadIDs[i] = id;
 	}
 	
+	sleepTicks = deadline*1000000/TICKINTERVAL;
+	printf("Main thread sleeping for %d ticks. \n", sleepTicks);
+
+	while(sleepTicks > 0xffff) {
+		Sleep(0xffff);
+		sleepTicks -= 0xffff;
+	}
+	if(sleepTicks > 0) {
+		Sleep(sleepTicks);
+	}
+	printf("Main thread woken up.\n");
+	stopSquare = 1;
+	Sleep(100);
 }
 
 
