@@ -4,8 +4,6 @@
 # @author Nakhba Mubashir, epl482, 11317060
 # @date 2024-09-14
 
-set -e
-
 print_help() {
     echo "./partB.bash version [<threads deadline size>...]"
     echo "version is one of partA1, partA2, or partA3. partA1 is windows only"
@@ -61,9 +59,14 @@ case "$1" in
 esac
 
 regex_int=^[0-9]+$
-regex_float=^[0-9]*\.?[0-9]+$
+runCount=0
 
 while read -r -a line; do
+    runCount=$((runCount+1))
+    echo "------------------------"
+    echo
+    echo "------- Run: $runCount -------"
+    
     if [[ ${#line[@]} -ne 3 ]]; then
         echo "Invalid number of arguments. Must be threads deadline size"
         continue
@@ -73,21 +76,20 @@ while read -r -a line; do
     deadline="${line[1]}"
     size="${line[2]}"
 
-    if [[ ! "$threads" =~ $regex_int ]]; then
-        echo "Number of threads must be a non-negative integer"
+    if [[ ! "$threads" =~ $regex_int || "$threads" -le 0 ]]; then
+        echo "Number of threads must be an integer greater than 0."
         continue
     fi
-    if [[ ! "$deadline" =~ $regex_float ]]; then
-        echo "Deadline must be a non-negative integer or float"
+    if [[ ! "$deadline" =~ $regex_int || "$deadline" -le 0 ]]; then
+        echo "Deadline must be an integer greater than 0."
         continue
     fi
-    if [[ ! "$size" =~ $regex_int ]]; then
-        echo "size must be a non-negative integer"
+    if [[ ! "$size" =~ $regex_int || "$size" -lt 0 ]]; then
+        echo "size must be a non-negative integer."
         continue
     fi
     echo "Processing line ${line[@]} using $exe"
     $exe "$threads" "$deadline" "$size"
-    echo
 done
 
 echo "Exiting partB.bash"

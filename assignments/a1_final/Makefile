@@ -20,6 +20,9 @@ build_dir = ./build
 obj_dir := $(build_dir)/obj/$(os)-$(arch)
 lib_dir := $(build_dir)/lib/$(os)-$(arch)
 
+ubc_pthreads_dir = /student/cmpt332/pthreads
+ubc_pthreads_lib_dir := /student/cmpt332/pthreads/lib/$(kernel)$(arch)
+
 
 
 ##############################
@@ -34,15 +37,19 @@ compile = $(CC) $(CFLAGS) $(CPPFLAGS) $(I)
 
 ifeq ($(os), Windows)
     all_exes = partA1
+	partA_exes = PartA1
 else ifeq ($(os), Linux)
     all_exes = partA2 partA3 mytestlist
+	partA_exes = partA2 partA3
 else
     $(error Only Window and Linux are supported in this make file)
 endif
 $(info Making $(all_exes))
 
-.PHONY: all
+.PHONY: all partA
 all: mkdirs $(all_exes)
+
+partA: mkdirs $(partA_exes)
 	
 
 ############################
@@ -50,18 +57,27 @@ all: mkdirs $(all_exes)
 
 
 a1_objects := $(obj_dir)/partA1.o $(obj_dir)/square.o
+a2_objects := $(obj_dir)/partA2.o $(obj_dir)/square.o
+a3_objects := $(obj_dir)/partA3.o $(obj_dir)/square.o
+
 partA1: $(a1_objects)
 	$(CC) $(CFLAGS) $(CPPFLAGS) -o partA1 $(a1_objects)
 
-partA2:
-	$(info "Target partA2 not yet implemented.")
+partA2: $(a2_objects)
+	$(compile)  -L$(ubc_pthreads_lib_dir) -o partA2 $(a2_objects) -lpthreads 
 
-partA3:
-	$(info "Target partA3 not yet implemented.")
+partA3: $(a3_objects)
+	$(compile) -o partA3 $(a3_objects) -lpthread
 
 $(obj_dir)/partA1.o: partA1.c square.h
 	$(compile) -c partA1.c -o $(obj_dir)/partA1.o
 
+$(obj_dir)/partA2.o: partA2.c square.h
+	$(compile) -I$(ubc_pthreads_dir) -c partA2.c -o $(obj_dir)/partA2.o
+
+$(obj_dir)/partA3.o: partA3.c square.h
+	$(compile) -c partA3.c -o $(obj_dir)/partA3.o
+	
 $(obj_dir)/square.o: square.c square.h
 	$(compile) -c square.c -o $(obj_dir)/square.o
 
@@ -103,9 +119,10 @@ mkdirs:
 	mkdir -p $(obj_dir) $(lib_dir)
 
 clean:
-	find $(build_dir) -type f -delete && rm -f $(all_exes) partA1.exe
+	find $(build_dir) -type f -delete && rm -f $(all_exes) partA1.exe \
+	partA1 partA2 partA3
 
 clean_all:
-	rm -rf $(build_dir) $(all_exes) partA1.exe
+	rm -rf $(build_dir) $(all_exes) partA1.exe partA1 partA2 partA3
 
 

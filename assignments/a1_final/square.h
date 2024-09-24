@@ -12,8 +12,9 @@
 extern int32_t *pSquareCount;
 extern int64_t *pStartTime;
 extern int stopSquare;
-extern int get_index();
 
-int64_t square(int n);
+extern int getIndex();
+int64_t Square(int n);
+int32_t* parseArgs(int argc, char* argv[]);
 
 #endif
