@@ -1,0 +1,30 @@
+____________TESTING PARTC: LIST LIBRARY_________
+______ListCreate()________
+[]
+[]
+[]
+[]
+________ListADD()___________
+Empty list()
+ListAdd() successful!!
+NON Empty lis()
+ListAdd() successful!!
+[44 18 ]
+________ListInsert()___________
+Empty list()
+ListInsert() successful!!
+NON Empty lis()
+ListInsert() successful!!
+[9 55 ]
+________ListAppend()___________
+Empty lis()
+ListAppend() successful!!
+NON Empty lis()
+ListAppend() successful!!
+[44 55 ]
+________ListPrepend()___________
+Empty lis()
+ListPrepend() successful!!
+NON Empty lis()
+ListPrepend() successful!!
+[70 55 ]
