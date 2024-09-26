@@ -10,6 +10,8 @@
 
 #include "square.h"
 
+#define CHILD_STACK_SIZE 5000000
+
 DWORD tlsIndex;
 
 int getIndex() {
@@ -99,7 +101,7 @@ int main(int argc, char* argv[]) {
 		
 		handle = CreateThread(
 			NULL,
-			0,
+			CHILD_STACK_SIZE,
 			tmain,
 			threadParams[i],
 			CREATE_SUSPENDED,

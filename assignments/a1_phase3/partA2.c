@@ -13,6 +13,7 @@
 
 #include "square.h"
 
+#define CHILD_STACK_SIZE 4000000
 
 int getIndex() {
 	PID pid;
@@ -77,7 +78,7 @@ PROCESS parentThreadFunction(void* params){
 		
 		snprintf(name, 15, "%d", i);
 		id = Create( (void(*)()) childThreadFunction,
-			16000,
+			CHILD_STACK_SIZE,
 			name,
 			threadParams[i],
 			NORM,
@@ -112,17 +113,17 @@ PROCESS parentThreadFunction(void* params){
 }
 
 
-
 void mainp(int argc, char* argv[]) {
-	int32_t *args;
+	int32_t *args, parentStackSize;
 
 	args = parseArgs(argc, argv);
-    if (args == NULL){
+    if(args == NULL) {
         return;
     }
-	
-	 Create( (void(*)()) parentThreadFunction,
-		16000,
+
+	parentStackSize = CHILD_STACK_SIZE * args[0] + CHILD_STACK_SIZE;
+	Create( (void(*)()) parentThreadFunction,
+		parentStackSize,
 		"a",
 		(void *) args,
 		NORM,

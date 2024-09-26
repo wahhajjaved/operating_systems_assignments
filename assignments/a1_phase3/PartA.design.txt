@@ -61,15 +61,21 @@ Solution
         must be determined empirically
     
     - Based on in class discussion, Square() should complete its calculations 
-        within 15 seconds which provides an upper bound on the input argument 
-        size. 
-    -
-    The stack size can be finetuned by measuring how big size must be based
+        within 15 - 30 seconds which provides an upper bound on the input 
+        argument size. 
+    
+    - The stack size can be finetuned by measuring how big size must be based
         on how quickly the function exits while running on a single thread
         
+    - Based on run time, size = 65535 will be set as the maximum supported size
+        value. For a single thread, it takes about 20-30 seconds to compute
+        across the different APIs.
         
-    
-    
+    - size = 65535 is the maximum value that works using the default pthreads
+        stack size. Stack size of UBC pthreads and win32 threads will be 
+        configured such that they can compute this size without segfaulting
+
+
 
 Part A1 Design
     
@@ -116,6 +122,9 @@ Part A1 Design
 
             ElapsedMicroseconds.QuadPart *= 1000000;
             ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
+            
+    - For size = 65535, stack size needs to be 5MB
+
 
 
 Part A2 Design
@@ -163,6 +172,8 @@ Part A2 Design
     - UBC pthreads do not have a mechanism for thread local storage. However,
         each thread can be given a name. The index can be stored in this name.
     
+    - For size = 65536, UBC Pthreads requires 4MB stack size for the child
+    
 
 Part A3
 
@@ -196,7 +207,10 @@ Part A3
     - timespec struct has a second field and a nanosecond field so calculating
         the difference between two of these structs is not as simple as 
         subtracting them, but its also not too difficult either
-
+    
+    - Using the default thread stack size, the stack will overflow when size is
+       greater than 65535
+    
 
 Data Storage
 
