@@ -48,6 +48,26 @@ Solution
         
     - Using thread local storage is the best option as it gets rid of the 
         overhead of getting the thread ID every invocation of Square().
+        
+    - Each thread is created with a certain of stack space: 1MB in win32 by 
+        default. In pthreads, the default is architecture dependent. It must
+        be set by users in UBC pthreads
+        
+    - If Square() recurses too many times, it will fill up its stack and start
+        using the next thread's stack which will likely cause a crash
+    
+    - There is no way to detect a stackoverflow at runtime so it can't be 
+        handled at runtime. So the max allowed value of input argument size
+        must be determined empirically
+    
+    - Based on in class discussion, Square() should complete its calculations 
+        within 15 seconds which provides an upper bound on the input argument 
+        size. 
+    -
+    The stack size can be finetuned by measuring how big size must be based
+        on how quickly the function exits while running on a single thread
+        
+        
     
     
 
