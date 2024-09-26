@@ -10,19 +10,17 @@
 int ListCount(LIST *list){
     /* if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
+        err("ERROR: list is NULL \n");
         return 0;
     }
 
     if (list-> size <0){
-        printf("ERROR: list count cannot be negative");
+        err(1,"ERROR: list count cannot be negative");
     }
-    /*TODO */
     return list->size;
 }
 
 void *ListFirst(LIST *list){
-    /*TODO */
     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
@@ -30,7 +28,6 @@ void *ListFirst(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     }
     list->curser= list->head;
@@ -46,7 +43,6 @@ void *ListLast(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     } 
     list->curser=list->tail;
@@ -62,18 +58,16 @@ void *ListNext(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     }
 
-    /* check if the curser is not list last
+    /* check if the curser is not list last*/
     if (list -> curser == list -> tail) {
         printf("ERROR: curser is list tail");
         return NULL;
-    }*/
+    }
     list->curser=list->curser->next;
     return list->curser->item;
-
 }
 
 void *ListPrev(LIST *list){
@@ -85,15 +79,14 @@ void *ListPrev(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     }
     
-    /* check if the curser is not list head
+    /* check if the curser is not list head*/
     if (list -> curser == list -> head) {         
         printf("ERROR: curser is list tail");
         return NULL;
-    }*/
+    }
     list->curser=list->curser->prev;
     return list->curser->item;
 
@@ -126,8 +119,14 @@ void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
         return NULL;
     }    
 
-
-    /*TODO */
-    return NULL;
+    while (1){
+        if (list->curser->item, comparisonArg)==1 {
+            return list->curser->item;
+        }
+        if (list->curser ==list->tail){
+             return NULL;
+        }
+        list-> curser= list->curser->next
+    }
 }
 
