@@ -6,8 +6,8 @@
 
 
 #include "list.h"
-int nodesNum;
-int listNum;
+int nodesNum=0;
+int listNum=0;
 LIST *listDict= NULL; /* dict of lists*/
 NODE *nodeDict= NULL; /* dict of all the nodes*/
 LIST *aviableList=NULL;
@@ -18,14 +18,11 @@ NODE *aviableNode=NULL;
  */
 void listInit(void){
     int i;
-
     /* Allocating memory */
     listDict= (LIST*) malloc ((MIN_LIST) * sizeof(LIST));
     if (listDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED"); 
-
     nodeDict= (NODE*) malloc ((MIN_NODE) * sizeof(NODE));
     if (nodeDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED "); 
-
     /* initialization */
      aviableList=&listDict[0];
      aviableNode=&nodeDict[0];
@@ -85,8 +82,6 @@ void Increse_node_Memory(){
 
 NODE *new_node(){
     NODE *newNode;
-
-
     newNode= aviableNode;
     aviableNode= aviableNode-> next;
     return newNode;
@@ -102,7 +97,6 @@ LIST *new_list(){
     aviableList= newList-> nextfreeList;
     newList-> nextfreeList= NULL;
     return newList;
-
 }
 
 
@@ -111,7 +105,34 @@ LIST *ListCreate(){
     LIST *newList;
 
     if (listDict == NULL){
-        listInit(); 
+            int i;
+
+        /* Allocating memory */
+        listDict= (LIST*) malloc ((MIN_LIST) * sizeof(LIST));
+        if (listDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED");
+    
+        nodeDict= (NODE*) malloc ((MIN_NODE) * sizeof(NODE));
+        if (nodeDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED ");
+    
+        /* initialization */
+        aviableList=&listDict[0];
+        aviableNode=&nodeDict[0];
+
+        for ( i=0; i<(MIN_LIST-1); i++){
+            listDict[i].size=0;
+            listDict[i].nextfreeList= &listDict[i+1];
+         }
+   
+        listDict[i].nextfreeList= NULL; /*last*/
+
+    for ( i=0; i<(MIN_NODE-1); i++){
+        nodeDict[i].next= &nodeDict[i+1];
+        if (i==0) nodeDict[i].prev= NULL;
+        else {
+             nodeDict[i].prev= &nodeDict[i-1];
+        }
+    }
+    nodeDict[i].next= NULL; /*last*/
     }
     if (aviableList==NULL) {
         printf("ERROR:no aviableList\n");
@@ -147,6 +168,9 @@ int ListAdd(LIST *list,void *item){
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;   }
+    if (nodeNums == MIN_NODE){
+        Increse_node_Memory();
+    }
 
     /*get an unused node  */
     newNode =new_node();
@@ -317,5 +341,34 @@ void ListConcat(LIST *list1, LIST *list2){
         printf("ERROR: list1 OR list2 is NULL \n");
         return ;
     }
-   /*TODO */
+    if (list1 == list2) {
+        errx(1, "ERROR: IN listConcat, both list are same");
+    }
+
+    /*list1 is empty and list2 not empty 
+    * concatenate to an empty list */
+    if (list1->size == 0 && list2->size !=0){
+        list1->head = list2->head;
+        list1->tail = list2->tail;
+        list1->curser = list2->curser;
+        list1->size = list2->size;
+    }
+
+    /* both  list1 and list2 are non empty*/
+    if (list1->size !=0 && list2->size !=0){
+        list1->tail->next = list2->head;
+        list2->head->prev = list1->tail;
+        list1->tail = list2->tail;
+        list2->size += list2->size;
+    }
+
+    list2->size = 0;
+    list2->head = NULL;
+    list2->tail = NULL;
+    list2->curser = NULL;
+
+    listNum--;
+
+    list2->nextfreeList = aviableList;
+    aviableList = list2;
 }
