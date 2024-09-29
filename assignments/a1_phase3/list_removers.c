@@ -5,24 +5,51 @@
  */
 
 #include "list.h"
+
+extern LIST *aviableList;
+extern NODE *aviableNode;
+
 void *ListRemove(LIST *list){
+    NODE *curr_node;
+    void *curr_item;
 
-    /* if the List struct pointer is not right
-    */
-    if (list == NULL) {
-        printf("ERROR: list is NULL \n");
-        return NULL;
+    /* if the List struct pointer is not right */
+    if (list == NULL) { errx(1, "ERROR: list is NULL \n");}
+
+    /* check if the list is empty or not */
+    if (list-> size ==0){ errx(1, "ERROR: list empty");}
+
+    removeNode= list->curser;
+    curr_item= list->curser->item;
+    if (list->curser == list->tail){
+        if (list->size == 1){
+            list->head = NULL;
+            list->tail = NULL;
+            list->curser = NULL;
+        } 
+        else {
+            list->tail = list->curser->prev;
+            list->curser->curser = NULL;
+            list->tail->next = NULL;
+            list->curser =list->tail;
+        }
     }
-
-    /* check if the list is empty or not
-*/
-    if (list-> size ==0){
-        printf("ERROR: list empty");
-        return NULL;
+    else if (list->curser == list->head){
+        
     }
-    return NULL;
+    else {
+        list->curser->prev->next = list->curser->next;
+        list->curser->next->prev = list->curser->prev;
+        list->curser= list->curser->next;
+        removeNode->next= NULL;
+        removeNode->next= NULL;
+    }
+    list->size--;
+    listnum--;
 
-   /*TODO */
+    removeNode->next= avaiableNode;
+    avaiableNode = removeNode;
+    return curr_item;
 }
 
 void ListFree(LIST *list, ITEMFREE *itemFree){
@@ -61,3 +88,5 @@ void *ListTrim(LIST *list){
    /*TODO */
     return NULL;
 }
+
+

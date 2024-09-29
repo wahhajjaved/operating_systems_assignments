@@ -120,12 +120,10 @@ void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
     }    
 
     while (1){
-        if (list->curser->item, comparisonArg)==1 {
-            return list->curser->item;
-        }
-        if (list->curser ==list->tail){
-             return NULL;
-        }
+        if (list->curser->item, comparisonArg)==1 {return list->curser->item;}
+        
+        if (list->curser ==list->tail){return NULL;}
+        
         list-> curser= list->curser->next
     }
 }
