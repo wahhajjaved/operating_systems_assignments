@@ -10,8 +10,8 @@ extern LIST *aviableList;
 extern NODE *aviableNode;
 
 void *ListRemove(LIST *list){
-    NODE *curr_node;
-    void *curr_item;
+    NODE *removeNode;
+    void *currItem;
 
     /* if the List struct pointer is not right */
     if (list == NULL) { errx(1, "ERROR: list is NULL \n");}
@@ -20,7 +20,7 @@ void *ListRemove(LIST *list){
     if (list-> size ==0){ errx(1, "ERROR: list empty");}
 
     removeNode= list->curser;
-    curr_item= list->curser->item;
+    currItem= list->curser->item;
     if (list->curser == list->tail){
         if (list->size == 1){
             list->head = NULL;
@@ -29,13 +29,23 @@ void *ListRemove(LIST *list){
         } 
         else {
             list->tail = list->curser->prev;
-            list->curser->curser = NULL;
+            removerNode->prev = NULL;
             list->tail->next = NULL;
             list->curser =list->tail;
         }
     }
     else if (list->curser == list->head){
-        
+        if (list->size == 1){
+            list->head = NULL;
+            list->tail = NULL;
+            list->curser = NULL;
+        } 
+        else {
+            list->tail = list->curser->prev;
+            list->head->prev = NULL;
+            removeNode->next = NULL;
+            list->curser =list->head;
+        }
     }
     else {
         list->curser->prev->next = list->curser->next;
@@ -49,7 +59,7 @@ void *ListRemove(LIST *list){
 
     removeNode->next= avaiableNode;
     avaiableNode = removeNode;
-    return curr_item;
+    return currItem;
 }
 
 void ListFree(LIST *list, ITEMFREE *itemFree){
@@ -73,21 +83,37 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
 
 
 void *ListTrim(LIST *list){
+    NODE *lastNode;
+    void *lastItem;
 
-    /* if the List struct pointer is not right*/
-    if (list == NULL) {
-        printf("ERROR: list is NULL \n");
-        return NULL;
+    /* if the List struct pointer is not right */
+    if (list == NULL) { errx(1, "ERROR: list is NULL \n");}
+
+    /* check if the list is empty or not */
+    if (list-> size ==0){ errx(1, "ERROR: list empty");}
+
+    removeNode = list->tail;
+    lastItem = list->tail->item;
+    
+    if (list->size == 1){
+        list->head = NULL;
+        list->tail = NULL;
+        list->curser = NULL;
     }
-
-    /* check if the list is empty or not*/
-    if (list-> size ==0){
-        printf("ERROR: list empty");
-        return NULL;
+    else {
+        list->tail = list->tail->prev;
+        lastNode->prev = NULL;
+        list->tail->next = NULL;
+        list->curser =list->tail;
+        
     }
+    list->size--;
+    listnum--;
 
+    removeNode->next= avaiableNode;
+    avaiableNode = removeNode;
+    return curr_item;
 
-    return NULL;
 }
 
 
