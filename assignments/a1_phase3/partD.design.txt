@@ -4,49 +4,120 @@
 
 Description
 
-    Write a program that uses UNIX system calls to ''ping-pong'' a byte between
-    two processes over a pair of pipes, one for each direction.
-    
+	Write a program that uses UNIX system calls to ''ping-pong'' a byte between
+	two processes over a pair of pipes, one for each direction.
+	
 
 Solution
-    
-    - The question description on the assignment basically provides all
-        steps needed to implement this program
+	
+	- The question description on the assignment basically provides all
+		steps needed to implement this program
 
-    - Need to use pipe(), fork(), read(), write(), and getpid xv6 system calls.
-        These are in user/user.h. Their documentation is on page 11 in the 
-        xv6 book
+	- Need to use pipe(), fork(), read(), write(), and getpid xv6 system calls.
+		These are in user/user.h. Their documentation is on page 11 in the 
+		xv6 book
 
-    - pipe() takes in an int array of length 2. The read end of the pipe is
-        the first element of the array and the write end is the second
-    
-    - Need 2 pipes, one for parent to child and one for child to parent because
-        the pipes are one way
-    
-    - Pipes must be created before creating child process so that both 
-        processes have access to the pipes
-    
-    - fork() is used to create the child processes
-    
-    - After forking, the parent needs to send a byte to the child. This can
-        be done by writing the byte to the write end of the parent-to-child
-        pipe using the write() system call
-    
-    - Meanwhile, the child process will use read() to read the byte send from
-        the parent on the read end of the parent-to-child pipe. read() will 
-        block until the parent has written the byte so the oder the parent 
-        and child run after fork() doesn't matter
-        
-    - After the byte is read, the child can use getpid() to get its pid and
-        print 'received ping'.
-    
-    - To send the byte back to the parent, the child must now send the byte 
-        back to the parent by writing to the write end of the child-to-parent
-        pipe
-    
-    - After sending the byte to the child, the parent needs to read the 
-        response from the child so it must call read() on the read end of the
-        child-to-parent pipe
-    
-    - When the response is received, the parent prints out the message using
-        getpid() and printf()
+	- pipe() takes in an int array of length 2. The read end of the pipe is
+		the first element of the array and the write end is the second
+	
+	- Need 2 pipes, one for parent to child and one for child to parent because
+		the pipes are one way
+	
+	- Pipes must be created before creating child process so that both 
+		processes have access to the pipes
+	
+	- fork() is used to create the child processes
+	
+	- After forking, the parent needs to send a byte to the child. This can
+		be done by writing the byte to the write end of the parent-to-child
+		pipe using the write() system call
+	
+	- Meanwhile, the child process will use read() to read the byte send from
+		the parent on the read end of the parent-to-child pipe. read() will 
+		block until the parent has written the byte so the oder the parent 
+		and child run after fork() doesn't matter
+		
+	- After the byte is read, the child can use getpid() to get its pid and
+		print 'received ping'.
+	
+	- To send the byte back to the parent, the child must now send the byte 
+		back to the parent by writing to the write end of the child-to-parent
+		pipe
+	
+	- After sending the byte to the child, the parent needs to read the 
+		response from the child so it must call read() on the read end of the
+		child-to-parent pipe
+	
+	- When the response is received, the parent prints out the message using
+		getpid() and printf()
+
+
+
+
+Bonus Description
+
+	Write a concurrent version of prime sieve using pipes. The first process
+	feeds the numbers 2 through 35 into the pipeline. For each prime number, 
+	you will arrange to create one process that reads from its left neighbor 
+	over a pipe and writes to its right neighbor over another pipe
+	
+
+Solution
+
+	
+	- kernel/param.h sets the max number of open files per process to 16 and 
+		the max number of open files per system to 100. Max number of processes
+		is 64
+
+	- There are 11 primes between 2 and 35, so 11 processes will be needed, not
+		counting the main process
+	
+	- Algorithm to implement from the link given in description
+	
+		p = get a number from left neighbor
+		print p
+		loop:
+			n = get a number from left neighbor
+			if (p does not divide n)
+				send n to right neighbor
+				
+	- Processes are created using fork() and communicate using pipe(). These
+		steps are the same as part D above
+	
+	- A main process will first need to create a child process for dividing by
+		2. It will also need to create a pipe going from main to process_2
+	
+	- To conserve file descriptors, main should close the read end of the pipe
+		and process_2 should close the write end of the pipe
+	
+	- After creating process_2, main then just loops over integers from 2 to 35
+		and feeds the values to process_2 over the pipe
+	
+	- processes_2 will wait for the next integer using read(). If processes_2 
+		is not able to divide the integer obtained from the pipe, it will need 
+		to send that integer to the next process in the chain
+	
+	- Processes will be created on an as needed basis. So process_2 will need
+		to track whether the next process exists and fork() if it doesn't. It
+		will also need to create the outgoing pipe if needed and close the read
+		end of this pipe
+	
+	- The previous steps for process_2 will be used for process_3, process_5, 
+		and so on. 
+	
+	- This can be done by using a function which takes accepts an integer as a 
+		parameter, which is the divisor of a process. The function will already
+		have an incoming pipe since it would have been created by its parent It
+		can then declare an array for the outgoing pipe and set it to -1
+	
+	- When an integer n doesn't divide by the divisor p, then the function will
+		check if the outgoing pipe is valid. If it is, then n is sent on this
+		pipe. If the outgoing pipe is -1, then it will create a new pipe and
+		fork, then proceed to the next iteration of the loop
+		
+	- After forking, the newly created child process will already have the 
+		divisor. It will just need to set the outgoing pipe to the incomming 
+		one while closing the write end and close the outgoing pipe. Then it 
+		can continue through to the next iteration of the loop
+	
+	
