@@ -11,7 +11,7 @@
 int ListCount(LIST *list){
     /* if the List struct pointer is not right*/
     if (list == NULL) {
-        err("ERROR: list is NULL \n");
+        errx(1,"ERROR: list is NULL \n");
         return 0;
     }
 
@@ -121,7 +121,7 @@ void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
     }    
 
     while (1){
-        if ((*comparator)list->curser->item, comparisonArg)==1 {
+        if ((*comparator)(list->curser->item, comparisonArg)==1) {
             return list->curser->item;
             }
         
@@ -129,7 +129,7 @@ void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
             return NULL;
             }
         
-        list-> curser= list->curser->next
+        list-> curser= list->curser->next;
     }
 }
 
