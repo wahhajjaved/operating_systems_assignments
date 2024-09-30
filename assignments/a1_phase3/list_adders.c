@@ -6,7 +6,7 @@
 
 
 #include "list.h"
-int nodesNum=0;
+int nodeNum=0;
 int listNum=0;
 LIST *listDict= NULL; /* dict of lists*/
 NODE *nodeDict= NULL; /* dict of all the nodes*/
@@ -16,7 +16,7 @@ NODE *aviableNode=NULL;
 
 void Increse_node_Memory(){
     NODE *newNodeDict;
-    int i;
+    int i, Num;
     Num =MIN_NODE*2;
     newNodeDict=realloc(nodeDict, (Num * sizeof(LIST)));
     nodeDict=newNodeDict;
@@ -97,14 +97,14 @@ int ListAdd(LIST *list,void *item){
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;   }
-    if (nodeNums == MIN_NODE){
+    if (nodeNum == MIN_NODE){
         Increse_node_Memory();
     }
 
     /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next; 
-    nodesNum++;   
+    nodeNum++;   
     
     /*initialize and add to list*/
     newNode-> item = item;
@@ -147,14 +147,14 @@ int ListInsert(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-    if (nodeNums == MIN_NODE){
+    if (nodeNum == MIN_NODE){
         Increse_node_Memory();
     }
 
     /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next;    
-    nodesNum++;
+    nodeNum++;
 
     /*initialize and add to list*/
     newNode-> item=item;
@@ -193,14 +193,14 @@ int ListAppend(LIST *list, void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-        if (nodeNums == MIN_NODE){
+        if (nodeNum == MIN_NODE){
         Increse_node_Memory();
     }
 
     /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next;    
-    nodesNum++;
+    nodeNum++;
 
     /*initialize and add to list*/
     newNode-> item = item;
@@ -234,13 +234,13 @@ int ListPrepend(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-        if (nodeNums == MIN_NODE){
+        if (nodeNum == MIN_NODE){
         Increse_node_Memory();
     }
         /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next;    
-    nodesNum++;
+    nodeNum++;
 
     /*initialize and add to list*/
     newNode-> item=item;
