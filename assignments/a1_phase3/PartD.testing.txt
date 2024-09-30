@@ -1,0 +1,26 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-22
+
+
+Number: 1
+Description: Run program
+Input: No input
+Expected Output: program prints the following
+    4: received ping
+    3: received pong
+
+
+
+
+Test Results
+
+    xv6 kernel is booting
+
+    hart 1 starting
+    hart 2 starting
+    init: starting sh
+    $ pingpong
+    4: received ping
+    3: received pong
+    $ 
