@@ -1,0 +1,52 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-22
+
+Description
+
+    Write a program that uses UNIX system calls to ''ping-pong'' a byte between
+    two processes over a pair of pipes, one for each direction.
+    
+
+Solution
+    
+    - The question description on the assignment basically provides all
+        steps needed to implement this program
+
+    - Need to use pipe(), fork(), read(), write(), and getpid xv6 system calls.
+        These are in user/user.h. Their documentation is on page 11 in the 
+        xv6 book
+
+    - pipe() takes in an int array of length 2. The read end of the pipe is
+        the first element of the array and the write end is the second
+    
+    - Need 2 pipes, one for parent to child and one for child to parent because
+        the pipes are one way
+    
+    - Pipes must be created before creating child process so that both 
+        processes have access to the pipes
+    
+    - fork() is used to create the child processes
+    
+    - After forking, the parent needs to send a byte to the child. This can
+        be done by writing the byte to the write end of the parent-to-child
+        pipe using the write() system call
+    
+    - Meanwhile, the child process will use read() to read the byte send from
+        the parent on the read end of the parent-to-child pipe. read() will 
+        block until the parent has written the byte so the oder the parent 
+        and child run after fork() doesn't matter
+        
+    - After the byte is read, the child can use getpid() to get its pid and
+        print 'received ping'.
+    
+    - To send the byte back to the parent, the child must now send the byte 
+        back to the parent by writing to the write end of the child-to-parent
+        pipe
+    
+    - After sending the byte to the child, the parent needs to read the 
+        response from the child so it must call read() on the read end of the
+        child-to-parent pipe
+    
+    - When the response is received, the parent prints out the message using
+        getpid() and printf()
