@@ -9,7 +9,7 @@
 extern LIST *aviableList;
 extern NODE *aviableNode;
 extern int listNum;
-
+extern int nodeNum;
 
 void *ListRemove(LIST *list){
     NODE *removeNode;
@@ -31,7 +31,7 @@ void *ListRemove(LIST *list){
         } 
         else {
             list->tail = list->curser->prev;
-            removerNode->prev = NULL;
+            removeNode->prev = NULL;
             list->tail->next = NULL;
             list->curser =list->tail;
         }
@@ -57,15 +57,15 @@ void *ListRemove(LIST *list){
         removeNode->next= NULL;
     }
     list->size--;
-    listnum--;
+    listNum--;
 
-    removeNode->next= avaiableNode;
-    avaiableNode = removeNode;
+    removeNode->next= aviableNode;
+    aviableNode = removeNode;
     return currItem;
 }
 
 void ListFree(LIST *list, ITEMFREE *itemFree){
-
+    NODE *node;
     /* if the List struct pointer is not right
     */
     if (list == NULL || itemFree == NULL) {
@@ -79,7 +79,7 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
         return ;
     }
 
-    while (node !=null){
+    while (node != NULL){
     node = node->next;
     (*itemFree)(node->item);
     nodeNum--;
@@ -89,7 +89,7 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
 
     list->head = NULL;
     list->tail = NULL;
-    list->curser = Null;
+    list->curser = NULL;
     list->size=0;
     nodeNum--;
 
@@ -98,7 +98,7 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
 
 
 void *ListTrim(LIST *list){
-    NODE *lastNode;
+    NODE *removeNode;
     void *lastItem;
 
     /* if the List struct pointer is not right */
@@ -117,17 +117,17 @@ void *ListTrim(LIST *list){
     }
     else {
         list->tail = list->tail->prev;
-        lastNode->prev = NULL;
+        removeNode->prev = NULL;
         list->tail->next = NULL;
         list->curser =list->tail;
         
     }
     list->size--;
-    listnum--;
+    listNum--;
 
-    removeNode->next= avaiableNode;
-    avaiableNode = removeNode;
-    return curr_item;
+    removeNode->next= aviableNode;
+    aviableNode = removeNode;
+    return lastItem;
 
 }
 
