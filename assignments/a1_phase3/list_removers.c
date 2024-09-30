@@ -8,6 +8,8 @@
 
 extern LIST *aviableList;
 extern NODE *aviableNode;
+extern int listNum;
+
 
 void *ListRemove(LIST *list){
     NODE *removeNode;
@@ -67,8 +69,7 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
     /* if the List struct pointer is not right
     */
     if (list == NULL || itemFree == NULL) {
-        printf("ERROR: list or itemfree is NULL \n");
-        return ;
+        errx(1,"ERROR: list or itemfree is NULL \n");
     }
 
     /* check if the list is empty or not
@@ -78,7 +79,21 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
         return ;
     }
 
-   /*TODO */
+    while (node !=null){
+    node = node->next;
+    (*itemFree)(node->item);
+    nodeNum--;
+    node->next = aviableNode;
+    aviableNode = node;
+    }
+
+    list->head = NULL;
+    list->tail = NULL;
+    list->curser = Null;
+    list->size=0;
+    nodeNum--;
+
+
 }
 
 
