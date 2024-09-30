@@ -14,28 +14,30 @@ char b = 'p';
 int child() {
 	char buffer;
 	int bytesRead, bytesWritten;
-	bytesRead = read(pToC[1], &buffer, 1) == -1;
+	bytesRead = read(pToC[0], &buffer, 1);
 	if (bytesRead == -1) {
-		fprintf(2,"Error when reading byte from parent\n");
+		printf("Error when reading byte from parent\n");
+		return 1;
 	}
 	else if (bytesRead != 1) {
 		printf("Error in child: Expected to read 1 byte but instead read %d"
 			"\n",
 			bytesRead
 		);
-	}
-	
-	if(buffer == b) {
-		printf("%d: received ping", getpid());
-	}
-	else {
-		printf("Error in child. Expecting %c but got %c\n", b, buffer);
 		return 1;
 	}
 	
-	bytesWritten = write(cToP[0], &b, 1) == -1;
+	if(buffer == b) {
+		printf("%d: received ping\n", getpid());
+	}
+	else {
+		printf("Error in child. Expecting %d but got %d\n", b, buffer);
+		return 1;
+	}
+	
+	bytesWritten = write(cToP[1], &b, 1);
 	if (bytesWritten == -1) {
-		fprintf(2,"Error when sending byte to child\n");
+		printf("Error when sending byte to child\n");
 	}
 	else if (bytesWritten != 1) {
 		printf("Error in parent: Expected to write 1 byte but instead wrote %d"
@@ -50,9 +52,9 @@ int child() {
 int parent() {
 	char buffer;
 	int bytesRead, bytesWritten;
-	bytesWritten = write(pToC[1], &b, 1) == -1;
+	bytesWritten = write(pToC[1], &b, 1);
 	if (bytesWritten == -1) {
-		fprintf(2,"Error when sending byte to child\n");
+		printf("Error when sending byte to child\n");
 	}
 	else if (bytesWritten != 1) {
 		printf("Error in parent: Expected to write 1 byte but instead wrote %d"
@@ -61,22 +63,24 @@ int parent() {
 		);
 	}
 	
-	bytesRead = read(cToP[0], &buffer, 1) == -1;
+	bytesRead = read(cToP[0], &buffer, 1);
 	if (bytesRead == -1) {
-		fprintf(2,"Error when reading byte from child\n");
+		printf("Error when reading byte from child\n");
+		return 1;
 	}
 	else if (bytesRead != 1) {
 		printf("Error in parent: Expected to read 1 byte but instead read %d"
 			"\n",
 			bytesRead
 		);
+		return 1;
 	}
 	
 	if(buffer == b) {
-		printf("%d: received pong", getpid());
+		printf("%d: received pong\n", getpid());
 	}
 	else {
-		printf("Error in parent. Expecting %c but got %c\n", b, buffer);
+		printf("Error in parent. Expecting %d but got %d\n", b, buffer);
 		return 1;
 	}
 	
@@ -86,17 +90,17 @@ int parent() {
 int main(int argc, char* argv[]) {
 	int childPid;
 	if (pipe(pToC) == -1) {
-		fprintf(2,"Could not create pipe pToC\n");
+		printf("Could not create pipe pToC\n");
 		return 1;
 	}
 	if (pipe(cToP) == -1) {
-		fprintf(2,"Could not create pipe cToP\n");
+		printf("Could not create pipe cToP\n");
 		return 1;
 	}
 	
 	childPid = fork();
 	if (childPid == -1) {
-		fprintf(2,"fork failed\n");
+		printf("fork failed\n");
 		return 1;
 	}
 	else if (childPid == 0) {
