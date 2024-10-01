@@ -18,23 +18,26 @@ NODE *aviableNode=NULL;
 void Increse_node_Memory(){
     NODE *newNodeDict;
     int i, Num;
-    Num =MIN_NODE*2;
-    newNodeDict=realloc(nodeDict, (Num * sizeof(LIST)));
+    Num = MIN_NODES *2;
+
+    newNodeDict=realloc(nodeDict, (Num * sizeof(NODE)));
+    if (newNodeDict ==NULL){
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED\n");
+            return ;
+    }
     nodeDict=newNodeDict;
     /* initialize the new list*/
 
-    for (i=MIN_NODE; i< Num; i++){
+    for (i=MIN_NODES; i< Num; i++){
         nodeDict[i].next= &nodeDict[i+1];
-        if (i==MIN_NODE){
+        if (i==MIN_NODES){
             nodeDict[i].prev=NULL;
         }
         else {
             nodeDict[i].prev= &nodeDict[i-1];
         }
-
-    
     }
-    nodeDict[MIN_NODE-1].next= NULL;
+    nodeDict[MIN_NODES-1].next= NULL;
 }
 
 
@@ -44,28 +47,28 @@ LIST *ListCreate(){
     if (listDict == NULL){
         int i;
         /* Allocating memory */
-        listDict= (LIST*) malloc ((MIN_LIST) * sizeof(LIST));
+        listDict= (LIST*) malloc ((MIN_LISTS) * sizeof(LIST));
         if (listDict ==NULL) {
-            errx(1, "ERROR: MEMORY ALLOCATION FAILED");
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED\n");
             return NULL;
         }    
-        nodeDict= (NODE*) malloc ((MIN_NODE) * sizeof(NODE));
+        nodeDict= (NODE*) malloc ((MIN_NODES) * sizeof(NODE));
         if (nodeDict ==NULL) {
-            errx(1, "ERROR: MEMORY ALLOCATION FAILED ");
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED\n ");
             return NULL;
         }
         /* initialization */
         aviableList=&listDict[0];
         aviableNode=&nodeDict[0];
 
-        for ( i=0; i<(MIN_LIST); i++){
+        for ( i=0; i<(MIN_LISTS); i++){
             listDict[i].size=0;
             listDict[i].nextfreeList= &listDict[i+1];
          }
    
         listDict[i-1].nextfreeList= NULL; /*last*/
 
-        for ( i=0; i<(MIN_NODE-1); i++){
+        for ( i=0; i<(MIN_NODES-1); i++){
             nodeDict[i].next= &nodeDict[i+1];
             if (i==0){
                  nodeDict[i].prev= NULL;
@@ -76,15 +79,17 @@ LIST *ListCreate(){
     }
     nodeDict[i].next= NULL; /*last*/
     }
+
     if (aviableList==NULL) {
         int i, Num, index;
         if (listNum ==MIN_LISTS){
             LIST *oldListDict= listDict;
             Num= MIN_LISTS*2;
+
             /* doubling the memory  */
             listDict =(LIST*) malloc(Num * sizeof(LIST));
             if (listDict ==NULL) {
-                errx(1, "ERROR: MEMORY ALLOCATION FAILED");
+                errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");
                 return NULL;
             }
             /*INITIALIZE ALL NEW LISTS*/
@@ -94,27 +99,29 @@ LIST *ListCreate(){
 
             /* move the old list into new list dict*/
             for (i=0; i<MIN_LISTS; i++){
-                index =i % Num;
+                index =i;
                 /* indexing to find the empty list*/
                 
-                while (listDict[index] != 0){
-                    index = (index +1) % num;
+                while (listDict[index].size != 0){
+                    index++;
                 }
-                listDict[index] = oldListDict; /* move the old list to new*/
+                listDict[index] = oldListDict[i]; /* move the old list to new*/
             }
+
             /* chain the unused lists*/
-            aviableList==NULL;
+            aviableList =NULL;
             for (i= Num-1; i>=0; i--){
                 if (listDict[i].size ==0){
-                    listDict[i].nextfreeList = avaiableList;
-                    avaiableList =&listDict[i];
+                    listDict[i].nextfreeList = aviableList;
+                    aviableList =&listDict[i];
                 }
             }
             free(oldListDict); /* free the old list dict memory*/
         }
     }
+
     if (aviableList==NULL) {
-        printf("ERROR: MEMORY ALLOCATION FAILED");
+        printf("ERROR: no aviable list \n");
         return NULL;
     }
     /*get new list and initilize it */
@@ -142,7 +149,7 @@ int ListAdd(LIST *list,void *item){
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;   }
-    if (nodeNum == MIN_NODE){
+    if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
 
@@ -181,6 +188,7 @@ int ListAdd(LIST *list,void *item){
     return 0;
 
 }
+
 int ListInsert(LIST *list,void *item){
     NODE *newNode;
      /* if the List struct pointer is not right*/
@@ -192,7 +200,7 @@ int ListInsert(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-    if (nodeNum == MIN_NODE){
+    if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
 
@@ -238,7 +246,7 @@ int ListAppend(LIST *list, void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-        if (nodeNum == MIN_NODE){
+        if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
 
@@ -279,7 +287,7 @@ int ListPrepend(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-        if (nodeNum == MIN_NODE){
+        if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
         /*get an unused node  */
