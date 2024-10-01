@@ -8,6 +8,7 @@
 #include "list.h"
 int nodeNum=0;
 int listNum=0;
+
 LIST *listDict= NULL; /* dict of lists*/
 NODE *nodeDict= NULL; /* dict of all the nodes*/
 LIST *aviableList=NULL;
@@ -39,15 +40,20 @@ void Increse_node_Memory(){
 
 LIST *ListCreate(){
     LIST *newList;
+    
     if (listDict == NULL){
         int i;
         /* Allocating memory */
         listDict= (LIST*) malloc ((MIN_LIST) * sizeof(LIST));
-        if (listDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED");
-    
+        if (listDict ==NULL) {
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED");
+            return NULL;
+        }    
         nodeDict= (NODE*) malloc ((MIN_NODE) * sizeof(NODE));
-        if (nodeDict ==NULL) errx(1, "ERROR: MEMORY ALLOCATION FAILED ");
-    
+        if (nodeDict ==NULL) {
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED ");
+            return NULL;
+        }
         /* initialization */
         aviableList=&listDict[0];
         aviableNode=&nodeDict[0];
@@ -57,21 +63,60 @@ LIST *ListCreate(){
             listDict[i].nextfreeList= &listDict[i+1];
          }
    
-        listDict[i].nextfreeList= NULL; /*last*/
+        listDict[i-1].nextfreeList= NULL; /*last*/
 
-    for ( i=0; i<(MIN_NODE-1); i++){
-        nodeDict[i].next= &nodeDict[i+1];
-        if (i==0) nodeDict[i].prev= NULL;
-        else {
+        for ( i=0; i<(MIN_NODE-1); i++){
+            nodeDict[i].next= &nodeDict[i+1];
+            if (i==0){
+                 nodeDict[i].prev= NULL;
+            }
+            else {
              nodeDict[i].prev= &nodeDict[i-1];
         }
     }
     nodeDict[i].next= NULL; /*last*/
     }
     if (aviableList==NULL) {
-        printf("ERROR:no aviableList\n");
-        return NULL;}
+        int i, Num, index;
+        if (listNum ==MIN_LISTS){
+            LIST *oldListDict= listDict;
+            Num= MIN_LISTS*2;
+            /* doubling the memory  */
+            listDict =(LIST*) malloc(Num * sizeof(LIST));
+            if (listDict ==NULL) {
+                errx(1, "ERROR: MEMORY ALLOCATION FAILED");
+                return NULL;
+            }
+            /*INITIALIZE ALL NEW LISTS*/
+            for ( i=0; i<(Num); i++){
+               listDict[i].size=0;
+            }
 
+            /* move the old list into new list dict*/
+            for (i=0; i<MIN_LISTS; i++){
+                index =i % Num;
+                /* indexing to find the empty list*/
+                
+                while (listDict[index] != 0){
+                    index = (index +1) % num;
+                }
+                listDict[index] = oldListDict; /* move the old list to new*/
+            }
+            /* chain the unused lists*/
+            aviableList==NULL;
+            for (i= Num-1; i>=0; i--){
+                if (listDict[i].size ==0){
+                    listDict[i].nextfreeList = avaiableList;
+                    avaiableList =&listDict[i];
+                }
+            }
+            free(oldListDict); /* free the old list dict memory*/
+        }
+    }
+    if (aviableList==NULL) {
+        printf("ERROR: MEMORY ALLOCATION FAILED");
+        return NULL;
+    }
     /*get new list and initilize it */
     newList= aviableList;
     aviableList= newList-> nextfreeList;
