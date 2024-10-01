@@ -16,10 +16,16 @@ void *ListRemove(LIST *list){
     void *currItem;
 
     /* if the List struct pointer is not right */
-    if (list == NULL) { errx(1, "ERROR: list is NULL \n");}
+    if (list == NULL) { 
+        printf("ERROR: list is NULL \n");
+        return NULL;
+    }
 
     /* check if the list is empty or not */
-    if (list-> size ==0){ errx(1, "ERROR: list empty");}
+    if (list-> size ==0){ 
+        printf("ERROR: list empty \n");
+        return NULL;
+}
 
     removeNode= list->curser;
     currItem= list->curser->item;
@@ -69,13 +75,14 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
     /* if the List struct pointer is not right
     */
     if (list == NULL || itemFree == NULL) {
-        errx(1,"ERROR: list or itemfree is NULL \n");
+        printf("ERROR: list or itemfree is NULL \n");
+        return ;
     }
 
     /* check if the list is empty or not
     */
     if (list-> size ==0){
-        printf("ERROR: list empty");
+        printf("ERROR: list empty \n");
         return ;
     }
 
@@ -102,10 +109,16 @@ void *ListTrim(LIST *list){
     void *lastItem;
 
     /* if the List struct pointer is not right */
-    if (list == NULL) { errx(1, "ERROR: list is NULL \n");}
+    if (list == NULL) { 
+        printf( "ERROR: list is NULL \n");
+        return NULL;
+    }
 
     /* check if the list is empty or not */
-    if (list-> size ==0){ errx(1, "ERROR: list empty");}
+    if (list-> size ==0){ 
+        printf("ERROR: list empty \n");
+        return NULL;
+    }
 
     removeNode = list->tail;
     lastItem = list->tail->item;
@@ -136,10 +149,11 @@ void ListConcat(LIST *list1, LIST *list2){
      /* if the List struct pointer is not right*/
     if (list1 == NULL || list2== NULL) {
         printf("ERROR: list1 OR list2 is NULL \n");
-        return ;
+        return;
     }
     if (list1 == list2) {
-        errx(1, "ERROR: IN listConcat, both list are same");
+        printf("ERROR: IN listConcat, both list are same \n");
+        return ;
     }
 
     /*list1 is empty and list2 not empty 
