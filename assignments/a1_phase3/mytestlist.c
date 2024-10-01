@@ -6,13 +6,18 @@
 
 #include"list.h"
 
+
 /* print list for testing*/
 void Print_List(LIST *list);
+    
+int (*testCOMPARATOR)(void *V, void *I);
+void (*testITEMFREE)(void *I);    
+
 
 int main(void){
-    LIST *L1, *L2, *L3, *L4 ;
-    int *I1, *I2, *I4, *I5, *I6;
-    int a, b, d, e, f, result;
+    LIST *L1, *L2, *L3, *L4, *L5, *L6, *LTest ;
+    int *I1, *I2, *I4, *I5, *I6, *I3;
+    int a, b, d, e, f, result, *cArg, i;
     a= 44;
     b=55;
     d=70;
@@ -24,21 +29,50 @@ int main(void){
     I5=&e;
     I6=&f;
 
-/*    
-    int (*testCOMPARATOR)(void *V, void *I);
-    void (*testITEMFREE)(void *I);    
-*/  
+    printf("MIN_LIST %d\n=", MIN_LISTS);
+    printf("MIN_NODES %d\n=", MIN_NODES);
     printf("____________TESTING PARTC: LIST LIBRARY_________\n");
 
-    printf("______ListCreate()________\n");
+    printf("______Testing_ListCreate()________\n");
+
+    /* testing normal case: creating a list*/
+    LTest= ListCreate();
+    if (LTest ==NULL){
+        printf("TEST CASE FAILED: ListCreate returned NULL on new list\n");
+    }
+    else {
+        printf("TEST CASE SUCCESS: ListCreate() on new list\n");
+    }
+
+    /* testing normal case: creating several lists*/
+    for (i=0; i<5; i++){
+        LTest= ListCreate();
+        if (LTest ==NULL){
+            printf("TEST CASE FAILED: ListCreate returned NULL on several list: list %d\n", i+1);
+        }
+        else {
+            printf("TEST CASE SUCCESS: ListCreate() on several list\n");
+        }
+    }
+
+    printf("bonus marks\n");    
+/*     testing egde case: creating several lists for doubling memory
+*/
+/*
+    for (i=MIN_LISTS; i<15; i++){
+        LTest= ListCreate();
+        if (LTest ==NULL){
+            printf("TEST CASE FAILED: ListCreate returned NULL AFTER DOUBLING: list %d\n", i+1);
+        }
+        else {
+            printf("TEST CASE SUCCESS: ListCreate() after doubling\n");
+        }
+    }
+*/  
     L1= ListCreate();
-    Print_List(L1);
     L2= ListCreate();
-    Print_List(L2);
     L3= ListCreate();
-    Print_List(L3);
     L4= ListCreate();
-    Print_List(L4);
     
 /*
 	ListCount(L1);
@@ -61,25 +95,37 @@ int main(void){
 	
 */
     printf("________ListADD()___________\n");
-    printf("Empty list()\n");
+    printf("test: Empty list()\n");
     result=ListAdd(L1, I1);
-/*    Print_List(L1);*/
     if (result !=0){
-        printf("ERROR : listAdd.\n");
+        printf("ERROR: listAdd for empty list   \n");
         printf("list1=");
         Print_List(L1);
     }
-    else printf("ListAdd() successful!!\n");
+    else printf("ListAdd() successful for empty list!!\n");
 
-    printf("NON Empty lis()\n");
-    result=ListAppend(L1, I5);
+    printf("test: adding with one item \n");
+    result=ListAdd(L1, I5);
     if (result !=0){
-        printf("ERROR : listAdd().\n");
+        printf("ERROR : listAdd() with one item.\n");
         printf("list1=");
         Print_List(L1);
     }
-    else printf("ListAdd() successful!!\n");
-    Print_List(L1);
+    else printf("ListAdd() successful!! with one item\n");
+
+    printf("test: adding with to a null list \n");
+    result=ListAdd(NULL, I5);
+    if (result !=-1){
+        printf("ERROR : listAdd() with NULL LIST.\n");
+    }
+    else printf("ListAdd() successful!! with NULL list\n");
+
+    printf("test: adding with to a null item \n");
+    result=ListAdd(L1, "NULL");
+    if (result !=-1){
+        printf("ERROR : listAdd() with NULL item.\n");
+    }
+    else printf("ListAdd() successful!! with NULL item\n");
 
     printf("________ListInsert()___________\n");
     printf("Empty list()\n");
@@ -158,9 +204,28 @@ int main(void){
 	I1 = ListSearch(L1, &testCOMPARATOR, I1);
 	printf("got to procedure ListSearch()\n");
 */
+    printf("________ListPrepend()___________\n");
+    
 	return 0;
 
 }
+
+void testItemFree(void *item){
+    ((NODE *)item)->item = NULL;
+    ((NODE *)item)->prev = NULL;
+}
+int tesrComp(void *item1,void *item2 ){
+    int i1= *(int*) item1;
+    int i2= *(int*) item2;
+    
+    if (i1 == i2){
+        return 1;
+    } 
+    else{
+        return 0;
+    }
+}
+
 /* print list for testing*/
 void Print_List(LIST *list){
     NODE *printing_node= list->head;
