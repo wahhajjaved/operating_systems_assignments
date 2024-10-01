@@ -319,6 +319,7 @@ fork(void)
   release(&wait_lock);
 
   acquire(&np->lock);
+  np->traceMask =p->traceMask;
   np->state = RUNNABLE;
   release(&np->lock);
 
