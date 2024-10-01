@@ -12,12 +12,8 @@
 #include <err.h>
 
 
-#define MAX_NODE 100
-#define MAX_LIST 100
-#define MIN_LIST 10
-#define MIN_NODE 10
-#define MAX_LIST_SIZE 100
-
+#define MIN_LISTS 10
+#define MIN_NODES 10
 /*
  * comparator pointer for the parameter for ListSearch() 
  */
@@ -49,21 +45,7 @@ typedef struct list {
 } LIST;
 
 
-/*
- * array of list
- 
- /LIST dictionary[MAX_LIST];
 
- * array of free list
- 
- LIST freed_list[MAX_LIST_SIZE];
-
-
- * array of free nodes
- 
-
-/ NODE freed_node[MAX_NODE];
-*/
 /*
  * creates a new empty list and return its reference or Null if fails
  * 
