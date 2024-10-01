@@ -1,0 +1,32 @@
+
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+
+PART E design
+____________________________________________________-
+
+Add a new field called int traceMask to proc structure
+
+Add a system call trace which will set the traceMask to the call number which
+is 22
+
+in proc.h add traceMask
+in proc.c add np->traceMask = p->traceMask;
+in syscall.c add extern uint64 sys_trace(void);
+
+[SYS_trace] sys_trace
+
+/* array of sys call names */
+char syscallnames[22][10]= {
+    "read",
+    "trace",
+    "exec",
+    "open",
+    "close",
+    "fork",
+    "kill",
+    "mkdir",
+    "pipe",
+    "wait"
+
+};
