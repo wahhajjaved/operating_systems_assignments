@@ -25,42 +25,36 @@ void *ListRemove(LIST *list){
     if (list-> size ==0){ 
         printf("ERROR: list empty \n");
         return NULL;
-}
+    }
 
     removeNode= list->curser;
-    currItem= list->curser->item;
-    if (list->curser == list->tail){
-        if (list->size == 1){
-            list->head = NULL;
-            list->tail = NULL;
-            list->curser = NULL;
-        } 
-        else {
-            list->tail = list->curser->prev;
-            removeNode->prev = NULL;
-            list->tail->next = NULL;
-            list->curser =list->tail;
-        }
+    currItem= list->curser->item;   
+    if (list->size == 1){
+        list->head = NULL;
+        list->tail = NULL;
+        list->curser = NULL;
+    }
+
+   else  if (list->curser == list->tail){
+        list->tail = list->curser->prev;            
+        removeNode->prev = NULL;
+        list->tail->next = NULL;
+        list->curser =list->tail;
+      
     }
     else if (list->curser == list->head){
-        if (list->size == 1){
-            list->head = NULL;
-            list->tail = NULL;
-            list->curser = NULL;
-        } 
-        else {
-            list->tail = list->curser->prev;
-            list->head->prev = NULL;
-            removeNode->next = NULL;
-            list->curser =list->head;
-        }
+        list->head = list->curser->next;
+        list->head->prev = NULL;
+        removeNode->next = NULL;
+        list->curser =list->head;
+        
     }
     else {
         list->curser->prev->next = list->curser->next;
         list->curser->next->prev = list->curser->prev;
         list->curser= list->curser->next;
         removeNode->next= NULL;
-        removeNode->next= NULL;
+        removeNode->prev= NULL;
     }
     list->size--;
     listNum--;
