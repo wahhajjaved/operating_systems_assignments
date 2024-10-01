@@ -15,22 +15,25 @@ void (*testITEMFREE)(void *I);
 
 
 int main(void){
-    LIST *L1, *L2, *L3, *L4, *L5, *L6, *LTest ;
-    int *I1, *I2, *I4, *I5, *I6, *I3;
-    int a, b, d, e, f, result, *cArg, i;
+    LIST *L1, *L2, *L3, *L4, *LTest ;
+    int *I1, *I2, *I4, *I5, *Itemcheck, *I3;
+    int a, b, d,c, e,  result, *cArg, i;
+    int tests=0, testpassed=0;
+    void *removedItem;
+
     a= 44;
     b=55;
     d=70;
     e=18;
-    f=9;
+    c=99;
     I1=&a;
     I2=&b;    
     I4=&d;
     I5=&e;
-    I6=&f;
+    I3=&c;
 
-    printf("MIN_LIST %d\n=", MIN_LISTS);
-    printf("MIN_NODES %d\n=", MIN_NODES);
+    printf("MIN_LIST= %d\n", MIN_LISTS);
+    printf("MIN_NODES= %d\n", MIN_NODES);
     printf("____________TESTING PARTC: LIST LIBRARY_________\n");
 
     printf("______Testing_ListCreate()________\n");
@@ -74,119 +77,427 @@ int main(void){
     L3= ListCreate();
     L4= ListCreate();
     
-/*
-	ListCount(L1);
-	printf("got to procedure ListCount()\n");
 
-	I1 = ListFirst(L1);
-	printf("got to procedure ListFirst()\n");
+    /* testing with empty list*/
 
-	I1 = ListLast(L1);
-	printf("got to procedure ListLast()\n");
+    printf("test: Empty list\n");
+    tests++;
+    if (ListCount(L1) ==0){
+        printf("ListCount() successful!! with empty \n");
+        testpassed++;
+    }else {
+        printf("ListCount() FAILED! with empty \n");        
+        printf("list count:%d\n",ListCount(L2));
 
-	I1 = ListNext(L1);
-	printf("got to procedure ListNext()\n");
+    }
 
-	I1 = ListPrev(L1);
-	printf("got to procedure ListPrev()\n");
+    tests++;
+    if (ListFirst(L1) == NULL){
+        printf("ListFirst() successful!! with empty \n");
+        testpassed++;
+    }else {
+        printf("ListFirst() FAILED! with empty \n");
+    }
 
-	I1 = ListCurr(L1);
-	printf("got to procedure ListCurr()\n");
-	
-*/
+    tests++;
+    if (ListLast(L1) == NULL){
+        printf("ListLast() successful!! with empty \n");
+        testpassed++;
+    }else {
+        printf("ListLast() FAILED! with empty \n");
+    }
+
+    tests++;
+    if (ListNext(L1) == NULL){
+        printf("ListNext() successful!! with empty \n");
+        testpassed++;
+    }else {
+        printf("ListNext() FAILED! with empty \n");
+    }
+
+    tests++;
+    if (ListPrev(L1) == NULL){
+        printf("ListPrev() successful!! with empty\n ");
+        testpassed++;
+    }else {
+        printf("ListPrev() FAILED! with empty\n ");
+    }
+
+    tests++;
+    if (ListCurr(L1) == NULL){
+        printf("ListCurr() successful!! with empty\n ");
+        testpassed++;
+    }else {
+        printf("ListCurr() FAILED! with empty\n ");
+    }
+
+
+    tests++;
+    if (ListRemove(L1) == NULL){
+        printf("ListRemove() successful!! with empty\n ");
+        testpassed++;
+    }else {
+        printf("ListRemove() FAILED! with empty\n ");
+    }
+
+    tests++;
+    if (ListTrim(L1) == NULL){
+        printf("ListTrim() successful!! with empty\n ");
+        testpassed++;
+    }else {
+        printf("ListTrim() FAILED! with empty\n ");
+    }
+
+    tests++;
+    ListConcat(L1,L2);
+    if (ListCurr(L1) == NULL){
+        printf("ListConcat() successful!! with empty\n ");
+        testpassed++;
+    }else {
+        printf("Listconcat() FAILED! with empty\n ");
+    }
+
     printf("________ListADD()___________\n");
     printf("test: Empty list()\n");
+    tests++;
     result=ListAdd(L1, I1);
     if (result !=0){
-        printf("ERROR: listAdd for empty list   \n");
+        printf("listAdd FAILED for empty list   \n");
         printf("list1=");
         Print_List(L1);
     }
-    else printf("ListAdd() successful for empty list!!\n");
+    else {
+        printf("ListAdd() successful for empty list!!\n");
+        testpassed++;
+    }
 
     printf("test: adding with one item \n");
     result=ListAdd(L1, I5);
+    tests++;
     if (result !=0){
-        printf("ERROR : listAdd() with one item.\n");
+        printf("listAdd() FAILED  with one item.\n");
         printf("list1=");
         Print_List(L1);
     }
-    else printf("ListAdd() successful!! with one item\n");
+        else{
+             printf("ListAdd() successful!! with one item\n");
+             testpassed++;
+        }
+    ListAdd(L1, I2);
+    ListAdd(L1, I1);   
+
+    printf("test: adding with at tail \n");
+    ListLast(L1);
+    tests++;
+    result=ListAdd(L1, I3);
+    if (L1->tail->item !=I3){
+        printf("listAdd() FAILED AT TAIL.\n");
+        printf("list1=");
+        Print_List(L1);
+    }
+        else {
+            printf("ListAdd() successful!! with AT TAIL\n");
+            printf("ListLast() successful!! tested with ListAdd(), curser was at last \n");
+            testpassed++;
+        }
+
+    printf("test: adding with at head \n");
+    ListFirst(L1);
+    tests++;
+    result=ListAdd(L1, I3);
+    if (L1->head->next->item !=I3){
+        printf("listAdd() FAILED after head.\n");
+        printf("list1=");
+        Print_List(L1);
+    }
+        else {
+            printf("ListAdd() successful!! after head\n");
+            printf("ListFirst() successful!! tested with ListAdd(),");
+            printf(" curser was at start \n");
+            testpassed++;
+            }
+
+    printf("test: adding at the middle \n");
+    ListFirst(L1);
+    ListNext(L1);
+    ListNext(L1);
+    tests++;
+    result=ListAdd(L1, I3);
+    if (L1->head->next->next->next->item !=I3){
+        printf("listAdd() FAILED in the middle\n");
+        printf("list1=");
+        Print_List(L1);
+    }
+        else{
+            printf("ListAdd() successful!! in the middle\n");
+            printf("ListNext() successful!! tested with ListAdd(),");
+            printf(" curser is where its supposed to be \n");
+            testpassed++;
+        }
+    Print_List(L1);
+
 
     printf("test: adding with to a null list \n");
     result=ListAdd(NULL, I5);
+    tests++;
     if (result !=-1){
-        printf("ERROR : listAdd() with NULL LIST.\n");
+        printf("listAdd() FAILED with NULL LIST.\n");
     }
-    else printf("ListAdd() successful!! with NULL list\n");
-
-    printf("test: adding with to a null item \n");
-    result=ListAdd(L1, "NULL");
-    if (result !=-1){
-        printf("ERROR : listAdd() with NULL item.\n");
-    }
-    else printf("ListAdd() successful!! with NULL item\n");
-
+    else {
+        printf("ListAdd() successful!! with NULL list\n");
+        testpassed++;
+}
+    
     printf("________ListInsert()___________\n");
-    printf("Empty list()\n");
+    printf("test: inserting with one item \n");
     result=ListInsert(L2, I2);
+    tests++;
     if (result !=0){
-        printf("ERROR : ListInser.\n");
+        printf(" ListInsert FAILED on empty list.\n");
         printf("list2=");
         Print_List(L2);
     }
-    else printf("ListInsert() successful!!\n");
+    else {
+        printf("ListInsert() successful on empty list\n");
+        testpassed++;
+        }
 
-    printf("NON Empty lis()\n");
-    result=ListInsert(L2, I6);
+   /*listcount after item is added to empty list*/ 
+    printf("test: listcount when list is not empty and have one item" );
+    tests++;
+    if (ListCount(L2) ==1){
+        printf("ListCount() successful!! with one item in empty ");
+        testpassed++;
+    }
+    else {
+        printf("ListCount() FAILED! with empty ");
+        printf("list count:%d\n",ListCount(L2));}
+    
+    printf("test: inserting with one item \n");
+    result=ListInsert(L2, I5);
+    tests++;
     if (result !=0){
-        printf("ERROR : ListInsert.\n");
+        printf("listInsert() FAILED with one item.\n");
         printf("list2=");
         Print_List(L2);
     }
-    else printf("ListInsert() successful!!\n");
+        else{
+             printf("ListInsert() successful!! with one item\n");
+             testpassed++;
+        }
+    ListInsert(L2, I2);
+    ListInsert(L2, I1);
+    printf("test: inserting at tail \n");
+    ListLast(L2);
+    tests++;
+    result=ListInsert(L2, I3);
+    if (L2->tail->prev->item != I3){
+        printf("listInsert() FAILED AT TAIL.\n");
+        printf("list2=");
+        Print_List(L2);
+    }
+        else {
+            printf("ListInsert() successful!! with AT TAIL\n");
+            printf("ListLast() successful!! tested with ListInsert(), curser was at last \n");
+            testpassed++;
+        }
+
+    printf("test: insert with at head \n");
+    ListFirst(L2);
+    tests++;
+    result=ListInsert(L2, I3);
+    if (L2->head->item !=I3){
+        printf("listAdd() FAILED after head.\n");
+        printf("list2=");
+        Print_List(L2);
+    }
+        else {
+            printf("ListInsert() successful!! after head\n");
+            printf("ListFirst() successful!! tested with ListInsert(),");
+            printf(" curser was at start \n");
+            testpassed++;
+            }
+
+
+
+    printf("test: inserting at the middle \n");
+    ListLast(L2);
+    ListPrev(L2);
+    tests++;
+    result=ListInsert(L2, I3);
+    if (L2->head->prev->prev->item !=I3){
+        printf("listinsert() FAILED in the middle\n");
+        printf("list2=");
+        Print_List(L2);
+    }
+        else{
+            printf("ListInsert() successful!! in the middle\n");
+            printf("ListPrev() successful!! tested with ListInsert(),");
+            printf(" curser is where its supposed to be \n");
+            testpassed++;
+        }
     Print_List(L2);
+       /*listcount after item is added to empty list*/
+    printf("test: listcount when list is not empty" );
+    tests++;
+    if (ListCount(L2) ==7){
+        printf("ListCount() successful!! with items in list ");
+        testpassed++;
+    }
+    else {
+        printf("ListCount() FAILED! with empty ");
+        printf("list count:%d\n",ListCount(L2));}
+
+
+    printf("test: inserting with to a null list \n");
+    result=ListInsert(NULL, I5);
+    tests++;
+    if (result !=-1){
+        printf("listInsert() FAILED with NULL LIST.\n");
+    }
+    else {
+        printf("ListInsert() successful!! with NULL list\n");
+        testpassed++;
+    }    
 	
 
     printf("________ListAppend()___________\n");
-    printf("Empty lis()\n");
+    printf("test: Empty list()\n");
+    tests++;
 	result=ListAppend(L3, I1);
     if (result !=0){
-        printf("ERROR : list append.\n");
+        printf("listAppend FAILED to an empty list.\n");
         printf("list3=");
         Print_List(L3);
     }
-    else printf("ListAppend() successful!!\n");
+    else {
+        printf("ListAppend() successful!!\n");
+        testpassed++;
+        }
 
-    printf("NON Empty lis()\n");
-    result=ListAppend(L3, I2);
-    if (result !=0){ 
-        printf("ERROR : listAppend().\n");
-        printf("list3=");
-        Print_List(L3);
+    printf("test: non Empty list()\n");
+    tests++;
+    ListFirst(L2);
+    ListAppend(L2, I3);
+    if (result !=0 && L2->tail->item !=I3){
+        printf(" listAppend() FAILED when there are multiple items.\n");
+        printf("list2=");
+        Print_List(L2);
     }
-    else printf("ListAppend() successful!!\n");
-    Print_List(L3);    
+    else {
+        printf("ListAppend() successful!! when there are multiple items\n");
+        testpassed++;
+    }
+
+    tests++;
+    if (ListCurr(L2) !=I3){
+        printf(" listCurr with ListAppend() FAILED when there are multiple");
+        printf(" items.\n");
+        printf("list2=");
+        Print_List(L2);
+    }
+    else {
+        printf("ListCurr() successful!! with ListAppend() when");
+        printf(" there are multiple item \n");
+        testpassed++;
+    }
 
     printf("________ListPrepend()___________\n");
-    printf("Empty lis()\n");
+    printf("Test: Empty list()\n");
+    tests++;
     result=ListPrepend(L4, I4);
-    if (result !=0){ 
-        printf("ERROR : listPrepend.\n");
+    if (result !=-0){ 
+        printf("listPrepend FAILED on an empty list.\n");
         printf("list4=");
         Print_List(L4);
     }
-    else printf("ListPrepend() successful!!\n");
+    else {
+        printf("ListPrepend() successful!! on empty list\n");
+        testpassed++;
+    }
 
-    printf("NON Empty lis()\n");
-    result=ListAppend(L4, I2);
-    if (result !=0){
-        printf("ERROR : listPrepend().\n");
+    printf("test: non Empty list() and curser at random place\n");
+    ListPrepend(L4, I1);
+    ListPrepend(L4, I3);
+    ListLast(L4);
+    ListPrev(L4);
+    tests++;
+    result=ListPrepend(L4, I2);
+    if (result !=0 && L2->head->item !=I2  ){
+        printf("listPrepend() FAILED on non empty list  and curser\
+ at random place .\n");
         printf("list4=");
         Print_List(L4);
     }
-    else printf("ListPrepend() successful!!\n");
+    else {
+        printf("ListPrepend() successful!! on non empty list and curser at\
+ random place\n");
+            testpassed++;
+    }
     Print_List(L4);
+
+    /*using the listLast to go to list's tail and test ListNext and Listprev */
+    printf("----------------ListNext()_and ListPrev()____________\n");
+    printf("testing ListPrev when current node is list's tail\n");
+    tests++;
+    ListLast(L2);
+    ListPrev(L2);
+    if (L2->curser->item != L2->tail->prev->item){
+        printf(" listPrev FAILED when current node is list's tail\n");
+        printf("list2=");
+        Print_List(L2);
+        printf("curser item:%d  expected item:%d\n ",
+*(int *) L2->curser->item,*(int *) L2->tail->prev->item);
+    }
+    else {
+        printf("ListPrev() successful!! when current node is list's tail\n");
+        testpassed++;
+    }
+    printf("testing ListNext() when current node is list's tail\n");
+    tests++;
+    ListLast(L2);
+    if (ListNext(L2) != NULL){
+        printf(" listNext FAILED when current node is list's tail\n");
+        printf("list2=");
+        Print_List(L2);
+    }
+    else {
+        printf("ListNext() successful!! when current node is list's tail\n ");
+        testpassed++;
+    }
+
+    printf("testing ListNext when current node is list's head\n");
+    tests++;
+    ListFirst(L2);
+    ListNext(L2);
+    printf("hhh\n");
+    if (L2->curser->item != L2->head->next->item){
+        printf(" listNext() FAILED when current node is list's head\n");
+        printf("list2=");
+        Print_List(L2);
+        printf("curser item:%d  expected item:%d\n ",
+*(int *) L2->curser->item,*(int *) L2->tail->next->item);
+    }
+    else {
+        printf("ListNext() successful!! when current node is list's head\n");
+        testpassed++;
+    }
+    printf("testing ListPrev() when current node is list's head\n");
+    tests++;
+    ListFirst(L2);
+    if (ListPrev(L2) != NULL){
+        printf(" listPrev FAILED when current node is list's head\n");
+        printf("list2=");
+        Print_List(L2);
+    }
+    else {
+        printf("ListPrev() successful!! when current node is list's head\n ");
+        testpassed++;
+    }
+
+    
+
+
 
 /*
 	I1 = ListRemove(L1);
@@ -204,10 +515,77 @@ int main(void){
 	I1 = ListSearch(L1, &testCOMPARATOR, I1);
 	printf("got to procedure ListSearch()\n");
 */
-    printf("________ListPrepend()___________\n");
-    
-	return 0;
+ 
+    printf("________________ListRemove()___________________\n");
+    printf("test: remove from start of the list\n");
+    ListFirst(L1);
+    Itemcheck= L1->head->item;
+    removedItem=ListRemove(L1);
+    tests++;
+    if (Itemcheck != (*(int *) removedItem)){
+        printf("ListRemove() sucessfull on removing the head\n");
+        testpassed++;
+    } else {
+        printf("ListRemove() FAILED on removing the head\n");
+        printf("item to be removed: %d\n", *Itemcheck);
+        printf("item now in head: %d\n",*(int *) L1->head->item);
+    }
 
+
+    printf("test: remove from tail of the list\n");
+    ListLast(L1);
+    Itemcheck= L1->tail->item;
+    removedItem=ListRemove(L1);
+    tests++;
+    if (Itemcheck != (*(int *) removedItem)){
+        printf("ListRemove() sucessfull on removing the tail\n");
+        testpassed++;
+    } else {
+        printf("ListRemove() FAILED on removing the tail\n");
+        printf("item to be removed: %d\n", *Itemcheck);
+        printf("item now in tail: %d\n",*(int *) L1->tail->item);
+    }
+
+    printf("test: remove from middle of the list\n");
+    ListFirst(L1);
+    ListNext(L1);
+    ListNext(L1);
+    Itemcheck= L1->head->next->next->item;
+    removedItem=ListRemove(L1);
+    tests++;
+    if (Itemcheck != (*(int *) removedItem)){
+        printf("ListRemove() sucessfull on removing from middle\n");
+        testpassed++;
+    } else {
+        printf("ListRemove() FAILED on removing from middle\n");
+        printf("item to be removed: %d\n", *Itemcheck);
+        printf("item now: %d\n",*(int *) L1->head->next->next->item);
+    }
+
+    printf("________________ListConcat()___________________");
+
+    printf("________________ListFree()___________________");
+
+    printf("________________ListTrim()___________________");
+
+    printf("________________ListSearch()___________________");
+
+
+
+
+
+
+    /* null testing */
+        printf("test: adding with to a null item \n");
+    result=ListAdd(L1, "NULL");
+    if (result !=-1){
+        printf("ERROR : listAdd() with NULL item.\n");
+    }
+    else printf("ListAdd() successful!! with NULL item\n");
+    
+    printf("----------------------------------\n");
+    printf("tests passes: %d  out of %d\n", testpassed, tests);
+    return 0;
 }
 
 void testItemFree(void *item){
@@ -229,8 +607,9 @@ int tesrComp(void *item1,void *item2 ){
 /* print list for testing*/
 void Print_List(LIST *list){
     NODE *printing_node= list->head;
+    printf("size: %d\n", list->size);
     printf("[");
-    if (ListCount(list)>0){
+    if (list->size != 0){
         while (printing_node != NULL){
             printf("%d ", *((int*) printing_node->item ));
             printing_node= printing_node->next;
