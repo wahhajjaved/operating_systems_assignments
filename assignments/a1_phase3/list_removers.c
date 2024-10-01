@@ -164,7 +164,7 @@ void ListConcat(LIST *list1, LIST *list2){
         list1->tail->next = list2->head;
         list2->head->prev = list1->tail;
         list1->tail = list2->tail;
-        list2->size += list2->size;
+        list1->size += list2->size;
     }
 
     list2->size = 0;
