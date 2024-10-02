@@ -6,69 +6,163 @@ Test plan:
 - in main fuction printout if the fuction do as intended(test successful) and
   if the test fail print out the the parameter, list and intended output.
 
-- for create list printout the list;
+- empty list
+  empty list is a consistant test case for all the list manipulations so first
+  we will test all manipulators except the list adders
+
+- ListFirst ListNext ListLast ListPrev ListCurr is tested with other functions
+  like listAdd ListRemove etc
+
+
+
+----------------------------------
+extra functions used for testing
+
+- Print_List: printout the list;
+
+- testItemFree: for item free, it sets the item's item and prev to null
+
+- testComp: it compares the two items
+
+----------------------------------
 TEST cases:
 
 ListCreate():
     1. test to create new list for the first time
-    2. test when atleat one list alreay exist
+        expected output: != NULL because list is initialized
+    2. test to create new list for the when there is already a list
+        expected output: the new list should not replace the already created 
+                        list
     3. test when max no. of list have been reaches(need to increase memory)
+        expected output: if the increase memory is not implemented/added then
+         it should give an error otherwise it should increase memory
 
 ListCount(list):
     1. test when list is empty
-    2. test when list is not empty
+        expected output: size = 0 because no item
+    2. test when list is not empty 
+        expected output size !=0 because there are items
 
 ListFirst(list):
     1. test when list is empty
+        expected output: = Null because no item and when the list is initialized
+        all the parts of list is set to NULL
     2. test when list is not empty 
+        expected output: the pointer to the first item in the list regardless of
+        where the curser is. should return list->head
+
+    there are no other corner cases because if the list is not empty, and 
+    regardless of size of the list, the functionality is the same. ListFirst
+    is always the list head
 
 ListLast(list)
     1. test when list is empty
+        expected output: = Null because no item and when the list is initialized
+        all the parts of list is set to NULL
     2. test when list is not empty
+        expected output: the pointer to the last item in the list regardless of
+        where the curser is. should return list->tail
+
+    there are no other corner cases because if the list is not empty, and 
+    regardless of size of the list, the functionality is the same. ListLast
+    is always the list tail
 
 ListNext(list)
     1. test when list is empty
+        expected output: = Null because no item and when the list is initialized
+        all the parts of list is set to NULL
     2. test when list is not empty and current node is last node
+        expected output: = Null because its the last node and while implementin
+        g the next of last node is set to null
     3. test when list is not empty and current node is first node
+        expected output: curser goes to the next Node
     4. test when list is not empty and current node is middle node
+       expected output: curser goes to the next Node
 
 ListPrev(list)
     1. test when list is empty
+        expected output: = Null because no item and when the list is initialized
+        all the parts of list is set to NULL
     2. test when list is not empty and current node is last node
+       expected output: curser goes to the previous Node
     3. test when list is not empty and current node is first node
+        expected output: = Null becaue there is no previous to the head node
     4. test when list is not empty and current node is middle node
+       expected output: curser goes to the previous Node
 
 ListCurr(list)
     1. test when list is empty
+        expected output: = Null because no item and when the list is initialized
+        all the parts of list is set to NULL
     2. test when list is not empty 
+        expected output: the pointer to the item at the curser position
 
-ListAdd(list, item)
+    regardless of the position of the curser the ListCurr returns the pointer 
+    to the item at the curser position. it does not matter if the node is at
+    head tail or in the middle.
+
+ListAdd(list, item):
     1. test when list is empty
-    2. test when list is not empty and current node is last node
+        expected output: 1 because the item should be in the list sucessufully
+        the list has the item, it should be the head, tail and curser
+    2. test when list is not empty and have one item
+        expected output: 1 because the item should be in the list sucessufully
+        the item should be after curser. the item should not overwrite the 
+        previous item.
     3. test when list is not empty and current node is first node
-
+        expected output: 1 because the item should be in the list sucessufully
+        the item should be after head node.
+    4. test when list is not empty and current node is last node
+        expected output: 1 because the item should be in the list sucessufully
+        the item should be after curser which is the tail in this case.
+        the item should be the new tail item
+    5. test when list is not empty and current node is middle node
+        expected output: this test is not mainly used to test the listAdd as 
+        all the cases are covered but it is used to test Listnextand listFirst
 ListInsert(list, item)
     1. test when list is empty
+        expected output: 1 because the item should be in the list sucessufully
+        the list has the item, it should be the head, tail and curser
     2. test when list is not empty and current node is last node
+        expected output: 1 because the item should be in the list sucessufully
+        the item should be before curser
     3. test when list is not empty and current node is first node
 
 ListPrepend(list, item)
     1. test when list is empty
+        expected output: 1 because the item should be in the list sucessufully
+        the list has the item, it should be the head, tail and curser
     2. test when list is not empty
+        expected output: 1 because the item should be in the list sucessufully
+        the item is now list head item
 
 ListAppend(list, item)
     1. test when list is empty
+        expected output: 1 because the item should be in the list sucessufully
+        the list has the item, it should be the head, tail and curser
     2. test when list is not empty
+        expected output: 1 because the item should be in the list sucessufully
+        the item is now list tail item
 
 ListRemove(list)
     1. test when list is empty
     2. test when list is not empty and current node is last node
+       expected output: list size decrease by 1, the item not in list, new
+        tail item. 
     3. test when list is not empty and current node is first node
-
+        expected output: list size decrease by 1, the item not in list, new
+        head item
+    4. test when list is not empty and current node is middle node
+        expected output: list size decrease by 1, the item not in list
+    5. test when list is not empty and have one item
+        expected output: list size decrease by 1, list is empty
 ListConcat(list1, list2)
     1. test with both empty list
+        expected output: returns error
     2. test with both non empty
+
     3. test with one empty and other non empty
+
 
 ListFree(list, itemFree)
     1. test when list is empty
@@ -77,9 +171,20 @@ ListFree(list, itemFree)
 ListTrim(list)
     1. test when list is empty
     2. test when list is not empty
+       expected output: list size decrease by 1, the item not in list, new
+        tail item. 
+
+    there is no other test case because regardless where the curser is the item
+    will be removed from the tail.
 
 ListSearch(list, comparator, comparisonArg)
     1. test when item in list
     2. test when item not in list
+_____________________________________________
+other test case that i didn't test
+
+adding a Null to a list or list is NULL:
+in the adder functions i have a condition that checks if item or list is NULL
 
 
+----------------------------------------------------
