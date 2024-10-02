@@ -64,11 +64,12 @@ void *ListRemove(LIST *list){
     return currItem;
 }
 
-void ListFree(LIST *list, ITEMFREE *itemFree){
-    NODE *node;
+void ListFree(LIST *list, ITEMFREE itemFree){
+    NODE *node, *prevNode;
+    void *itemToBeFreed;
     /* if the List struct pointer is not right
     */
-    if (list == NULL || itemFree == NULL) {
+    if (list == NULL) {
         printf("ERROR: list or itemfree is NULL \n");
         return ;
     }
@@ -76,16 +77,19 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
     /* check if the list is empty or not
     */
     if (list-> size ==0){
-        printf("ERROR: list empty \n");
-        return ;
+        prevNode=NULL;
+    }else{
+        prevNode= list->tail;
     }
 
-    while (node != NULL){
-    node = node->next;
-    (*itemFree)(node->item);
-    nodeNum--;
-    node->next = aviableNode;
-    aviableNode = node;
+    while (prevNode != NULL){
+        node= prevNode;
+        prevNode = node->prev;
+        itemToBeFreed= node->item;
+        (*itemFree)(itemToBeFreed);
+        nodeNum--;
+        node->next = aviableNode;
+        aviableNode = node;
     }
 
     list->head = NULL;
