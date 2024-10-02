@@ -149,10 +149,13 @@ int ListAdd(LIST *list,void *item){
     if (item == NULL){
         printf("ERROR: item is NULL");
         return -1;   }
+    if (aviableNode ==NULL){
+        printf("ERROR: no aviabkle node");
+        return -1;   }
+
     if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
-
     /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next; 
