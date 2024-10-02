@@ -30,3 +30,25 @@ char syscallnames[22][10]= {
     "wait"
 
 };
+
+in void syscall(void) function:
+    if ((p->traceMask) & (1<< num)) {
+        printf("%d: syscall %s -> %d\n", p->pid, syscallnames[num-1],
+p->trapframe->a0);
+    }
+
+in syscall.h #define SYS_trace  22
+
+
+uint64
+sys_trace(void)
+{
+    int mask;
+    struct proc *p =myproc();
+    argint(0, &mask);
+
+    acquire (&p->lock);
+    p->traceMask = mask;
+    release (&p->lock);
+    return 0;
+}
