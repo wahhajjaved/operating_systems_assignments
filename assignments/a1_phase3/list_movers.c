@@ -108,7 +108,7 @@ void *ListCurr(LIST *list){
 
 }
 
-void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
+void *ListSearch(LIST *list,COMPARATOR comparator,void *comparisonArg){
     /* if the List struct pointer is not right*/
     if (list == NULL||comparator ==NULL || comparisonArg == NULL ) {
         printf("ERROR: one of the arguments is NULL \n");
