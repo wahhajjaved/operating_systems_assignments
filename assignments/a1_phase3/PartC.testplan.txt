@@ -1,6 +1,7 @@
 @author Wahhaj Javed, muj975, 11135711
 @author Nakhba Mubashir, epl482, 11317060
 @date 2024-09-22
+@updated 2024-10-2
 
 Test plan:
 - in main fuction printout if the fuction do as intended(test successful) and
@@ -12,7 +13,6 @@ Test plan:
 
 - ListFirst ListNext ListLast ListPrev ListCurr is tested with other functions
   like listAdd ListRemove etc
-
 
 
 ----------------------------------
@@ -119,6 +119,7 @@ ListAdd(list, item):
     5. test when list is not empty and current node is middle node
         expected output: this test is not mainly used to test the listAdd as 
         all the cases are covered but it is used to test Listnextand listFirst
+
 ListInsert(list, item)
     1. test when list is empty
         expected output: 1 because the item should be in the list sucessufully
@@ -127,6 +128,8 @@ ListInsert(list, item)
         expected output: 1 because the item should be in the list sucessufully
         the item should be before curser
     3. test when list is not empty and current node is first node
+        expected output: 1 because the item should be in the list sucessufully
+        the item should be the new head
 
 ListPrepend(list, item)
     1. test when list is empty
@@ -146,6 +149,8 @@ ListAppend(list, item)
 
 ListRemove(list)
     1. test when list is empty
+        expected output: = Null because no item  to remove and when the list is 
+        initialized all the parts of list is set to NULL
     2. test when list is not empty and current node is last node
        expected output: list size decrease by 1, the item not in list, new
         tail item. 
@@ -156,20 +161,30 @@ ListRemove(list)
         expected output: list size decrease by 1, the item not in list
     5. test when list is not empty and have one item
         expected output: list size decrease by 1, list is empty
+
 ListConcat(list1, list2)
     1. test with both empty list
-        expected output: returns error
+        expected output: prints out an error message
     2. test with both non empty
-
+        expected output: returns list2 size is 0 and it have no items. list1
+        size is list1 size+ list2 size. list1 have both list items.
     3. test with one empty and other non empty
 
 
 ListFree(list, itemFree)
     1. test when list is empty
+        expected output: the new list size is 0 and itemfree is the pointer to 
+        route
     2. test when list is not empty
+        expected output: the new list size is 0 and itemfree is the pointer to
+        route
+
+    there are no more tests because it does not matter if the list have one or 
+    more items.
 
 ListTrim(list)
     1. test when list is empty
+        expected output: = Null because no item  to remove and when the list is         initialized all the parts of list is set to NULL
     2. test when list is not empty
        expected output: list size decrease by 1, the item not in list, new
         tail item. 
@@ -178,13 +193,15 @@ ListTrim(list)
     will be removed from the tail.
 
 ListSearch(list, comparator, comparisonArg)
+
     1. test when item in list
+       expected output: the pointer to the item thst is same as comparisonArg
     2. test when item not in list
+       expected output:NUll pointer indicating that item not in list
 _____________________________________________
 other test case that i didn't test
 
 adding a Null to a list or list is NULL:
 in the adder functions i have a condition that checks if item or list is NULL
-
 
 ----------------------------------------------------
