@@ -15,7 +15,7 @@ void (*testITEMFREE)(void *I);
 
 
 int main(void){
-    LIST *L1, *L2, *L3, *L4, *LTest ;
+    LIST *L1, *L2, *L3, *L4, *LTest, *L5, *L6;
     int *I1, *I2, *I4, *I5, *Itemcheck, *I3;
     int a, b, d,c, e,  result, *cArg, i;
     int tests=0, testpassed=0;
@@ -76,6 +76,8 @@ int main(void){
     L2= ListCreate();
     L3= ListCreate();
     L4= ListCreate();
+    L5= ListCreate();
+    L6= ListCreate();
     
 
     /* testing with empty list*/
@@ -562,7 +564,29 @@ int main(void){
         printf("item now: %d\n",*(int *) L1->head->next->next->item);
     }
 
-    printf("________________ListConcat()___________________");
+    printf("________________ListConcat()___________________\n");
+    
+    printf("test: TWO LISTS with content\n");
+    ListConcat(L1, L2);
+    tests++;
+    if (ListCount(L2) == 0){
+        printf("ListConcat() successfull with two lists with content\n");
+        testpassed++;
+    } else{
+        printf("ListConcat() Failed with two lists with content\n");
+        printf("List1 size:%d  List2 size: %d\n",ListCount(L1),ListCount(L2)); 
+    }
+
+    printf("test: L1 empty\n");
+    ListConcat(L5, L1);
+    tests++;
+    if (ListCount(L1) != 0){
+        printf("ListConcat() successful with one list empty\n");
+        testpassed++;
+    } else{
+        printf("ListConcat() failed with one list empty\n");
+    }
+
 
     printf("________________ListFree()___________________");
 
