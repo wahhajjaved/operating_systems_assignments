@@ -17,12 +17,12 @@
 /*
  * comparator pointer for the parameter for ListSearch() 
  */
-typedef int (*COMPARATOR)(void *, void *);
+typedef int (COMPARATOR)(void *, void *);
 
 /*
  * itemfree pointer used for the parameter to ListFree()
  */
-typedef void (*ITEMFREE)(void *);
+typedef void (ITEMFREE)(void *);
 
 /*int nodes_num;
 */
@@ -200,7 +200,7 @@ void ListConcat(LIST *list1, LIST *list2);
  * Return: 
  *
  */
-void ListFree(LIST *list, ITEMFREE *itemFree);
+void ListFree(LIST *list, ITEMFREE itemFree);
 
 /*
  * Return last item and take it out of list. The current pointer shall
@@ -224,7 +224,7 @@ void *ListTrim(LIST *list);
  * Return: 
  *
  */
-void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg);
+void *ListSearch(LIST *list,COMPARATOR comparator,void *comparisonArg);
 
 
 #endif
