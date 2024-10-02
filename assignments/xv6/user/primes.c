@@ -7,7 +7,7 @@
 #include "kernel/types.h"
 #include "user/user.h"
 
-#define MAX_INT 3
+#define MAX_INT 10
 
 int pipe1[2]; //incoming
 int pipe2[2]; //outgoing
@@ -152,7 +152,7 @@ void prime() {
 		printf("%d: %d read in prime.\n", getpid(), number);
 		if (divisor == -1) {
 			sleep(2);
-			printf("Prime %d.\n", number);
+			printf("\t\tPrime %d.\n", number);
 			divisor = number;
 			continue;
 		}
@@ -167,7 +167,7 @@ void prime() {
 			continue;
 		}
 		
-		printf("%d: %d is not divisible by %d.\n", 
+		printf("%d: %d is not divisible by %d. Passing it to next process.\n", 
 			getpid(), 
 			number,
 			divisor
@@ -201,8 +201,8 @@ void prime() {
 		}
 		
 	}
-	sleep(5);
-	printf("%d: Loop finished in prime(). Now exiting program.\n", getpid());
+	// sleep(5);
+	// printf("%d: Loop finished in prime(). Now exiting program.\n", getpid());
 	return;
 }
 
@@ -266,7 +266,7 @@ int main(int argc, char* argv[]) {
 			printf("%d: Process %d closed\n", getpid(), closedPid);
 		}
 	}
-	sleep(10);
+	// sleep(10);
 	printf("%d: Exiting program.\n", getpid());
 	return 0;
 }
