@@ -14,7 +14,7 @@ int testComp(void *item1,void *item2 );
 
 
 int main(void){
-    LIST *L1, *L2, *L3, *L4, *LTest, *L5, *L6;
+    LIST *L1, *L2, *L3, *L4, *LTest, *L5;
     int *I1, *I2, *I4, *I5, *Itemcheck, *I3;
     int a, b, d,c, e,  result, *cArg, i;
     int tests=0, testpassed=0;
@@ -76,12 +76,11 @@ int main(void){
     L3= ListCreate();
     L4= ListCreate();
     L5= ListCreate();
-    L6= ListCreate();
     
 
     /* testing with empty list*/
 
-    printf("test: Empty list\n");
+    printf("test:_________ Empty list_________\n");
     tests++;
     if (ListCount(L1) ==0){
         printf("ListCount() successful!! with empty \n");
@@ -156,6 +155,20 @@ int main(void){
         testpassed++;
     }else {
         printf("Listconcat() FAILED! with empty\n ");
+    }
+
+
+    cArg= I4;
+    ListFirst(L1);
+    tests++;
+    resultPtr= (int*) ListSearch(L1, testComp,cArg);
+    if (resultPtr==NULL){
+        printf("ListSearch() sucessfull on finding an item in an empty list\n");
+        testpassed++;
+    } else {
+        printf("ListSearch() Failed on finding an item in an empty list\n");
+        printf("item to be seacrched: %d\n", *cArg);
+        printf("item found: %d\n",*resultPtr);
     }
 
     printf("________ListADD()___________\n");
@@ -497,26 +510,6 @@ int main(void){
     }
 
     
-
-
-
-/*
-	I1 = ListRemove(L1);
-	printf("got to procedure ListRemove()\n");
-
-	ListConcat(L1, L2);
-	printf("got to procedure ListConcat()\n");
-
-	I1 = ListTrim(L1);
-	printf("got to procedure ListTrim()\n");
-
-	ListFree(L2, &testITEMFREE);
-	printf("got to procedure ListFree()\n");
-
-	I1 = ListSearch(L1, &testCOMPARATOR, I1);
-	printf("got to procedure ListSearch()\n");
-*/
- 
     printf("________________ListRemove()___________________\n");
     printf("test: remove from start of the list\n");
     ListFirst(L1);
@@ -634,22 +627,64 @@ int main(void){
     }
 
     printf("________________ListSearch()___________________\n");
-    Print_List(L1);ListAppend(I4);
+    printf("test:finding an item in list with mulpiple items\n");
+    cArg= I2;  
+    ListFirst(L1);
+    tests++;
     resultPtr= (int*) ListSearch(L1, testComp,cArg);
-
-
-
+    if (resultPtr==cArg){
+        printf("ListSearch() sucessfull on finding an item in list with\
+ mulpiple items\n");
+        testpassed++;
+    } else {
+        printf("ListSearch() Failed on finding an item in list with\
+ mulpiple items\n");
+        printf("item to be seacrched: %d\n", *cArg);
+        printf("item found: %d\n",*resultPtr);
+    }
+    
+    printf("test:finding an item not in list\n");
+    cArg= I4;
+    ListFirst(L1);
+    tests++;
+    resultPtr= (int*) ListSearch(L1, testComp,cArg);
+    if (resultPtr==NULL){
+        printf("ListSearch() sucessfull on finding an item in list with\
+ mulpiple items\n");
+        testpassed++;
+    } else {
+        printf("ListSearch() Failed on finding an item in list with\
+ mulpiple items\n");
+        printf("item to be seacrched: %d\n", *cArg);
+        printf("item found: %d\n",*resultPtr);
+    }
 
     printf("________________ListFree()___________________\n");
-    /* null testing */
-        printf("test: adding with to a null item \n");
-    result=ListAdd(L1, "NULL");
-    if (result !=-1){
-        printf("ERROR : listAdd() with NULL item.\n");
+    printf("test:freeing list with multiple item\n");
+    ListFirst(L1);
+    tests++;
+    ListFree(L1,testItemFree);
+    if (L1->size==0){
+        printf("ListFree() sucessfull on list with mulpiple items\n");
+        testpassed++;
+    } else {
+        printf("ListSearch() Failed on list withmulpiple items\n");
+        printf("List size: %d\n", ListCount(L1));
     }
-    else printf("ListAdd() successful!! with NULL item\n");
-    
-    printf("----------------------------------\n");
+
+    printf("test:freeing list with no item\n");
+    ListFirst(L2);
+    tests++;
+    ListFree(L2,testItemFree);
+    if (L2->size==0){
+        printf("ListFree() sucessfull on list with no items\n");
+        testpassed++;
+    } else {
+        printf("ListSearch() Failed on list with no items\n");
+        printf("List size: %d\n", ListCount(L2));
+    }
+      
+    printf("-----------------------------------------------------------\n");
     printf("tests passes: %d  out of %d\n", testpassed, tests);
     return 0;
 }
