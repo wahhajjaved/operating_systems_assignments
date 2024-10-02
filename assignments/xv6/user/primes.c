@@ -25,8 +25,8 @@ void print_state() {
 int createProcess() {
 	int childPid;
 	
-	printf("%d: CreateProcess() start.\n", getpid());
-	print_state();
+	// printf("%d: CreateProcess() start.\n", getpid());
+	// print_state();
 	
 	
 	sleep(1);
@@ -43,9 +43,9 @@ int createProcess() {
 		return -1;
 	}
 	
-	printf("%d: pipe2 created in createProcess().\n", getpid());
-	print_state();
-	printf("\n");
+	// printf("%d: pipe2 created in createProcess().\n", getpid());
+	// print_state();
+	// printf("\n");
 	sleep(1);
 
 	childPid = fork();
@@ -57,9 +57,9 @@ int createProcess() {
 	else if (childPid == 0) {
 		// close pipe1 because it connects to the parent's parent
 		sleep(3);
-		printf("\n");
-		printf("%d: createProcess() in child after fork.\n", getpid());
-		print_state();
+		// printf("\n");
+		// printf("%d: createProcess() in child after fork.\n", getpid());
+		// print_state();
 		
 		if(close(pipe1[0]) != 0) {
 			printf("%d: Error in createProcess. Could not close pipe1[0]\n", 
@@ -87,14 +87,14 @@ int createProcess() {
 		pipe2[0] = -1;
 		pipe2[1] = -1;
 		sleep(3);
-		printf("%d: createProcess() in child end.\n", getpid());
-		print_state();
+		// printf("%d: createProcess() in child end.\n", getpid());
+		// print_state();
 		sleep(3);
 	}
 	else {
 		sleep(1);
-		printf("%d: createProcess() after fork in parent.\n", getpid());
-		print_state();
+		// printf("%d: createProcess() after fork in parent.\n", getpid());
+		// print_state();
 		
 		// pipe1 = [3, 4]
 		// pipe2 = [5, 6]
@@ -116,15 +116,15 @@ int createProcess() {
 		pipe2[0] = -1;
 		
 		sleep(1);
-		printf("%d: createProcess() in parent end.\n", getpid());
-		print_state();
+		// printf("%d: createProcess() in parent end.\n", getpid());
+		// print_state();
 	}
 	
 	sleep(2);
 	incoming = pipe1[0];
 	outgoing = pipe2[1];
-	printf("%d: createProcess() end.\n", getpid());
-	print_state();
+	// printf("%d: createProcess() end.\n", getpid());
+	// print_state();
 	return childPid;
 	
 }
@@ -151,6 +151,8 @@ void prime() {
 		}
 		printf("%d: %d read in prime.\n", getpid(), number);
 		if (divisor == -1) {
+			sleep(2);
+			printf("Prime %d.\n", number);
 			divisor = number;
 			continue;
 		}
@@ -186,10 +188,8 @@ void prime() {
 				return;
 			}
 			else if (childPid == 0) {
-		sleep(1);
-				
-				printf("Prime %d\n", number);
 				divisor = -1;
+				sleep(1);
 				continue;
 			}
 		}
@@ -210,8 +210,8 @@ void parent(int outgoing) {
 	int nextInt, bytesWritten;
 	nextInt = 1;
 	while (nextInt++ <= MAX_INT) {
-		printf("\n");
-		printf("%d: Writing %d to child.\n", getpid(), nextInt);
+		// printf("\n");
+		// printf("%d: Writing %d to child.\n", getpid(), nextInt);
 		if ((bytesWritten = write(outgoing, &nextInt, 4)) != 4) {
 			printf("%d: Error when writing nextInt.\n", getpid());
 			printf("%d: Expected to write 4 bytes but instead wrote %d.\n", getpid(), bytesWritten);
