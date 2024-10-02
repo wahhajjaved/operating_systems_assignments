@@ -93,8 +93,6 @@ void ListFree(LIST *list, ITEMFREE *itemFree){
     list->curser = NULL;
     list->size=0;
     nodeNum--;
-
-
 }
 
 
@@ -142,7 +140,7 @@ void *ListTrim(LIST *list){
 void ListConcat(LIST *list1, LIST *list2){
      /* if the List struct pointer is not right*/
     if (list1 == NULL || list2== NULL) {
-        printf("ERROR: list1 OR list2 is NULL \n");
+        printf("ERROR: list1 AND list2 is NULL \n");
         return;
     }
     if (list1 == list2) {
@@ -158,9 +156,8 @@ void ListConcat(LIST *list1, LIST *list2){
         list1->curser = list2->curser;
         list1->size = list2->size;
     }
-
     /* both  list1 and list2 are non empty*/
-    if (list1->size !=0 && list2->size !=0){
+    else if (list1->size !=0 && list2->size !=0){
         list1->tail->next = list2->head;
         list2->head->prev = list1->tail;
         list1->tail = list2->tail;
