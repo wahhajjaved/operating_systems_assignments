@@ -9,9 +9,8 @@
 
 /* print list for testing*/
 void Print_List(LIST *list);
-    
-int (*testCOMPARATOR)(void *V, void *I);
-void (*testITEMFREE)(void *I);    
+void testItemFree(void *item);
+int testComp(void *item1,void *item2 );
 
 
 int main(void){
@@ -20,7 +19,7 @@ int main(void){
     int a, b, d,c, e,  result, *cArg, i;
     int tests=0, testpassed=0;
     void *removedItem;
-
+    int * resultPtr;
     a= 44;
     b=55;
     d=70;
@@ -564,6 +563,22 @@ int main(void){
         printf("item now: %d\n",*(int *) L1->head->next->next->item);
     }
 
+    printf("test: Remove the list when only one item\n");
+    ListRemove(L4);
+    ListRemove(L4);
+    ListRemove(L4);
+    Itemcheck= L4->tail->item;
+    removedItem=ListRemove(L4);
+    tests++;
+    if (Itemcheck != (*(int *) removedItem)){
+        printf("ListRemove() sucessfull on removing the tail when one item\n");
+        testpassed++;
+    } else {
+        printf("ListRemove() FAILED on removing the tail when one item \n");
+        printf("item to be removed: %d\n", *Itemcheck);
+        printf("item now in tail: %d\n",*(int *) L4->tail->item);
+    }
+
     printf("________________ListConcat()___________________\n");
     
     printf("test: TWO LISTS with content\n");
@@ -587,18 +602,45 @@ int main(void){
         printf("ListConcat() failed with one list empty\n");
     }
 
+    printf("_______________ListTrim()___________________\n");
 
-    printf("________________ListFree()___________________");
+    printf("test: Trim the list when curser at random place\n");
+    ListLast(L1);
+    ListPrev(L1);
+    ListPrev(L1);
+    Itemcheck= L1->tail->item;
+    removedItem=ListTrim(L1);
+    tests++;
+    if (Itemcheck != (*(int *) removedItem)){
+        printf("ListTrim sucessfull on Triming the tail when multiple item\n");
+        testpassed++;
+    } else {
+        printf("ListTrim() FAILED on Triming the tail when multiple item\n");
+        printf("item to be removed: %d\n", *Itemcheck);
+        printf("item now in tail: %d\n",*(int *) L1->tail->item);
+    }
 
-    printf("________________ListTrim()___________________");
+    printf("test: Trim the list when only one item\n");
+    Itemcheck= L3->tail->item;
+    removedItem=ListTrim(L3);
+    tests++;
+    if (Itemcheck != (*(int *) removedItem)){
+        printf("ListTrim() sucessfull on Triming the tail when one item\n");
+        testpassed++;
+    } else {
+        printf("ListTrim() FAILED on Triming the tail when one item \n");
+        printf("item to be removed: %d\n", *Itemcheck);
+        printf("item now in tail: %d\n",*(int *) L3->tail->item);
+    }
 
-    printf("________________ListSearch()___________________");
+    printf("________________ListSearch()___________________\n");
+    Print_List(L1);ListAppend(I4);
+    resultPtr= (int*) ListSearch(L1, testComp,cArg);
 
 
 
 
-
-
+    printf("________________ListFree()___________________\n");
     /* null testing */
         printf("test: adding with to a null item \n");
     result=ListAdd(L1, "NULL");
@@ -616,7 +658,7 @@ void testItemFree(void *item){
     ((NODE *)item)->item = NULL;
     ((NODE *)item)->prev = NULL;
 }
-int tesrComp(void *item1,void *item2 ){
+int testComp(void *item1,void *item2 ){
     int i1= *(int*) item1;
     int i2= *(int*) item2;
     
