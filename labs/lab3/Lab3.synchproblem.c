@@ -11,7 +11,8 @@
 
 int elfTex,mutex, santaSem, reindeerSem;
 
-int elveNum, reindeerNum;
+int elveNum=0;
+int reindeerNum=0;
 
 void getHelp(void){
     printf("getting help\n");
@@ -74,4 +75,10 @@ PROCESS reindeer(void){
     getHitcth();
 }
 
+void initialize(void){
+    elfTex=NewSem(0);
+    mutex=NewSem(1); 
+    santaSem= NewSem(0);
+    reindeerSem=NewSem(0);
+}
 
