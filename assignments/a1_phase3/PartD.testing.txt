@@ -3,24 +3,301 @@
 @date 2024-09-22
 
 
-Number: 1
-Description: Run program
-Input: No input
-Expected Output: program prints the following
-    4: received ping
-    3: received pong
+
+Part D
+
+	Number: 1
+	Description: Run program
+	Input: No input
+	Expected Output: program prints the following
+		4: received ping
+		3: received pong
 
 
 
 
-Test Results
+	Test Results
 
-    xv6 kernel is booting
+		xv6 kernel is booting
 
-    hart 1 starting
-    hart 2 starting
-    init: starting sh
-    $ pingpong
-    4: received ping
-    3: received pong
-    $ 
+		hart 1 starting
+		hart 2 starting
+		init: starting sh
+		$ pingpong
+		4: received ping
+		3: received pong
+		$ 
+
+
+
+
+
+Part D Bonus
+
+	- There isn't really any program input so there isn't anything to test
+		except to ensure that it produces the same output as in the assignment
+		specs
+		
+	- Intermediate tests were done using the print_state() to print the out
+		the pipes and see if they are correct, but they have been removed. The
+		testing print statements are still present in the previous commits
+		
+	
+	[ Test Results for Primes Up To 35 ]
+		
+		xv6 kernel is booting
+
+		hart 1 starting
+		hart 2 starting
+		init: starting sh
+		$ primes
+		prime 2
+		prime 3
+		prime 5
+		prime 7
+		prime 11
+		prime 13
+		prime 17
+		prime 19
+		prime 23
+		prime 29
+		prime 31
+		$
+
+
+
+	[ Testing Proper Closure of File Descriptors ]
+
+	- xv6 doesn't have ps, top, or ss, so its hard to figure out if the file
+		descriptors are being closed properly. I also can't think of any easy
+		solution to track the number of open descriptors in the processes 
+		themselves
+	
+	- As mentioned in the design doc, xv6 has a max open file limit of 100. 
+		From testing, it doesn't seem like stdin, stdout, and stderr are 
+		counted as part of the 100
+	
+	- If the files are being closed properly, then at most 50 primes 
+		processes can be created, including the main one. Since pipe() opens
+		two descriptors, at most 98 descriptors can be in use before pipe()
+		and the subsequent fork() fail
+
+	- Just after booting, xv6 will create a new process starting at pid = 3.
+		50 processes means that the last process will have pid 50 + 3 - 1 = 52.
+		The +1 is needed because processes start at 0
+	
+	- With 50 processes, there will be 49 processes that will correspond to 
+		primes. The 48th, 49th, and 50th prime numbers 223, 227, and 229
+		respectively
+	
+	- So, if the processes are closing their file descriptors properly, then
+		the program should be able to print primes up to 227 but fail 
+		before printing 229. If the pipes aren't being closed properly, then 
+		failure should occur well before.
+	
+	- The MAX_INT define in primes.c controls how many primes to compute. 
+		For the assignment that is set to 35 but for testing purposes, it can
+		be set higher. When set to 300, it prints the following output. 
+		
+	- In line "4: prime 2", 4 is the pid. The main process has pid = 3, but
+		there is no print statement for that. pid = 4 is the first child
+		
+			xv6 kernel is booting
+
+			hart 1 starting
+			hart 2 starting
+			init: starting sh
+			$ primes
+			4: prime 2
+			5: prime 3
+			6: prime 5
+			7: prime 7
+			8: prime 11
+			9: prime 13
+			10: prime 17
+			11: prime 19
+			12: prime 23
+			13: prime 29
+			14: prime 31
+			15: prime 37
+			16: prime 41
+			17: prime 43
+			18: prime 47
+			19: prime 53
+			20: prime 59
+			21: prime 61
+			22: prime 67
+			23: prime 71
+			24: prime 73
+			25: prime 79
+			26: prime 83
+			27: prime 89
+			28: prime 97
+			29: prime 101
+			30: prime 103
+			31: prime 107
+			32: prime 109
+			33: prime 113
+			34: prime 127
+			35: prime 131
+			36: prime 137
+			37: prime 139
+			38: prime 149
+			39: prime 151
+			40: prime 157
+			41: prime 163
+			42: prime 167
+			43: prime 173
+			44: prime 179
+			45: prime 181
+			46: prime 191
+			47: prime 193
+			48: prime 197
+			49: prime 199
+			50: prime 211
+			51: prime 223
+			52: prime 227
+			53: prime 229
+			54: prime 233
+			55: prime 239
+			56: prime 241
+			57: prime 251
+			58: prime 257
+			59: prime 263
+			60: prime 269
+			61: prime 271
+			62: prime 277
+			63: prime 281
+			64: prime 283
+			64: fork failed in createProcess().
+			64: Could not create new process in prime().
+			
+	
+	- The process number goes up to 64 meaning that 62 process were created. 
+		This is higher than the 50 that was expected. The reason for this is
+		that while the main process is feeding number from the left, new 
+		processes are being created on the right. 
+		
+	- When fork fails, the processes close from the right end. There is a 
+		propogation delay between fork failing, and main stopping during which
+		main keeps sending numbers which go through the pipeline. This causes
+		new propocesses to pop up since file descriptors have been freed. 
+	
+	- If main waits for a little bit before sending the next integer, the 
+		program behaves as expected. This delay is added using sleep(1) in
+		the while loop in the prime() function in prime.c
+	
+	- In the submission, this line is commented out, but can be uncommmented
+		for marking purposes. MAX_INT will also need to be set higher so see
+		the following output
+		
+			xv6 kernel is booting
+
+			hart 2 starting
+			hart 1 starting
+			init: starting sh
+			$ primes
+			4: prime 2
+			5: prime 3
+			6: prime 5
+			7: prime 7
+			8: prime 11
+			9: prime 13
+			10: prime 17
+			11: prime 19
+			12: prime 23
+			13: prime 29
+			14: prime 31
+			15: prime 37
+			16: prime 41
+			17: prime 43
+			18: prime 47
+			19: prime 53
+			20: prime 59
+			21: prime 61
+			22: prime 67
+			23: prime 71
+			24: prime 73
+			25: prime 79
+			26: prime 83
+			27: prime 89
+			28: prime 97
+			29: prime 101
+			30: prime 103
+			31: prime 107
+			32: prime 109
+			33: prime 113
+			34: prime 127
+			35: prime 131
+			36: prime 137
+			37: prime 139
+			38: prime 149
+			39: prime 151
+			40: prime 157
+			41: prime 163
+			42: prime 167
+			43: prime 173
+			44: prime 179
+			45: prime 181
+			46: prime 191
+			47: prime 193
+			48: prime 197
+			49: prime 199
+			50: prime 211
+			51: prime 223
+			52: prime 227
+			52: Could not create pipe2 pipe.
+			52: Could not create new process in prime().
+		
+	- As expected, (52 - 3) + 1 = 50 processes were created and the creating of
+		the 51st process failed. 
+		
+	- To run the previous tests, in user/primes.c set 
+			MAX_INT to at least 250 on line 10
+			Uncomment sleep(1) on line 142
+			Comment the printf() on line 93 and uncomment the printf on line 94
+				This print statement will output the pid 
+				
+
+
+	 [ Testing Process Close Order ]
+	 
+	 - The processes are created from left to right, but close from right to
+		left
+		
+	- To check if the main process waits until the entire pipeline is closed
+		before exiting, uncomment the printf() on line 200, just before main()
+		returns
+	
+	-  This will cause each process to output its pid before it exits. This
+		can be used to confirm that the main process exits last
+		
+			xv6 kernel is booting
+
+			hart 1 starting
+			hart 2 starting
+			init: starting sh
+			$ primes
+			prime 2
+			prime 3
+			prime 5
+			prime 7
+			prime 11
+			prime 13
+			prime 17
+			prime 19
+			prime 23
+			prime 29
+			prime 31
+			Process 14 exiting.
+			Process 13 exiting.
+			Process 12 exiting.
+			Process 11 exiting.
+			Process 10 exiting.
+			Process 9 exiting.
+			Process 8 exiting.
+			Process 7 exiting.
+			Process 6 exiting.
+			Process 5 exiting.
+			Process 4 exiting.
+			Process 3 exiting.
