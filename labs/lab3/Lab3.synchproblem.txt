@@ -1,0 +1,35 @@
+
+general information
+santa clause sleeps at at north pole-> normal wait condition
+
+santa clause wake up if either
+    all 9 reindeer      
+    3 elves have problems 
+
+if 3 elves have problem then othen elves wait
+
+ reindeers have higher priority then elves
+
+last reindeer wakes up the santa so santa (prepareSleigh)
+
+santa
+
+reindeer
+
+
+
+elves:
+eleves wait p
+mutex wait P 
+elves +++
+if elves ==3 then santa
+else elves wait
+mutex signal V
+
+gethelp()
+
+
+
+
+
+

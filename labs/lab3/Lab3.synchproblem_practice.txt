@@ -1,0 +1,37 @@
+5.2 the barbershop problem
+
+waiting room n chairs
+if no to be served then barber sleep
+if no n empty for customer then customer leaves
+if n is not full then the customer sits
+if barber sleep then customer wakes 
+
+two threads
+
+customer
+mux.wait()
+    if customer==n
+        mux.signal
+        balk
+    coustomer+=1
+mutex.signal
+barber.wait()
+getHairCut
+
+customer.Done.signal()
+
+barberDone.wait()
+mutex.wait()
+    customer -=1
+
+mutex.sigal
+
+
+barber
+customer . wait () // wait for customer
+barber . signal ()
+
+# cutHair ()
+
+customerDone . wait ()
+barberDone . signal ()
