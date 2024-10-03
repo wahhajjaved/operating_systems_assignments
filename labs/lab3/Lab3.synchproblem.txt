@@ -1,3 +1,5 @@
+// NAKHBA MUBASHIR EPL482 11317060 
+santa problem used the given solution
 
 general information
 santa clause sleeps at at north pole-> normal wait condition
@@ -8,9 +10,12 @@ santa clause wake up if either
 
 if 3 elves have problem then othen elves wait
 
- reindeers have higher priority then elves
+reindeers have higher priority then elves
 
 last reindeer wakes up the santa so santa (prepareSleigh)
+
+
+
 
 santa
 
@@ -19,14 +24,21 @@ reindeer
 
 
 elves:
-eleves wait p
-mutex wait P 
-elves +++
-if elves ==3 then santa
-else elves wait
-mutex signal V
+eleves wait for signal-> p
+mutex wait for signal -> P 
+elves ++
+if elves ==3 then sends signal to santa -> V
+else send signal to elves-> V
+
+send mutex signal-> V
 
 gethelp()
+
+mutex wait for signal -> P
+elves --
+if elves ==0 then signal send to elves -> V
+
+
 
 
 

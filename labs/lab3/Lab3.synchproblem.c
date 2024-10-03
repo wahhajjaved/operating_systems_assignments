@@ -36,3 +36,6 @@ PROCESS Elves(void){
     if (eleveNum == 0) V(elfTex);
     V(mutex);
 }
+
+
+
