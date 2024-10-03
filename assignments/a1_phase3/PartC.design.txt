@@ -8,8 +8,8 @@ PART C design document
 
 
 
-int (*COMPARATOR)(void *, void *)
-void (*ITEMFREE)(void *)
+int (COMPARATOR)(void *, void *)
+void (ITEMFREE)(void *)
 
 struct List Freed_list[]    /// array of freed lists
 struct Node Freed_node      // array of freed of nodes
@@ -296,31 +296,37 @@ test:
 
 _____
 my own function:
-int list_dict_size(){list_dict)
+int list_dict_size(){list_dict) // removed
 description: calculate the size of list dictionary
 
 algorithm:
     return size of list_dict/list_dict[0]
 
-void ListInit(void)"{
+void ListInit(void)"{ //removed this function and added inside list create
     allocate memory to list and node by malloc
     link the node and list to prev and next
-
-
-void increase_list_memory(){
-    reallocate the memory and initialize
 }
 
+void increase_list_memory()
+    reallocate the memory and initialize
 
-// for now for organization purposes new list and new node are there own 
-function
-NODE *new_node():
-    creates new node 
+void increase_node_memory()
+    reallocate the memory and initialize
 
-LIST *new_list():
-    creates new list
+
+void decrease_list_memory()
+    reallocate the memory and decrease by 2
+
+void decrease_node_memory()
+    reallocate the memory and decease by 2
 
 
 void Print_List(LIST *list)
     prints the list
+
+void testItemFree(void *item):
+    for testing of item free
+
+int testComp(void *item1,void *item2 )
+    for testing of comparator
 
