@@ -19,13 +19,11 @@ void print_state() {
 		"incoming = %d, outgoing = %d\n", 
 		getpid(), pipe1[0], pipe1[1], pipe2[0], pipe2[1], incoming, outgoing
 	);
-	
 }
 
 int createProcess() {
 	int childPid;
 	
-	// printf("%d: createProcess() called.\n", getpid());
 	if (pipe2[0] != -1 && pipe2[1] != -1) {
 		printf("%d: Can not create process as pipe2 is already initialized.\n", 
 			getpid()
@@ -78,7 +76,6 @@ int createProcess() {
 }
 
 void prime() {
-	// int divisor, nextInt, bytesRead;
 	int childPid, divisor, number, bytesRead, bytesWritten, closedPid, status;
 	childPid = -1;
 	divisor = -1;
@@ -93,7 +90,8 @@ void prime() {
 			break;
 		}
 		if (divisor == -1) {
-			printf("%d: prime %d\n", getpid(),number);
+			printf("prime %d\n", number);
+			// printf("%d: prime %d\n", getpid(),number);
 			divisor = number;
 			continue;
 		}
@@ -132,7 +130,7 @@ void prime() {
 		return;
 	}
 	if((closedPid = wait(&status) != childPid)) {
-			printf("%d: Process %d closed\n", getpid(), closedPid);
+			// printf("%d: Process %d closed\n", getpid(), closedPid);
 	}
 	return;
 }
@@ -141,12 +139,16 @@ void parent(int outgoing) {
 	int nextInt, bytesWritten;
 	nextInt = 1;
 	while (nextInt++ <= MAX_INT) {
+		// sleep(1);
 		if ((bytesWritten = write(outgoing, &nextInt, 4)) != 4) {
 			if (bytesWritten == -1)
 				printf("%d: Downstream pipe closed.\n", getpid());
 			else {
 				printf("%d: Error when writing nextInt.\n", getpid());
-				printf("%d: Expected to write 4 bytes but instead wrote %d.\n", getpid(), bytesWritten);
+				printf("%d: Expected to write 4 bytes but instead wrote %d.\n",
+					getpid(),
+					bytesWritten
+				);
 			}
 			return;
 		}
@@ -191,9 +193,10 @@ int main(int argc, char* argv[]) {
 	else {
 		parent(outgoing);
 		while((closedPid = wait(&status) != childPid)) {
-			printf("%d: Process %d closed\n", getpid(), closedPid);
+			// printf("%d: Process %d closed\n", getpid(), closedPid);
 		}
-		sleep(1); //so shell prompt doesn't end up as part of program output
+		// sleep(1); //so shell prompt doesn't end up as part of program output
 	}
+	// printf("Process %d exiting.\n", getpid());
 	return 0;
 }
