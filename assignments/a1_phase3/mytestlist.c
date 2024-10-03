@@ -50,7 +50,8 @@ int main(void){
     for (i=0; i<5; i++){
         LTest= ListCreate();
         if (LTest ==NULL){
-            printf("TEST CASE FAILED: ListCreate returned NULL on several list: list %d\n", i+1);
+            printf("TEST CASE FAILED: ListCreate returned NULL on several list\
+: list %d\n", i+1);
         }
         else {
             printf("TEST CASE SUCCESS: ListCreate() on several list\n");
@@ -64,7 +65,8 @@ int main(void){
     for (i=MIN_LISTS; i<9; i++){
         LTest= ListCreate();
         if (LTest ==NULL){
-            printf("TEST CASE FAILED: ListCreate returned NULL AFTER DOUBLING: list %d\n", i+1);
+            printf("TEST CASE FAILED: ListCreate returned NULL AFTER DOUBLING"
+" list %d\n", i+1);
         }
         else {
             printf("TEST CASE SUCCESS: ListCreate() after doubling\n");
@@ -211,7 +213,8 @@ int main(void){
     }
         else {
             printf("ListAdd() successful!! with AT TAIL\n");
-            printf("ListLast() successful!! tested with ListAdd(), curser was at last \n");
+            printf("ListLast() successful!! tested with ListAdd(), curser was at\
+ last \n");
             testpassed++;
         }
 
@@ -312,7 +315,8 @@ int main(void){
     }
         else {
             printf("ListInsert() successful!! with AT TAIL\n");
-            printf("ListLast() successful!! tested with ListInsert(), curser was at last \n");
+            printf("ListLast() successful!! tested with ListInsert(), curser\
+was at last \n");
             testpassed++;
         }
 

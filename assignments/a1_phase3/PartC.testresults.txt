@@ -46,7 +46,8 @@ ListAdd() successful!! after head
 ListFirst() successful!! tested with ListAdd(), curser was at start
 test: adding at the middle
 ListAdd() successful!! in the middle
-ListNext() successful!! tested with ListAdd(), curser is where its supposed to be
+ListNext() successful!! tested with ListAdd(), curser is where its supposed to 
+be
 size: 7
 [44 99 18 99 55 44 99 ]
 test: adding with to a null list
@@ -55,7 +56,8 @@ ListAdd() successful!! with NULL list
 ________ListInsert()___________
 test: inserting with one item
 ListInsert() successful on empty list
-test: listcount when list is not empty and have one itemListCount() successful!! with one item in empty test: inserting with one item
+test: listcount when list is not empty and have one itemListCount() successful!
+! with one item in empty test: inserting with one item
 ListInsert() successful!! with one item
 test: inserting at tail
 ListInsert() successful!! with AT TAIL
@@ -65,10 +67,12 @@ ListInsert() successful!! after head
 ListFirst() successful!! tested with ListInsert(), curser was at start
 test: inserting at the middle
 ListInsert() successful!! in the middle
-ListPrev() successful!! tested with ListInsert(), curser is where its supposed to be
+ListPrev() successful!! tested with ListInsert(), curser is where its supposed 
+to be
 size: 7
 [99 44 55 18 99 99 55 ]
-test: listcount when list is not emptyListCount() successful!! with items in list test: inserting with to a null list
+test: listcount when list is not emptyListCount() successful!! with items in 
+list test: inserting with to a null list
 ERROR: list is NULL
 ListInsert() successful!! with NULL list
 ________ListAppend()___________
