@@ -1,7 +1,7 @@
 // NAKHBA MUBASHIR EPL482 11317060 
 
 santa problem used the given solution
-____________________________________
+______________________________________
 general information
 santa clause sleeps at at north pole-> normal wait condition
 
