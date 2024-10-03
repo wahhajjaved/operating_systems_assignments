@@ -5,18 +5,56 @@
 PART E design
 ____________________________________________________-
 
-Add a new field called int traceMask to proc structure
+- Add a new field called int traceMask to proc header (proc.h)
 
-Add a system call trace which will set the traceMask to the call number which
-is 22
+- modify fork() of proc.c to copy the parent traceMask from parent to child
+    process
+    add np->traceMask = p->traceMask;
 
-in proc.h add traceMask
+- Add a system call trace which will set the traceMask to the avaialable 
+  call number which is 22 so in syscall.h #define SYS_trace  22
+
+- to handle system call trace in syscall.c add [SYS_trace] sys_trace so when
+    the system calls "trace", the kernel excecute sys_trace
+
+-add the system calls
+char syscallnames[22][10]= {
+    "read",
+    "trace",
+    "exec",
+    "open",
+    "close",
+    "fork",
+    "kill",
+    "mkdir",
+    "pipe",
+    "wait"
+
+}; 
+
+- syscall function we will print out so the output looks like the example in 
+  the question <pid> syscall <systemcallname> <p->trapframe->a0>
+
+in void syscall(void) function:
+    if ((p->traceMask) & (1<< num)) {
+        printf("%d: syscall %s -> %d\n", p->pid, syscallnames[num-1],
+p->trapframe->a0);
+    }
+
+- to handle system call trace in syscall.c add [SYS_trace] sys_trace so when 
+    the system calls "trace", the kernel excecute sys_trace
+
+- next aquire the mask for trace and set the trace mask to it
+
+
+------------------------------------------------
+my additions
+
+in proc.h add int traceMask
 in proc.c add np->traceMask = p->traceMask;
 in syscall.c add extern uint64 sys_trace(void);
-
 [SYS_trace] sys_trace
 
-/* array of sys call names */
 char syscallnames[22][10]= {
     "read",
     "trace",
@@ -40,6 +78,7 @@ p->trapframe->a0);
 in syscall.h #define SYS_trace  22
 
 
+in sysproc.c
 uint64
 sys_trace(void)
 {
@@ -52,3 +91,10 @@ sys_trace(void)
     release (&p->lock);
     return 0;
 }
+
+
+in user.h
+int trace(int);
+
+in usys.pl
+entry("trace");
