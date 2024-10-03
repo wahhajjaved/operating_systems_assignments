@@ -73,6 +73,7 @@ int32_t* parseArgs(int argc, char* argv[]) {
 		return NULL;
 	}
 	
+	
 	deadline = strtol(argv[2], &endptr, 10);
 	if (*endptr != '\0' || deadline <= 0){
 		printf("Invalid value %s for deadline. "
@@ -83,10 +84,11 @@ int32_t* parseArgs(int argc, char* argv[]) {
 	}
 	
 	size = strtol(argv[3], &endptr, 10);
-	if (*endptr != '\0' || size < 0){
+	if (*endptr != '\0' || size < 0 || size > MAN_SIZE){
 		printf("Invalid value %s for size. "
-			"Must be non-negative integer.\n",
-			argv[3]
+			"Must be non-negative integer between 0 and %d.\n",
+			argv[3],
+			MAN_SIZE
 		);
 		return NULL;
 	}

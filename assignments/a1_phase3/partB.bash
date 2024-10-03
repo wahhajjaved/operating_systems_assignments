@@ -4,6 +4,8 @@
 # @author Nakhba Mubashir, epl482, 11317060
 # @date 2024-09-14
 
+MAX_SIZE=65535
+
 print_help() {
     echo "./partB.bash version [<threads deadline size>...]"
     echo "version is one of partA1, partA2, or partA3. partA1 is windows only"
@@ -84,8 +86,9 @@ while read -r -a line; do
         echo "Deadline must be an integer greater than 0."
         continue
     fi
-    if [[ ! "$size" =~ $regex_int || "$size" -lt 0 ]]; then
-        echo "size must be a non-negative integer."
+    if [[ ! "$size" =~ $regex_int || "$size" -lt 0 || "$size" -gt $MAX_SIZE ]];
+    then
+        echo "size must be a non-negative integer between 0 and $MAX_SIZE."
         continue
     fi
     echo "Processing line ${line[@]} using $exe"

@@ -9,6 +9,8 @@
 
 #include <stdint.h>
 
+#define MAN_SIZE 65535
+
 extern int32_t *pSquareCount;
 extern int64_t *pStartTime;
 extern int stopSquare;
