@@ -1,34 +1,129 @@
+
 @author Wahhaj Javed, muj975, 11135711
 @author Nakhba Mubashir, epl482, 11317060
-@date 2024-09-22
 
+MIN_LIST= 5
+MIN_NODES= 50
 ____________TESTING PARTC: LIST LIBRARY_________
-______ListCreate()________
-[]
-[]
-[]
-[]
+______Testing_ListCreate()________
+TEST CASE SUCCESS: ListCreate() on new list
+TEST CASE SUCCESS: ListCreate() on several list
+TEST CASE SUCCESS: ListCreate() on several list
+TEST CASE SUCCESS: ListCreate() on several list
+TEST CASE SUCCESS: ListCreate() on several list
+TEST CASE SUCCESS: ListCreate() on several list
+bonus marks
+TEST CASE SUCCESS: ListCreate() after doubling
+TEST CASE SUCCESS: ListCreate() after doubling
+TEST CASE SUCCESS: ListCreate() after doubling
+TEST CASE SUCCESS: ListCreate() after doubling
+test:_________ Empty list_________
+ListCount() successful!! with empty 
+ListFirst() successful!! with empty 
+ListLast() successful!! with empty 
+ListNext() successful!! with empty 
+ListPrev() successful!! with empty
+ ERROR: list empty
+ListCurr() successful!! with empty
+ ERROR: list empty 
+ListRemove() successful!! with empty
+ ERROR: list empty 
+ListTrim() successful!! with empty
+ ERROR: list empty
+ListConcat() successful!! with empty
+ ERROR: list empty
+ListSearch() sucessfull on finding an item in an empty list
 ________ListADD()___________
-Empty list()
-ListAdd() successful!!
-NON Empty lis()
-ListAdd() successful!!
-[44 18 ]
+test: Empty list()
+ListAdd() successful for empty list!!
+test: adding with one item 
+ListAdd() successful!! with one item
+test: adding with at tail 
+ListAdd() successful!! with AT TAIL
+ListLast() successful!! tested with ListAdd(), curser was at last 
+test: adding with at head 
+ListAdd() successful!! after head
+ListFirst() successful!! tested with ListAdd(), curser was at start 
+test: adding at the middle 
+ListAdd() successful!! in the middle
+ListNext() successful!! tested with ListAdd(), curser is where its supposed to be 
+size: 7
+[44 99 18 99 55 44 99 ]
+test: adding with to a null list 
+ERROR: list is NULL 
+ListAdd() successful!! with NULL list
 ________ListInsert()___________
-Empty list()
-ListInsert() successful!!
-NON Empty lis()
-ListInsert() successful!!
-[9 55 ]
+test: inserting with one item 
+ListInsert() successful on empty list
+test: listcount when list is not empty and have one itemListCount() successful!! with one item in empty test: inserting with one item 
+ListInsert() successful!! with one item
+test: inserting at tail 
+ListInsert() successful!! with AT TAIL
+ListLast() successful!! tested with ListInsert(), curser was at last 
+test: insert with at head 
+ListInsert() successful!! after head
+ListFirst() successful!! tested with ListInsert(), curser was at start 
+test: inserting at the middle 
+ListInsert() successful!! in the middle
+ListPrev() successful!! tested with ListInsert(), curser is where its supposed to be 
+size: 7
+[99 44 55 18 99 99 55 ]
+test: listcount when list is not emptyListCount() successful!! with items in list test: inserting with to a null list 
+ERROR: list is NULL 
+ListInsert() successful!! with NULL list
 ________ListAppend()___________
-Empty lis()
+test: Empty list()
 ListAppend() successful!!
-NON Empty lis()
-ListAppend() successful!!
-[44 55 ]
+test: non Empty list()
+ListAppend() successful!! when there are multiple items
+ListCurr() successful!! with ListAppend() when there are multiple item 
 ________ListPrepend()___________
-Empty lis()
-ListPrepend() successful!!
-NON Empty lis()
-ListPrepend() successful!!
-[70 55 ]
+Test: Empty list()
+ListPrepend() successful!! on empty list
+test: non Empty list() and curser at random place
+ListPrepend() successful!! on non empty list and curser at random place
+size: 4
+[55 99 44 70 ]
+----------------ListNext()_and ListPrev()____________
+testing ListPrev when current node is list's tail
+ListPrev() successful!! when current node is list's tail
+testing ListNext() when current node is list's tail
+ERROR: curser is list tail
+ListNext() successful!! when current node is list's tail
+ testing ListNext when current node is list's head
+hhh
+ListNext() successful!! when current node is list's head
+testing ListPrev() when current node is list's head
+ERROR: curser is list tail
+ListPrev() successful!! when current node is list's head
+ ________________ListRemove()___________________
+test: remove from start of the list
+ListRemove() sucessfull on removing the head
+test: remove from tail of the list
+ListRemove() sucessfull on removing the tail
+test: remove from middle of the list
+ListRemove() sucessfull on removing from middle
+test: Remove the list when only one item
+ListRemove() sucessfull on removing the tail when one item
+________________ListConcat()___________________
+test: TWO LISTS with content
+ListConcat() successfull with two lists with content
+test: L1 empty
+ListConcat() successful with one list empty
+_______________ListTrim()___________________
+test: Trim the list when curser at random place
+ListTrim sucessfull on Triming the tail when multiple item
+test: Trim the list when only one item
+ListTrim() sucessfull on Triming the tail when one item
+________________ListSearch()___________________
+test:finding an item in list with mulpiple items
+ListSearch() sucessfull on finding an item in list with mulpiple items
+test:finding an item not in list
+ListSearch() sucessfull on finding an item in list with mulpiple items
+________________ListFree()___________________
+test:freeing list with multiple item
+ListFree() sucessfull on list with mulpiple items
+test:freeing list with no item
+ListFree() sucessfull on list with no items
+-----------------------------------------------------------
+tests passes: 45  out of 45
