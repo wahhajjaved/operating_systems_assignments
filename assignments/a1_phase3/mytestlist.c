@@ -516,7 +516,7 @@ int main(void){
     Itemcheck= L1->head->item;
     removedItem=ListRemove(L1);
     tests++;
-    if (Itemcheck != (*(int *) removedItem)){
+    if (Itemcheck == ((int *)removedItem)){
         printf("ListRemove() sucessfull on removing the head\n");
         testpassed++;
     } else {
@@ -531,7 +531,7 @@ int main(void){
     Itemcheck= L1->tail->item;
     removedItem=ListRemove(L1);
     tests++;
-    if (Itemcheck != (*(int *) removedItem)){
+    if (Itemcheck == ((int *) removedItem)){
         printf("ListRemove() sucessfull on removing the tail\n");
         testpassed++;
     } else {
@@ -547,7 +547,7 @@ int main(void){
     Itemcheck= L1->head->next->next->item;
     removedItem=ListRemove(L1);
     tests++;
-    if (Itemcheck != (*(int *) removedItem)){
+    if (Itemcheck == ((int *) removedItem)){
         printf("ListRemove() sucessfull on removing from middle\n");
         testpassed++;
     } else {
@@ -563,7 +563,7 @@ int main(void){
     Itemcheck= L4->tail->item;
     removedItem=ListRemove(L4);
     tests++;
-    if (Itemcheck != (*(int *) removedItem)){
+    if (Itemcheck == ((int *) removedItem)){
         printf("ListRemove() sucessfull on removing the tail when one item\n");
         testpassed++;
     } else {
@@ -604,7 +604,7 @@ int main(void){
        Itemcheck= L1->tail->item;
     removedItem=ListTrim(L1);
     tests++;
-    if (Itemcheck != (*(int *) removedItem)){
+    if (Itemcheck == ((int *) removedItem)){
         printf("ListTrim sucessfull on Triming the tail when multiple item\n");
         testpassed++;
     } else {
@@ -617,7 +617,7 @@ int main(void){
     Itemcheck= L3->tail->item;
     removedItem=ListTrim(L3);
     tests++;
-    if (Itemcheck != (*(int *) removedItem)){
+    if (Itemcheck == ((int *) removedItem)){
         printf("ListTrim() sucessfull on Triming the tail when one item\n");
         testpassed++;
     } else {
