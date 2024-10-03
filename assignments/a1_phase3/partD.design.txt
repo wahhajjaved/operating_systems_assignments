@@ -1,0 +1,177 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-22
+
+Description
+
+	Write a program that uses UNIX system calls to ''ping-pong'' a byte between
+	two processes over a pair of pipes, one for each direction.
+	
+
+Solution
+	
+	- The question description on the assignment basically provides all
+		steps needed to implement this program
+
+	- Need to use pipe(), fork(), read(), write(), and getpid xv6 system calls.
+		These are in user/user.h. Their documentation is on page 11 in the 
+		xv6 book
+
+	- pipe() takes in an int array of length 2. The read end of the pipe is
+		the first element of the array and the write end is the second
+	
+	- Need 2 pipes, one for parent to child and one for child to parent because
+		the pipes are one way
+	
+	- Pipes must be created before creating child process so that both 
+		processes have access to the pipes
+	
+	- fork() is used to create the child processes
+	
+	- After forking, the parent needs to send a byte to the child. This can
+		be done by writing the byte to the write end of the parent-to-child
+		pipe using the write() system call
+	
+	- Meanwhile, the child process will use read() to read the byte send from
+		the parent on the read end of the parent-to-child pipe. read() will 
+		block until the parent has written the byte so the oder the parent 
+		and child run after fork() doesn't matter
+		
+	- After the byte is read, the child can use getpid() to get its pid and
+		print 'received ping'.
+	
+	- To send the byte back to the parent, the child must now send the byte 
+		back to the parent by writing to the write end of the child-to-parent
+		pipe
+	
+	- After sending the byte to the child, the parent needs to read the 
+		response from the child so it must call read() on the read end of the
+		child-to-parent pipe
+	
+	- When the response is received, the parent prints out the message using
+		getpid() and printf()
+
+
+
+
+Bonus Description
+
+	Write a concurrent version of prime sieve using pipes. The first process
+	feeds the numbers 2 through 35 into the pipeline. For each prime number, 
+	you will arrange to create one process that reads from its left neighbor 
+	over a pipe and writes to its right neighbor over another pipe
+	
+
+Solution
+
+	
+	- kernel/param.h sets the max number of open files per process to 16 and 
+		the max number of open files per system to 100. Max number of processes
+		is 64
+
+	- There are 11 primes between 2 and 35, so 11 processes will be needed, not
+		counting the main process
+	
+	- Algorithm to implement from the link given in description
+	
+		p = get a number from left neighbor
+		print p
+		loop:
+			n = get a number from left neighbor
+			if (p does not divide n)
+				send n to right neighbor
+				
+	- Processes are created using fork() and communicate using pipe(). These
+		steps are the same as part D above
+	
+	- A main process will first need to create a child process for dividing by
+		2. It will also need to create a pipe going from main to process_2
+	
+	- To conserve file descriptors, main should close the read end of the pipe
+		and process_2 should close the write end of the pipe
+	
+	- The pipes will also need to be properly connected such that adjacent 
+		processes can communicate with each other
+	
+	- After creating process_2, main then just loops over integers from 2 to 35
+		and feeds the values to process_2 over the pipe
+	
+	- processes_2 will wait for the next integer using read(). If processes_2 
+		is not able to divide the integer obtained from the pipe, it will need 
+		to send that integer to the next process in the chain
+	
+	- Processes will be created on an as needed basis. So process_2 will need
+		to track whether the next process exists and fork() if it doesn't. It
+		will also need to create the outgoing pipe if needed and close the read
+		end of this pipe
+	
+	- The previous steps for process_2 will be used for process_3, process_5, 
+		and so on. 
+	
+	- Spawning a new process is complicated so that will be done in a dedicated
+		function
+		
+	Connecting Pipes:
+		
+		- Each process has an incoming pipe and an outgoing pipe, except for
+			main and the last process. 
+		
+		- Even though main has no incomming pipe, creating one for it will 
+			allow for the process creation function, createProcess() to work 
+			when called from main
+			
+		- When the application starts, the main process creates an incoming
+			pipe and then closes the write end to prepare for createProcess().
+			The file descriptors should look as follows
+			
+				3, -1 -> M -> -1, -1
+			
+		- 3, -1 are the read and write ends of the incoming pipe to the main
+			process M. -1, -1 are the outgoing pipes from M. -1 represents a 
+			closed file descriptor
+		
+		- createProcess() then needs to open an outgoing pipe, after which
+			the pipes shoud look like
+
+				3, -1 -> M -> 4, 5
+		
+		- Next, a new process needs to be created using fork()
+
+				3, -1 -> M -> 4, 5       3, -1 -> C1 -> 4, 5
+		
+		- Both main(M) and the newly forked child process (C1) have the same
+			file descriptors. Main can close the read end of the outgoing
+			pipe since it will only be writing
+		
+		- The childs incoming pipe needs to be the same as main's outgoing
+			pipe. So the child's incoming pipe needs to be set as the outgoing.
+			Its current incoming pipe can be closed.
+		
+		- After the previous two steps, the pipes should look like
+
+			3, -1 -> M -> -1, 5      4, -1 -> C1 -> -1, -1
+		
+		- The child won't have an outgoing pipe created yet. This will be used
+			to check if the next process in line needs to be created
+	
+		- The previous steps will repeat for each new process. The incoming
+			pipe for C1 has already been created so that doesn't need to be 
+			done. Just a new outgoing pipe needs to be created before forking.
+			
+		- The creation of the next process, C2, should look like the following.
+			The file descriptors should go be 3 and 5 for C2, however, 6 and 7
+			are used here for clarity
+
+
+	//Current state
+	3, -1 -> M -> -1, 5      4, -1 -> C1 -> -1, -1 
+	
+	// new outgoing pipe
+	3, -1 -> M -> -1, 5      4, -1 -> C1 -> 6, 7 
+	
+	//fork()
+	3, -1 -> M -> -1, 5      4, -1 -> C1 -> 6, 7        4, -1 -> C2 -> 6, 7
+	
+	//pipe connection updates and pipe closure
+	3, -1 -> M -> -1, 5      4, -1 -> C1 -> -1, 7       6, -1 -> C2 -> -1, -1
+
