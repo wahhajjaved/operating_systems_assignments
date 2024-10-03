@@ -95,12 +95,11 @@ sys_uptime(void)
 uint64
 sys_trace(void)
 {
-    int mask;
+    int mask; /* to hols trace mask*/
     struct proc *p =myproc();
-    argint(0, &mask);
-
+    argint(0, &mask); /* aquire the mask*/
     acquire (&p->lock);
-    p->traceMask = mask;
-    release (&p->lock);
+    p->traceMask = mask; /*set the trace mask*/
+    release (&p->lock); 
     return 0;
 }
