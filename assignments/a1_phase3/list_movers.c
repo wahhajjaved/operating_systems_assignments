@@ -2,6 +2,7 @@
  *@author Wahhaj Javed, muj975, 11135711
  *@author Nakhba Mubashir, epl482, 11317060
  *@date 2024-09-16
+ *@editted
  */
 
 
@@ -10,19 +11,17 @@
 int ListCount(LIST *list){
     /* if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
+        errx(1,"ERROR: list is NULL \n");
         return 0;
     }
 
     if (list-> size <0){
-        printf("ERROR: list count cannot be negative");
+        err(1,"ERROR: list count cannot be negative\n");
     }
-    /*TODO */
     return list->size;
 }
 
 void *ListFirst(LIST *list){
-    /*TODO */
     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
@@ -30,7 +29,6 @@ void *ListFirst(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     }
     list->curser= list->head;
@@ -46,9 +44,8 @@ void *ListLast(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
-    } 
+    }
     list->curser=list->tail;
     return list->curser->item;
 }
@@ -62,18 +59,16 @@ void *ListNext(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     }
 
-    /* check if the curser is not list last
+    /* check if the curser is not list last*/
     if (list -> curser == list -> tail) {
-        printf("ERROR: curser is list tail");
+        printf("ERROR: curser is list tail\n");
         return NULL;
-    }*/
+    }
     list->curser=list->curser->next;
     return list->curser->item;
-
 }
 
 void *ListPrev(LIST *list){
@@ -85,15 +80,14 @@ void *ListPrev(LIST *list){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
         return NULL;
     }
-    
-    /* check if the curser is not list head
-    if (list -> curser == list -> head) {         
-        printf("ERROR: curser is list tail");
+
+    /* check if the curser is not list head*/
+    if (list -> curser == list -> head) {
+        printf("ERROR: curser is list tail\n");
         return NULL;
-    }*/
+    }
     list->curser=list->curser->prev;
     return list->curser->item;
 
@@ -107,14 +101,14 @@ void *ListCurr(LIST *list){
     }
     /* check if the list is not empty */
     if (list-> size ==0){
-        printf("ERROR: list empty");
+        printf("ERROR: list empty\n");
         return NULL;
     }
     return list->curser->item;
 
 }
 
-void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
+void *ListSearch(LIST *list,COMPARATOR comparator,void *comparisonArg){
     /* if the List struct pointer is not right*/
     if (list == NULL||comparator ==NULL || comparisonArg == NULL ) {
         printf("ERROR: one of the arguments is NULL \n");
@@ -122,12 +116,20 @@ void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg){
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
-        printf("ERROR: list empty");
+        printf("ERROR: list empty\n");
         return NULL;
-    }    
+    }
 
+    while (1){
+        if ((*comparator)(list->curser->item, comparisonArg)==1) {
+            return list->curser->item;
+            }
 
-    /*TODO */
-    return NULL;
+        if (list->curser ==list->tail){
+            return NULL;
+            }
+
+        list-> curser= list->curser->next;
+    }
 }
 

@@ -1,0 +1,109 @@
+
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+
+PART E testing
+
+for testing, we will run the same commands as the assignmnet description
+
+steps for running the test
+    1.navigate to xv6 folder
+    2. make and run the xv6
+        make
+        make qemu
+    3. then excecute the commands
+            trace 32 grep hello README
+            trace 2147483647 grep hello README
+            grep hello README
+            trace 2 usertests forkforkfork
+    
+----------------------------------------------------
+testing output
+
+init: starting sh
+$ trace 32 grep hello README
+3: syscall close -> 1023
+3: syscall close -> 971
+3: syscall close -> 298
+3: syscall close -> 0
+$ trace 2147483647 grep hello README
+4: syscall  -> 0
+4: syscall kill -> 3
+4: syscall  -> 3
+4: syscall close -> 1023
+4: syscall close -> 971
+4: syscall close -> 298
+4: syscall close -> 0
+4: syscall  -> 0
+$ grep hello README
+$ trace 2 usertests forkforkfork
+usertests starting
+6: syscall read -> 7
+test forkforkfork: 6: syscall read -> 8
+8: syscall read -> 9
+9: syscall read -> 10
+9: syscall read -> 11
+10: syscall read -> 12
+9: syscall read -> 13
+10: syscall read -> 14
+9: syscall read -> 15
+10: syscall read -> 16
+11: syscall read -> 17
+9: syscall read -> 18
+10: syscall read -> 19
+9: syscall read -> 20
+11: syscall read -> 21
+10: syscall read -> 22
+9: syscall read -> 23
+10: syscall read -> 24
+9: syscall read -> 25
+11: syscall read -> 26
+10: syscall read -> 27
+9: syscall read -> 28
+11: syscall read -> 29
+10: syscall read -> 30
+9: syscall read -> 31
+10: syscall read -> 32
+9: syscall read -> 33
+11: syscall read -> 34
+10: syscall read -> 35
+9: syscall read -> 36
+11: syscall read -> 37
+9: syscall read -> 38
+10: syscall read -> 39
+9: syscall read -> 40
+10: syscall read -> 41
+9: syscall read -> 42
+10: syscall read -> 43
+9: syscall read -> 44
+11: syscall read -> 45
+9: syscall read -> 46
+10: syscall read -> 47
+9: syscall read -> 48
+10: syscall read -> 49
+9: syscall read -> 50
+11: syscall read -> 51
+9: sysc failedd -> 52
+$ : syAcall read -> 53
+9: syscall read -> 54
+11: syscall read -> 55
+9:xec call read -> 56
+10: syscall read -> 57
+11: syscall read -> 58
+9: syscall read -> 59
+10: syscall read -> 60
+11: syscall read -> 61
+9: syscall read -> 62
+10: syscall read -> 63
+11: syscall read -> 64
+9: syscall read -> 65
+10: syscall read -> 66
+9: syscall read -> 67
+11: syscall read -> 68
+9: syscall read -> -1
+10: syscall read -> -1
+11: syscall read -> -1
+OK
+6: syscall read -> 69
+ALL TESTS PASSED
+ 

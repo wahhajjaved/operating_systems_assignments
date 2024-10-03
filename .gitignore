@@ -15,7 +15,6 @@ build
 #xv6
 *initcode
 */xv6/*/initcode.out
-*/xv6/kernel
 */xv6/fs.img
 */xv6/*/mkfs
 */xv6/.gdbinit

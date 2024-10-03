@@ -7,26 +7,22 @@
 #ifndef LIST_H
 #define LIST_H
 
-#include <stdlib.h> 
+#include <stdlib.h>
 #include <stdio.h>
 #include <err.h>
 
 
-#define MAX_NODE 100
-#define MAX_LIST 100
-#define MIN_LIST 10
-#define MIN_NODE 10
-#define MAX_LIST_SIZE 100
-
+#define MIN_LISTS 5
+#define MIN_NODES 50
 /*
- * comparator pointer for the parameter for ListSearch() 
+ * comparator pointer for the parameter for ListSearch()
  */
-typedef int (*COMPARATOR)(void *, void *);
+typedef int (COMPARATOR)(void *, void *);
 
 /*
  * itemfree pointer used for the parameter to ListFree()
  */
-typedef void (*ITEMFREE)(void *);
+typedef void (ITEMFREE)(void *);
 
 /*int nodes_num;
 */
@@ -50,26 +46,11 @@ typedef struct list {
 
 
 /*
- * array of list
- 
- /LIST dictionary[MAX_LIST];
-
- * array of free list
- 
- LIST freed_list[MAX_LIST_SIZE];
-
-
- * array of free nodes
- 
-
-/ NODE freed_node[MAX_NODE];
-*/
-/*
  * creates a new empty list and return its reference or Null if fails
- * 
+ *
  * Parameter: none
  *
- * return :  refrence of empty list or NULL if fails   
+ * return :  refrence of empty list or NULL if fails
  */
 LIST *ListCreate();
 
@@ -89,41 +70,41 @@ int ListCount(LIST *list);
  *
  * Parameter: List list:    struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListFirst(LIST *list);
 
 /*
- * returns a pointer to the last item in list and makes the last item the 
+ * returns a pointer to the last item in list and makes the last item the
  * current one.
  *
  * Parameter: List list:    struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListLast(LIST *list);
 
 /*
- * advances the list's current node by one, and returns a pointer to the new 
- * current item. If this operation attempts to advances the current item 
+ * advances the list's current node by one, and returns a pointer to the new
+ * current item. If this operation attempts to advances the current item
  * beyond the end of the list, a NULL pointer is returned.
- * 
+ *
  * Parameter: List list:    struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListNext(LIST *list);
 
 /*
- * backs up the list's current node by one, and returns a pointer to the new 
+ * backs up the list's current node by one, and returns a pointer to the new
  * current item.
  *
  * Parameter: List list:    struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListPrev(LIST *list);
@@ -133,7 +114,7 @@ void *ListPrev(LIST *list);
  *
  * Parameter: List list:    struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListCurr(LIST *list);
@@ -152,13 +133,13 @@ void *ListCurr(LIST *list);
 int ListAdd(LIST *list,void *item);
 
 /*
- * adds item to list directly before the current item, and makes the new item 
+ * adds item to list directly before the current item, and makes the new item
  * the current one.
  *
  * Parameter: List list:    struct List
  *            item:         item to be added
  *
- * Return: Returns 0 on success, -1 on failure 
+ * Return: Returns 0 on success, -1 on failure
  *
  */
 int ListInsert(LIST *list,void *item);
@@ -182,7 +163,7 @@ int ListAppend(LIST *list, void *item);
  * Parameter: LIST list: struct List
  *            item:      pointer to the item to be added
  *
- * Return:   Returns 0 on success, -1 on failure 
+ * Return:   Returns 0 on success, -1 on failure
  *
  */
 int ListPrepend(LIST *list,void *item);
@@ -193,7 +174,7 @@ int ListPrepend(LIST *list,void *item);
  *
  * Parameter: LIST list: struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListRemove(LIST *list);
@@ -204,7 +185,7 @@ void *ListRemove(LIST *list);
  * Parameter: List list1: struct List
  *            List list2: struct List
  *
- * Return: 
+ * Return:
  *
  */
 void ListConcat(LIST *list1, LIST *list2);
@@ -215,10 +196,10 @@ void ListConcat(LIST *list1, LIST *list2);
  * Parameter: LIST list:             struct List
  *            ITEMFREE itemFree:     item to be freed
  *
- * Return: 
+ * Return:
  *
  */
-void ListFree(LIST *list, ITEMFREE *itemFree);
+void ListFree(LIST *list, ITEMFREE itemFree);
 
 /*
  * Return last item and take it out of list. The current pointer shall
@@ -226,7 +207,7 @@ void ListFree(LIST *list, ITEMFREE *itemFree);
  *
  * Parameter: LIST list:    struct List
  *
- * Return: 
+ * Return:
  *
  */
 void *ListTrim(LIST *list);
@@ -239,10 +220,10 @@ void *ListTrim(LIST *list);
  *             COMPARATOR *comparator:      to match
  *             *comparisonArg :             match with
  *
- * Return: 
+ * Return:
  *
  */
-void *ListSearch(LIST *list,COMPARATOR *comparator,void *comparisonArg);
+void *ListSearch(LIST *list,COMPARATOR comparator,void *comparisonArg);
 
 
 #endif
