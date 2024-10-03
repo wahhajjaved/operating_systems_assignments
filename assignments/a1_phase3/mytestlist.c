@@ -57,11 +57,11 @@ int main(void){
         }
     }
 
-    printf("bonus marks\n");    
+        
 /*     testing egde case: creating several lists for doubling memory
 */
-/*
-    for (i=MIN_LISTS; i<15; i++){
+    printf("bonus marks\n");
+    for (i=MIN_LISTS; i<9; i++){
         LTest= ListCreate();
         if (LTest ==NULL){
             printf("TEST CASE FAILED: ListCreate returned NULL AFTER DOUBLING: list %d\n", i+1);
@@ -70,7 +70,7 @@ int main(void){
             printf("TEST CASE SUCCESS: ListCreate() after doubling\n");
         }
     }
-*/  
+
     L1= ListCreate();
     L2= ListCreate();
     L3= ListCreate();
@@ -588,20 +588,20 @@ int main(void){
     printf("test: L1 empty\n");
     ListConcat(L5, L1);
     tests++;
-    if (ListCount(L1) != 0){
+    if (ListCount(L1) == 0){
         printf("ListConcat() successful with one list empty\n");
         testpassed++;
     } else{
         printf("ListConcat() failed with one list empty\n");
     }
-
+    ListConcat(L1, L5);
     printf("_______________ListTrim()___________________\n");
 
     printf("test: Trim the list when curser at random place\n");
-    ListLast(L1);
+   ListLast(L1);
     ListPrev(L1);
     ListPrev(L1);
-    Itemcheck= L1->tail->item;
+       Itemcheck= L1->tail->item;
     removedItem=ListTrim(L1);
     tests++;
     if (Itemcheck != (*(int *) removedItem)){

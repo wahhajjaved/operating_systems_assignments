@@ -169,7 +169,8 @@ ListConcat(list1, list2)
         expected output: returns list2 size is 0 and it have no items. list1
         size is list1 size+ list2 size. list1 have both list items.
     3. test with one empty and other non empty
-
+        expected output: list1 was empty and list2 had items so now list2 size
+        is 0, it have no items and list1 have the items that list1 had.
 
 ListFree(list, itemFree)
     1. test when list is empty
@@ -205,3 +206,10 @@ adding a Null to a list or list is NULL:
 in the adder functions i have a condition that checks if item or list is NULL
 
 ----------------------------------------------------
+Bonus
+
+CreateList
+use a for loop to create lists
+MAX_LIST is 5 and more than 10 lists are created so bonus for list creates work
+
+

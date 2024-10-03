@@ -38,6 +38,7 @@ void Increse_node_Memory(){
         }
     }
     nodeDict[MIN_NODES-1].next= NULL;
+    aviableNode =&nodeDict[MIN_NODES];
 }
 
 
@@ -63,61 +64,47 @@ LIST *ListCreate(){
 
         for ( i=0; i<(MIN_LISTS); i++){
             listDict[i].size=0;
-            listDict[i].nextfreeList= &listDict[i+1];
+ 
+            if (i == MIN_LISTS - 1) {
+                listDict[i].nextfreeList = NULL;
+            } else {
+                listDict[i].nextfreeList = &listDict[i + 1];
+                }
          }
    
-        listDict[i-1].nextfreeList= NULL; /*last*/
 
         for ( i=0; i<(MIN_NODES-1); i++){
             nodeDict[i].next= &nodeDict[i+1];
+            
             if (i==0){
                  nodeDict[i].prev= NULL;
             }
             else {
              nodeDict[i].prev= &nodeDict[i-1];
+            }
         }
-    }
-    nodeDict[i].next= NULL; /*last*/
+        nodeDict[MIN_NODES-1].next= NULL; /*last*/
     }
 
     if (aviableList==NULL) {
-        int i, Num, index;
-        if (listNum ==MIN_LISTS){
-            LIST *oldListDict= listDict;
-            Num= MIN_LISTS*2;
+        int i, Num;
+
+        LIST *newListDict;
+        Num= MIN_LISTS*2;
 
             /* doubling the memory  */
-            listDict =(LIST*) malloc(Num * sizeof(LIST));
-            if (listDict ==NULL) {
-                errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");
-                return NULL;
+        newListDict =(LIST*) realloc(listDict,Num * sizeof(LIST));
+        if (newListDict ==NULL) {
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");                return NULL;
             }
+        listDict=newListDict;
+
             /*INITIALIZE ALL NEW LISTS*/
-            for ( i=0; i<(Num); i++){
-               listDict[i].size=0;
+         for ( i=MIN_LISTS; i<(Num); i++){
+              listDict[i].size=0;
+              listDict[i].nextfreeList= aviableList;
+              aviableList= &listDict[i];
             }
-
-            /* move the old list into new list dict*/
-            for (i=0; i<MIN_LISTS; i++){
-                index =i;
-                /* indexing to find the empty list*/
-                
-                while (listDict[index].size != 0){
-                    index++;
-                }
-                listDict[index] = oldListDict[i]; /* move the old list to new*/
-            }
-
-            /* chain the unused lists*/
-            aviableList =NULL;
-            for (i= Num-1; i>=0; i--){
-                if (listDict[i].size ==0){
-                    listDict[i].nextfreeList = aviableList;
-                    aviableList =&listDict[i];
-                }
-            }
-            free(oldListDict); /* free the old list dict memory*/
-        }
     }
 
     if (aviableList==NULL) {
@@ -134,6 +121,7 @@ LIST *ListCreate(){
     newList -> curser= NULL;
     newList -> size= 0;
 
+    listNum++;
     return newList;
 }
 
