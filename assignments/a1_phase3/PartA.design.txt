@@ -167,7 +167,7 @@ Part A2 Design
         threads is larger than 32
 
     - Since part A2 is only supposed to run on Linux, the timing method used
-        for part A3 can be used
+        for part A3 can be used i.e. clock_gettime() in time.h
 
     - UBC pthreads do not have a mechanism for thread local storage. However,
         each thread can be given a name. The index can be stored in this name.

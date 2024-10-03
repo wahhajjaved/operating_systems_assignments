@@ -11,7 +11,7 @@
 /*UBC pthreads headers*/
 #include <kernel.h>
 
-#include "square.h"
+#include <square.h>
 
 #define CHILD_STACK_SIZE 4000000
 
@@ -94,11 +94,6 @@ PROCESS parentThreadFunction(void* params){
 
 	sleepTicks = deadline*1000000/TICKINTERVAL;
 	printf("Main thread sleeping for %d ticks. \n", sleepTicks);
-
-	/* Sleep doesn't work properly yet.
-		The main thread is supposed to use Kill() to kill child threads but
-		not enough time to implement that yet.
-	*/
 
 	while(sleepTicks > 0xffff) {
 		Sleep(0xffff);

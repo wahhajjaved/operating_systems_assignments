@@ -8,17 +8,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "square.h"
+#include <square.h>
 
 #define CHILD_STACK_SIZE 5000000
 
-DWORD tlsIndex;
+DWORD tlsIndex; //thread local storage
 
 int getIndex() {
 	int index;
 	LPVOID data = TlsGetValue(tlsIndex);
+	//The stored data can be 0 so error must also be checked
+	//Recommended by Microsoft in the TlsGetValue documentation
 	if ((data == 0) && (GetLastError() != ERROR_SUCCESS))
-      return -1;
+      return ERROR_INVALID_DATA;
 	index = *(int*)data;
 	return index;
 }
@@ -27,7 +29,7 @@ int getIndex() {
 
 	Parameters
 		LPVOID lpParam: Array of ints. lpParam[0] is index of pSquareCount at
-			which Square()'s call count is stored. lpParam[0] is the value
+			which Square()'s call count is stored. lpParam[1] is the value
 			passed to Square() when it is called
 
 	Return
@@ -109,7 +111,7 @@ int main(int argc, char* argv[]) {
 		);
 
 		if (handle == NULL) {
-			printf("CreateThread failed. Error: %u\n", GetLastError());
+			printf("CreateThread failed. Error: 0x%x\n", GetLastError());
 			return 1;
 		}
 		threadHandles[i] = handle;
@@ -121,16 +123,6 @@ int main(int argc, char* argv[]) {
 
 	Sleep(deadline*1000);
 	stopSquare = 1;
-
-	/*potential segfault if child threads don't stop fast enough before the
-	arrays are freed. A small delay before freeing shoudl prevent this.*/
-	Sleep(1000);
-
-
-	free(threadHandles);
-	free(threadIDs);
-	free(pSquareCount);
-	free(pStartTime);
-
+	
 	return 0;
 }
