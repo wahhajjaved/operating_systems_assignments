@@ -10,6 +10,62 @@ extern LIST *aviableList;
 extern NODE *aviableNode;
 extern int listNum;
 extern int nodeNum;
+extern LIST *listDict; /* dict of lists*/
+extern NODE *nodeDict; /* dict of all the nodes*/
+
+
+void Decrease_list_memory(){
+    LIST  *newListDict;
+    int Num, i;
+
+    Num= MIN_LISTS / 2;
+    newListDict=realloc(listDict, (Num * sizeof(LIST)));
+    if (newListDict ==NULL){
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED\n");
+            return ;
+    }
+    listDict = newListDict;
+    aviableList = NULL;
+
+    for (i=Num-1; i>=0; i--){
+        if (listDict[i].size == 0){
+            listDict[i].nextfreeList = aviableList;
+            aviableList = &listDict[i];
+
+        }
+    }
+    
+}
+
+void Decrease_node_memory(){
+
+    NODE *newNodeDict;
+    int Num, i;
+    Num= MIN_NODES / 2;
+    if (nodeNum <(MIN_NODES/2)){
+        newNodeDict = realloc (nodeDict, (Num * sizeof(NODE)));
+        if (newNodeDict ==NULL){
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED\n");
+            return ;
+        }
+        
+        nodeDict = newNodeDict;
+        aviableNode = NULL;
+
+        /* rechain the left over nodes */
+        for (i=Num-1; i>=0; i--){
+            nodeDict[i].next = aviableNode;
+            if (i >= 0){
+                nodeDict[i].prev = &nodeDict[i-1];
+            } else {
+                nodeDict[i].prev = NULL;
+            }            
+            aviableNode = &nodeDict[i];
+        }
+    }
+}
+
+
 
 void *ListRemove(LIST *list){
     NODE *removeNode;
@@ -177,5 +233,11 @@ void ListConcat(LIST *list1, LIST *list2){
 
     list2->nextfreeList = aviableList;
     aviableList = list2;
+/*
+    if (listNum < (MIN_LISTS/2)){
+        Decrease_list_memory();
+    } 
+*/
 }
+
 

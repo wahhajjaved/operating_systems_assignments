@@ -51,8 +51,7 @@ LIST *ListCreate(){
         listDict= (LIST*) malloc ((MIN_LISTS) * sizeof(LIST));
         if (listDict ==NULL) {
             errx(1, "ERROR: MEMORY ALLOCATION FAILED\n");
-            return NULL;
-        }    
+            return NULL;}
         nodeDict= (NODE*) malloc ((MIN_NODES) * sizeof(NODE));
         if (nodeDict ==NULL) {
             errx(1, "ERROR: MEMORY ALLOCATION FAILED\n ");
@@ -71,8 +70,6 @@ LIST *ListCreate(){
                 listDict[i].nextfreeList = &listDict[i + 1];
                 }
          }
-   
-
         for ( i=0; i<(MIN_NODES-1); i++){
             nodeDict[i].next= &nodeDict[i+1];
             
@@ -123,8 +120,8 @@ LIST *ListCreate(){
 
     listNum++;
     return newList;
-}
 
+}
 
 int ListAdd(LIST *list,void *item){
     NODE *newNode;
@@ -136,7 +133,8 @@ int ListAdd(LIST *list,void *item){
     }
     if (item == NULL){
         printf("ERROR: item is NULL");
-        return -1;   }
+        return -1;   
+    }
     if (aviableNode ==NULL){
         printf("ERROR: no aviabkle node");
         return -1;   }
@@ -148,7 +146,6 @@ int ListAdd(LIST *list,void *item){
     newNode = aviableNode;
     aviableNode = aviableNode-> next; 
     nodeNum++;   
-    
     /*initialize and add to list*/
     newNode-> item = item;
     newNode-> next = NULL;
@@ -175,9 +172,7 @@ int ListAdd(LIST *list,void *item){
     }
     list->curser=newNode;
     list->size++;
-
     return 0;
-
 }
 
 int ListInsert(LIST *list,void *item){
@@ -222,7 +217,6 @@ int ListInsert(LIST *list,void *item){
         }
     list->curser = newNode;
     list->size++;
-
     return 0;
 }
 
@@ -237,7 +231,7 @@ int ListAppend(LIST *list, void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-        if (nodeNum == MIN_NODES){
+    if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
 
@@ -264,8 +258,6 @@ int ListAppend(LIST *list, void *item){
     list->size++;
 
     return 0;
-
-
 }
 int ListPrepend(LIST *list,void *item){
     NODE *newNode;
@@ -278,7 +270,7 @@ int ListPrepend(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-        if (nodeNum == MIN_NODES){
+    if (nodeNum == MIN_NODES){
         Increse_node_Memory();
     }
         /*get an unused node  */
