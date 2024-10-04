@@ -15,5 +15,11 @@ list_adders.c
 list_movers.c
 list_removers.c
 mytestlist.c
+PartD.design.txt
+PartD.testing.txt
+PartE.design.txt
+PartE.testing.txt
 Makefile
 git-log.txt
+pingpong.c
+primes.c
