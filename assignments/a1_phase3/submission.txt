@@ -20,6 +20,7 @@ PartD.testing.txt
 PartE.design.txt
 PartE.testing.txt
 Makefile
+../xv6/user/pingpong.c
+../xv6/user/primes.c
+xv6-diff.txt
 git-log.txt
-pingpong.c
-primes.c
