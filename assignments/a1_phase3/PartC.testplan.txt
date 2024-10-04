@@ -45,11 +45,11 @@ ListCount(list):
 
 ListFirst(list):
     1. test when list is empty
-        expected output: = Null because no item and when the list is initialized
-        all the parts of list is set to NULL
+        expected output: = Null because no item and when the list is 
+        initialized all the parts of list is set to NULL
     2. test when list is not empty
-        expected output: the pointer to the first item in the list regardless of
-        where the curser is. should return list->head
+        expected output: the pointer to the first item in the list regardless 
+        of where the curser is. should return list->head
 
     there are no other corner cases because if the list is not empty, and
     regardless of size of the list, the functionality is the same. ListFirst
@@ -57,8 +57,8 @@ ListFirst(list):
 
 ListLast(list)
     1. test when list is empty
-        expected output: = Null because no item and when the list is initialized
-        all the parts of list is set to NULL
+        expected output: = Null because no item and when the list is 
+        initialized all the parts of list is set to NULL
     2. test when list is not empty
         expected output: the pointer to the last item in the list regardless of
         where the curser is. should return list->tail
@@ -69,11 +69,11 @@ ListLast(list)
 
 ListNext(list)
     1. test when list is empty
-        expected output: = Null because no item and when the list is initialized
-        all the parts of list is set to NULL
+        expected output: = Null because no item and when the list is 
+        initialized all the parts of list is set to NULL
     2. test when list is not empty and current node is last node
-        expected output: = Null because its the last node and while implementin
-        g the next of last node is set to null
+        expected output: = Null because its the last node and while 
+        implementing the next of last node is set to null
     3. test when list is not empty and current node is first node
         expected output: curser goes to the next Node
     4. test when list is not empty and current node is middle node
@@ -81,8 +81,8 @@ ListNext(list)
 
 ListPrev(list)
     1. test when list is empty
-        expected output: = Null because no item and when the list is initialized
-        all the parts of list is set to NULL
+        expected output: = Null because no item and when the list is 
+        initialized all the parts of list is set to NULL
     2. test when list is not empty and current node is last node
        expected output: curser goes to the previous Node
     3. test when list is not empty and current node is first node
@@ -92,8 +92,8 @@ ListPrev(list)
 
 ListCurr(list)
     1. test when list is empty
-        expected output: = Null because no item and when the list is initialized
-        all the parts of list is set to NULL
+        expected output: = Null because no item and when the list is 
+        initialized all the parts of list is set to NULL
     2. test when list is not empty
         expected output: the pointer to the item at the curser position
 
@@ -185,7 +185,8 @@ ListFree(list, itemFree)
 
 ListTrim(list)
     1. test when list is empty
-        expected output: = Null because no item  to remove and when the list is         initialized all the parts of list is set to NULL
+        expected output: = Null because no item  to remove and when the list is
+            initialized all the parts of list is set to NULL
     2. test when list is not empty
        expected output: list size decrease by 1, the item not in list, new
         tail item.

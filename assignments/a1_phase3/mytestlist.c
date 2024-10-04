@@ -165,7 +165,7 @@ int main(void){
     tests++;
     resultPtr= (int*) ListSearch(L1, testComp,cArg);
     if (resultPtr==NULL){
-        printf("ListSearch() sucessfull on finding an item in an empty list\n");
+        printf("ListSearch() sucessfully found an item in an empty list\n");
         testpassed++;
     } else {
         printf("ListSearch() Failed on finding an item in an empty list\n");
@@ -213,8 +213,9 @@ int main(void){
     }
         else {
             printf("ListAdd() successful!! with AT TAIL\n");
-            printf("ListLast() successful!! tested with ListAdd(), curser was at\
- last \n");
+            printf("ListLast() successful!! tested with ListAdd(), cursor "
+                "was at last\n"
+            );
             testpassed++;
         }
 
