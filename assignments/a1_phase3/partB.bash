@@ -30,7 +30,7 @@ case "$1" in
             echo "partA1 only works on Windows"
             echo
             print_help
-            return 1
+            exit 1
         fi
         exe=./partA1
         ;;
@@ -39,7 +39,7 @@ case "$1" in
             echo "partA2 only works on Linux"
             echo
             print_help
-            return 1
+            exit 1
         fi
         exe=./partA2
         ;;
@@ -48,7 +48,7 @@ case "$1" in
             echo "partA3 only works on Linux"
             echo
             print_help
-            return 1
+            exit 1
         fi
         exe=./partA3
         ;;
@@ -56,7 +56,7 @@ case "$1" in
         echo "Unknown value for version"
         echo
         print_help
-        return 1
+        exit 1
         ;;
 esac
 
