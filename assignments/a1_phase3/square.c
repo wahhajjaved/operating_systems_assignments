@@ -16,10 +16,6 @@ int stopSquare = 0;
 
 int64_t square(int n) {
 	int index;
-	// if (n < 0){
-	// 	printf("Invalid value %d for n. Must be at least 0\n", n);
-	// 	return -1;
-	// }
     if (n == 0 || stopSquare != 0){
 		return 0;
 	}

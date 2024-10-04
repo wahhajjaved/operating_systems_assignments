@@ -12,7 +12,7 @@
 
 #include <square.h>
 
-pthread_key_t tlsKey; //thread local storage
+pthread_key_t tlsKey; /*thread local storage*/
 
 int getIndex() {
 	int index;

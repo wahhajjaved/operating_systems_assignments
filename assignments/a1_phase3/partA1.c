@@ -12,7 +12,7 @@
 
 #define CHILD_STACK_SIZE 5000000
 
-DWORD tlsIndex; //thread local storage
+DWORD tlsIndex; /*thread local storage*/
 
 int getIndex() {
 	int index;
