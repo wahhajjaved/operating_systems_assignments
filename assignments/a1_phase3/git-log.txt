@@ -1,0 +1,560 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-10-03
+
+commit fa134bd2496b3456cc2bba243061dbafd4dc0b63
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 19:29:04 2024 -0600
+
+    xv6 directory renames to xv6-riscv
+
+commit 0c6df21d973fd407d5b01e9c92bd113e66ecef30
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 19:09:10 2024 -0600
+
+    Author info added
+
+commit 79c8b086509d87eec33c2857565ae66e49702138
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 19:04:07 2024 -0600
+
+    xv6 diff create starting at commit ac9038dd974849e7ddb1466abb0ca8b2800ea1f1
+
+commit 3632448a23b5ec8b83dc99e625cf99d30f95053f
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:57:15 2024 -0600
+
+    Author information added
+
+commit 36427b89a4395112b89507d9d4e33a8386cda847
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:47:05 2024 -0600
+
+    Changes to /* comments to remove compiler warnings
+
+commit 2a7d210abe9556934da6941ade644a32b0deeeba
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:44:14 2024 -0600
+
+    Added xv6 files
+
+commit db7f4e232652347f51a07c6fc1a37aababd6eced
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:43:46 2024 -0600
+
+    Added makefile rule for compiling marker's list test
+
+commit e8e38cba70e396541114131ab9adfbd64159b2ee
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:17:16 2024 -0600
+
+    80 char line length enforced
+
+commit ea339e61cdf97332bd0e1cd0b765c5cc5f8a3a5e
+Merge: 1425aba 6e7342c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:12:28 2024 -0600
+
+    Merge remote-tracking branch 'origin/main' into wahhaj_assignments
+
+commit 1425abaa0915fe2119a753b78ac81e204d25bfb8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:12:08 2024 -0600
+
+    File list updated to include phase 3 files
+
+commit ad4242ea3b79392edb218ada3c9aeb9dbd82177b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 18:08:43 2024 -0600
+
+    Replaced return with exit since return only works in functions
+
+commit 6e7342c3a35950ebdbb77c7c2abed638515b6b96
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 3 17:35:35 2024 -0600
+
+    fixed to 80 character limit
+
+commit acffd9ccecd5f781000c8022c37f4693b4795b7b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 3 17:32:59 2024 -0600
+
+    fixed to 80 character limit
+
+commit 7641e3c00b15cc67b1941c0b65fce9cfe3eaf877
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 16:53:46 2024 -0600
+
+    File rename to be consistent. Prep for submission
+
+commit 8fcc24ff318992b4ccd50147e4d7acc4edc516eb
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 16:37:45 2024 -0600
+
+    Incorporated phase2 feedback. Removed quoted includes
+
+commit 98607f9b070d1e33a5c6f1fc2abaddc035981fb2
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 16:08:10 2024 -0600
+
+    Added entry for kernel binary
+
+commit 25fb81fe2a63e57a92f0f4cbb34b5619bc993780
+Merge: 5c69c74 38f41d4
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 16:00:22 2024 -0600
+
+    Merge remote-tracking branch 'origin/wahhaj_assignments'
+
+commit 5c69c749bca20a5eed8ddefc5521290eb92b55c2
+Merge: ac9038d 2bfef15
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 15:56:22 2024 -0600
+
+    Merge branch 'nakhba_assignments'
+
+commit 38f41d440728fa8d796d1077c1bf54ab117c6132
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 11:28:23 2024 -0600
+
+    Added enforcement of upper bound of size
+
+commit 95c0a6b178d295ab5044b0f629ea4a0199687221
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 11:14:24 2024 -0600
+
+    Final clean up for submission.
+
+commit c21c1fc58577a26ab9d5c8ced5c901e3a406ea35
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 11:13:41 2024 -0600
+
+    Test plan and test results for primes updated
+
+commit 9e516230a52a6b110ad97ca5debc83213f5ead80
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 3 10:34:32 2024 -0600
+
+    Debug statements removed. Primes prints the correct output.
+
+commit 2bfef15f37f7295c7192be6e71b921a6eb6be245
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 22:09:40 2024 -0600
+
+    added the decrease memory to each function in list remover
+
+commit 3e81a2247cc628556e985c1699bf5735091f50bf
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 21:57:51 2024 -0600
+
+    added the decrease the memory for bonus
+
+commit 9a1ba545d803b14d362927257bbc25b41ed94309
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 21:56:00 2024 -0600
+
+    added the test results to file
+
+commit 9992a8e622db13eb05f13be54a29fbc815c5b533
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 21:55:10 2024 -0600
+
+     removed the warning and fixed minor errors like refrences and comparating pointer with int
+
+commit 9fa906c53052107d444ae7b4968db36d7a17e018
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 21:53:11 2024 -0600
+
+    in plan added the bonus increase and decrease memory and testing functions
+
+commit 954011c509dde3223cfa7647848753c7df39da7e
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 2 18:43:21 2024 -0600
+
+    Part D design updated to include pipe connections
+
+commit e1f2d440b3c68650bc6580f85b3354090c86ac82
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 18:08:25 2024 -0600
+
+    added comments and clarifications
+
+commit d156f6f33953b37fa47455bb1d63ef5db93b27e4
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 18:06:24 2024 -0600
+
+    added the plan and test for part E xv6 system call trace
+
+commit 2457b44c9754e3eabacade388d36bb1f6954c2a3
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 18:04:56 2024 -0600
+
+    added and tested the increasing the list memory, in .h file changed the MIN_LIST amount
+
+commit f9f6cb0973e714a945c35044ae85dab0c14c914c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 16:01:21 2024 -0600
+
+    added description to the list remover functions and to any other tests
+
+commit 61ded3786f2d18049d6902d580e61d1a72028fab
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 2 15:28:11 2024 -0600
+
+    Primes works properly for 5 processes
+
+commit cfa1048a49c31a7130eb72fa3f7ac1788bae99c7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 2 15:23:12 2024 -0600
+
+    Primes seems to work properly for 2 child processes
+
+commit 4828211e6e331ab913dbb44dc2d7dce1b8fe85bf
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 2 15:14:50 2024 -0600
+
+    Primes compiles, run, and terminates. Output not correct
+
+commit e00ac0cdfe2f9a977cc6a9f07a67d5de4e309cdc
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 13:47:41 2024 -0600
+
+    for part e, wrote the rough plan for xv6 system call,including in which files what new functions are added
+
+commit a1748319015188fcb81b69614422dd18c96379fd
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 13:44:10 2024 -0600
+
+    minor edits that does not chage the functionslity of the functions
+
+commit 9bedd73c0e14984773b3f738e3ec43a2c4a798ee
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 13:42:59 2024 -0600
+
+    edited list_removers while testing so the output for the special cases are desplayed properly
+
+commit 5f8e2581aa5eaed90818137aabec950cd2cf8ce0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 13:41:39 2024 -0600
+
+    updating the test plan for the list, adding expected output and descriptions
+
+commit e3dd5e19c7de7b7612d46b15bd1e9db9e748d7bf
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 13:04:18 2024 -0600
+
+    completed the tests except the bonus marks
+
+commit dc89513f850a7b407fdac59c778ace656be99cf9
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 11:22:51 2024 -0600
+
+    edited header file to fix the parameter for ListSearch
+
+commit 33a94263cd4d2561df6bb7362229d562187bdcbf
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 2 09:22:56 2024 -0600
+
+    added the test cases for ListTrim and ListRemove
+
+commit 61885fd5d22950e76b3a3f9ba7a3545acbb56c40
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 21:53:18 2024 -0600
+
+    added some test for list concat
+
+commit 01f7ea9132454d01cb13092088e23365d6dcd0c6
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 21:51:37 2024 -0600
+
+    in user.h corrected to nt trace(int)
+
+commit 2fec436dfa68f619233e704fae7c6918bed74ddb
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 21:27:46 2024 -0600
+
+    edited list empty case in cancat
+
+commit 66ab554182b374e01f57932808b917dac799775f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 21:12:25 2024 -0600
+
+    edited during testing
+
+commit c1a862797e6a56f4e30ce65e6580b99999c6cdbb
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 17:47:12 2024 -0600
+
+    fixed minor spelling error which was not updating the size of list 1 for listconcat
+
+commit 0e545fe63dc912ebb2d4c6a1c8674a18c401e85e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 17:45:19 2024 -0600
+
+    wrote the main test cases except some of remove with description
+
+commit 744d43c5bfe0ccbb5f6f981b817a33e7c014706a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 17:33:04 2024 -0600
+
+    while testing found linking mistake in listRemove()
+
+commit 8d5918c054d6572e1d83beec9033f306fda80119
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 14:46:01 2024 -0600
+
+    handled the returns of the functions when the list is empty
+
+commit 8a242ea2f426fdb703a2a752cf1becc675fbcfca
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 1 14:40:09 2024 -0600
+
+    increased the min node and list for testing
+
+commit 861ebd4057dc13fb2f97d4ea6a43539fa1fbda3a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 1 13:16:14 2024 -0600
+
+    part D bonus compiles and runs for a single child
+
+commit e317c9030223b517401ea390777051b839af2730
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 22:58:50 2024 -0600
+
+    added the new int traceMask, system call 22m systemcall name
+
+commit 366fc1689e71f8446d721e0d103443ac353b02ae
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 22:19:59 2024 -0600
+
+    added and started the design process for the partE system call
+
+commit 373c7569184b8a5ad3ce52a04b0ec04210c5c167
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 21:27:30 2024 -0600
+
+    copied xv6
+
+commit ce309cdc710d7a2ba5cf34010944442666b30662
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 21:22:35 2024 -0600
+
+    added more description for tests
+
+commit 05ae34844889a7a73086123ad4694a9787fc643b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 21:22:06 2024 -0600
+
+    changed the minlist and min node amounts
+
+commit af8c6a8e9acf31b415a943121682d62410b8bf03
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 21:21:17 2024 -0600
+
+    added increase list memory
+
+commit 9674bb6ea58f67a6e3c64f7af46d31ac0f122b27
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Sep 30 19:17:11 2024 -0600
+
+    added the increase list memory
+
+commit 5df398693fafd3355a788fe191f6ff1cbf9fc5f2
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Sep 30 11:51:10 2024 -0600
+
+    Able to send 2 from main to child
+
+commit 661e73b89041c0c599887e8f8aa6d3506a2bf85c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Sep 30 11:25:07 2024 -0600
+
+    part D bonus hello world compiles and runs
+
+commit 7eb017ad1dceab6f3681d4dc61ad5eda6aa69f2e
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 29 22:07:12 2024 -0600
+
+    Plan for part D bonus added
+
+commit 6d2ae53c9776a2fbd39aa39186d4549a5f4b303c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Sep 29 22:01:18 2024 -0600
+
+    fixed monor errors like spelling mistake, missing variable
+
+commit 33add7c4474e3f26d7323dbe22a15a04c2f00594
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Sep 29 21:52:41 2024 -0600
+
+    fixed monor errors like spelling mistake
+
+commit dc13becd3dae188f1ae0268dc0d110586d68c65a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Sep 29 21:47:09 2024 -0600
+
+    fixed monor errors like missing semicolon, braccket, spelling mistake
+
+commit c458146584e5c2fd73cba447a36e39dbb88d2530
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Sep 29 21:41:35 2024 -0600
+
+     added list free
+
+commit f4c029219cd587d0b78d8387a483d9e8dff204b8
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Sep 29 21:29:49 2024 -0600
+
+     added list remove and list trim
+
+commit 5a4482512c0c9115052c67f58f334d3fff510158
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 29 20:55:42 2024 -0600
+
+    Added test plan and test results for part D
+
+commit ba28f5056d9989e657d8603710de3a700e392819
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 29 20:51:00 2024 -0600
+
+    Added partD design
+
+commit e8f388ad8c92cf67b80180c0a984ebb561cc74fe
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 29 20:29:06 2024 -0600
+
+    part D done. Compiles and prints correct output
+
+commit c52c2eec7e2cf5bdcf91acc24ca6cc229050f7a1
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 29 17:20:50 2024 -0600
+
+    Program compiles but output is jumbled and incorrect
+
+commit 9659b7d2bb2551bf3cb065810e55ed9271136e21
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 29 15:19:38 2024 -0600
+
+    pingpong.c hello world created. Compiles and runs
+
+commit bbda3a1047f9ba25cc220b448e2bc1fb6ff3ca38
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 28 19:17:00 2024 -0600
+
+    edied list search
+
+commit af24a03a659465ba94a1c59b82b8a8ba46e819de
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 28 19:15:15 2024 -0600
+
+    removed useless functions and cleaned up the increase memory
+
+commit 286ccd1689cd9259844f3f1d3778a980f94343df
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 28 18:38:16 2024 -0600
+
+    moved list concat from listadder to listremovers
+
+commit 6c3291523fd29c40f180dda4ae1d99c505b3800f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Sep 28 18:33:45 2024 -0600
+
+    added listsearch to listmovers
+
+commit a4c7455afbdb2645bcccc8ac320ec6ffb861ec3d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 26 20:20:16 2024 -0600
+
+    added list concate ti list adder
+
+commit ac9038dd974849e7ddb1466abb0ca8b2800ea1f1
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 18:12:50 2024 -0600
+
+    More ignore rules for xv6
+
+commit 14ba6ca8bc4be18418fd68a1fdfd8f6c727b9b3f
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 18:02:22 2024 -0600
+
+    Ignoring even more xv6 built files
+
+commit 6e41930723e96644c87f00a0afad432edc8d9a2a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 18:01:35 2024 -0600
+
+    Removed object files and other things that shouldn't be tracked.
+
+commit c4525d5932a4d59afc9fa7af5d2b9bfa37c27341
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 26 17:18:45 2024 -0600
+
+    added the search and cleaned up the other functions
+
+commit cf1d67967d661da085330c17bc8583b81983d640
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 17:10:30 2024 -0600
+
+    Removed uneeded files
+
+commit 455ba3931d021d78368ff58aa09443bcfdc9a593
+Merge: cb58dd1 7097bc3
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 17:07:36 2024 -0600
+
+    Merge branch 'main' into wahhaj_assignments
+
+commit 7097bc3125bc944003ea6c4ba0d56b33b393a89a
+Merge: 3c0347e eb94345
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 17:04:58 2024 -0600
+
+    added xv6
+
+commit cb58dd1eb84785607dc23326dcd4fa64110bd8f6
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 26 16:37:04 2024 -0600
+
+    Stack sizes configured on all APIs
+
+commit 52a1a72ccb9e49db25648640ad620363392f5e0b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Sep 26 15:44:40 2024 -0600
+
+    copied the directory from main
+
+commit 8b86b56a645159dd1d09f3bc5c81084c55e4960c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Sep 25 18:24:10 2024 -0600
+
+    Plan added for finetuning stack stize
+
+commit 3c0347e0b96018453d0484b38a6fbfa38cf368c5
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Sep 25 13:32:16 2024 -0600
+
+    Initial commit A1 phase 3
+
+commit d57bcf9bc48baa952bba0d062fc0abe5071d4a44
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Sep 25 13:28:52 2024 -0600
+
+    removed unwanred files
+
+commit 8e37c53f16756137ee3c21b0550c6b7fd81a4d9f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Sep 24 17:21:30 2024 -0600
+
+    copied the files for a1 final phase
+
+commit 3a39caf8136cb22109917045657473156c57983b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Sep 24 17:17:38 2024 -0600
+
+    copied the files for a1 final phase
+
+commit 5422dd19e05c8d2acf2ca8a2c5071081443a57ac
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Sep 24 17:13:11 2024 -0600
+
+    copied the files for a1 final phase
