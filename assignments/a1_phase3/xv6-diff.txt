@@ -1,3 +1,7 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-10-03
+
 diff --git a/assignments/xv6/.gdbinit.tmpl-riscv b/assignments/xv6/.gdbinit.tmpl-riscv
 new file mode 100644
 index 0000000..faff3cc
