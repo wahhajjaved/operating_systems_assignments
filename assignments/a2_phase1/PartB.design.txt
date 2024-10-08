@@ -5,13 +5,50 @@
 Monitors Part c
 
 mutex = NewSem(1) // start mutex with wait 
+monList
 
 
-Procedures
+struct listData: //the struct holds all the data used by the monitors
+    sem      // semaphore
+    count
+    listItems
+
+Procedures:
 
 MonEnter()
+    P(mutex) // wait for signal
 
 MonLeave() 
+    V(mutex) // send signal to leave
+
 MonWait()
+    // search the list for conditional variable 
+    ListSearch(MonList, comparator, cmp)
+    // cmp is the conditional variable
+    // the comparator() function will be defined
+
+    if cmp not in list then add it to the list
+        listData = memory allocation
+        newData.sem =NewSem(0) 
+        newData.count=0
+        add to list by listAdd(MonList,newData)
+
+    newData.count ++
+
+    V(mutex)  //send the signal to mutex 
+
+    P(MonList.sem) // wait for the signal
+    MonList.count --
+
 MonSignal()
+    // search the list for conditional variable
+    ListSearch(MonList, comparator, cmp)
+    // cmp is the conditional variable
+    // the comparator() function will be defined
+
+    //if atleast one thread waiting 
+    if (ListData count >0)
+        V(listData.sem)
+
+
 
