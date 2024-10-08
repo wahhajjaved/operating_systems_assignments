@@ -50,5 +50,11 @@ MonSignal()
     if (ListData count >0)
         V(listData.sem)
 
+____________________________________________
+
+changes made 
+
+reader-writer
+changed rt threads to ubc pthreads
 
 
