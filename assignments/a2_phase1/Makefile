@@ -1,6 +1,14 @@
 # @author Wahhaj Javed, muj975, 11135711
 # @author Nakhba Mubashir, epl482, 11317060
 
+.PHONY: all clean
+
+all:reader-writer-test
+
+mkdirs: 
+	mkdir -p $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir)
+
+
 CC=gcc
 CFLAGS= -I. -I/student/cmpt332/pthreads -I/student/cmpt332/rtt\
 		-I/usr/include/tirpc -I/usr/include
@@ -57,6 +65,16 @@ $(build_list)/list_removers.o: list_removers.c list.h | mkdirs
 ################################################################
 ###################### Part B ##################################
 
+
+### Monitor ###
+
+$(lib_dir)/libMonitor.a: $(PartB_dir)/Monitor.o
+	ar -rcs $(lib_dir)/libMonitor.a $(PartB_dir)/Monitor.o
+
+$(PartB_dir)/Monitor.o: Monitor.c Monitor.h
+	$(compile) -o $(PartB_dir)/Monitor.o -c Monitor.c
+
+
 #### reader writer ####
 reader-writer-test: $(PartB_dir)/reader-writer.o \
 	$(PartB_dir)/reader-writer-monitor.o $(lib_dir)/liblist.a\
@@ -64,7 +82,7 @@ reader-writer-test: $(PartB_dir)/reader-writer.o \
 	
 	$(CC) -o reader-writer-test $(PartB_dir)/reader-writer.o \
 		$(PartB_dir)/reader-writer-monitor.o\
-		 -L$(lib_dir) -llist -lMonitor ${LINK_PTHREADS}
+		${LINK_PTHREADS} -L$(lib_dir) -lMonitor
 
 $(PartB_dir)/reader-writer.o: reader-writer.c reader-writer-monitor.h | mkdirs 
 	 $(compile) -o $(PartB_dir)/reader-writer.o -c reader-writer.c
@@ -73,22 +91,6 @@ $(PartB_dir)/reader-writer-monitor.o: reader-writer-monitor.c\
  		reader-writer-monitor.h Monitor.h | mkdirs
 	$(compile) -o $(PartB_dir)/reader-writer-monitor.o -c \
 		reader-writer-monitor.c
-
-### Monitor ###
-
-$(lib_dir)/libMonitor.a: $(PartB_dir)/Monitor.o
-	ar -rcs $(lib_dir)/libMonitor.a $(PartB_dir)/Monitor.o
-
-$(PartB_dir)/Monitor.o: Monitor.c Monitor.h 
-	$(compile) -o $(PartB_dir)/Monitor.o Monitor.c
-
-.PHONY: all clean
-
-all: reader-writer-test
-
-mkdirs: 
-	mkdir -p $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir)
-
 clean: 
 	rm -rf $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir) \
 		reader-writer-test
