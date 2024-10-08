@@ -1,0 +1,17 @@
+# @author Wahhaj Javed, muj975, 11135711
+# @author Nakhba Mubashir, epl482, 11317060
+
+------------------------------------
+Monitors Part c
+
+mutex = NewSem(1) // start mutex with wait 
+
+
+Procedures
+
+MonEnter()
+
+MonLeave() 
+MonWait()
+MonSignal()
+
