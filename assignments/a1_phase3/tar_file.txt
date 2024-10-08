@@ -15,12 +15,12 @@ list_adders.c
 list_movers.c
 list_removers.c
 mytestlist.c
+testlist.c
 PartD.design.txt
 PartD.testing.txt
 PartE.design.txt
 PartE.testing.txt
 Makefile
-../xv6-riscv/user/pingpong.c
-../xv6-riscv/user/primes.c
 xv6-diff.txt
 git-log.txt
+xv6-A1.tar

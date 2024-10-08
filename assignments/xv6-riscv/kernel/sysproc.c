@@ -100,6 +100,6 @@ sys_trace(void)
     argint(0, &mask); /* aquire the mask*/
     acquire (&p->lock);
     p->traceMask = mask; /*set the trace mask*/
-    release (&p->lock); 
+    release (&p->lock);
     return 0;
 }

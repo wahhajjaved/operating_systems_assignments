@@ -39,7 +39,8 @@ ifeq ($(os), Windows)
     all_exes = partA1
 	partA_exes = PartA1
 else ifeq ($(os), Linux)
-    all_exes = partA2 partA3 mytestlist
+    all_exes = partA2 partA3 mytestlist-$(kernel)$(arch) \
+	testlist-$(kernel)$(arch)
 	partA_exes = partA2 partA3
 else
     $(error Only Window and Linux are supported in this make file)
@@ -85,19 +86,27 @@ $(obj_dir)/square.o: square.c square.h
 ############################
 ########## Part C ##########
 
-c_objects := $(obj_dir)/mytestlist.o $(obj_dir)/list_movers.o \
-    $(obj_dir)/list_adders.o $(obj_dir)/list_removers.o
+c_objects := $(obj_dir)/testlist.o $(obj_dir)/mytestlist.o \
+    $(obj_dir)/list_movers.o $(obj_dir)/list_adders.o \
+    $(obj_dir)/list_removers.o
 
 #excecutable
-mytestlist: $(c_objects) $(lib_dir)/liblist.a
-	$(CC) $(CFLAGS) $(CPPFLAGS) -o mytestlist $(obj_dir)/mytestlist.o \
-    $(lib_dir)/liblist.a
+mytestlist-$(kernel)$(arch): $(c_objects) $(lib_dir)/liblist.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o mytestlist-$(kernel)$(arch) \
+    $(obj_dir)/mytestlist.o $(lib_dir)/liblist.a
+
+testlist-$(kernel)$(arch): $(c_objects) $(lib_dir)/liblist.a
+	$(CC) $(CFLAGS) $(CPPFLAGS) -o testlist-$(kernel)$(arch) \
+    $(obj_dir)/testlist.o $(lib_dir)/liblist.a
 
 # library
 $(lib_dir)/liblist.a: $(c_objects)
 	ar -c -r -s $(lib_dir)/liblist.a $(c_objects)
 
 #object files
+$(obj_dir)/testlist.o: testlist.c list.h
+	$(compile) -o $(obj_dir)/testlist.o -c testlist.c
+	
 $(obj_dir)/mytestlist.o: mytestlist.c list.h
 	$(compile) -o $(obj_dir)/mytestlist.o -c mytestlist.c
 
@@ -110,9 +119,9 @@ $(obj_dir)/list_adders.o: list_adders.c list.h
 $(obj_dir)/list_removers.o: list_removers.c list.h
 	$(compile) -o $(obj_dir)/list_removers.o -c list_removers.c
 
+
+
 #clean
-
-
 .PHONY: clean clean_all mkdirs
 
 mkdirs:

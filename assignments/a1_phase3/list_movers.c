@@ -2,7 +2,7 @@
  *@author Wahhaj Javed, muj975, 11135711
  *@author Nakhba Mubashir, epl482, 11317060
  *@date 2024-09-16
- *@editted 
+ *@editted
  */
 
 
@@ -45,7 +45,7 @@ void *ListLast(LIST *list){
     /* check if the list is empty or not*/
     if (list-> size ==0){
         return NULL;
-    } 
+    }
     list->curser=list->tail;
     return list->curser->item;
 }
@@ -82,9 +82,9 @@ void *ListPrev(LIST *list){
     if (list-> size ==0){
         return NULL;
     }
-    
+
     /* check if the curser is not list head*/
-    if (list -> curser == list -> head) {         
+    if (list -> curser == list -> head) {
         printf("ERROR: curser is list tail\n");
         return NULL;
     }
@@ -118,17 +118,17 @@ void *ListSearch(LIST *list,COMPARATOR comparator,void *comparisonArg){
     if (list-> size ==0){
         printf("ERROR: list empty\n");
         return NULL;
-    }    
+    }
 
     while (1){
         if ((*comparator)(list->curser->item, comparisonArg)==1) {
             return list->curser->item;
             }
-        
+
         if (list->curser ==list->tail){
             return NULL;
             }
-        
+
         list-> curser= list->curser->next;
     }
 }

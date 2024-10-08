@@ -25,7 +25,7 @@ struct
 Node:
     void *value
     Node *next
-    Node *prev   
+    Node *prev
 List:
     Node *head
     Node *tail
@@ -35,18 +35,18 @@ ____________________________________________________
 FUNCTIONS:
 ____
 LIST *ListCreate():
-description: creates a new empty list and return its reference or 
+description: creates a new empty list and return its reference or
 Null if fails
 
 
-algorithm: 
-    list size=0, 
+algorithm:
+    list size=0,
     add it dictionary
     if all list used: return Null
     else return the pointer to the head of the list (pointer to the list
 
 
-     
+
 test:
     1. calling the function to create new list for the first time
     2. calling it when atleat one list alreay exist
@@ -55,8 +55,8 @@ ____
 int ListCount(list)
 description: it returns the number of items in the list
 
-algorithm: 
-    check the size of list 
+algorithm:
+    check the size of list
     return list size
 
 test:
@@ -73,7 +73,7 @@ description: returns a pointer to the first item in list and makes the first
 
 algorithm:
     check if the list is not empty
-    list.cursor= list head 
+    list.cursor= list head
     list cursor next = head next
     list cursor prev = null
     return list head item
@@ -93,18 +93,18 @@ algorithm:
     list cursor prev = list tail prev
     return list last item
 test:
-    check if the item is right, the next pointer is null and prev is list 
+    check if the item is right, the next pointer is null and prev is list
     tail.prev
 ____
-void *ListNext(list) 
-description: goes to the next node in list, return the pointer to current 
+void *ListNext(list)
+description: goes to the next node in list, return the pointer to current
 item or NULL if no current item
 
 algorithm:
     if empty list OR list's last node then NULL
     else list curser =curser next
 
-test: 
+test:
     1. empty list
     2. last node in list
     3. first (it is diffrent from middle becuse prev is NULL)
@@ -117,7 +117,7 @@ item or NULL if no current item
 algorithm:
     if empty list OR list's first node then return NULL
     else list curser =curser prev
-    
+
 test:
     1. empty list
     2. first node in list
@@ -126,10 +126,10 @@ test:
 
 ____
 
-void *ListCurr(list) 
+void *ListCurr(list)
 description: returns a pointer to the current item in list
 
-algorithm: 
+algorithm:
     if list not empty
     return curser.item
 
@@ -138,16 +138,16 @@ test:
     2. curser at null when not empty
 ___
 int ListAdd(list, item)
-description:) adds the new item to list directly after the current item, 
-and makes the new item the current item. If the current pointer is at the 
-end of the list, the item is added at the end. Returns 0 on success, -1 
+description:) adds the new item to list directly after the current item,
+and makes the new item the current item. If the current pointer is at the
+end of the list, the item is added at the end. Returns 0 on success, -1
 on failure.
 
 algorithm:
     //create new node
     new node item = item
     new node prev= current prev
-    new node next =curser 
+    new node next =curser
     new curser = new node
     return 0
 
@@ -182,12 +182,12 @@ test:
     5. add to full
 
 ___
-int ListAppend(list, item) 
+int ListAppend(list, item)
 
-description:adds item to the end of list, and makes the new item the current 
+description:adds item to the end of list, and makes the new item the current
 one. Returns 0 on success, -1 on failure.
 
-algorithm: 
+algorithm:
     new node item = item
     new node prev= listlast()
     new node next =null
@@ -222,7 +222,7 @@ test:
 
 ___
 void *ListRemove(list)
-description:Return current item and take it out of list. Make the next item 
+description:Return current item and take it out of list. Make the next item
 the current one.
 
 algorithm:
@@ -230,7 +230,7 @@ algorithm:
         Node prevcurrent next= node newcureent
         node newcurrent prev = node prevcurrent
         list size decrease by 1
-        add it freed_node 
+        add it freed_node
 
 test:
     1. remove from starting and check size
@@ -287,12 +287,12 @@ algorithm:
         listfirst(list)
         if (*comparator)(list->current->item, comparisonArg) == 1
 		    	return list->current.item
-	    while list.current != list.tail	
+	    while list.current != list.tail
 	    return null
     else return NULL
 
 test:
-    1. test with invalid parameter 
+    1. test with invalid parameter
 
 _____
 my own function:

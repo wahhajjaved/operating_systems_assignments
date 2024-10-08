@@ -18,16 +18,16 @@ TEST CASE SUCCESS: ListCreate() after doubling
 TEST CASE SUCCESS: ListCreate() after doubling
 TEST CASE SUCCESS: ListCreate() after doubling
 test:_________ Empty list_________
-ListCount() successful!! with empty 
-ListFirst() successful!! with empty 
-ListLast() successful!! with empty 
-ListNext() successful!! with empty 
+ListCount() successful!! with empty
+ListFirst() successful!! with empty
+ListLast() successful!! with empty
+ListNext() successful!! with empty
 ListPrev() successful!! with empty
  ERROR: list empty
 ListCurr() successful!! with empty
- ERROR: list empty 
+ ERROR: list empty
 ListRemove() successful!! with empty
- ERROR: list empty 
+ ERROR: list empty
 ListTrim() successful!! with empty
  ERROR: list empty
 ListConcat() successful!! with empty
@@ -36,47 +36,51 @@ ListSearch() sucessfull on finding an item in an empty list
 ________ListADD()___________
 test: Empty list()
 ListAdd() successful for empty list!!
-test: adding with one item 
+test: adding with one item
 ListAdd() successful!! with one item
-test: adding with at tail 
+test: adding with at tail
 ListAdd() successful!! with AT TAIL
-ListLast() successful!! tested with ListAdd(), curser was at last 
-test: adding with at head 
+ListLast() successful!! tested with ListAdd(), curser was at last
+test: adding with at head
 ListAdd() successful!! after head
-ListFirst() successful!! tested with ListAdd(), curser was at start 
-test: adding at the middle 
+ListFirst() successful!! tested with ListAdd(), curser was at start
+test: adding at the middle
 ListAdd() successful!! in the middle
-ListNext() successful!! tested with ListAdd(), curser is where its supposed to be 
+ListNext() successful!! tested with ListAdd(), curser is where its supposed to 
+be
 size: 7
 [44 99 18 99 55 44 99 ]
-test: adding with to a null list 
-ERROR: list is NULL 
+test: adding with to a null list
+ERROR: list is NULL
 ListAdd() successful!! with NULL list
 ________ListInsert()___________
-test: inserting with one item 
+test: inserting with one item
 ListInsert() successful on empty list
-test: listcount when list is not empty and have one itemListCount() successful!! with one item in empty test: inserting with one item 
+test: listcount when list is not empty and have one itemListCount() successful!
+! with one item in empty test: inserting with one item
 ListInsert() successful!! with one item
-test: inserting at tail 
+test: inserting at tail
 ListInsert() successful!! with AT TAIL
-ListLast() successful!! tested with ListInsert(), curser was at last 
-test: insert with at head 
+ListLast() successful!! tested with ListInsert(), curser was at last
+test: insert with at head
 ListInsert() successful!! after head
-ListFirst() successful!! tested with ListInsert(), curser was at start 
-test: inserting at the middle 
+ListFirst() successful!! tested with ListInsert(), curser was at start
+test: inserting at the middle
 ListInsert() successful!! in the middle
-ListPrev() successful!! tested with ListInsert(), curser is where its supposed to be 
+ListPrev() successful!! tested with ListInsert(), curser is where its supposed 
+to be
 size: 7
 [99 44 55 18 99 99 55 ]
-test: listcount when list is not emptyListCount() successful!! with items in list test: inserting with to a null list 
-ERROR: list is NULL 
+test: listcount when list is not emptyListCount() successful!! with items in 
+list test: inserting with to a null list
+ERROR: list is NULL
 ListInsert() successful!! with NULL list
 ________ListAppend()___________
 test: Empty list()
 ListAppend() successful!!
 test: non Empty list()
 ListAppend() successful!! when there are multiple items
-ListCurr() successful!! with ListAppend() when there are multiple item 
+ListCurr() successful!! with ListAppend() when there are multiple item
 ________ListPrepend()___________
 Test: Empty list()
 ListPrepend() successful!! on empty list

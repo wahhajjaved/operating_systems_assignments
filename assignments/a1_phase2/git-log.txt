@@ -1,8 +1,81 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-09-22
+
+commit 2798c65c290199057776c090e8ab422ce1c027b8 (HEAD -> main)
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 22:02:54 2024 -0600
+
+    no longer needed
+
+commit bb67168e50787a268051739390160ce8ce309ddc
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 22:02:46 2024 -0600
+
+    author info added
+
+commit d59f931d2810b79cf2425d4b76352ce12a63f81c
+Merge: ff62e17 494c0b9
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 21:54:22 2024 -0600
+
+    Merge branch 'wahhaj_assignments'
+
+commit 494c0b92dde8f55eceeb5b9b9bb4287fd3021f9d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 21:50:24 2024 -0600
+
+    Added part A1 test results
+
+commit ff62e17ff201d86ee9931d7f3a3d2995831208cb
+Merge: e44ba3a f1119aa
+Author: Wahhaj Javed (muj975) <2321-muj975@users.noreply.git.cs.usask.ca>
+Date:   Sun Sep 22 20:03:13 2024 -0600
+
+    Merge branch 'wahhaj_assignments' into 'main'
+    
+    commented out the checking statements from list_adders.c and 
+    list_removers.c,...
+    
+    See merge request cmpt332-fall2024/cmpt332-2024-group67!2
+
+commit f1119aa0073a5b34e0fd9b7e54562b8f6f30f8c3
+Merge: 92e522d 8b98e2a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 20:01:22 2024 -0600
+
+    Merge branch 'nakhba_assignments' into wahhaj_assignments
+
+commit 92e522d8a5bd8df09033220db55d09217fe55421
+Merge: 5e1f16e d045972
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 19:35:03 2024 -0600
+
+    Merge branch 'nakhba_assignments' into wahhaj_assignments
+
+commit 8b98e2a7fc58d990086d17626f09466399f7ed42
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Sep 22 19:20:19 2024 -0600
+
+    added new git log
+
 commit 33ef6a8ccff674fe02839f6434ef0876a7f3b0f8
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Sep 22 19:18:56 2024 -0600
 
     added increase memory
+
+commit 5e1f16ec58a306ddaf7b283fdd13a48ed34c7502
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 19:09:03 2024 -0600
+
+    submission check
+
+commit 18f2b6b94003bd02a90d1d7cf11d3f225a85692a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 19:00:06 2024 -0600
+
+    Part A2 and A3 test results added
 
 commit d045972dbda1fd419554be130f1a2ee879c5050a
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -16,11 +89,37 @@ Date:   Sun Sep 22 18:53:19 2024 -0600
 
     added git log
 
+commit 8a13417c949080731af0297d52df290f7dc72d30
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 18:46:41 2024 -0600
+
+    Test plan updated so test 16 work properly. PartA1 passes all tests
+
+commit bd04921ada62283b96d4f28c85734b88b3d19865
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 18:45:21 2024 -0600
+
+    Test input file renamed
+
+commit 3e052b945528df9c7cdf42e26808fade349f18be
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 18:45:03 2024 -0600
+
+    PartA1 compilation errors and warning fixed after extracting argument 
+    parser.
+
+commit 32091e518316dce6fde1716632743469ea7def5c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 18:26:20 2024 -0600
+
+    Timer added to part A2. Most tests pass. Segfault if size too large.
+
 commit aecb6fa6fb7293cc2a4aeff1973a05500a5ad187
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Sep 22 18:20:52 2024 -0600
 
-    commented out the checking statements from list_adders.c and list_removers.c, and editted while testing
+    commented out the checking statements from list_adders.c and 
+    list_removers.c, and editted while testing
 
 commit 0de5ddb4f605e72476982b6e1d1f2d72fbc9cddc
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -39,6 +138,30 @@ Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Sep 22 18:16:54 2024 -0600
 
     added the output from the tests
+
+commit c692df92000544c89c2dde966f655145b6241531
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 18:13:22 2024 -0600
+
+    Part A2 main thread sleep implemented
+
+commit d8cb2446e8df45cf2be27dee69f96dde14150e76
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 17:35:23 2024 -0600
+
+    Deadline reached test added. Part A3 passes all tests
+
+commit 6d3325104b5c6bd5790575a94c6172ebea3bbb0d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 17:30:46 2024 -0600
+
+    Part A3 now calculates elapsed time
+
+commit 326ecc1d08a77f5725852f210a8032035591406d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 17:15:32 2024 -0600
+
+    Fixed input validation. Tests now pass
 
 commit 9c5f04289cec788e194541dcdb2ccb9f423a28b2
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -70,6 +193,24 @@ Date:   Sun Sep 22 16:55:53 2024 -0600
 
     changed count to size
 
+commit 739f8529b382df2b21d702f106003a85cc1f99cc
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 16:43:07 2024 -0600
+
+    Test plan created
+
+commit a8dc1d055b38f955d3170e36f41d4b524aac5bf9
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 15:49:33 2024 -0600
+
+    Argument parsing method extracted
+
+commit 49866d5faae0d6c5e396eb5b9b9d3af453e8e1be
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 15:09:20 2024 -0600
+
+    Basic implementation for partA3. Compiles and runs
+
 commit 3cad75b17437b9d3556b714cc23640ea95d7e084
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Sep 22 15:01:45 2024 -0600
@@ -82,17 +223,41 @@ Date:   Sun Sep 22 14:56:32 2024 -0600
 
     added other functions in list_adder other than list concat
 
+commit fa09e6e93393cf0b73436baa57d40c913356d153
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 14:54:50 2024 -0600
+
+    Design for pthreads added
+
 commit 63090551382e4d0fbf00e39600f0a02facb66afe
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Sep 22 14:27:59 2024 -0600
 
     added Listadd
 
+commit 72093a7df4bd5e7793b0e907edeae2557cd4e7d3
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 14:14:30 2024 -0600
+
+    partA2 initial implementation. Compiles and runs.
+
 commit df75b8284bd5c0a871eff0a31900a3b3575c5aae
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Sep 22 13:44:33 2024 -0600
 
     started the testlist, added the variables
+
+commit b5cbecafe8aaad0e85a0a5a1f5b460eaa3981dde
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 12:13:20 2024 -0600
+
+    Elapsed time measurement plan added to design
+
+commit 415b9bc983e11c06021f9af40b4c960d3a0182f8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Sep 22 10:04:42 2024 -0600
+
+    Added design for part A2. Not done yet.
 
 commit 8e8e465876b369f406cf875197ad6d8366ae3270
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -106,6 +271,24 @@ Date:   Sat Sep 21 20:13:54 2024 -0600
 
     added listInit, newnode and newList
 
+commit 0bda9071c80ee057a6a44ad0e1373da3dac45cd5
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Sep 21 19:22:55 2024 -0600
+
+    Initial commit for partA2
+
+commit 989f62ea60ee00c3e506f47252d27385d3992a78
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Sep 21 19:09:58 2024 -0600
+
+    Design doc updated to include TlsAlloc()
+
+commit c96fef44f248d01c6bbfc9738ed3eb4810c90cd5
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Sep 21 19:02:42 2024 -0600
+
+    Fixed dangling pointer for lpParam in tmain()
+
 commit 9ef4e7bc080e2b6c91162f64d04551a7342ed4d1
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sat Sep 21 18:56:45 2024 -0600
@@ -118,6 +301,12 @@ Date:   Sat Sep 21 18:56:04 2024 -0600
 
     added the test plan according to the design
 
+commit 6744d4210581d667ef92dd67ff53b6f92eaa7f16
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Sep 21 18:50:40 2024 -0600
+
+    Switched to using TLS for storing index
+
 commit c2662a8d8787e08712a6599ccfd8ab71fcd26410
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sat Sep 21 17:00:06 2024 -0600
@@ -129,6 +318,12 @@ Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sat Sep 21 16:58:48 2024 -0600
 
     added the increasing memory and some global variables
+
+commit e4041b9dbec3efc8f177a20d96d908adedde1ad1
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Sep 21 15:33:41 2024 -0600
+
+    Updated win32 design
 
 commit b39b9c89d8d95ce27fbfbb2e4597ca570edc48ef
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -154,302 +349,9 @@ Date:   Sat Sep 21 13:41:20 2024 -0600
 
     Moved a1 phase 1 into assignment for consistance for merging
 
-commit 45664f6a831e869a9b060ee5ff05c5af80cf3050
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 21:39:05 2024 -0600
+commit 57f7e2d8ea1dd9f9b271b06f6fba8e15a9825d3b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 19 21:13:45 2024 -0600
 
-    fixed the warnings
+    Initial commit a1_phase2
 
-commit 09179e5332e066226838fd68f86d13873c3a0556
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 21:03:03 2024 -0600
-
-    fixed minor errors
-
-commit b9dd4af1445bac369cc92304b31e24b1ced081fb
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 20:27:11 2024 -0600
-
-    fixed mironr mistakes like semi colon and rearranged
-
-commit 4fe6ebe4b6cbf18a5aee00abb6c4f0f36797aff0
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 17:39:43 2024 -0600
-
-    problems with uname
-
-commit 9dfddcc84b020543730ff877f7a87eba0dd29db2
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 17:27:46 2024 -0600
-
-    forgot to update UNAME
-
-commit 01ef12cee7dea0591ba05ee5b6f7d67bbcea059b
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 00:20:01 2024 -0600
-
-    fixed spelling mistake and added itemfree and comparator
-
-commit bf8cc01b015ba233f5f87c45da792e2514e86944
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sun Sep 15 00:13:37 2024 -0600
-
-    implemented according to the instruction
-
-commit 931eafb333561daf00edda3f4b93bbff87df86fb
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 20:07:13 2024 -0600
-
-    added the git log
-
-commit a302bad5dc903e6e0c0144b2d47e3e3a3f62ac4b
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 19:53:15 2024 -0600
-
-    fixed minor error
-
-commit cf05fec246fa58751cdd0535355436ad8d9f878d
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 19:39:35 2024 -0600
-
-    added the checks for correct type and correct parameter
-
-commit c25d54914a3591fa1cdc3a5c67920eed249e2adf
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 19:39:06 2024 -0600
-
-    added max list and max node
-
-commit a4fef774c1471d3201a4cbbe05cb3d7c4a01c544
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 18:26:25 2024 -0600
-
-    added the checks for correct type and correct parameter
-
-commit 819eebba162a3403c022f71bff4f898862e6c6f4
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 18:17:55 2024 -0600
-
-    added the checks for correct type and correct parameter
-
-commit d8075c1de53560d0f25b929ddfdf1425345af21d
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 17:49:31 2024 -0600
-
-    added freed_list and frees_node
-
-commit 2a917e18e2a5f44a344104ed8d06e6da7ced5a6c
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 17:47:59 2024 -0600
-
-    added free_list and freed_node array to store the deleted nodes and array
-
-commit f3e00259f3035f4749e938df7135bb066685450d
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 13:45:19 2024 -0600
-
-    added listInsert which i missed before
-
-commit cfb9bd95b070a8acb85f37ca36469e51bc633d3a
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 13:43:27 2024 -0600
-
-     added the author info and documentation
-
-commit bb41fd5f5de00e88a76455037f3fd9dd5a6bb4fa
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Sat Sep 14 13:40:29 2024 -0600
-
-     added the Makfefile for Part C
-
-commit 4c366c98bf639a4978c717c7538e356340b4836b
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 22:31:10 2024 -0600
-
-    finished the documentations for each function
-
-commit cc0fcd1e3772cd8f83ef9353c31c64cda3d7c7c9
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 22:02:12 2024 -0600
-
-    added the prototype and the function parameter
-
-commit 99ea60079dc02a1bc54bfebbde0ccba50f51b637
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 22:01:27 2024 -0600
-
-    fixed minor problems
-
-commit 4274229db8cf7d958859847ed6287479757ee93e
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 21:41:44 2024 -0600
-
-    added the function parameter for list search and list free
-
-commit 5a20b1c978c78ab26b560c1731c560bb7a1ce379
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 21:36:33 2024 -0600
-
-    added the rest of the functions
-
-commit 7332ec77e6ce5b560d816a3ac844807cfa49dd55
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 17:55:44 2024 -0600
-
-    added lisycount
-
-commit 727917448d85e3a7e6770d55ca30c4a334dd17ce
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 14:09:29 2024 -0600
-
-     added the list stuct will be stored in an array
-
-commit bb7d9ea54b3238bac05094fa7cce32e33685cf96
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 14:07:33 2024 -0600
-
-     added the list stuct will be stored in an array
-
-commit b2711236320645447391371f449c452168554c4e
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 14:06:34 2024 -0600
-
-     added the structs and function prototypes
-
-commit 4f86130081f8f56c0b5731a85e42011aa2840dd0
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Fri Sep 13 09:21:50 2024 -0600
-
-    statrted the design, finished the sturctures, list create, list first item.
-
-commit 99120751c11268b481a06581a1f6c888659d2a2d
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 22:08:05 2024 -0600
-
-     initiate commit
-
-commit a08d8c4ac8edbef8fcb594b83adf47062a1810d2
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 21:22:35 2024 -0600
-
-    removed unwanted .o files
-
-commit 6a1bcabb9774ca0a1e8a20224837447e4de22d9b
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 18:32:04 2024 -0600
-
-    lab1
-
-commit 5295b4d591a67f525ac9d3f01ffa08c7bbcfc8e8
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 18:26:15 2024 -0600
-
-     made the makefile in 80 characters
-
-commit c5453c22a19f2932b239acf3e947ee5dec80124c
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 18:14:51 2024 -0600
-
-    added python.txt
-
-commit 9d64e675e8de65cf052f5a2deeb822f19cc990aa
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 18:09:23 2024 -0600
-
-    fixed the errors and added -10 after gcc
-
-commit f12a1e28ca85d005255f0f85436154776d0c539a
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 16:18:27 2024 -0600
-
-    corrected small spelling mistake
-
-commit 2776154604cc96cc87ea10c7d16370ae996de8dd
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 16:17:41 2024 -0600
-
-    edited the bash file with the options for architecture
-
-commit 80957657598942d8d3544219715ac6d840885b5e
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 15:19:57 2024 -0600
-
-    correct error with linking wrong library for linux
-
-commit 45d143b3d4987e6dca26dd79f3c98120a5dc398c
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Thu Sep 12 08:49:13 2024 -0600
-
-    installed the Ubuntu virtual machine
-
-commit 51207e38c50c561db161807f409d0a79f17f0381
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 23:05:39 2024 -0600
-
-    fixed minor errors like wrong variable names and added more values for clean
-
-commit 182fbcd88862bcaa57a090eb58b6a2673ba14bf8
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 22:14:49 2024 -0600
-
-    could not locate standard.h
-
-commit c5b1f48850f765b87135ee00a9a45af2d56e3eac
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 22:01:22 2024 -0600
-
-    found the link list and added it to the makefile
-
-commit a28658b64512715c7f83729e4bc414cb103f38da
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 17:47:28 2024 -0600
-
-    corrected the ARM naming to raspi to be more consistant with the lab manual
-
-commit c80a381bb9548ce86fa98a38928c1c6c6395d6ee
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 17:12:37 2024 -0600
-
-    wrote the bash script
-
-commit b6e43d12facf78be0bdf1d759e2835d7bfedcb0b
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 16:24:25 2024 -0600
-
-    added and linked libraries
-
-commit d1be863bd2f41ebe6e92b5597a8b762957d23bbc
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 16:11:05 2024 -0600
-
-    added object files for all three compilers
-
-commit c3b722e8f4ddea222aaa65a7f7d88e57d37dbe06
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 15:29:40 2024 -0600
-
-    added directories for linux 64
-
-commit 7424bc177613548627559554c3b3cb7aa0bd11c1
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 15:25:52 2024 -0600
-
-    added directories for ppc and arm
-
-commit 0eb18fb7a9e9ecdd56c77541f031f481fb7e5adf
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 13:57:01 2024 -0600
-
-    initate commit and started editing
-
-commit aa22ae15ede9a630c05a11d73f16329901ed446f
-Author: Nakhba Mubashir <epl482@usask.ca>
-Date:   Wed Sep 11 11:42:54 2024 -0600
-
-    added the given files
-
-commit e44ba3acfeec8612123bdf6f4d92ad1f2df1beaa
-Author: Dwight Makaroff (dwm138) <makaroff@cs.usask.ca>
-Date:   Mon Sep 9 22:25:46 2024 -0600
-
-    Initial commit

@@ -44,7 +44,7 @@ void Increse_node_Memory(){
 
 LIST *ListCreate(){
     LIST *newList;
-    
+
     if (listDict == NULL){
         int i;
         /* Allocating memory */
@@ -63,7 +63,7 @@ LIST *ListCreate(){
 
         for ( i=0; i<(MIN_LISTS); i++){
             listDict[i].size=0;
- 
+
             if (i == MIN_LISTS - 1) {
                 listDict[i].nextfreeList = NULL;
             } else {
@@ -72,7 +72,7 @@ LIST *ListCreate(){
          }
         for ( i=0; i<(MIN_NODES-1); i++){
             nodeDict[i].next= &nodeDict[i+1];
-            
+
             if (i==0){
                  nodeDict[i].prev= NULL;
             }
@@ -92,7 +92,8 @@ LIST *ListCreate(){
             /* doubling the memory  */
         newListDict =(LIST*) realloc(listDict,Num * sizeof(LIST));
         if (newListDict ==NULL) {
-            errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");                return NULL;
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");
+            return NULL;
             }
         listDict=newListDict;
 
@@ -112,7 +113,7 @@ LIST *ListCreate(){
     newList= aviableList;
     aviableList= newList-> nextfreeList;
     newList-> nextfreeList= NULL;
-    
+
     newList -> head= NULL;
     newList -> tail= NULL;
     newList -> curser= NULL;
@@ -125,7 +126,7 @@ LIST *ListCreate(){
 
 int ListAdd(LIST *list,void *item){
     NODE *newNode;
-/*    
+/*
   if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
@@ -133,7 +134,7 @@ int ListAdd(LIST *list,void *item){
     }
     if (item == NULL){
         printf("ERROR: item is NULL");
-        return -1;   
+        return -1;
     }
     if (aviableNode ==NULL){
         printf("ERROR: no aviabkle node");
@@ -144,13 +145,13 @@ int ListAdd(LIST *list,void *item){
     }
     /*get an unused node  */
     newNode = aviableNode;
-    aviableNode = aviableNode-> next; 
-    nodeNum++;   
+    aviableNode = aviableNode-> next;
+    nodeNum++;
     /*initialize and add to list*/
     newNode-> item = item;
     newNode-> next = NULL;
     newNode-> prev = NULL;
-    
+
     if (list->size==0){ /* if list is empty */
         newNode-> next =NULL;
         list-> head = newNode;
@@ -192,7 +193,7 @@ int ListInsert(LIST *list,void *item){
 
     /*get an unused node  */
     newNode = aviableNode;
-    aviableNode = aviableNode-> next;    
+    aviableNode = aviableNode-> next;
     nodeNum++;
 
     /*initialize and add to list*/
@@ -221,7 +222,7 @@ int ListInsert(LIST *list,void *item){
 }
 
 int ListAppend(LIST *list, void *item){
-    NODE *newNode; 
+    NODE *newNode;
     /* if the List struct pointer is not right*/
     if (list == NULL) {
         printf("ERROR: list is NULL \n");
@@ -237,7 +238,7 @@ int ListAppend(LIST *list, void *item){
 
     /*get an unused node  */
     newNode = aviableNode;
-    aviableNode = aviableNode-> next;    
+    aviableNode = aviableNode-> next;
     nodeNum++;
 
     /*initialize and add to list*/
@@ -275,7 +276,7 @@ int ListPrepend(LIST *list,void *item){
     }
         /*get an unused node  */
     newNode = aviableNode;
-    aviableNode = aviableNode-> next;    
+    aviableNode = aviableNode-> next;
     nodeNum++;
 
     /*initialize and add to list*/

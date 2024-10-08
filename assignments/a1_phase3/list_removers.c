@@ -34,7 +34,7 @@ void Decrease_list_memory(){
 
         }
     }
-    
+
 }
 
 void Decrease_node_memory(){
@@ -48,7 +48,7 @@ void Decrease_node_memory(){
             errx(1, "ERROR: MEMORY ALLOCATION FAILED\n");
             return ;
         }
-        
+
         nodeDict = newNodeDict;
         aviableNode = NULL;
 
@@ -59,7 +59,7 @@ void Decrease_node_memory(){
                 nodeDict[i].prev = &nodeDict[i-1];
             } else {
                 nodeDict[i].prev = NULL;
-            }            
+            }
             aviableNode = &nodeDict[i];
         }
     }
@@ -72,19 +72,19 @@ void *ListRemove(LIST *list){
     void *currItem;
 
     /* if the List struct pointer is not right */
-    if (list == NULL) { 
+    if (list == NULL) {
         printf("ERROR: list is NULL \n");
         return NULL;
     }
 
     /* check if the list is empty or not */
-    if (list-> size ==0){ 
+    if (list-> size ==0){
         printf("ERROR: list empty \n");
         return NULL;
     }
 
     removeNode= list->curser;
-    currItem= list->curser->item;   
+    currItem= list->curser->item;
     if (list->size == 1){
         list->head = NULL;
         list->tail = NULL;
@@ -92,18 +92,18 @@ void *ListRemove(LIST *list){
     }
 
    else  if (list->curser == list->tail){
-        list->tail = list->curser->prev;            
+        list->tail = list->curser->prev;
         removeNode->prev = NULL;
         list->tail->next = NULL;
         list->curser =list->tail;
-      
+
     }
     else if (list->curser == list->head){
         list->head = list->curser->next;
         list->head->prev = NULL;
         removeNode->next = NULL;
         list->curser =list->head;
-        
+
     }
     else {
         list->curser->prev->next = list->curser->next;
@@ -120,7 +120,7 @@ void *ListRemove(LIST *list){
 
     if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    } 
+    }
 
     return currItem;
 }
@@ -161,7 +161,7 @@ void ListFree(LIST *list, ITEMFREE itemFree){
 
     if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    } 
+    }
 
 }
 
@@ -171,20 +171,20 @@ void *ListTrim(LIST *list){
     void *lastItem;
 
     /* if the List struct pointer is not right */
-    if (list == NULL) { 
+    if (list == NULL) {
         printf( "ERROR: list is NULL \n");
         return NULL;
     }
 
     /* check if the list is empty or not */
-    if (list-> size ==0){ 
+    if (list-> size ==0){
         printf("ERROR: list empty \n");
         return NULL;
     }
 
     removeNode = list->tail;
     lastItem = list->tail->item;
-    
+
     if (list->size == 1){
         list->head = NULL;
         list->tail = NULL;
@@ -195,18 +195,18 @@ void *ListTrim(LIST *list){
         removeNode->prev = NULL;
         list->tail->next = NULL;
         list->curser =list->tail;
-        
+
     }
     list->size--;
     listNum--;
 
     removeNode->next= aviableNode;
     aviableNode = removeNode;
-    
+
 
     if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    } 
+    }
 
     return lastItem;
 
@@ -224,7 +224,7 @@ void ListConcat(LIST *list1, LIST *list2){
         return ;
     }
 
-    /*list1 is empty and list2 not empty 
+    /*list1 is empty and list2 not empty
     * concatenate to an empty list */
     if (list1->size == 0 && list2->size !=0){
         list1->head = list2->head;
@@ -252,7 +252,7 @@ void ListConcat(LIST *list1, LIST *list2){
 
     if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    } 
+    }
 }
 
 

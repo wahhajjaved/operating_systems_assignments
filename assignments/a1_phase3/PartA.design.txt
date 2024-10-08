@@ -27,40 +27,66 @@ Solution
 
     - To signal child threads to stop, a global boolean variable can be
         checked at the start of Square()
-    
+
     - Different platforms require different function signatures for the thread
-        entry point. Can't change Square() to match this func requirement 
-        on windows since CreateThread requires 
+        entry point. Can't change Square() to match this func requirement
+        on windows since CreateThread requires
         DWORD WINAPI MyThreadFunction( LPVOID lpParam ). So a wrapper function
         can be used which calls Square()
-    
+
     - This wrapper function will be platform specific but will call the same
         Square() function
-        
-    - On exit, threads are required to output elapsed time. The wrapper 
+
+    - On exit, threads are required to output elapsed time. The wrapper
         will get the start time before calling Square() and compute the elapsed
         time after Square() returns.
-        
+
      - On exit threads are required to output Square()'s invocation count. This
-        can be stored inside a global array. Each thread gets one element in 
-        that array to store its count. Square() will need to know the index to 
+        can be stored inside a global array. Each thread gets one element in
+        that array to store its count. Square() will need to know the index to
         store data. Options are discussed below in the Data Storage section
-        
-    - Using thread local storage is the best option as it gets rid of the 
+
+    - Using thread local storage is the best option as it gets rid of the
         overhead of getting the thread ID every invocation of Square().
-    
-    
+
+    - Each thread is created with a certain of stack space: 1MB in win32 by
+        default. In pthreads, the default is architecture dependent. It must
+        be set by users in UBC pthreads
+
+    - If Square() recurses too many times, it will fill up its stack and start
+        using the next thread's stack which will likely cause a crash
+
+    - There is no way to detect a stackoverflow at runtime so it can't be
+        handled at runtime. So the max allowed value of input argument size
+        must be determined empirically
+
+    - Based on in class discussion, Square() should complete its calculations
+        within 15 - 30 seconds which provides an upper bound on the input
+        argument size.
+
+    - The stack size can be finetuned by measuring how big size must be based
+        on how quickly the function exits while running on a single thread
+
+    - Based on run time, size = 65535 will be set as the maximum supported size
+        value. For a single thread, it takes about 20-30 seconds to compute
+        across the different APIs.
+
+    - size = 65535 is the maximum value that works using the default pthreads
+        stack size. Stack size of UBC pthreads and win32 threads will be
+        configured such that they can compute this size without segfaulting
+
+
 
 Part A1 Design
-    
+
     - In windows, threads are created using CreateThread()
-    
-    - CreateThread() requires the function to be run in the form of 
-        DWORD WINAPI MyThreadFunction( LPVOID lpParam ). 
-    
-    - In windows, thread local variables are used by first getting an index 
+
+    - CreateThread() requires the function to be run in the form of
+        DWORD WINAPI MyThreadFunction( LPVOID lpParam ).
+
+    - In windows, thread local variables are used by first getting an index
         using TlsAlloc() in the main thread. Then each child thread can use
-        TlsSetValue() and TlsGetValue() to set and get data. 
+        TlsSetValue() and TlsGetValue() to set and get data.
 
     - Assignment specs recommend GetSystemTime() to get the current time, but
         this method is only accurate to miliseconds. Furthermore, it returns
@@ -97,26 +123,29 @@ Part A1 Design
             ElapsedMicroseconds.QuadPart *= 1000000;
             ElapsedMicroseconds.QuadPart /= Frequency.QuadPart;
 
+    - For size = 65535, stack size needs to be 5MB
+
+
 
 Part A2 Design
 
     - UBC pthreads use the word process for threads
-    
+
     - New processes are created using Create(). It is declared in os.h as
         EXTERN PID  Create( void(*)(),  int, char *, void *, PPRIO, int );
-    
-    - The documentation on Canvas defines it as PID Create(void(*addr)(), 
+
+    - The documentation on Canvas defines it as PID Create(void(*addr)(),
         int stksize, char *name, void *arg, PPRIO prio, int level)
-    
-    - The first argument is the function pointer to the entry point of the 
+
+    - The first argument is the function pointer to the entry point of the
         thread. Based on the documentation and how it was used in Lab 1, this
         function pointer needs to be cast to one without any parameters
-        
+
     - The parameters to the function are passed through the void *arg argument
 
     - char *name is a user defined string attached to a thread. This can be
         used to pass the index to the global array in which Square()'s call
-        count is stored. 
+        count is stored.
 
     - The other parameters can be set to how they are set in Lab 1 sample code
 
@@ -125,24 +154,26 @@ Part A2 Design
         that hasn't finished executing when the deadline occurs.
 
     - Kill() is used for killing child threads. It requires the PID of the
-        thread to be killed and returns the same PID if successfull and 
+        thread to be killed and returns the same PID if successfull and
         PNUL not.
 
     - Another option is that a structure can be used to store everything about
         the thread, including whether it has finished and printed its output.
-        If it hasn't, then the main thread can handle the printing. 
+        If it hasn't, then the main thread can handle the printing.
 
-    - UBC pthreads have StartETimer() and StopETimer() defined in os.h which 
+    - UBC pthreads have StartETimer() and StopETimer() defined in os.h which
         can be used to get elapsed time. However, there are only 32 timers
         available to use with these methods and so won't work if the number of
         threads is larger than 32
-    
+
     - Since part A2 is only supposed to run on Linux, the timing method used
-        for part A3 can be used
-    
+        for part A3 can be used i.e. clock_gettime() in time.h
+
     - UBC pthreads do not have a mechanism for thread local storage. However,
         each thread can be given a name. The index can be stored in this name.
-    
+
+    - For size = 65536, UBC Pthreads requires 4MB stack size for the child
+
 
 Part A3
 
@@ -150,32 +181,35 @@ Part A3
                           const pthread_attr_t *restrict attr,
                           void *(*start_routine)(void *),
                           void *restrict arg);
-        
-        is used to create a pthread. 
+
+        is used to create a pthread.
         pthread_create stores the thread id in thread
         attr should be set to NULL for default attributes
         start_routine is the entry point of thread
         arg is the argument to start_routine
-    
+
     - pthread_key_create() is used to create thread local storage. Then
-        pthread_setspecific() is used to set a variable and 
+        pthread_setspecific() is used to set a variable and
         pthread_getspecific() to get that variable.
-        
+
     - The time can be obtained using clock_gettime() system call available
-        in time.h. 
+        in time.h.
             int clock_gettime(clockid_t clk_id, struct timespec *tp);
 
     - For measuring elapsed time, CLOCK_MONOTONIC is the recommended value
         for the clk_id parameter
-    
-    - The second argument is just a struct into which clock_gettime() will 
+
+    - The second argument is just a struct into which clock_gettime() will
         store the time. Two structs can be created as
             struct timespec startTime, endTime;
         These structs are then passed to clock_gettime()
-    
+
     - timespec struct has a second field and a nanosecond field so calculating
-        the difference between two of these structs is not as simple as 
+        the difference between two of these structs is not as simple as
         subtracting them, but its also not too difficult either
+
+    - Using the default thread stack size, the stack will overflow when size is
+       greater than 65535
 
 
 Data Storage
@@ -184,16 +218,16 @@ Data Storage
     m = number of times Square is called
     O(getThreadID) = Time complexity of the system call used get the thread
         ID of the current thread.
-    
+
     Data used by Square() is stored in an array called threadData.
     This array has n elements.
 
 Option 1:
     - On each invocation of Square()
-        Get thread id 
+        Get thread id
         search through threadData to find a threadId match
         update data
-    
+
     get index time complexity on each call of Square() = O(n) + O(getThreadID)
 
 
@@ -201,20 +235,19 @@ Option 1:
 Option 2:
     - Index passed to wrapper and stored in a global variable using thread
         local storage. Square() can then get the index from this variable.
-    
+
     get index time complexity on each call of Square() = O(1)
-    
+
 
 
 Option 3:
-    - Use hashing to convert a threadid to an index. 
+    - Use hashing to convert a threadid to an index.
     - On windows, thread IDs are guarenteed to be unique system wide while the
         thread exists
     - In pthreads, thread IDs are only guarenteed to be unique within a process
     - Uniqueness means no collisions so the hash will have O(1) access time.
-    - Hash built by main thread. Square() gets the current thread ID and then 
+    - Hash built by main thread. Square() gets the current thread ID and then
         gets the index by hashing it.
-    
+
     get index time complexity on each call of Square() = O(1) + O(getThreadID)
-    
-    
+

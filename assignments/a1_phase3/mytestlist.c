@@ -26,7 +26,7 @@ int main(void){
     e=18;
     c=99;
     I1=&a;
-    I2=&b;    
+    I2=&b;
     I4=&d;
     I5=&e;
     I3=&c;
@@ -50,21 +50,23 @@ int main(void){
     for (i=0; i<5; i++){
         LTest= ListCreate();
         if (LTest ==NULL){
-            printf("TEST CASE FAILED: ListCreate returned NULL on several list: list %d\n", i+1);
+            printf("TEST CASE FAILED: ListCreate returned NULL on several list\
+: list %d\n", i+1);
         }
         else {
             printf("TEST CASE SUCCESS: ListCreate() on several list\n");
         }
     }
 
-        
+
 /*     testing egde case: creating several lists for doubling memory
 */
     printf("bonus marks\n");
     for (i=MIN_LISTS; i<9; i++){
         LTest= ListCreate();
         if (LTest ==NULL){
-            printf("TEST CASE FAILED: ListCreate returned NULL AFTER DOUBLING: list %d\n", i+1);
+            printf("TEST CASE FAILED: ListCreate returned NULL AFTER DOUBLING"
+" list %d\n", i+1);
         }
         else {
             printf("TEST CASE SUCCESS: ListCreate() after doubling\n");
@@ -76,7 +78,7 @@ int main(void){
     L3= ListCreate();
     L4= ListCreate();
     L5= ListCreate();
-    
+
 
     /* testing with empty list*/
 
@@ -86,7 +88,7 @@ int main(void){
         printf("ListCount() successful!! with empty \n");
         testpassed++;
     }else {
-        printf("ListCount() FAILED! with empty \n");        
+        printf("ListCount() FAILED! with empty \n");
         printf("list count:%d\n",ListCount(L2));
 
     }
@@ -163,7 +165,7 @@ int main(void){
     tests++;
     resultPtr= (int*) ListSearch(L1, testComp,cArg);
     if (resultPtr==NULL){
-        printf("ListSearch() sucessfull on finding an item in an empty list\n");
+        printf("ListSearch() sucessfully found an item in an empty list\n");
         testpassed++;
     } else {
         printf("ListSearch() Failed on finding an item in an empty list\n");
@@ -198,7 +200,7 @@ int main(void){
              testpassed++;
         }
     ListAdd(L1, I2);
-    ListAdd(L1, I1);   
+    ListAdd(L1, I1);
 
     printf("test: adding with at tail \n");
     ListLast(L1);
@@ -211,7 +213,9 @@ int main(void){
     }
         else {
             printf("ListAdd() successful!! with AT TAIL\n");
-            printf("ListLast() successful!! tested with ListAdd(), curser was at last \n");
+            printf("ListLast() successful!! tested with ListAdd(), cursor "
+                "was at last\n"
+            );
             testpassed++;
         }
 
@@ -261,7 +265,7 @@ int main(void){
         printf("ListAdd() successful!! with NULL list\n");
         testpassed++;
 }
-    
+
     printf("________ListInsert()___________\n");
     printf("test: inserting with one item \n");
     result=ListInsert(L2, I2);
@@ -276,7 +280,7 @@ int main(void){
         testpassed++;
         }
 
-   /*listcount after item is added to empty list*/ 
+   /*listcount after item is added to empty list*/
     printf("test: listcount when list is not empty and have one item" );
     tests++;
     if (ListCount(L2) ==1){
@@ -286,7 +290,7 @@ int main(void){
     else {
         printf("ListCount() FAILED! with empty ");
         printf("list count:%d\n",ListCount(L2));}
-    
+
     printf("test: inserting with one item \n");
     result=ListInsert(L2, I5);
     tests++;
@@ -312,7 +316,8 @@ int main(void){
     }
         else {
             printf("ListInsert() successful!! with AT TAIL\n");
-            printf("ListLast() successful!! tested with ListInsert(), curser was at last \n");
+            printf("ListLast() successful!! tested with ListInsert(), curser\
+was at last \n");
             testpassed++;
         }
 
@@ -372,8 +377,8 @@ int main(void){
     else {
         printf("ListInsert() successful!! with NULL list\n");
         testpassed++;
-    }    
-	
+    }
+
 
     printf("________ListAppend()___________\n");
     printf("test: Empty list()\n");
@@ -420,7 +425,7 @@ int main(void){
     printf("Test: Empty list()\n");
     tests++;
     result=ListPrepend(L4, I4);
-    if (result !=-0){ 
+    if (result !=-0){
         printf("listPrepend FAILED on an empty list.\n");
         printf("list4=");
         Print_List(L4);
@@ -509,7 +514,7 @@ int main(void){
         testpassed++;
     }
 
-    
+
     printf("________________ListRemove()___________________\n");
     printf("test: remove from start of the list\n");
     ListFirst(L1);
@@ -573,7 +578,7 @@ int main(void){
     }
 
     printf("________________ListConcat()___________________\n");
-    
+
     printf("test: TWO LISTS with content\n");
     ListConcat(L1, L2);
     tests++;
@@ -582,7 +587,7 @@ int main(void){
         testpassed++;
     } else{
         printf("ListConcat() Failed with two lists with content\n");
-        printf("List1 size:%d  List2 size: %d\n",ListCount(L1),ListCount(L2)); 
+        printf("List1 size:%d  List2 size: %d\n",ListCount(L1),ListCount(L2));
     }
 
     printf("test: L1 empty\n");
@@ -628,7 +633,7 @@ int main(void){
 
     printf("________________ListSearch()___________________\n");
     printf("test:finding an item in list with mulpiple items\n");
-    cArg= I2;  
+    cArg= I2;
     ListFirst(L1);
     tests++;
     resultPtr= (int*) ListSearch(L1, testComp,cArg);
@@ -642,7 +647,7 @@ int main(void){
         printf("item to be seacrched: %d\n", *cArg);
         printf("item found: %d\n",*resultPtr);
     }
-    
+
     printf("test:finding an item not in list\n");
     cArg= I4;
     ListFirst(L1);
@@ -683,7 +688,7 @@ int main(void){
         printf("ListSearch() Failed on list with no items\n");
         printf("List size: %d\n", ListCount(L2));
     }
-      
+
     printf("-----------------------------------------------------------\n");
     printf("tests passes: %d  out of %d\n", testpassed, tests);
     return 0;
@@ -696,10 +701,10 @@ void testItemFree(void *item){
 int testComp(void *item1,void *item2 ){
     int i1= *(int*) item1;
     int i2= *(int*) item2;
-    
+
     if (i1 == i2){
         return 1;
-    } 
+    }
     else{
         return 0;
     }

@@ -10,8 +10,9 @@
 #include <pthread.h>
 #include <unistd.h>
 
-#include "square.h"
-pthread_key_t tlsKey;
+#include <square.h>
+
+pthread_key_t tlsKey; /*thread local storage*/
 
 int getIndex() {
 	int index;
@@ -94,14 +95,6 @@ int main(int argc, char* argv[]) {
 	sleep(deadline);
 	stopSquare = 1;
 	
-	/*potential segfault if child threads don't stop fast enough before the
-	arrays are freed. A small delay before freeing shoudl prevent this.*/
-	sleep(1);
-
-
-	free(threadIDs);
-	free(pSquareCount);
-	free(pStartTime);
 
 	return 0;
 }
