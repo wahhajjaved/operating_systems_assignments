@@ -3,6 +3,10 @@
 /*# nsid              */
 /*# November 7, 2008  */
 
+/*  Wahhaj Javed, muj975, 11135711
+ *  Nakhba Mubashir, epl482, 11317060
+*/
+
 /* modified slightly October 2018 */
 
 /* Modified October 2019 to have a version for UBC Pthreads
@@ -18,10 +22,7 @@
 */
 
 
-#include <stdio.h>
-
-
-#include <monitor.h>
+#include "reader-writer-monitor.h"
 
 /* INITIALIZATION CODE */
 #define OKtoWrite 1
