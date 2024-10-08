@@ -1,0 +1,95 @@
+<html>
+<head>
+<title>CMPT 332 - Lab 4 - Fall 2024</title>
+</head>
+<body>
+<img src="splashBanner.gif" align="middle">
+<h1>
+  CMPT 332 - Lab 4 - Fall 2024 <br>
+  University of Saskatchewan <br>
+  Lab 4: Implement Monitors using RT Threads IPC
+</h1>
+
+<p><b>Instructor:</b> Dwight Makaroff</p>
+<p><b>Out:</b> October 7th, 2024</p>
+<p><b>Due:</b> At the end of the tutorial (actually by 9:00 p.m.
+  Thursday, October 10th, 2024 final deadline). .</p> 
+<p>Marks: 5</p>
+
+<h2 id="docs">Useful Documentation</h2>
+<p>Before the start of your lab, please review the following resources:
+<ul>
+  <li> Monitors: "course notes" =&gt "Process Description and Control" =&gt "Conncurrency" =&gt "Monitors"
+  <li> IPC: "course notes" =&gt "Process Description and Control" =&gt "Concurrency" =&gt "IPC"
+</ul>
+
+<h2 id="provided">Provided Files</h2>
+<ul>
+  <li> reader-writer.c - the reader-writer test application.</li>
+  <li> reader-writer-monitor.c - contains helper functions for the reader-writer application. </li>
+  <li> liblist.a - list library from Assignment 1. You may choose to use your own instead.
+  <li> list.h - header file
+</ul>
+
+<h2 id="description">Description</h2>
+<h3 id="overview">Overview</h3>
+<p>In this lab, you will learn how to implement a monitor using IPC
+from the RT Threads library. 
+This will help with your understanding of Assignment 2 - Part B, 
+but is also a likely candidate for an <b>*exam question*</b>, 
+so please make sure you understand the relationship between IPC, monitors, 
+and semaphores. Ask plenty of questions! You *may* work with your
+  partner on this implementation.</p>
+  
+
+<h3 id="monitor">Monitors</h3>
+<p> <a href="https://en.wikipedia.org/wiki/Monitor_(synchronization)">
+	Monitors</a> provide a method for synchronizing between
+	threads or processes. Similar to assignment 2, you are to
+	implement 6 functions: </p> 
+<ul>
+  <li><b>RttMonInit()</b> - called at the start of the program to initialize the monitor. </li>
+  <li><b>RttMonEnter() / RttMonLeave()</b> - called by a process
+  entering / exiting the monitor.</li> 
+  <li><b>RttMonWait(int CV)</b> - causes the calling process to wait
+  on some condition variable (CV). The effect is that the calling
+  process exits the monitor, is added to the associated CV queue, and
+  waits until it is signalled by another process.</li> 
+  <li><b>RttMonSignal(int CV)</b> - signals the process at the head of
+  the CV queue, to resume running. The effect is that the calling
+  process must exit the 
+  monitor, is added to an urgent queue, and waits until the other
+  process leaves the Monitor; this ensures that only one process is
+    running in the Monitor at a time.</li>
+  <li><b>MonServer()</b> - Server process that handles the
+  coordination by putting processes on lists according to the
+  semantics of Monitors. Receives messages from the client processes
+  and determines which list they are moved onto and off of and who to
+  reply to such that the proper coordination is achieved.</li>
+</ul>
+
+
+<h2 id="deliverables">Deliverables</h2>
+<p>A single tar file containing
+your <code>Makefile</code>, <code>reader-writer-monitor.h</code>, 
+  <code>monitor.c</code>, <code>monitor.h</code> and <code>gitlog.txt</code>.
+ Name the tar file lab4.tar.
+
+  
+<h2 id="grading">Submission</h2>
+
+<p> Create a .tar file with the 5 files and submit to Lab 4. Your
+  name, NSID and Student number 
+must be at the beginning of every individual file that you hand
+in. </p>
+
+<h2 id="grading">Grading</h2>
+<ul>
+<li><code>Makefile</code>: 1 mark</li>
+<li><code>monitor.c</code>: 1 mark</li>
+<li><code>monitor.h</code>: 1 mark</li>
+<li><code>reader-writer-monitor.h</code>: 1 mark</li>
+<li><code>gitlog.txt</code>: 1 mark</li>
+</ul>
+</body>
+
