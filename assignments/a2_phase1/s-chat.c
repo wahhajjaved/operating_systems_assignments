@@ -35,6 +35,7 @@ RTTTHREAD networkOut() {
 
 int mainp()
 {
+	
 	int temp;
 	
 	RttThreadId serverTid;
@@ -48,6 +49,7 @@ int mainp()
 	attr.priority = RTTNORM;
 	attr.deadline = RTTNODEADLINE;
 
+	printf("s-chat starting.\n");
 	setbuf(stdout, 0);
 	
 	temp = RttCreate(
@@ -104,7 +106,10 @@ int mainp()
 		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkOut thread.");
-
+	
+	
+	printf("s-chat exiting.\n");
+	
 	return(0);
 
 }
