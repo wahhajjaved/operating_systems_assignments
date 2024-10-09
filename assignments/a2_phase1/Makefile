@@ -3,15 +3,16 @@
 
 .PHONY: all clean
 
-all:reader-writer-test
+all:reader-writer-test s-chat
 
 mkdirs: 
 	mkdir -p $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir)
 
 
 CC=gcc
-CFLAGS= -I. -I/student/cmpt332/pthreads -I/student/cmpt332/rtt\
-		-I/usr/include/tirpc -I/usr/include
+CFLAGS= -I. -I/student/cmpt332/pthreads \
+		-I/student/cmpt332/rtt/include -I/student/cmpt332/rtt/src/rtt \
+		-I/usr/include/tirpc -I/usr/include/tirpc/rpc -I/usr/include 
 CPPFLAGS=-std=gnu90 -Wall -pedantic -g
 compile= $(CC) $(CFLAGS) $(CPPFLAGS)
 
@@ -92,7 +93,15 @@ $(PartB_dir)/reader-writer-monitor.o: reader-writer-monitor.c\
 	$(compile) -o $(PartB_dir)/reader-writer-monitor.o -c \
 		reader-writer-monitor.c
 
+################################################################
+###################### Part C ##################################
+
+s-chat: $(obj_dir)/s-chat.o
+	$(compile) -o s-chat $(obj_dir)/s-chat.o $(LINK_RT_X86) -ltirpc
+
+$(obj_dir)/s-chat.o: s-chat.c
+	$(compile) -c s-chat.c -o $(obj_dir)/s-chat.o
 
 clean: 
 	rm -rf $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir) \
-		reader-writer-test
+		reader-writer-test s-chat
