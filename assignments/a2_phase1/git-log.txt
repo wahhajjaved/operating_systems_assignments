@@ -1,0 +1,157 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-10-09
+
+commit 10c9003d62e983acedbe20469bb8e4028b82a271
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 9 12:35:55 2024 -0600
+
+    Added print statements to s-chat
+
+commit 391489bf56060afa6bf9f5d2ed7ec34008d0dd1b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 9 12:28:33 2024 -0600
+
+    Mkaefile rule for s-chat working
+
+commit c765949610d2269e5a15f828aafe33ed5eb8ce51
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 22:27:45 2024 -0600
+
+    Fixed RttSchAttr argument in RttCreate
+
+commit bc732e6974a5820209e7ea5f5b27376911a46029
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 22:27:23 2024 -0600
+
+    a2 gitignore added
+
+commit dcec73de5bc46ae721fb834e4baf45a557d82a4c
+Merge: 1fad2b7 afbcde6
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 21:59:27 2024 -0600
+
+    Merge branch 'main' into wahhaj_assignments
+
+commit afbcde631f88beecf2a3ae2c11e6f2af60b0ceb2
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 21:54:39 2024 -0600
+
+    fixed spelling mistake in Makefile
+
+commit 1fad2b70748c11981711e7591212095bf569449a
+Merge: 3a972af aad02e7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 21:48:35 2024 -0600
+
+    Merge branch 'main' into wahhaj_assignments
+
+commit 3a972afc63e91e87938cb6bca731854bff1c22ed
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 21:48:14 2024 -0600
+
+    Date change
+
+commit 65f48176be6b25707cc0151d785d5364f3064948
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 21:46:41 2024 -0600
+
+    Added RttCreate documentation to design plan
+
+commit 800924066d40cc8f643e113584799b0d42cf4328
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 21:33:36 2024 -0600
+
+    Function stubs created.
+
+commit aad02e7340d12c36700df91d28508b4cee4b58ab
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 21:24:34 2024 -0600
+
+    minor edits
+
+commit f860caea3fa868b6c926e5c5e6b7847c39d63b0f
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 17:19:18 2024 -0600
+
+    Design plan for part C console input
+
+commit d9d12cc65c7f54be3509660685fe9bf14abaece7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 16:51:52 2024 -0600
+
+    A2 phase 1 initial commit
+
+commit a57aee9507588dc567a86d9087c5f133d0f3b5e6
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 14:18:39 2024 -0600
+
+    reader-writer.c is giving errors when building reader-writer-test
+
+commit bdcaebd2c9ed9df35b9ca1d414f5403ee7646f0a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 14:17:29 2024 -0600
+
+    added Monitor.h and Monitor.c, added the skeleton for monitor.c
+
+commit 7eec325a009bd0e8ca9e03ea7d4e17248e6a9603
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 14:16:09 2024 -0600
+
+    edited the reader-writer-monitor.h and added functions from .c files
+
+commit bb578850e4fb4f96744c4237bd6582329ea25cf0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 14:14:14 2024 -0600
+
+    adding the changes to read-write file for it to work with ubc
+
+commit 1c144473e118bc3c5d7f97515c9589cb97b94013
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 12:35:56 2024 -0600
+
+    Makefile is creating list objects but not the reader-writer obj
+
+commit 1692e44a2811b6ad8e0d3f0fb9363619da29f352
+Merge: 13b7f61 c913c14
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 11:23:15 2024 -0600
+
+    merge files
+
+commit 13b7f61f0773bc095d25c00c79b35343aed98a67
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 09:41:21 2024 -0600
+
+    added and modified the header file for reader-writer and reader-writer-monitor
+
+commit 7f41f8ddad4dc1d860423a48f8cf641d067dacc6
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 09:27:31 2024 -0600
+
+    copied the list files from a1
+
+commit a04f1826a51dc6d3845226ba785f5cc3d0b8b800
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 09:22:19 2024 -0600
+
+    copied the given files to local directory
+
+commit cc1df428cacea988c5c1de4f6e24009409b7a90a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 8 09:18:40 2024 -0600
+
+     added MonEnter() MonLeave() MonWait() MonSignal() in the design document, 
+     stating the design and solution
+
+commit a4f359b36691e13bf55b2d6f45982e86ea5ae167
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 7 21:52:15 2024 -0600
+
+    started the partB ubc pthread design
+
+commit e76b66ca2d00822549891d9bca2920709bc90146
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 7 21:44:22 2024 -0600
+
+    added old files

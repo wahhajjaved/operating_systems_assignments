@@ -92,7 +92,8 @@ LIST *ListCreate(){
             /* doubling the memory  */
         newListDict =(LIST*) realloc(listDict,Num * sizeof(LIST));
         if (newListDict ==NULL) {
-            errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");                return NULL;
+            errx(1, "ERROR: MEMORY ALLOCATION FAILED increasing memory \n");  
+                          return NULL;
             }
         listDict=newListDict;
 
