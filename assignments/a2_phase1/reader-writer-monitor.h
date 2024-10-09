@@ -4,19 +4,20 @@
  *@date 2024-10-08
  */
 
-#ifndef READER-WRITER-MONITOR
-#define READER-WRITER-MONITOR
+#ifndef READER_WRITER_MONITOR
+#define READER_WRITER_MONITOR
 
 #include <stdio.h>
-#include <monitor.h>
-#include <os.h>
+/*#include <os.h>*/
 #include <standards.h>
 
-void StartRead();
-void StopRead();
-void StopWrite();
-PID reader(void *arg);
-PID writer(void *arg);
-
+void StartRead(void);
+void StopRead(void);
+void StopWrite(void);
+void StartWrite(void);
+/*
+PROCESS reader(void *arg);
+PROCESS writer(void *arg);
+*/
 
 #endif
