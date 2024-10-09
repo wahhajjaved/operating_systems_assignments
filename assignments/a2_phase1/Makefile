@@ -78,7 +78,7 @@ $(PartB_dir)/Monitor.o: Monitor.c Monitor.h
 #### reader writer ####
 reader-writer-test: $(PartB_dir)/reader-writer.o \
 	$(PartB_dir)/reader-writer-monitor.o $(lib_dir)/liblist.a\
-	$(lib_dir)/libMonitor.a
+	$(lib_dir)/libMonitor.a 
 	
 	$(CC) -o reader-writer-test $(PartB_dir)/reader-writer.o \
 		$(PartB_dir)/reader-writer-monitor.o\
@@ -91,6 +91,8 @@ $(PartB_dir)/reader-writer-monitor.o: reader-writer-monitor.c\
  		reader-writer-monitor.h Monitor.h | mkdirs
 	$(compile) -o $(PartB_dir)/reader-writer-monitor.o -c \
 		reader-writer-monitor.c
+
+
 clean: 
 	rm -rf $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir) \
 		reader-writer-test

@@ -25,7 +25,7 @@
 
 #define SLEEPMAX 20
 
-PID reader(void *arg)
+PROCESS reader(void *arg)
 {
   long myId;
   
@@ -43,7 +43,7 @@ PID reader(void *arg)
     }
 }
 
-PID writer(void *arg)
+PROCESS writer(void *arg)
 {
   long myId;
   myId = (long) arg;
@@ -87,3 +87,4 @@ int mainp()
     
     return(0);
 }
+
