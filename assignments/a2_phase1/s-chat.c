@@ -42,6 +42,11 @@ int mainp()
 	RttThreadId consoleOutTid;
 	RttThreadId networkInTid;
 	RttThreadId networkOutTid;
+	
+	RttSchAttr 	attr;
+	attr.startingtime = RTTZEROTIME;
+	attr.priority = RTTNORM;
+	attr.deadline = RTTNODEADLINE;
 
 	setbuf(stdout, 0);
 	
@@ -50,8 +55,9 @@ int mainp()
 		(void(*)()) server,
 		STKSIZE,
 		"server",
-		void,
-		RTTNORM
+		NULL,
+		attr,
+		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create server thread.");
 
@@ -60,8 +66,9 @@ int mainp()
 		(void(*)()) consoleIn,
 		STKSIZE,
 		"consoleIn",
-		void,
-		RTTNORM
+		NULL,
+		attr,
+		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create consoleIn thread.");
 
@@ -70,8 +77,9 @@ int mainp()
 		(void(*)()) consoleOut,
 		STKSIZE,
 		"consoleOut",
-		void,
-		RTTNORM
+		NULL,
+		attr,
+		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create consoleOut thread.");
 
@@ -80,8 +88,9 @@ int mainp()
 		(void(*)()) networkIn,
 		STKSIZE,
 		"networkIn",
-		void,
-		RTTNORM
+		NULL,
+		attr,
+		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkIn thread.");
 
@@ -90,8 +99,9 @@ int mainp()
 		(void(*)()) networkOut,
 		STKSIZE,
 		"networkOut",
-		void,
-		RTTNORM
+		NULL,
+		attr,
+		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkOut thread.");
 
