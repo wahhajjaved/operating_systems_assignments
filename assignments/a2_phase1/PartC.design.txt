@@ -14,6 +14,11 @@
 	-- Thread 3 listens for UDP datagrams
 	-- Thread 4 sends UDP datagrams
 	-- Thread 5 is the server which coordinates sending of messages
+	-- Threads are created using RttCreate. For now all threads have a stack
+		size of 65536 and have RTTNORM priority. These parameters may need to
+		be fine tuned as the program develops
+	- Threads functions don't need to take any input parameters as each is 
+		responsible for its own thing
 	
 	
 [ Console Input ]
@@ -23,9 +28,11 @@
 	- fgets() will return newlines but these are not stripped as the output
 		on clients should match the input on the server
 	- Each input string is placed in a list so the messages can be buffered
-		
 
 
+
+** Have a midterm the day this assignment is due so this is all the time 
+	I can spend on it.
 
 
 
