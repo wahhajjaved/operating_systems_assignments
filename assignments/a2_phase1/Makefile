@@ -82,7 +82,7 @@ reader-writer-test: $(PartB_dir)/reader-writer.o \
 	
 	$(CC) -o reader-writer-test $(PartB_dir)/reader-writer.o \
 		$(PartB_dir)/reader-writer-monitor.o\
-		${LINK_PTHREADS} -L$(lib_dir) -lMonitor
+		${LINK_pthreads} -L$(lib_dir) -lMonitor -llist
 
 $(PartB_dir)/reader-writer.o: reader-writer.c reader-writer-monitor.h | mkdirs 
 	 $(compile) -o $(PartB_dir)/reader-writer.o -c reader-writer.c
