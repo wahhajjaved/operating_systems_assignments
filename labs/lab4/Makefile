@@ -21,7 +21,7 @@ monitor: reader-writer.o reader-writer-monitor.o monitor.o
 reader-writer.o: reader-writer.c reader-writer-monitor.h
 	 $(compile) -o $(PartB_dir)/reader-writer.o -c reader-writer.c
 
-reader-writer-monitor.o: reader-writer-monitor.c reader-writer-monitor.h
+reader-writer-monitor.o: reader-writer-monitor.c monitor.h
 	$(compile) -o reader-writer-monitor.o -c reader-writer-monitor.c 
 
 monitor.o: monitor.c monitor.h
