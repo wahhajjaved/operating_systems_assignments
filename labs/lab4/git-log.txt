@@ -1,0 +1,102 @@
+commit bbc2b8517ca3dfdbd5d720d038fb8545e92e20f5
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 16:31:56 2024 -0600
+
+    added name
+
+commit 3eb981ed2234bd75cdcfad118567cf8d6c5a85dd
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 16:29:49 2024 -0600
+
+    added the lib links and removed the unwanted libs
+
+commit 7e2ff43ca4b4c0ff403a9a8303263d12a0b1baee
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 16:29:09 2024 -0600
+
+    fixed minor errors like spelling mistake
+
+commit dbbf0ecd198ff23c02d86702ea4e4f48f703fc9a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 15:58:01 2024 -0600
+
+    added the wait and signal in monserver
+
+commit bf57e74722db870dc1bf4764bb8cb0e127de5200
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 15:45:29 2024 -0600
+
+    added conditional variable to msg struct
+
+commit 3cd5db5e5d817036e6074093bac3724e84a2c2e0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 15:32:23 2024 -0600
+
+    added RttMonInit(int numConds)
+
+commit 407f20a32303e13807c3b3f61e4df9a76a05ef31
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 13:58:45 2024 -0600
+
+    added the parameter(numConds) for monintit, got this parameter from 
+reader-writer.c
+
+commit f6eaebaf7117ff0a4c10351a7748ee3473cbb732
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 13:52:20 2024 -0600
+
+     in server added leave
+
+commit 2b80c5bc741c57f6fe82189b99f853f2af8bcffa
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 13:33:55 2024 -0600
+
+     in server added enter
+
+commit 96828d339fd89fe961b10b819f89bba1ffe437c6
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 11:59:29 2024 -0600
+
+     added enter leave wait signal to monitor
+
+commit 5dd6c9c7ca1b1ab0b9e4dfc50b1b9591ac3e2c93
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 09:44:54 2024 -0600
+
+    added string.h as the message in string
+
+commit c6adbe1cc0f66601840887d15fa917bb220d274f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 09:43:00 2024 -0600
+
+    added the errx.h and msg struct
+
+commit 6fac5b5fcf5ebb380467d07523f43bf61f949c93
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 09:30:05 2024 -0600
+
+    added the correct header file for each file
+
+commit d131279bf14e311cc5b6f9f1c60e7bc462f70719
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 09:27:32 2024 -0600
+
+    created the monitor.h file
+
+commit 6a930fd56d7667587b0280976a9ea38dde2a987a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 09:12:26 2024 -0600
+
+    moved the makefile in right directory
+
+commit 33d3929bec2a2acf5f60a9aff9ad37df382b1ab4
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 09:09:05 2024 -0600
+
+    created the Makefile using the makefile from a2-phase1
+
+commit 7accb0355a054dbb2ee669bdb9adc86a68cd919d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Oct 10 08:54:41 2024 -0600
+
+    added the files for lab4
