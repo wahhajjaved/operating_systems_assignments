@@ -54,7 +54,7 @@ void RttMonEnter(){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-    
+    senMsg-> condVar =2 ;
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/ 
     temp= RttSend(RTTPid, msg,*sendLen, receiveMsg,recieveLen); 
 
@@ -70,7 +70,7 @@ void RttMonLeave(){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-
+    senMsg-> condVar =2;
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
     temp= RttSend(RTTPid, msg,*sendLen, receiveMsg,recieveLen);    
 }
@@ -85,6 +85,7 @@ void RttMonWait(int CV){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
+    senMsg-> condVar =CV;
 
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
     temp= RttSend(RTTPid, msg, *sendLen, receiveMsg,recieveLen);    
@@ -101,7 +102,7 @@ void RttMonSignal(int CV){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-
+    senMsg-> condVar =CV;
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
     temp= RttSend(RTTPid, msg, *sendLen, receiveMsg,recieveLen);
 }
@@ -155,10 +156,34 @@ void MonServer() {
             }
             
         }else if (strcmp(msg ->data , "wait") ==0){
-            
+            ListAppend(CVlistDict[msg->condVar], senderPid);
+            if (ListCount(urgentQueue) !=0) {
+                takeOffPid= (RttThreadId *) ListTrim(urgentQueue);
+                RttReply (*takeOffPid, replyMess,*recieveLen );
+                free (takeOffPid);
+
+            } else if (ListCount(enterQueue) !=0) {
+                takeOffPid= (RttThreadId *) ListTrim(enterQueue);
+                RttReply (*takeOffPid, replyMess,*recieveLen );
+                free (takeOffPid);
+            } else {
+                monBusy =0;
+            }        
 
 
         } else if (strcmp(msg ->data , "signal") ==0){
+
+            if (ListCount(CVlistDict[msg->condVar]) > 0) {
+                ListFirst(CVlistDict[msg->condVar]);
+                takeOffPid=(RttThreadId*) ListRemove(CVlistDict[msg->condVar]);
+                RttReply (*takeOffPid, replyMess,*recieveLen );
+                free (takeOffPid);
+                ListInsert(urgentQueue, senderPid);
+
+            } else {
+                RttReply(*senderPid, replyMess,*recieveLen );
+                free (senderPid);
+            } 
 
         }
 
