@@ -15,8 +15,8 @@
 
 /* the size of data*/
 typedef struct msg{
-    char data[];
-    unt condVar; /* conditional variable*/
+    char data[10];
+    int condVar; /* conditional variable*/
 } MSG;
 
 void RttMonInit(int numConds);

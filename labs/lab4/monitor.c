@@ -8,11 +8,11 @@
 
 LIST *CVList, **CVlistDict;
 LIST *enterQueue, *urgentQueue;
-MSG *sendMsg, msg;
+MSG *sendMsg, *msg;
 
-unsigned int sendLen, recieveLen;
+unsigned int *sendLen, *recieveLen, len;
 MSG *receiveMsg;
-RttThreadId RTTPid, senderPid, takeOffPid;
+RttThreadId RTTPid, *senderPid, *takeOffPid;
 
 
 /* functions */
@@ -44,8 +44,7 @@ void RttMonInit(int numConds){
     recieveLen= &len;
 
 }
-void RttMonEnter(){
-    
+void RttMonEnter(){ 
     int temp;
     char Mess[] = "enter";
     
@@ -54,14 +53,13 @@ void RttMonEnter(){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-    senMsg-> condVar =2 ;
+    sendMsg-> condVar =2 ;
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/ 
-    temp= RttSend(RTTPid, msg,*sendLen, receiveMsg,recieveLen); 
-
+    temp= RttSend(RTTPid,sendMsg,*sendLen, receiveMsg,recieveLen); 
+    if (temp != RTTOK) perror("RTTSEND error");
 }
 
 void RttMonLeave(){
-
     int temp;
     char Mess[] = "leave";
 
@@ -70,9 +68,10 @@ void RttMonLeave(){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-    senMsg-> condVar =2;
+    sendMsg-> condVar =2;
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
-    temp= RttSend(RTTPid, msg,*sendLen, receiveMsg,recieveLen);    
+    temp= RttSend(RTTPid, sendMsg,*sendLen, receiveMsg,recieveLen); 
+    if (temp != RTTOK) perror("RTTSEND error");   
 }
 
 void RttMonWait(int CV){
@@ -85,11 +84,11 @@ void RttMonWait(int CV){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-    senMsg-> condVar =CV;
+    sendMsg-> condVar =CV;
 
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
-    temp= RttSend(RTTPid, msg, *sendLen, receiveMsg,recieveLen);    
-
+    temp= RttSend(RTTPid, sendMsg, *sendLen, receiveMsg,recieveLen);    
+    if (temp != RTTOK) perror("RTTSEND error");
 
 }
 void RttMonSignal(int CV){
@@ -102,14 +101,15 @@ void RttMonSignal(int CV){
     if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
-    senMsg-> condVar =CV;
+    sendMsg-> condVar =CV;
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
-    temp= RttSend(RTTPid, msg, *sendLen, receiveMsg,recieveLen);
+    temp= RttSend(RTTPid, sendMsg, *sendLen, receiveMsg,recieveLen);
+    if (temp != RTTOK) perror("RTTSEND error");
 }
 
 void MonServer() {
 
-    int message, monBusy, reply;
+    int message, monBusy;
     char replyMess[] = "server";
 
     /* memory allocation*/
@@ -130,10 +130,10 @@ void MonServer() {
         /*Enter */
 
         if (strcmp(msg ->data , "enter") ==0){
-            if (monOccu){
+            if (monBusy){
                 ListAdd(enterQueue, senderPid);
             } else {
-                monOccu =1;
+                monBusy =1;
                 RttReply (*senderPid, replyMess,*recieveLen );
                 free (senderPid);
             }
