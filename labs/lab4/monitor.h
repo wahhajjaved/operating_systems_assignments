@@ -11,7 +11,7 @@
 #include <list.h>
 #include <rtthreads.h> 
 #include <err.h>
-
+#include <string.h>
 
 /* the size of data*/
 typedef struct msg{
