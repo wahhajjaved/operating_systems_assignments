@@ -6,13 +6,22 @@
 #include <stdio.h>
 #include <monitor.h>
 #include <list.h>
-
+#include <rtthreads.h>
+#include <RttCommon.h>
 
 
 LIST* cvLists;
 LIST* enterq;
 LIST* urgentq;
+typedef enum action {
+	ENTER, LEAVE, WAIT, SIGNAL
+} ACTION;
 
+typedef struct message {
+	RttThreadId tid;
+	ACTION action;
+	int cv;
+} Message;
 
 void RttMonInit(int numConds){
 	cvLists = ListCreate();
@@ -26,21 +35,41 @@ void RttMonInit(int numConds){
 }
 
 void RttMonEnter() {
-	printf("RttMonEnter not implemented\n");
+	Message message;
+	message.tid = RttMyThreadId();
+	message.action = ENTER;
+	message.cv = -1;
+	
 }
 
 void RttMonLeave(){
-	printf("RttMonLeave not implemented\n");
+	Message message;
+	message.tid = RttMyThreadId();
+	message.action = LEAVE;
+	message.cv = -1;
 }
 
 void RttMonWait(int CV){
-	printf("RttMonWait not implemented\n");
+	Message message;
+	message.tid = RttMyThreadId();
+	message.action = WAIT;
+	message.cv = CV;
+	
 }
 
 void RttMonSignal(int CV){
-	printf("RttMonSignal not implemented\n");
+	Message message;
+	message.tid = RttMyThreadId();
+	message.action = SIGNAL;
+	message.cv = CV;
 }
 
 void MonServer(){
-	printf("MonServer not implemented\n");
+	int isOccupied;
+
+	isOccupied = 0;
+	
+	while(1){
+		
+	}
 }
