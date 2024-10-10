@@ -4,7 +4,9 @@
 
 /* global variables */
 
-LIST *CVList
+
+
+LIST *CVList, **CVlistDict;
 LIST *enterQueue, *urgentQueue;
 MSG *sendMsg, msg;
 
@@ -14,7 +16,32 @@ RttThreadId RTTPid, senderPid, takeOffPid;
 
 
 /* functions */
-void RttMonInit(){
+void RttMonInit(int numConds){
+    int i;
+
+    /* copied from reader-writer.c*/
+    int temp;
+    RttSchAttr    attr;
+    attr.startingtime = RTTZEROTIME;
+    attr.priority = RTTNORM;
+    attr.deadline = RTTNODEADLINE;
+
+    temp = RttCreate(&RTTPid, (void(*)()) MonServer,1024,"CREATE", 
+            (void *) 1000, attr, RTTUSR );
+
+    if (temp == RTTFAILED) perror("RttCreate");
+
+    CVlistDict=(LIST **)malloc(sizeof(LIST *) *numConds);
+    for (i=0; i< numConds; i++){
+        CVList =ListCreate();
+        CVlistDict[i] = CVList;
+    }
+    enterQueue= ListCreate();
+    urgentQueue= ListCreate();
+
+    len= 10;
+    sendLen= &len;
+    recieveLen= &len;
 
 }
 void RttMonEnter(){
@@ -103,7 +130,7 @@ void MonServer() {
 
         if (strcmp(msg ->data , "enter") ==0){
             if (monOccu){
-                ListInsert(enterQueue, senderPid);
+                ListAdd(enterQueue, senderPid);
             } else {
                 monOccu =1;
                 RttReply (*senderPid, replyMess,*recieveLen );
@@ -128,6 +155,8 @@ void MonServer() {
             }
             
         }else if (strcmp(msg ->data , "wait") ==0){
+            
+
 
         } else if (strcmp(msg ->data , "signal") ==0){
 
