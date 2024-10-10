@@ -18,7 +18,7 @@ typedef struct msg{
     char data[];
 } MSG;
 
-void RttMonInit();
+void RttMonInit(int numConds);
 void RttMonEnter();
 void RttMonLeave(); 
 
