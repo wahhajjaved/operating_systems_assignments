@@ -5,12 +5,12 @@
 /* global variables */
 
 LIST *CVList
-LIST *enterQueue, *UrgentQueue;
+LIST *enterQueue, *urgentQueue;
 MSG *sendMsg, msg;
 
 unsigned int sendLen, recieveLen;
 MSG *receiveMsg;
-RttThreadId RTTPid, senderPid;
+RttThreadId RTTPid, senderPid, takeOffPid;
 
 
 /* functions */
@@ -81,14 +81,14 @@ void RttMonSignal(int CV){
 
 void MonServer() {
 
-    int message, monOccu, reply;
+    int message, monBusy, reply;
     char replyMess[] = "server";
 
     /* memory allocation*/
     msg= (MSG *) malloc(sizeof(MSG));
     if (msg ==NULL) errx(1, "Memory allocation failed");
     
-    monOccu=0;
+    monBusy=0;
     
     while (1){
         /* memory allocation*/
@@ -111,8 +111,22 @@ void MonServer() {
             }
 
         } else if (strcmp(msg ->data , "leave") ==0){
+            /* reply for every case that they have reached server*/
+            RttReply (*senderPid, replyMess,*recieveLen );
+            free (senderPid);
 
-
+            if (ListCount(urgentQueue) !=0) {
+                takeOffPid= (RttThreadId *) ListTrim(urgentQueue);
+                RttReply (*takeOffPid, replyMess,*recieveLen );
+                free (takeOffPid);
+            } else if (ListCount(enterQueue) !=0) {
+                takeOffPid= (RttThreadId *) ListTrim(enterQueue);
+                RttReply (*takeOffPid, replyMess,*recieveLen );
+                free (takeOffPid);
+            } else {
+                monBusy =0;
+            }
+            
         }else if (strcmp(msg ->data , "wait") ==0){
 
         } else if (strcmp(msg ->data , "signal") ==0){
