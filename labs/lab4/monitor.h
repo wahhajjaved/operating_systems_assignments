@@ -10,6 +10,13 @@
 #include <stdio.h>
 #include <list.h>
 #include <rtthreads.h> 
+#include <err.h>
+
+
+/* the size of data*/
+typedef struct msg{
+    char data[];
+} MSG;
 
 void RttMonInit();
 void RttMonEnter();
