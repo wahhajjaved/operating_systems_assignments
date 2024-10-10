@@ -10,9 +10,13 @@
 #include <RttCommon.h>
 
 
+unsigned long monMessagesMutex; /*1 is unlocked, 0 is locked*/
+LIST* monMessages;
 LIST* cvLists;
 LIST* enterq;
 LIST* urgentq;
+
+
 typedef enum action {
 	ENTER, LEAVE, WAIT, SIGNAL
 } ACTION;
@@ -24,6 +28,9 @@ typedef struct message {
 } Message;
 
 void RttMonInit(int numConds){
+	RttNewMutex(&monMessagesMutex);
+	monMessages = ListCreate();
+	
 	cvLists = ListCreate();
 	for(numConds; numConds > 0; numConds--) {
 		ListAdd(cvLists, ListCreate());
@@ -35,33 +42,52 @@ void RttMonInit(int numConds){
 }
 
 void RttMonEnter() {
-	Message message;
-	message.tid = RttMyThreadId();
-	message.action = ENTER;
-	message.cv = -1;
+	Message* message;
+	
+	message = malloc(sizeof(message));
+	message->tid = RttMyThreadId();
+	message->action = ENTER;
+	message->cv = -1;
+	
+	RttMutexLock(monMessagesMutex);
+	ListAppend(monMessages, message);
+	RttMutexUnlock(monMessagesMutex);
+	
 	
 }
 
 void RttMonLeave(){
-	Message message;
-	message.tid = RttMyThreadId();
-	message.action = LEAVE;
-	message.cv = -1;
+	Message* message;
+	message = malloc(sizeof(message));
+	message->tid = RttMyThreadId();
+	message->action = LEAVE;
+	message->cv = -1;
+	RttMutexLock(monMessagesMutex);
+	ListAppend(monMessages, message);
+	RttMutexUnlock(monMessagesMutex);
 }
 
 void RttMonWait(int CV){
-	Message message;
-	message.tid = RttMyThreadId();
-	message.action = WAIT;
-	message.cv = CV;
+	Message* message;
+	message = malloc(sizeof(message));
+	message->tid = RttMyThreadId();
+	message->action = WAIT;
+	message->cv = CV;
+	RttMutexLock(monMessagesMutex);
+	ListAppend(monMessages, message);
+	RttMutexUnlock(monMessagesMutex);
 	
 }
 
 void RttMonSignal(int CV){
-	Message message;
-	message.tid = RttMyThreadId();
-	message.action = SIGNAL;
-	message.cv = CV;
+	Message* message;
+	message = malloc(sizeof(message));
+	message->tid = RttMyThreadId();
+	message->action = SIGNAL;
+	message->cv = CV;
+	RttMutexLock(monMessagesMutex);
+	ListAppend(monMessages, message);
+	RttMutexUnlock(monMessagesMutex);
 }
 
 void MonServer(){
