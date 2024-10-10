@@ -6,11 +6,11 @@
 
 LIST *CVList
 LIST *enterQueue, *UrgentQueue;
-MSG *sendMsg;
+MSG *sendMsg, msg;
 
 unsigned int sendLen, recieveLen;
 MSG *receiveMsg;
-RttThreadId RTTPid;
+RttThreadId RTTPid, senderPid;
 
 
 /* functions */
@@ -24,7 +24,7 @@ void RttMonEnter(){
     
     /* memory allocation*/
     sendMsg= (MSG *) malloc(sizeof(MSG));
-    if (sendMmsg ==NULL) errx(1, "Memory allocation failed");
+    if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
     
@@ -33,17 +33,6 @@ void RttMonEnter(){
 
 }
 
-    /*
- *
- *int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *);
-int RttMsgWaits();
-int RttReceive(RttThreadId *, void *, unsigned int *);
-int RttReply(RttThreadId, void *, unsigned int);
- *int RttCreate(RttThreadId *, void(*)(), size_t, char *, void *, RttSchAttr, int);
-int RttP(RttSem);
-int RttV(RttSem);
- * */
-
 void RttMonLeave(){
 
     int temp;
@@ -51,7 +40,7 @@ void RttMonLeave(){
 
     /* memory allocation*/
     sendMsg= (MSG *) malloc(sizeof(MSG));
-    if (sendMmsg ==NULL) errx(1, "Memory allocation failed");
+    if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
 
@@ -66,7 +55,7 @@ void RttMonWait(int CV){
 
     /* memory allocation*/
     sendMsg= (MSG *) malloc(sizeof(MSG));
-    if (sendMmsg ==NULL) errx(1, "Memory allocation failed");
+    if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
 
@@ -82,11 +71,67 @@ void RttMonSignal(int CV){
 
     /* memory allocation*/
     sendMsg= (MSG *) malloc(sizeof(MSG));
-    if (sendMmsg ==NULL) errx(1, "Memory allocation failed");
+    if (sendMsg ==NULL) errx(1, "Memory allocation failed");
 
     strcpy(sendMsg->data, Mess);
 
     /*int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *)*/
     temp= RttSend(RTTPid, msg, *sendLen, receiveMsg,recieveLen);
 }
-void MonServer() 
+
+void MonServer() {
+
+    int message, monOccu, reply;
+    char replyMess[] = "server";
+
+    /* memory allocation*/
+    msg= (MSG *) malloc(sizeof(MSG));
+    if (msg ==NULL) errx(1, "Memory allocation failed");
+    
+    monOccu=0;
+    
+    while (1){
+        /* memory allocation*/
+        senderPid=(RttThreadId *) malloc(sizeof(RttThreadId)); 
+        if (senderPid==NULL) errx(1, "Memory allocation failed for senderPid");
+    
+        /* recieve message*/
+        message=  RttReceive(senderPid, msg, recieveLen);
+        if (message != 0) errx(1, "ERROR: RttRecieve");
+
+        /*Enter */
+
+        if (strcmp(msg ->data , "enter") ==0){
+            if (monOccu){
+                ListInsert(enterQueue, senderPid);
+            } else {
+                monOccu =1;
+                RttReply (*senderPid, replyMess,*recieveLen );
+                free (senderPid);
+            }
+
+        } else if (strcmp(msg ->data , "leave") ==0){
+
+
+        }else if (strcmp(msg ->data , "wait") ==0){
+
+        } else if (strcmp(msg ->data , "signal") ==0){
+
+        }
+
+    }
+}
+
+
+
+    /*
+ *for my refrence
+
+int RttSend(RttThreadId, void *, unsigned int, void *, unsigned int *);
+int RttMsgWaits();
+int RttReceive(RttThreadId *, void *, unsigned int *);
+int RttReply(RttThreadId, void *, unsigned int);
+int RttCreate(RttThreadId*,void(*)(),size_t, char *,void *,RttSchAttr, int);
+int RttP(RttSem);
+int RttV(RttSem);
+ */
