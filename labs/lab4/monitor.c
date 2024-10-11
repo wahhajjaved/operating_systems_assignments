@@ -8,10 +8,14 @@
 #include <list.h>
 #include <rtthreads.h>
 #include <RttCommon.h>
+#include <RttMutex.h>
+
+#define STKSIZE 65536
 
 
 unsigned long monMessagesMutex; /*1 is unlocked, 0 is locked*/
 LIST* monMessages;
+
 LIST* cvLists;
 LIST* enterq;
 LIST* urgentq;
@@ -28,25 +32,45 @@ typedef struct message {
 } Message;
 
 void RttMonInit(int numConds){
+	int temp;
+	RttSchAttr 	attr;
+	RttThreadId	serverTid;
+
+	
 	RttNewMutex(&monMessagesMutex);
 	monMessages = ListCreate();
-	
 	cvLists = ListCreate();
-	for(numConds; numConds > 0; numConds--) {
+	while(numConds > 0) {
 		ListAdd(cvLists, ListCreate());
+		numConds--;
 	}
 	enterq = ListCreate();
 	urgentq = ListCreate();
-	MonServer();
+	
+	
+	attr.startingtime = RTTZEROTIME;
+	attr.priority = RTTHIGH;
+	attr.deadline = RTTNODEADLINE;
+	temp = RttCreate(&serverTid, 
+		(void(*)()) MonServer, 
+		STKSIZE,"R1", 
+		(void *) 1000, 
+		attr, 
+		RTTSYS
+	);
+	if (temp == RTTFAILED) perror("RttMonInit");
+	
 	printf("RttMonInit - Lists created and server started.\n");
 }
 
 void RttMonEnter() {
 	Message* message;
-	message = malloc(sizeof(message));
+	message = malloc(sizeof(Message));
 	message->tid = RttMyThreadId();
 	message->action = ENTER;
 	message->cv = -1;
+	
+	printf("Sending enter message.\n");
 	
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
@@ -58,11 +82,12 @@ void RttMonEnter() {
 
 void RttMonLeave(){
 	Message* message;
-	message = malloc(sizeof(message));
+	message = malloc(sizeof(Message));
 	message->tid = RttMyThreadId();
 	message->action = LEAVE;
 	message->cv = -1;
 	
+	printf("Sending leave message.\n");
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
@@ -70,8 +95,10 @@ void RttMonLeave(){
 }
 
 void RttMonWait(int CV){
+	printf("RttMonWait not implemented.\n");
+	/*
 	Message* message;
-	message = malloc(sizeof(message));
+	message = malloc(sizeof(Message));
 	message->tid = RttMyThreadId();
 	message->action = WAIT;
 	message->cv = CV;
@@ -80,12 +107,13 @@ void RttMonWait(int CV){
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
 	RttSuspend();
-	
+	*/
 }
 
 void RttMonSignal(int CV){
-	Message* message;
-	message = malloc(sizeof(message));
+	printf("RttMonSignal not implemented.\n");
+	/*Message* message;
+	message = malloc(sizeof(Message));
 	message->tid = RttMyThreadId();
 	message->action = SIGNAL;
 	message->cv = CV;
@@ -93,7 +121,7 @@ void RttMonSignal(int CV){
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
-	RttSuspend();
+	RttSuspend();*/
 }
 
 void MonServer(){
@@ -101,11 +129,27 @@ void MonServer(){
 	int isOccupied;
 	isOccupied = 0;
 	
+	printf("Starting server loop.\n");
 	while(1){
-		RttMutexLock(monMessagesMutex);
-		ListFirst(monMessages);
-		message = (Message*) ListRemove(monMessages);
-		
+		if (!isOccupied && ListCount(urgentq)) {
+			ListFirst(urgentq);
+			message = (Message*) ListRemove(urgentq);
+		}
+		else if (!isOccupied && ListCount(enterq)) {
+			ListFirst(enterq);
+			message = (Message*) ListRemove(enterq);
+		}
+		else{
+			RttMutexLock(monMessagesMutex);
+			ListFirst(monMessages);
+			message = (Message*) ListRemove(monMessages);
+			RttMutexUnlock(monMessagesMutex);
+		}
+		if(!message) {
+			printf("No message dequeued.\n");
+			RttUSleep(1000);
+			continue;
+		}
 		switch (message->action) {
 			case ENTER:
 				if (isOccupied) {
@@ -116,11 +160,25 @@ void MonServer(){
 					RttResume(message->tid);
 					free(message);
 				}
+				break;
 			
+			case LEAVE:
+				isOccupied = 0;
+				RttResume(message->tid);
+				free(message);
+				break;
+			
+			case WAIT:
+				printf("Wait not handled in server.\n");
+				break;
+			
+			case SIGNAL:
+				printf("Wait not handled in server.\n");
+				break;
+			
+			default:
+				printf("ERROR - Unrecognized message.\n");
+				break;
 		}
-		
-		
-		
-		
 	}
 }
