@@ -43,7 +43,6 @@ void RttMonInit(int numConds){
 
 void RttMonEnter() {
 	Message* message;
-	
 	message = malloc(sizeof(message));
 	message->tid = RttMyThreadId();
 	message->action = ENTER;
@@ -52,6 +51,7 @@ void RttMonEnter() {
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
+	RttSuspend();
 	
 	
 }
@@ -62,9 +62,11 @@ void RttMonLeave(){
 	message->tid = RttMyThreadId();
 	message->action = LEAVE;
 	message->cv = -1;
+	
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
+	RttSuspend();
 }
 
 void RttMonWait(int CV){
@@ -73,9 +75,11 @@ void RttMonWait(int CV){
 	message->tid = RttMyThreadId();
 	message->action = WAIT;
 	message->cv = CV;
+	
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
+	RttSuspend();
 	
 }
 
@@ -85,17 +89,38 @@ void RttMonSignal(int CV){
 	message->tid = RttMyThreadId();
 	message->action = SIGNAL;
 	message->cv = CV;
+	
 	RttMutexLock(monMessagesMutex);
 	ListAppend(monMessages, message);
 	RttMutexUnlock(monMessagesMutex);
+	RttSuspend();
 }
 
 void MonServer(){
+	Message* message;
 	int isOccupied;
-
 	isOccupied = 0;
 	
 	while(1){
+		RttMutexLock(monMessagesMutex);
+		ListFirst(monMessages);
+		message = (Message*) ListRemove(monMessages);
+		
+		switch (message->action) {
+			case ENTER:
+				if (isOccupied) {
+					ListAppend(enterq, message);
+				}
+				else {
+					isOccupied = 1;
+					RttResume(message->tid);
+					free(message);
+				}
+			
+		}
+		
+		
+		
 		
 	}
 }
