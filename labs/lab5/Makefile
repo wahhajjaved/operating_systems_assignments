@@ -7,8 +7,7 @@ CFLAGS=-I. -I/student/cmpt332/pthreads
 CPPFLAGS=-std=gnu90 -Wall -pedantic -g
 compile= $(CC) $(CFLAGS) $(CPPFLAGS)
 
-LINK_PTHREADS_X86=-L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads \
-					-z noexecstack
+LINK_PTHREADS_X86=-L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads 
 
 Link_Libs=-L. -llist $(LINK_PTHREADS_X86) 
 # used the listlib.a from previous lab, not a1
