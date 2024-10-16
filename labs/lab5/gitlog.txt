@@ -1,0 +1,62 @@
+Nakhba Mubashir, epl482, 11317060
+
+commit d9aa1f00fffad0100a3e6526bbea8a5d8ac2fea0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:57:26 2024 -0600
+
+    added the name
+
+commit 39b1b4421651548020b8ec2d5b575882f521e075
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:55:04 2024 -0600
+
+    added the output of the file on the file
+
+commit ed2c94480418d8ef90cb090d859ff1c873ff7d61
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:52:52 2024 -0600
+
+    edited the makefile, while linking the library
+
+commit 8ab839bc28df0cf377ba449ccbc4f7edcaac6e15
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:41:26 2024 -0600
+
+    at this moment sim runs for a really long time
+
+commit 8b86b0c30f990e2bd694ff779c549542877c8922
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:39:45 2024 -0600
+
+    added the code for implementation, creates new queue list, in running state insete in the queue, in next
+    _proc, removes from the queue
+
+commit 181b813a99398d7a7bf24d7a38bebc801757ddfc
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:23:41 2024 -0600
+
+     copied from prevous lab instead of a1
+
+commit 7dcf45f75d172a5e18e94a63087624c662e87676
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 14:02:05 2024 -0600
+
+    copied the header file from a1
+
+commit aacac04b64ca7bd0046f280bf630aa533b4e17aa
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 12:25:46 2024 -0600
+
+    copied the library from a1
+
+commit bc7a1d85baa4bece7d5b4e111ee303750e4c6294
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 12:11:27 2024 -0600
+
+    added the makefile
+
+commit 9650acaa558dc8249028604c1fc1bbb45029176b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Oct 16 11:45:01 2024 -0600
+
+    copied the file from given
