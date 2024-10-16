@@ -7,6 +7,7 @@
 #include <stdio.h>
 
 #include <os.h>
+#include <list.h>
 
 #define SCHEDULER_QUANTUM 25
 
@@ -42,6 +43,8 @@ static struct {
 
 static PID scheduler_pid;
 
+LIST* queue0;
+
 /* Returns the next process to run or NULL if there is nothing runnable */
 struct proc *next_proc() {
     struct proc *p;
@@ -54,6 +57,7 @@ struct proc *next_proc() {
 
     return NULL;
 }
+
 
 /* Scheduler entrypoint */
 void scheduler(void *arg) {
@@ -100,6 +104,7 @@ void set_state(enum pstate state) {
 
         if (state == RUNNABLE) {
             /* TODO: add to runnable queue */
+            ListPrepend(queue0, p);
         }
 
         p->state = state;
@@ -200,6 +205,9 @@ int mainp(int argc, char **argv) {
         panic("Unable to create semaphore for ptable.");
     }
 
+    /*Lists for use by the scheduler*/
+    queue0 = ListCreate();
+    
     scheduler_pid = Create(scheduler, 4096, "scheduler", NULL, HIGH, USR);
     if (scheduler_pid == PNUL) {
         panic("Unable to create scheduler thread.");
