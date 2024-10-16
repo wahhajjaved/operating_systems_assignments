@@ -4,6 +4,8 @@
  * University of Saskatchewan
  */
 
+/* Nakhba Mubashir, epl482, 11317060
+ * */
 #include <stdio.h>
 
 #include <os.h>

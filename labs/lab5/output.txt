@@ -1,3 +1,5 @@
+Nakhba Mubashir, epl482, 11317060
+
 ./sim 5 2
 
 process_3 is running. (priority 0)
