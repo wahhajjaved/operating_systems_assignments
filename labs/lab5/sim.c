@@ -17,7 +17,7 @@
 
 #define PRIORITIES_NUM 5
 
-LIST *Queue[PRIORITIES_NUM];
+LIST* Queue[PRIORITIES_NUM];
 
 void panic(const char *msg) {
     fprintf(stderr, "[PANIC] %s\n", msg);
