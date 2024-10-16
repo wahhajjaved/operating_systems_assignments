@@ -1,0 +1,66 @@
+
+<html>
+<head>
+<title>CMPT 332 - Lab 5 - Fall 2024</title>
+</head>
+<body>
+  <img src="splashBanner.gif" align="middle"/>
+<h1>
+  CMPT 332 - Lab 5 - Fall 2024 <br>
+  University of Saskatchewan <br>
+  Lab 5: Implement a Round Robin Scheduler
+</h1>
+
+<p><b>Instructor:</b> Dwight Makaroff</p>
+<p><b>Out:</b> October 15th, 2024</p>
+
+<p><b>Due:</b> At the end of the tutorial 
+(actually by 9:00 p.m. Friday, October 18th, 2024, final deadline).</p>
+<p>Marks: 4</p>
+
+<h2 id="docs">Useful Documentation</h2>
+
+<h2 id="provided">Provided Files</h2>
+<p>
+There is only 1 provided file for this lab <code>sim.c</code>. This contains
+a scheduling simulator built on UBC pthreads (inspired by xv6).
+You <b>may</b> work in groups of at most 4 students.
+</p>
+
+<h2 id="description">Description</h2>
+<p>
+In this lab, you will be implementing a round robin scheduler with 5 priorities
+using using multiple queues. It is possible to use a heap, but you are
+encouraged to use your list library from assignment 1 for the queues.
+</p>
+
+<p>
+Inside <code>set_state()</code> add processes that are being set to
+<code>RUNNABLE</code> to the queue based on their priority.
+The priority of a process is inside its process table entry.
+
+Reimplement <code>next_proc()</code> to return the highest priority runnable
+process. Treat priority like POSIX does, i.e. a process with a lower priority
+number has "highest priority".
+</p>
+
+<h2 id="deliverables">Deliverables and Grading</h2>
+<p>
+A single tar file named <code>lab5.tar</code> containing:
+</p>
+
+<ul>
+  <li><code>Makefile</code> (1 mark)</li>
+  <li><code>sim.c</code> (1 mark) modified to run the highest priority 
+	  process.</li>
+  <li><code>output.txt</code> (1 mark) log of the output of the simulator.</li>
+  <li><code>gitlog.txt</code> (1 mark)</li>
+  <li>Any other necessary source code for compilation.</li>
+</ul>
+
+<p>
+GENERAL: Ensure that your name, NSID, and student number are at the beginning
+of every file that you hand in.  <b>If a lab is group work</b>, all partners'
+information is required in EVERY FILE. No files with lines more than 80
+characters.
+</p>
