@@ -7,12 +7,17 @@
 #include <stdio.h>
 
 #include <os.h>
+#include <list.h>
 
 #define SCHEDULER_QUANTUM 25
 
 #define BLOCK_MAXIMUM 50
 #define BLOCK_CHANCE 3
 #define WORK_MAXIMUM 50
+
+#define PRIORITIES_NUM 5
+
+LIST *Queue[PRIORITIES_NUM];
 
 void panic(const char *msg) {
     fprintf(stderr, "[PANIC] %s\n", msg);
@@ -44,14 +49,20 @@ static PID scheduler_pid;
 
 /* Returns the next process to run or NULL if there is nothing runnable */
 struct proc *next_proc() {
-    struct proc *p;
+   /* struct proc *p;*/
+    int i;
 
     /* TODO: reimplement as a priority scheduler */
+    for (i=0; i< PRIORITIES_NUM; i++){
+        if (ListCount(Queue[i]) !=0) return ListTrim(Queue[i]);
+    }
+
+/*
     for (p = ptable.procs; p < &ptable.procs[ptable.size]; p++) {
         if (p->state != RUNNABLE) continue;
         return p;
     }
-
+*/
     return NULL;
 }
 
@@ -100,7 +111,8 @@ void set_state(enum pstate state) {
 
         if (state == RUNNABLE) {
             /* TODO: add to runnable queue */
-        }
+            ListInsert(Queue[p-> priority],p);
+          }
 
         p->state = state;
         break;
@@ -171,6 +183,11 @@ int mainp(int argc, char **argv) {
     struct proc *p;
 
     srand(0);
+
+    for (i=0;i< PRIORITIES_NUM; i++){
+        Queue[i]=ListCreate();
+    }
+    
 
     if (argc != 3) {
         printf("usage: %s nproc ncpu\n", argv[0]);
