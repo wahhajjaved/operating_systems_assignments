@@ -3,13 +3,16 @@
 .PHONY: clean
 
 CC=gcc
-CFLAGS= -I. -I/student/cmpt332/pthreads
+CFLAGS=-I. -I/student/cmpt332/pthreads
 CPPFLAGS=-std=gnu90 -Wall -pedantic -g
 compile= $(CC) $(CFLAGS) $(CPPFLAGS)
 
-LINK_PTHREADS_X86=-L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads
+LINK_PTHREADS_X86=-L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads \
+					-z noexecstack
 
-Link_Libs=-llist -L. -l:liblist.a $(LINK_PTHREADS_X86) 
+Link_Libs=-L. -llist $(LINK_PTHREADS_X86) 
+# used the listlib.a from previous lab, not a1
+
 
 all: sim
 
