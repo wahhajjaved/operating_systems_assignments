@@ -43,19 +43,80 @@ static struct {
 
 static PID scheduler_pid;
 
+int runnableMutex;
+LIST* runnable;
 LIST* queue0;
+LIST* queue1;
+LIST* queue2;
+LIST* queue3;
+LIST* queue4;
 
 /* Returns the next process to run or NULL if there is nothing runnable */
 struct proc *next_proc() {
     struct proc *p;
 
     /* TODO: reimplement as a priority scheduler */
-    for (p = ptable.procs; p < &ptable.procs[ptable.size]; p++) {
+    /* for (p = ptable.procs; p < &ptable.procs[ptable.size]; p++) {
         if (p->state != RUNNABLE) continue;
         return p;
     }
+    */
+   
+   /*Drain the runnable queue and place everything in its proper queue
+   based on priority
+   */
+    if (P(runnableMutex)) panic("invalid runnable mutex");
 
+    ListFirst(runnable);
+    /* printf("ListFirst\n"); */
+    for(;;) {
+        if(ListCount(runnable) == 0) break;
+        
+        p = ListCurr(runnable);
+        /* printf("ListCurr returned %p\n", p); */
+        if (p == NULL) {
+            /* printf("p is NULL. Breaking out of loop\n"); */
+            break;
+        }
+        else if (p->priority == 0) ListAppend(queue0, p);
+        else if (p->priority == 1) ListAppend(queue1, p);
+        else if (p->priority == 2) ListAppend(queue2, p);
+        else if (p->priority == 3) ListAppend(queue3, p);
+        else if (p->priority == 4) ListAppend(queue4, p);
+        else break;
+        /* printf("Calling ListNext\n"); */
+        if(ListRemove(runnable) == NULL) break;
+    }
+    
+    if (V(runnableMutex)) panic("invalid runnable mutex");
+    
+    if(ListCount(queue0) > 0) {
+        p = ListFirst(queue0);
+        ListRemove(queue0);
+        return p;
+    }
+    else if(ListCount(queue1) > 0) {
+        p = ListFirst(queue1);
+        ListRemove(queue1);
+        return p;
+    }
+    else if(ListCount(queue2) > 0) {
+        p = ListFirst(queue2);
+        ListRemove(queue2);
+        return p;
+    }
+    else if(ListCount(queue3) > 0) {
+        p = ListFirst(queue3);
+        ListRemove(queue3);
+        return p;
+    }
+    else if(ListCount(queue4) > 0) {
+        p = ListFirst(queue4);
+        ListRemove(queue4);
+        return p;
+    }
     return NULL;
+
 }
 
 
@@ -104,7 +165,9 @@ void set_state(enum pstate state) {
 
         if (state == RUNNABLE) {
             /* TODO: add to runnable queue */
-            ListPrepend(queue0, p);
+            if (P(runnableMutex)) panic("invalid runnable mutex");
+            ListAppend(runnable, p);
+            if (V(runnableMutex)) panic("invalid runnable mutex");
         }
 
         p->state = state;
@@ -206,7 +269,16 @@ int mainp(int argc, char **argv) {
     }
 
     /*Lists for use by the scheduler*/
+    runnableMutex = NewSem(1);
+    if (runnableMutex == -1) {
+        panic("Unable to create semaphore for runnable.");
+    }
+    runnable = ListCreate();
     queue0 = ListCreate();
+    queue1 = ListCreate();
+    queue2 = ListCreate();
+    queue3 = ListCreate();
+    queue4 = ListCreate();
     
     scheduler_pid = Create(scheduler, 4096, "scheduler", NULL, HIGH, USR);
     if (scheduler_pid == PNUL) {
