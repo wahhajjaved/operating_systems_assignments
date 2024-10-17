@@ -1,0 +1,236 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-10-16
+
+commit d7f836f3c1e3263452b67b462ef606265e7f4cea
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 16 19:31:28 2024 -0600
+
+    program output added
+
+commit 558b2c63f98fee34e2ba73145da1a02f7f0ffae5
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 16 19:26:30 2024 -0600
+
+    Author info updated
+
+commit 3aecc24c212d6e2218186a9139c5b86ae07bfec8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 16 16:24:55 2024 -0600
+
+    Scheduler implemented
+
+commit c49139aa140138d3923f9928b790515f75435027
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 16 11:50:24 2024 -0600
+
+    created queue0 for priority 0 processes
+
+commit f08cd513e94b1ce0102149bdcf10392080b54bdf
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 16 11:00:04 2024 -0600
+
+    Makefile done. sim compiles and runs
+
+commit 40645417a914d93c8292142d0927cf79be810da3
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Oct 16 10:46:03 2024 -0600
+
+    lab5 start
+
+commit 3b37a599df7984b22e779b760a9e485572170905
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 19:26:03 2024 -0600
+
+    Enter and Leave cases handled
+
+commit 46afc73d0909810c16b7febe1b0cf471bd72d39b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 18:05:27 2024 -0600
+
+    Enter case done
+
+commit 80f91d344b3de314c95178fefc063f25ee655f24
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 17:40:56 2024 -0600
+
+    Functions now dynamically create messages and added them to message queue
+
+commit fe52a522448343e815903f3c82afda5e3ce0bd6b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 17:18:16 2024 -0600
+
+    Initial message type created. All functions can now create their own messages
+
+commit 5cff4116e236665764c67051e4682f9ba4dea9c7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 13:54:38 2024 -0600
+
+    RttMonInit implemented
+
+commit 61f0e3ea7a151ed6bc41e9e9a21460903243bc13
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 13:54:26 2024 -0600
+
+    .gitignore updated
+
+commit d50e68b51ecea9c6280a440001ed9b20277c785f
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Oct 10 13:41:33 2024 -0600
+
+    makefile done.
+
+commit ce59b25fd2eeda73e9c9d94271130f559fe9c013
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 11:18:21 2024 -0600
+
+    Stubs for monitor.c and monitor.h created
+
+commit aec3fcc753a372359c395dba8d6bea09bc9b6ea8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 8 10:37:35 2024 -0600
+
+    Lab4 Initial Commit
+
+commit 0899fef3fe60c521d2ffb2c0fa8bdcaa36acb327
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 19 19:18:37 2024 -0600
+
+    Part C done
+
+commit a50ff38f8cac40ba71368e6ac9b2dde8d3d5b934
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 19 16:09:10 2024 -0600
+
+    Part A done
+
+commit b4793d9a19641217be6e1ae77505889489dac2de
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 19 14:47:47 2024 -0600
+
+    lab2 initial commit
+
+commit fa1d36db4df8d65c7dd623bdbefb0ab70410f58b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 12 13:04:11 2024 -0600
+
+    script to check submission requirements
+
+commit 38ed7f24f9d62d632eab70245491f6dd81b43898
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 12 13:03:56 2024 -0600
+
+    Added author info
+
+commit 77c967314677d32742569d56fba0d8eef6cd9487
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Sep 12 12:50:11 2024 -0600
+
+    renamed files to conform to assignment specs
+
+commit e03a2fc9909fb112bf5e851d91f7dab13a0adbf3
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Sep 11 18:17:39 2024 -0600
+
+    Added author info and script to check submissions
+
+commit fde184c0e79536cafe640516ba23acdd61dfb4a8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Sep 11 15:18:09 2024 -0600
+
+    vm log files added
+
+commit 6976a40873d9fa7c938a62a76f38532b5d405434
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 16:13:52 2024 -0600
+
+    Fixed arm exe name. All executables now working
+
+commit ce533cc3f26591bcde3519a8e5af129b2f7871af
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 16:05:57 2024 -0600
+
+    run script for sample-linux-*
+
+commit 68111b924472b0d99fb0dd2395450e90a64b9161
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 16:05:42 2024 -0600
+
+    added rule to make all exes
+
+commit cbf2366f0fa79029fa361bbac60a87c09a996039
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 15:37:47 2024 -0600
+
+    ppc crosscompiling done
+
+commit bcde8db85a591fcd93c3d2c5fe623ef03c9a1894
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 15:27:38 2024 -0600
+
+    arm cross compile done
+
+commit b2676dd938b25f30299f38e57ab23943282afac2
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 14:04:07 2024 -0600
+
+    moved executbale to top level directory
+
+commit 8c997bc4bde327c3efd127bf640a709ef5bbe5f8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 14:00:03 2024 -0600
+
+    arm cross compile added. not tested
+
+commit 9ce25de200822d97491aad840935d804c5cfdbcd
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 13:39:38 2024 -0600
+
+    Refactored to make cross compiling easier
+
+commit cddc956716fc9d89306ec0871ac56763758e730a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 13:08:15 2024 -0600
+
+    binary compiles on linux x86_64
+
+commit e9e12f106ba3e54ae2b5e6d7ec8a450fb6e46018
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 12:44:37 2024 -0600
+
+    object files and library rules created and tested
+
+commit 912c193f802b5f5598ae2c043511efcf67286026
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 11:49:01 2024 -0600
+
+    clean rule added
+
+commit ef994635c477046757ee878bfee02f055082688a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 11:43:45 2024 -0600
+
+    directories configured
+
+commit b2b2c0a3c809bcc7d3c5de8475ea5813e4d83ab0
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 11:12:51 2024 -0600
+
+    initial makefile
+
+commit 637f08f27263efcd16c39f44dc754087d5fef530
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 10:54:11 2024 -0600
+
+    provided files extracted.
+
+commit cbf7c5950fcf689bc520bf88f36d817e3da5b83b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Sep 10 10:47:42 2024 -0600
+
+    Initial commit. Created gitignore
+
+commit e44ba3acfeec8612123bdf6f4d92ad1f2df1beaa
+Author: Dwight Makaroff (dwm138) <makaroff@cs.usask.ca>
+Date:   Mon Sep 9 22:25:46 2024 -0600
+
+    Initial commit
