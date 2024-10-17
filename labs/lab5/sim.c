@@ -2,6 +2,8 @@
  * Lab 6: Scheduler Simulator
  * CMPT 332 Fall 2018
  * University of Saskatchewan
+ * @author Wahhaj Javed, muj975, 11135711
+ * @date 2024-10-16
  */
 
 #include <stdio.h>

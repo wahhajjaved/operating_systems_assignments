@@ -1,5 +1,5 @@
 #@author Wahhaj Javed, muj975, 11135711
-#@date 2024-10-18
+#@date 2024-10-16
 
 pthreads_path = /student/cmpt332/pthreads
 L = -L. -llist
