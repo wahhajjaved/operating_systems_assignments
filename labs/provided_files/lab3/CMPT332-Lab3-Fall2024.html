@@ -1,0 +1,146 @@
+<html>
+
+<head>
+<title>CMPT 332 - Lab 3 - Fall 2024</title>
+</head>
+<body>
+<img src="splashBanner.gif" align="middle">
+<h1>
+    Computer Science 332 - Fall 2024<br>
+    University of Saskatchewan<br>
+    Lab 3: Semaphores and Linux Kernel<br>
+</h1>
+
+<b>Instructor:</b> Dwight Makaroff/Jon Lovering <br>
+<b>Out: </b>October 1, 2024<br>
+<b>Due:</b>At the end of the tutorial (actually by 21:00 on
+   Thursday, October 3, 2024, final deadline). <br>
+<b>Marks:</b> 8 <br>
+
+
+<h2>Part 1: Semaphores</h2>
+<h3 id="preface">Preface</h3>
+<p> For part of this lab you will work in your assignment groups (if
+  possible) or any 
+other group of about 3-5 people, and 
+it is expected that
+    <b>every member in the group chosen will submit this lab individually</b>.
+    You will use a Linux lab machine to complete this lab. 
+    This lab also assumes you are using <code>bash</code> and
+    <code>UBC Pthreads</code>. Identify all members of your group in
+    the beginning of the submitted files.</p>
+
+<h3>Lab Description</h3>
+<p> In groups of 3 to 5 people, you will design and implement a 
+	solution to <b><i>one</i></b>
+    of the following questions. 
+    All of these questions can be found in "The
+    Little Book of Semaphores" which is available on Canvas. Note as
+    well, that hints and solutions are given in the book. Work without
+    the solution, but if you cannot come up with a solution idea within 15
+    minutes, use the hint. If you cannot get the solution with the hint in
+    another 15 minutes, code the solution from the book. </p>
+
+<p> Each student will submit a text file,
+    <code>Lab3.synchproblem.txt</code> which details your design ideas and
+    outlines your understanding of why the solution works. <u><i>Be clear 
+    which question you are implementing in your design document.</i></u> Once
+    you have completed your design of the solution, you should then implement
+    your algorithm as <code>Lab3.synchproblem.c</code>. You should also
+    have a Makefile that will compile <code>Lab3.synchproblem.c</code>, as well
+    as your test file <code>Lab3.testsynchproblem.c</code>, linking them
+    to an executable whose name you have defined in your design document. </p>
+
+<p> Note: The book uses <code>wait()</code> and <code>signal()</code>
+    as the logical names for semaphore operations, these are
+    equivalent to <code>P()</code> and <code>V()</code>, respectively. </p>
+
+<h3 id="barbershop">BarberShop (5.2)</h3>
+<p>  </p>
+
+<h3 id="santa">Santa Claus (5.5)</h3>
+<p>  </p>
+
+<h3 id="rollercoaster">Roller-Coaster (5.8)</h3>
+<p>  </p>
+
+
+<h2>Part 2: A new baby Penguin (Compiling a new linux kernel)</h2>
+
+<p>This part is to be done INDIVIDUALLY. </p>
+
+
+<p>Open up your virtual machine from Lab 1.</p>
+
+<p>Once again run <code>script</code>.<br>
+<code>$ script penguin.txt</code></p>
+<p>First we'll need to get the dependencies. Note: This may not be all
+  of the dependencies required, and your compilation may fail. The
+  error output from compilation is generally really good, so TAs won't
+  assist unless something really strange occurs.</p>
+<p>Using apt, install the following modules to satisfy the dependencies:<br>
+<code>build-essential fakeroot ncurses-dev libssl-dev ccache bison flex</code></p>
+<p>Now install the Linux 5.15.133 source:<br>
+<code>$ sudo wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.15.133.tar.xz </code><br>
+The source will be downloaded as a tar in /usr/src/linux-source-5.15.133. 
+Feel free to get any kernel you want.</p>
+<p>Navigate to the above folder, and untar the tar.xz file. Once untar-ing
+  is complete, perform the following commands:<br>
+<code>$ sudo make defconfig</code><br>
+<code>$ sudo make localyesconfig</code></p>
+<p><code>defconfig</code> generates the default .config file for the
+  host's architecture, and <code>localyesconfig</code> ensures that
+  everything the host has in its kernel is selected in your
+  .config.</p>
+<p>Now run <code>$ sudo make menuconfig</code> which will bring up a
+  menu of options. Since we want the most secure kernel, enable
+  'Diffie-Hellman operations on retained keys'. There are many things
+  in the kernel configuration that are for special cases and/or to
+  cover every possibility. A lot of these are unnecessary for a basic
+  kernel on a server. Explore through the config options and delete at
+  least 10 packages/options that you are sure you won't need. <b>Document</b>
+  and <b>justify</b> what those choices are in Lab3.kernel-config.txt. 
+Device Drivers and File Systems
+  are two prime candidate categories. If you compile all the device drivers into
+  the kernel, it will take a very long time.
+
+  <p>Save your config file,
+  and then run <code>$ sudo make -j$(nproc)</code>.</p>
+<p>Once compilation is complete run:<br>
+  <code>$ sudo make modules_install</code><br>
+  <code>$ sudo make install</code><br>
+  edit the grub config file to use a menu and have -1 for timeout ; sudo update-grub
+  <p>Now <code>ctrl+d</code> so script terminates, and reboot your
+  vm. Finally run <code>$ script -a penguin.txt</code> and finish off
+  with a <code>uname -r</code>. You have just compiled and installed
+  a Linux kernel! Now you can play around with lots of things as the root user
+  in your VM and explore to figure stuff out. Remember to terminate script.</p>
+
+<p>Note that this may take some time. Work on Part 1 while the kernel
+  is compiling.</p>
+
+<h2>Deliverables</h2>
+
+<p> A single tar file containing your <code>Makefile</code>,
+    <code>Lab3.synchproblem.txt</code>, <code>Lab3.synchproblem.c</code>,
+    <code>Lab3.testsynchproblem.c</code>, <code>penguin.txt</code>,
+    <code>Lab3.kernel-config.txt</code>, <code>Lab3.test.results.txt</code>
+and <code>git-log.txt</code>. </p>
+
+<h2>Submission</h2>
+
+Create a .tar file with at least the 8 files in the next section it
+(no directories) and submit to Lab 3.
+
+<h2>Grading Scheme</h2>
+
+<ul>
+    <li><code>Makefile</code>: 1 mark </li>
+    <li><code>Lab3.synchproblem.txt</code>: 1 mark </li>
+    <li><code>Lab3.synchproblem.c</code>: 1 mark </li>
+    <li><code>Lab3.testsynchproblem.c</code>: 1 mark </li>
+    <li><code>Lab3.test.results.txt</code>: 1 mark </li>
+    <li><code>Lab3.kernel-config.txt</code>: 1 mark </li>
+    <li><code>penguin.txt</code>: 1 mark </li>
+    <li><code>git-log.txt</code>: 1 mark </li>
+<ul>
