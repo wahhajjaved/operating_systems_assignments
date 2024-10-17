@@ -1,0 +1,70 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-10-16
+
+❯ ./sim 5 1
+process_3 is running. (priority 0)
+process_3 is start block.
+process_1 is running. (priority 1)
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_1 is running. (priority 1)
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_3 is done blocking.
+process_3 is start block.
+process_3 is done blocking.
+process_3 is start block.
+process_1 is running. (priority 1)
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_3 is done blocking.
+process_3 is start block.
+process_0 is running. (priority 3)
+process_3 is done blocking.
+process_3 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is start block.
+process_4 is start block.
+process_3 is done blocking.
+process_3 is start block.
+process_0 is running. (priority 3)
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is start block.
+process_4 is done blocking.
+process_4 is running. (priority 3)
+process_3 is done blocking.
+process_3 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is running. (priority 0)
+process_3 is start block.
+process_0 is start block.
+process_3 is done blocking.
+process_3 is running. (priority 0)
+process_3 is start block.
+process_4 is running. (priority 3)
