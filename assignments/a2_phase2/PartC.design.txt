@@ -1,0 +1,38 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-10-08
+
+
+- <src_port> <dest_hostname> <dest_port>
+- Ports must be between 30001 and 40000
+
+
+[ Threads ]
+- 5 threads are needed:
+	-- Thread 1 handles keyboard input from console
+	-- Thread 2 handles output to console
+	-- Thread 3 listens for UDP datagrams
+	-- Thread 4 sends UDP datagrams
+	-- Thread 5 is the server which coordinates sending of messages
+	-- Threads are created using RttCreate. For now all threads have a stack
+		size of 65536 and have RTTNORM priority. These parameters may need to
+		be fine tuned as the program develops
+	- Threads functions don't need to take any input parameters as each is 
+		responsible for its own thing
+	
+	
+[ Console Input ]
+	- Strings are read from the console and do not need to be parsed
+	- Console input is handled using fgets()
+	- Each string can be a max of 1000 chars
+	- fgets() will return newlines but these are not stripped as the output
+		on clients should match the input on the server
+	- Each input string is placed in a list so the messages can be buffered
+
+
+
+** Have a midterm the day this assignment is due so this is all the time 
+	I can spend on it.
+
+
+
