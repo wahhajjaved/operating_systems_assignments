@@ -23,11 +23,11 @@ RTTTHREAD server() {
 	printf("server not yet implemented.\n");
 	
 }
-RTTTHREAD consoleIn() {
+RTTTHREAD consoleIn(void) {
 	char inputBuffer[BUFSIZE];
 	int bytesRead;
+	printf("consoleIn(): starting. \n");
 	for(;;) {
-		printf("consoleIn(): Reading from stdin. \n");
 		bytesRead = read(0, inputBuffer, BUFSIZE);
 		if(bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
 			perror("consoleIn(): Error encountered when reading from stdin.");
@@ -36,11 +36,10 @@ RTTTHREAD consoleIn() {
 		else if (bytesRead == 0) {
 			printf("consoleIn(): EOF detected on stdin.\n");
 		}
-		else {
-			printf("consoleIn(): No data to read on stdin.\n");
+		else if(bytesRead > 0) {
+			printf("consoleIn(): %d bytes read.\n", bytesRead);
 		}
-		printf("consoleIn(): Sleeping for 1000 us. \n");
-		RttUSleep(1000);
+		/* RttSleep(1); */
 	}
 	printf("consoleIn(): exiting.\n");
 	
@@ -100,7 +99,7 @@ int mainp(int argc, char* argv[])
 	/* RttThreadId networkOutTid; */
 	RttSchAttr attr;
 	
-	/* setbuf(stdout, 0); */
+	setbuf(stdout, 0);
 	parseArguments(argc, argv, &src_port, &dst_ip, &dst_port);
 	printf("Starting s-chat. src port: %u, dst ip: %u, dst port: %u.\n",
 		src_port, 
@@ -139,7 +138,7 @@ int mainp(int argc, char* argv[])
 		"consoleIn",
 		NULL,
 		attr,
-		RTTSYS
+		RTTUSR
 	);
 	if (temp == RTTFAILED) {
 		perror("Failed to create consoleIn thread.");
@@ -182,6 +181,7 @@ int mainp(int argc, char* argv[])
  */	
 	
 	printf("s-chat exiting.\n");
+	
 	
 	return(0);
 
