@@ -10,18 +10,39 @@
 #include <sys/socket.h>
 #include <netdb.h>
 #include <arpa/inet.h>
+#include <fcntl.h>
 
 #include <rtthreads.h>
 #include <RttCommon.h>
 
 #define STKSIZE 65536
+#define BUFSIZE 100
+
 
 RTTTHREAD server() {
 	printf("server not yet implemented.\n");
 	
 }
 RTTTHREAD consoleIn() {
-	printf("consoleIn not yet implemented.\n");
+	char inputBuffer[BUFSIZE];
+	int bytesRead;
+	for(;;) {
+		printf("consoleIn(): Reading from stdin. \n");
+		bytesRead = read(0, inputBuffer, BUFSIZE);
+		if(bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
+			perror("consoleIn(): Error encountered when reading from stdin.");
+			break;
+		}
+		else if (bytesRead == 0) {
+			printf("consoleIn(): EOF detected on stdin.\n");
+		}
+		else {
+			printf("consoleIn(): No data to read on stdin.\n");
+		}
+		printf("consoleIn(): Sleeping for 1000 us. \n");
+		RttUSleep(1000);
+	}
+	printf("consoleIn(): exiting.\n");
 	
 }
 RTTTHREAD consoleOut() {
@@ -76,23 +97,30 @@ int mainp(int argc, char* argv[])
 	int temp;
 	uint32_t src_port, dst_ip, dst_port;
 	RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
-	RttThreadId networkOutTid;
+	/* RttThreadId networkOutTid; */
 	RttSchAttr attr;
 	
+	/* setbuf(stdout, 0); */
 	parseArguments(argc, argv, &src_port, &dst_ip, &dst_port);
 	printf("Starting s-chat. src port: %u, dst ip: %u, dst port: %u.\n",
 		src_port, 
 		dst_ip, 
 		dst_port
 	);
-	return 0;
 	
-	
+	/*Configure stdin to be non blocking*/
+	temp = fcntl(0, F_SETFL, O_NONBLOCK);
+	if(temp == -1) {
+		perror("main(): Could not set std in to be non-blocking.\n");
+		return 1;
+	}
+
+	/*Thread creations*/
 	attr.startingtime = RTTZEROTIME;
 	attr.priority = RTTNORM;
 	attr.deadline = RTTNODEADLINE;
-	setbuf(stdout, 0);
 	
+	/* 
 	temp = RttCreate(
 		&serverTid, 
 		(void(*)()) server,
@@ -103,7 +131,7 @@ int mainp(int argc, char* argv[])
 		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create server thread.");
-
+ */
 	temp = RttCreate(
 		&consoleInTid, 
 		(void(*)()) consoleIn,
@@ -113,9 +141,13 @@ int mainp(int argc, char* argv[])
 		attr,
 		RTTSYS
 	);
-	if (temp == RTTFAILED) perror("Failed to create consoleIn thread.");
+	if (temp == RTTFAILED) {
+		perror("Failed to create consoleIn thread.");
+		return 1;
+	}
+		
 
-	temp = RttCreate(
+/* 	temp = RttCreate(
 		&consoleOutTid, 
 		(void(*)()) consoleOut,
 		STKSIZE,
@@ -125,8 +157,8 @@ int mainp(int argc, char* argv[])
 		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create consoleOut thread.");
-
-	temp = RttCreate(
+ */
+/* 	temp = RttCreate(
 		&networkInTid, 
 		(void(*)()) networkIn,
 		STKSIZE,
@@ -136,8 +168,8 @@ int mainp(int argc, char* argv[])
 		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkIn thread.");
-
-	temp = RttCreate(
+ */
+/* 	temp = RttCreate(
 		&networkOutTid, 
 		(void(*)()) networkOut,
 		STKSIZE,
@@ -147,7 +179,7 @@ int mainp(int argc, char* argv[])
 		RTTSYS
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkOut thread.");
-	
+ */	
 	
 	printf("s-chat exiting.\n");
 	
