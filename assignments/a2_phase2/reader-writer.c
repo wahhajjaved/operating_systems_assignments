@@ -12,13 +12,7 @@
    *********** reader-writer.c ***********
 */
 
-/*
-#include <stdio.h>
-
-#include <os.h>
-#include <standards.h>
-*/
-#include "reader-writer-monitor.h"
+#include <reader-writer-monitor.h>
 #include <os.h>
 #include <stdio.h>
 #include <standards.h>

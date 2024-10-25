@@ -21,8 +21,8 @@
    *********** reader-writer.c ***********
 */
 
-#include "Monitor.h"
-#include "reader-writer-monitor.h"
+#include <Monitor.h>
+#include <reader-writer-monitor.h>
 
 /* INITIALIZATION CODE */
 #define OKtoWrite 1
