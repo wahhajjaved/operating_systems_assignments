@@ -5,18 +5,19 @@
 #ifndef MONITOR
 #define MONITOR
 
+#include <list.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <os.h>
 #include <standards.h>
 
-/*void MonInit(int num);*/
+void MonInit(int num);
 void MonEnter(void);
 
 void MonLeave(void);
 
-void MonWait(int signal);
+void MonWait(int CV);
 
-void MonSignal(int signa);
+void MonSignal(int CV);
 
 #endif

@@ -15,9 +15,7 @@ void StartRead(void);
 void StopRead(void);
 void StopWrite(void);
 void StartWrite(void);
-/*
-PROCESS reader(void *arg);
-PROCESS writer(void *arg);
-*/
+void Initialize(void); 
+/* added initilized from reader-writer-monitor.c */
 
 #endif
