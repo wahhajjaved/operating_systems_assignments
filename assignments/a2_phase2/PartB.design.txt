@@ -4,11 +4,15 @@
 ------------------------------------
 Monitors Part c
 
-urgent             // semaphore that are urgent in monsignal
-urgentNum          // to store how many urgent are waiting 
-mutex            // semaphore for the enter state
-monList
-sem                // array of semaphors for each CV
+int urgent         // semaphore that are urgent in monsignal
+int urgentNum      // to store how many urgent are waiting 
+int mutex          // semaphore for the enter state
+
+int *monList       // array to keep track of waiting process in the monitor
+                   // in each condition
+int *sem           // array of semaphors for each CV
+LIST **condVar     // array of list that hold for each condition
+
 
 // in phase 1 i chose to use struct to store the semaphores and it's count
 and item, but in this phase i am changing into list as it simplier to use/
@@ -23,48 +27,48 @@ MonInit:
     
     memory allocation for monList , each index initialized to 0
     memory allocation for sem, each index intialized to NewSem(o)
+    memory allocation for condVar, each indext create a list
 
 
 MonEnter()
     P(mutex) // wait for signal
 
 MonLeave() 
-    V(mutex) // send signal to leave
+    if the UrgentNum > 0: V(urgent
+    else V(mutex) // send signal to leave
 
 MonWait()
-    // search the list for conditional variable 
-    ListSearch(MonList, comparator, cmp)
-    // cmp is the conditional variable
-    // the comparator() function will be defined
+    //add the current PID to the list
+    ListAppend(condVar, PID)
 
-    if cmp not in list then add it to the list
-        listData = memory allocation
-        newData.sem =NewSem(0) 
-        newData.count=0
-        add to list by listAdd(MonList,newData)
+    //release the mutex so other processes can run
+    // to prevent deadlock
+    if the UrgentNum > 0: V(urgent
+    else V(mutex) // send signal to leave
 
-    newData.count ++
-
-    V(mutex)  //send the signal to mutex 
-
-    P(MonList.sem) // wait for the signal
-    MonList.count --
+    P(sem[CV]); // from sem wait for the CV 
+    ListRemove(condVar[CV]); // remove from the list
+    monList[CV] --; 
 
 MonSignal()
-    // search the list for conditional variable
-    ListSearch(MonList, comparator, cmp)
-    // cmp is the conditional variable
-    // the comparator() function will be defined
-
-    //if atleast one thread waiting 
-    if (ListData count >0)
-        V(listData.sem)
-
+    //if there are processes in monitor
+    if monList[CV] > 0
+        increase urgent process 
+        ListRemove(condVar[CV]); // remove the process from list
+        V(sem[CV]); // send the single to wake up the waiting processes
+        P(urgent); // wait for the urgent to finish
+        urgentNum--; // decrease the urgent count
+    
 ____________________________________________
 
-changes made 
+changes made to other files 
 
-reader-writer
+reader-writer:
 changed rt threads to ubc pthreads
+
+list_adder.c list_remover.c list_movers.c:
+for the list modifiers i removed the print statements of when invalid or 
+unexpected parameters are give, now they are handled without telling the 
+user.
 
 
