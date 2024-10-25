@@ -57,26 +57,30 @@ PROCESS writer(void *arg)
 
 int mainp()
 {
-    PID tempPid, temp2, temp3;
+    PID r1PID, w1PID,  r2PID, w2PID, r3PID;
     setbuf(stdout, 0);
 
     srand(71);
 
-    tempPid = Create((void(*)()) reader, 16000, "R1", (void *) 1000, 
+    r1PID = Create((void(*)()) reader, 16000, "R1", (void *) 1000, 
 		      NORM, USR );
-    if (tempPid == PNUL) perror("Create");
-    temp2 = Create(  (void(*)()) writer, 16000, "W1", (void *) 500, 
+    if (r1PID == PNUL) perror("Create");
+    
+    w1PID = Create(  (void(*)()) writer, 16000, "W1", (void *) 500, 
 		       NORM, USR );
-    if (temp2 == PNUL) perror("Create");
-    temp3 = Create(  (void(*)()) reader, 16000, "R2", (void *) 1001,
+    if (r1PID == PNUL) perror("Create");
+    
+    r2PID = Create(  (void(*)()) reader, 16000, "R2", (void *) 1001,
 		       NORM, USR );
-    if (temp3 == PNUL) perror("Create");
-    temp3 = Create(  (void(*)()) reader, 16000, "R3", (void *) 1002, 
+    if (r2PID == PNUL) perror("Create");
+    
+    r3PID = Create(  (void(*)()) reader, 16000, "R3", (void *) 1002, 
 		       NORM, USR );
-    if (temp3 == PNUL) perror("Create");
-    temp3 = Create(  (void(*)()) writer, 16000, "W2", (void *) 501, 
+    if (r3PID == PNUL) perror("Create");
+    
+    w2PID = Create(  (void(*)()) writer, 16000, "W2", (void *) 501, 
 		       NORM, USR );
-    if (temp3 == PNUL) perror("Create");
+    if (w2PID == PNUL) perror("Create");
     printf("Reader and Writer processes created\n");
     
     return(0);
