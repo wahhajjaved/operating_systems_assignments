@@ -36,8 +36,8 @@ static int busyWriting =0;
 /* MONITOR PROCEDURES */
 void Initialize(void)
 {
-/*      MonInit(numConds);
-*/
+      MonInit(numConds);
+
 }
 
 void StartRead()
