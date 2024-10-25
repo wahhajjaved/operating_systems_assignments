@@ -4,16 +4,26 @@
 ------------------------------------
 Monitors Part c
 
-mutex = NewSem(1) // start mutex with wait 
+urgent             // semaphore that are urgent in monsignal
+urgentNum          // to store how many urgent are waiting 
+mutex            // semaphore for the enter state
 monList
+sem                // array of semaphors for each CV
 
+// in phase 1 i chose to use struct to store the semaphores and it's count
+and item, but in this phase i am changing into list as it simplier to use/
+impliement and already i used list for monitor in lab 4. 
 
-struct listData: //the struct holds all the data used by the monitors
-    sem      // semaphore
-    count
-    listItems
 
 Procedures:
+MonInit:
+    mutex= NewSem(1)
+    urgent= NewSem(0)
+    urgentNum=0
+    
+    memory allocation for monList , each index initialized to 0
+    memory allocation for sem, each index intialized to NewSem(o)
+
 
 MonEnter()
     P(mutex) // wait for signal
