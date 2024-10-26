@@ -15,29 +15,42 @@ thread_switch:
     i copied the code from swtch.S from kernel directory to thread_switch.
     the purpose of swtch.S is the same as thread_switch().
 
+uthread.h:
+
+    file created to add thread switch to uthread.c
+
+
+uthread.c:
 thread_create(void (*tmain)()):
+    added the checking for available thread for running state.
+    ra is intialized to the start of func and sp is initilazised to the 
+    address of the last item in the stack.so, when the thread_switch() is
+    called then it will return to the start of func and the stack pointer(sp)
+    is at the top of thread stack.
 
     in the code i used the coding design as already inside the code, 
     like "printf("thread_schedule: no runnable threads\n"); exit(-1);"
+
+thread struct:
+    used unit 64 because to ensure that it matches the register size of
+    architecture.
+    modified the thread struct to save/restore the registers, 
+    added s0-s9, ra and sp.
 
 thread_schedule:
     switched between threads by calling thread_switch() from uthread_switch.S
     switches from current to next thread to run.
 
-Mutex:
 
-
-
-
-
---------------------------------
-changes made to the files:
-
-Threading:
-
+____
 
 Mutex:
 
+
+
+
+
+---
 
 Makefile:
 
