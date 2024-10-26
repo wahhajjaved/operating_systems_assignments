@@ -142,7 +142,9 @@ UPROGS=\
 	$U/_pingpong\
 	$U/_primes\
 	$U/_trace\
-	$U/uthread\ #CMPT 332 GROUP 67 Change, Fall 2024 
+	$U/_uthread\
+ 
+#CMPT 332 GROUP 67 Change, Fall 2024 
 
 
 $U/uthread_switch.o : $U/uthread_switch.S
