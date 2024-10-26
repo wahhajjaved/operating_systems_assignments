@@ -1,6 +1,7 @@
 #include "kernel/types.h"
 #include "kernel/stat.h"
 #include "user/user.h"
+#include "user/uthread.h"
 
 /* Possible states of a thread: */
 #define FREE        0x0
@@ -10,18 +11,9 @@
 #define STACK_SIZE  8192
 #define MAX_THREAD  4
 
-
-struct thread {
-
-    /* CMPT 332 GROUP 37 Change, Fall 2024 */
-
-
-  char       stack[STACK_SIZE]; /* the thread's stack */
-  int        state;             /* FREE, RUNNING, RUNNABLE */
-};
 struct thread all_thread[MAX_THREAD];
 struct thread *current_thread;
-extern void thread_switch(uint64, uint64);
+/*extern void thread_switch(uint64, uint64);*/
               
 void 
 thread_init(void)
@@ -66,7 +58,7 @@ thread_schedule(void)
      * Invoke thread_switch to switch from t to next_thread:
      */
 
-    /* CMPT 332 GROUP 37 Change, Fall 2024 */
+    /* CMPT 332 GROUP 67 Change, Fall 2024 */
     thread_switch(t, next_thread); 
 
   } else
@@ -83,16 +75,17 @@ thread_create(void (*func)())
   }
   /*t->state = RUNNABLE;*/
   
-    /* CMPT 332 GROUP 37 Change, Fall 2024 */
+    /* CMPT 332 GROUP 67 Change, Fall 2024 */
     /* check if there are any avialable threads  */
-    if (t = all_thread+ MAX_THREAD) {
+    if (t == all_thread+ MAX_THREAD) {
         printf("thread_create: no threads available\n");
         exit(-1);
   }
     t->state = RUNNABLE;
 
-    /* initialize tthe id, ra and sp*/
-    
+    /* initialize ra and sp*/
+    t->ra = (uint64) func;
+    t->sp= (uint64) &t->stack[STACK_SIZE];
 
 }
 
