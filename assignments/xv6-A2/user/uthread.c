@@ -12,6 +12,10 @@
 
 
 struct thread {
+
+    /* CMPT 332 GROUP 37 Change, Fall 2024 */
+
+
   char       stack[STACK_SIZE]; /* the thread's stack */
   int        state;             /* FREE, RUNNING, RUNNABLE */
 };
@@ -58,10 +62,13 @@ thread_schedule(void)
     next_thread->state = RUNNING;
     t = current_thread;
     current_thread = next_thread;
-    /* YOUR CODE HERE
+    /* 
      * Invoke thread_switch to switch from t to next_thread:
-     * thread_switch(??, ??);
      */
+
+    /* CMPT 332 GROUP 37 Change, Fall 2024 */
+    thread_switch(t, next_thread); 
+
   } else
     next_thread = 0;
 }
@@ -74,8 +81,19 @@ thread_create(void (*func)())
   for (t = all_thread; t < all_thread + MAX_THREAD; t++) {
     if (t->state == FREE) break;
   }
-  t->state = RUNNABLE;
-  // YOUR CODE HERE
+  /*t->state = RUNNABLE;*/
+  
+    /* CMPT 332 GROUP 37 Change, Fall 2024 */
+    /* check if there are any avialable threads  */
+    if (t = all_thread+ MAX_THREAD) {
+        printf("thread_create: no threads available\n");
+        exit(-1);
+  }
+    t->state = RUNNABLE;
+
+    /* initialize tthe id, ra and sp*/
+    
+
 }
 
 void 
