@@ -17,28 +17,37 @@
 
 #define STKSIZE 65536
 #define BUFSIZE 100
+#define SUCCESS 1
+#define FAILURE 0
+
+u_int exitFlag = 0;
 
 RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
 RttThreadId networkOutTid;
 
 RTTTHREAD server() {
-	int r;
+	int r, reply;
 	RttThreadId from;
 	char data[BUFSIZE+1];
-	u_int len;
+	u_int len, replyLen;
+	replyLen = 1;
 	
-	for(;;) {
+	while(exitFlag != 1) {
+		len = BUFSIZE;
 		r = RttReceive(&from, data, &len);
 		if (r == RTTFAILED) {
 			perror("server(): RttReceive() failed.\n");
 			continue;
 		}
-		RttReply(from, (void *) 1, 1);
-		data[BUFSIZE] = '\0';
-		printf("server(): Message from consoleIn() - %s\n", data);
+		data[len] = '\0';
+		printf("server(): %u character message from consoleIn() - %s\n", len, data);
+		reply = SUCCESS;
+		RttReply(from, &reply, replyLen);
 	}
-	
+
+	printf("server(): exiting.\n");
 }
+
 RTTTHREAD consoleIn(void) {
 	char inputBuffer[BUFSIZE];
 	int bytesRead;
@@ -47,24 +56,26 @@ RTTTHREAD consoleIn(void) {
 	int r;
 	
 	printf("consoleIn(): starting. \n");
-	for(;;) {
+	while(exitFlag != 1) {
 		bytesRead = read(0, inputBuffer, BUFSIZE);
 		if(bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
 			perror("consoleIn(): Error encountered when reading from stdin.");
 			break;
 		}
+
 		else if (bytesRead == 0) {
 			printf("consoleIn(): EOF detected on stdin.\n");
+			exitFlag = 1;
+			RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
 			break;
 		}
+
 		else if(bytesRead > 0) {
 			printf("consoleIn(): %d bytes read.\n", bytesRead);
-		}
-		
-		RttSleep(1);
-		r = RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
-		if(r != RTTOK) {
-			printf("Could not send message from consoleIn to server.\n");
+			r = RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
+			if(r != RTTOK) {
+				printf("Could not send message from consoleIn to server.\n");
+			}
 		}
 	}
 	printf("consoleIn(): exiting.\n");
@@ -160,7 +171,6 @@ int mainp(int argc, char* argv[])
 	attr.startingtime = RTTZEROTIME;
 	attr.priority = RTTNORM;
 	attr.deadline = RTTNODEADLINE;
-	/*
 	temp = RttCreate(
 		&serverTid, 
 		(void(*)()) server,
@@ -171,7 +181,7 @@ int mainp(int argc, char* argv[])
 		RTTUSR
 	);
 	if (temp == RTTFAILED) perror("Failed to create server thread.");
-*/
+
 	temp = RttCreate(
 		&consoleInTid, 
 		(void(*)()) consoleIn,
