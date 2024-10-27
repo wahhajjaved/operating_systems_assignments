@@ -18,14 +18,34 @@
 #define STKSIZE 65536
 #define BUFSIZE 100
 
+RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
+RttThreadId networkOutTid;
 
 RTTTHREAD server() {
-	printf("server not yet implemented.\n");
+	int r;
+	RttThreadId from;
+	char data[BUFSIZE+1];
+	u_int len;
+	
+	for(;;) {
+		r = RttReceive(&from, data, &len);
+		if (r == RTTFAILED) {
+			perror("server(): RttReceive() failed.\n");
+			continue;
+		}
+		RttReply(from, (void *) 1, 1);
+		data[BUFSIZE] = '\0';
+		printf("server(): Message from consoleIn() - %s\n", data);
+	}
 	
 }
 RTTTHREAD consoleIn(void) {
 	char inputBuffer[BUFSIZE];
 	int bytesRead;
+	int reply;
+	u_int replyLen = 1;
+	int r;
+	
 	printf("consoleIn(): starting. \n");
 	for(;;) {
 		bytesRead = read(0, inputBuffer, BUFSIZE);
@@ -35,15 +55,21 @@ RTTTHREAD consoleIn(void) {
 		}
 		else if (bytesRead == 0) {
 			printf("consoleIn(): EOF detected on stdin.\n");
+			break;
 		}
 		else if(bytesRead > 0) {
 			printf("consoleIn(): %d bytes read.\n", bytesRead);
 		}
-		/* RttSleep(1); */
+		
+		RttSleep(1);
+		r = RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
+		if(r != RTTOK) {
+			printf("Could not send message from consoleIn to server.\n");
+		}
 	}
 	printf("consoleIn(): exiting.\n");
-	
 }
+
 RTTTHREAD consoleOut() {
 	printf("consoleOut not yet implemented.\n");
 	
@@ -55,6 +81,22 @@ RTTTHREAD networkIn() {
 RTTTHREAD networkOut() {
 	printf("networkOut not yet implemented.\n");
 	
+}
+
+void exitFunction() {
+	int temp, curFlags;
+	printf("s-chat exiting.\n");
+	/*Configure stdin to be blocking*/
+	curFlags = fcntl(0, F_GETFL, 0);
+	if(curFlags == -1) {
+		perror("Error getting curFlags for stdin.\n");
+		return;
+	}
+	curFlags &= ~O_NONBLOCK;
+	temp = fcntl(0, F_SETFL, curFlags);
+	if(temp == -1) {
+		perror("main(): Could not set std in to be blocking.\n");
+	}
 }
 
 void parseArguments(
@@ -94,9 +136,7 @@ void parseArguments(
 int mainp(int argc, char* argv[])
 {
 	int temp;
-	uint32_t src_port, dst_ip, dst_port;
-	RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
-	/* RttThreadId networkOutTid; */
+	uint32_t src_port, dst_ip, dst_port;	
 	RttSchAttr attr;
 	
 	setbuf(stdout, 0);
@@ -113,13 +153,14 @@ int mainp(int argc, char* argv[])
 		perror("main(): Could not set std in to be non-blocking.\n");
 		return 1;
 	}
-
+	
+	RttRegisterExitRoutine(&exitFunction);
+	
 	/*Thread creations*/
 	attr.startingtime = RTTZEROTIME;
 	attr.priority = RTTNORM;
 	attr.deadline = RTTNODEADLINE;
-	
-	/* 
+	/*
 	temp = RttCreate(
 		&serverTid, 
 		(void(*)()) server,
@@ -127,10 +168,10 @@ int mainp(int argc, char* argv[])
 		"server",
 		NULL,
 		attr,
-		RTTSYS
+		RTTUSR
 	);
 	if (temp == RTTFAILED) perror("Failed to create server thread.");
- */
+*/
 	temp = RttCreate(
 		&consoleInTid, 
 		(void(*)()) consoleIn,
@@ -179,10 +220,5 @@ int mainp(int argc, char* argv[])
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkOut thread.");
  */	
-	
-	printf("s-chat exiting.\n");
-	
-	
 	return(0);
-
 }
