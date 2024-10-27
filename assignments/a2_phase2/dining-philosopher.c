@@ -32,7 +32,7 @@ PROCESS Philosopher(void *arg)
 
 int mainp()
 {
-    int i;
+    unsigned long i;
     void *ptr;
     PID tempPid[philNum];
     setbuf(stdout, 0);
