@@ -74,16 +74,16 @@ thread_create(void (*func)())
   /*t->state = RUNNABLE;*/
   
     /* CMPT 332 GROUP 67 Change, Fall 2024 */
-    /* check if there are any avialable threads  */
+    /* check if there are any avialable threads  
     if (t == all_thread+ MAX_THREAD) {
         printf("thread_create: no threads available\n");
         exit(-1);
-  }
+  }*/
     t->state = RUNNABLE;
 
     /* initialize ra and sp*/
-    t->ra = (uint64) func;
-    t->sp= (uint64) &t->stack[STACK_SIZE-1];
+    t->ra = (uint64) (func);
+    t->sp= (uint64) (&t->stack[STACK_SIZE-1]);
 
 }
 

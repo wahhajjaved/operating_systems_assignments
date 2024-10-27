@@ -20,6 +20,9 @@
 struct thread {
 
     /* CMPT 332 GROUP 67 Change, Fall 2024 */
+    uint64 ra;
+    uint64 sp;
+
     /* save/restore the registers */
     uint64 s0;
     uint64 s1;
@@ -32,9 +35,9 @@ struct thread {
     uint64 s7;
     uint64 s8;
     uint64 s9;
+    uint64 s10;
+    uint64 s11;
 
-    uint64 ra;
-    uint64 sp;
   char       stack[STACK_SIZE]; /* the thread's stack */
   int        state;             /* FREE, RUNNING, RUNNABLE */
 };

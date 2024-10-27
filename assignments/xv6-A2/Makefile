@@ -146,7 +146,6 @@ UPROGS=\
  
 #CMPT 332 GROUP 67 Change, Fall 2024 
 
-
 $U/uthread_switch.o: $U/uthread_switch.S
 	$(CC) $(CFLAGS) -c -o $U/uthread_switch.o $U/uthread_switch.S
 
@@ -154,6 +153,7 @@ $U/_uthread: $U/uthreadtest.o  $U/uthread.o $U/uthread_switch.o $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_uthread $U/uthread.o\
 		$U/uthread_switch.o $U/uthreadtest.o $(ULIB)
 	$(OBJDUMP) -S $U/_uthread > $U/uthread.asm
+
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
