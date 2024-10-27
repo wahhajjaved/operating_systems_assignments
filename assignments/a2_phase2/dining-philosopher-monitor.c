@@ -2,7 +2,7 @@
  *@author Wahhaj Javed, muj975, 11135711
  *@author Nakhba Mubashir, epl482, 11317060
  */
-#include <dining-philisopher.h>
+#include <dining-philosopher.h>
 
 #define philNum 5
 enum {
@@ -23,12 +23,13 @@ void init(void){
         sem[i]=NewSem(0);
     }
 
+}
 int left(int phil){
-    return (i + (philNum - 1) % philNum);
+    return (phil + philNum - 1) % philNum;
 }
 
 int right(int phil){
-    return (i + 1  % philNum);
+    return (phil + 1)  % philNum;
 }
 
 void checkIfReady(int phil){
@@ -37,13 +38,13 @@ void checkIfReady(int phil){
         state[phil]= EATING;
         V(sem[phil]);
     }
-
+}
 void getChopstick(int phil){
     P(mutex);
     state[phil] = HUNGRY;
     checkIfReady(phil);
-    if (state[Phil] != EATING) {
-        P(sem[i]);
+    if (state[phil] != EATING) {
+        P(sem[phil]);
     }
     V(mutex);
 }
@@ -51,7 +52,7 @@ void getChopstick(int phil){
 
 void putChopstick(int phil){
     P(mutex);
-    state[phil] = THINKINH;
+    state[phil] = THINKING;
     checkIfReady(left(phil));
     checkIfReady(right(phil));
     V(mutex);

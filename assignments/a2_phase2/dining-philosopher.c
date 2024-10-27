@@ -3,7 +3,7 @@
  *@author Nakhba Mubashir, epl482, 11317060
  */
 
-#include <dining-philisopher.h>
+#include <dining-philosopher.h>
 
 #define SLEEPMAX 20
 
@@ -21,10 +21,10 @@ PROCESS Philosopher(void *arg)
       printf("%ld Philosopher is thinding \n", myId);
       Sleep((int) (rand() % SLEEPMAX*6));
       printf("%ld Philosopher is hungry \n", myId);
-      getChopstick(myId %100);
+      getChopstick(myId %1000);
       printf("%ld Philosopher is eating \n", myId);
-      Sleep((int) (rand() % SLEEPMAX*3));
-      getChopstick(myId %100);  
+      Sleep((int) (rand() % SLEEPMAX));
+      putChopstick(myId %1000);  
       printf("%ld philosopher is done\n", myId);
     }
 }
