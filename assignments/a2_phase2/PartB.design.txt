@@ -126,7 +126,9 @@ putchopstick:
     V(mutex)
 
 
-
-
+____________________________
+testing:
+the test results are in PartB.testresults.txt, as the test runs for a long 
+time, a portion is copied and put in the file.
 
 
