@@ -18,6 +18,9 @@ thread_switch:
 uthread.h:
 
     file created to add thread switch to uthread.c
+usertests.c:
+    added the testing code in this file from uthread.c to preent compiling
+    error
 
 
 uthread.c:
@@ -41,6 +44,13 @@ thread_schedule:
     switched between threads by calling thread_switch() from uthread_switch.S
     switches from current to next thread to run.
 
+new functions in uthread: 
+"current_thread->state = FREE" is giving error so i am creating new func 
+for free
+
+thread_free():
+    current_thread->state = FREE;
+    thread_schedule();
 
 ____
 
