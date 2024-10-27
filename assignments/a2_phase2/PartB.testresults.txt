@@ -82,3 +82,81 @@ stopping value of numReaders = 1
 stopping value of numReaders = 0
 500 writing
 
+-------------------------------------------------------------
+PART B BONUS test
+
+tested by runing ./dining-philosopher in terminal
+philosopher processes created
+1000 Philosopher is thinding 
+1001 Philosopher is thinding 
+1002 Philosopher is thinding 
+1003 Philosopher is thinding 
+1004 Philosopher is thinding 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1003 Philosopher is hungry 
+1003 Philosopher is eating 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1003 philosopher is done
+1003 Philosopher is thinding 
+1002 Philosopher is hungry 
+1002 Philosopher is eating 
+1002 philosopher is done
+1002 Philosopher is thinding 
+1001 Philosopher is hungry 
+1001 Philosopher is eating 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1001 philosopher is done
+1001 Philosopher is thinding 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1002 Philosopher is hungry 
+1002 Philosopher is eating 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1002 philosopher is done
+1002 Philosopher is thinding 
+1003 Philosopher is hungry 
+1003 Philosopher is eating 
+1003 philosopher is done
+1003 Philosopher is thinding 
+1003 Philosopher is hungry 
+1003 Philosopher is eating 
+1003 philosopher is done
+1003 Philosopher is thinding 
+1001 Philosopher is hungry 
+1001 Philosopher is eating 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1002 Philosopher is hungry 
+1002 Philosopher is eating 
+1001 philosopher is done
+1001 Philosopher is thinding 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1002 philosopher is done
+1002 Philosopher is thinding 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1001 Philosopher is hungry 
+1001 Philosopher is eating 
+1002 Philosopher is hungry 
+
