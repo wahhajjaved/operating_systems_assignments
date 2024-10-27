@@ -89,7 +89,8 @@ $(PartB_dir)/reader-writer-monitor.o: reader-writer-monitor.c\
 ###################### Part C ##################################
 
 s_chat_$(kernel)$(arch): $(obj_dir)/s_chat.o
-	$(compile) -o s_chat_$(kernel)$(arch) $(obj_dir)/s_chat.o $(LINK_RT_X86) 
+	$(compile) -o s_chat_$(kernel)$(arch) $(obj_dir)/s_chat.o \
+	$(LINK_RT_X86) -L$(lib_dir) -llist 
 
 $(obj_dir)/s_chat.o: s_chat.c
 	$(compile) -c s_chat.c -o $(obj_dir)/s_chat.o
