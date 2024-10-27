@@ -4,13 +4,14 @@
 #include "user/uthread.h"
 
 /* Possible states of a thread: */
+/*
 #define FREE        0x0
 #define RUNNING     0x1
 #define RUNNABLE    0x2
 
 #define STACK_SIZE  8192
 #define MAX_THREAD  4
-
+*/
 struct thread all_thread[MAX_THREAD];
 struct thread *current_thread;
 /*extern void thread_switch(uint64, uint64);*/
@@ -96,6 +97,17 @@ thread_yield(void)
   thread_schedule();
 }
 
+void
+thread_free(void)
+{
+  current_thread->state = FREE;
+  thread_schedule();
+
+}
+
+
+
+/*
 volatile int a_started, b_started, c_started;
 volatile int a_n, b_n, c_n;
 
@@ -171,3 +183,5 @@ main(int argc, char *argv[])
   thread_schedule();
   exit(0);
 }
+
+*/
