@@ -3,6 +3,9 @@
  *@author Nakhba Mubashir, epl482, 11317060
  */
 
+#include "kernel/types.h"
+#include "kernel/stat.h"
+#include "user/user.h"
 
 /* from uthread.c*/
 /* Possible states of a thread: */

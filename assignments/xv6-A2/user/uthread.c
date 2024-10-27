@@ -1,6 +1,3 @@
-#include "kernel/types.h"
-#include "kernel/stat.h"
-#include "user/user.h"
 #include "user/uthread.h"
 
 /* Possible states of a thread: */
@@ -86,7 +83,7 @@ thread_create(void (*func)())
 
     /* initialize ra and sp*/
     t->ra = (uint64) func;
-    t->sp= (uint64) &t->stack[STACK_SIZE];
+    t->sp= (uint64) &t->stack[STACK_SIZE-1];
 
 }
 

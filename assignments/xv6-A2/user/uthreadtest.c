@@ -1,6 +1,3 @@
-#include "kernel/types.h"
-#include "kernel/stat.h"
-#include "user/user.h"
 #include "user/uthread.h"
 
 volatile int a_started, b_started, c_started;
@@ -22,8 +19,10 @@ thread_a(void)
   }
   printf("thread_a: exit after %d\n", a_n);
 
-  /*current_thread->state = FREE;*/
-  thread_schedule();
+    /* CMPT 332 GROUP 67 Change, Fall 2024 */
+  thread_free();
+  /*current_thread->state = FREE;
+  thread_schedule();*/
 }
 
 
@@ -42,9 +41,10 @@ thread_b(void)
     thread_yield();
   }
   printf("thread_b: exit after %d\n", b_n);
-
-  /*current_thread->state = FREE;*/
-  thread_schedule();
+    /* CMPT 332 GROUP 67 Change, Fall 2024 */
+  thread_free();
+  /*current_thread->state = FREE;
+  thread_schedule();*/
 }
 
 void 
@@ -63,6 +63,8 @@ thread_c(void)
   }
   printf("thread_c: exit after %d\n", c_n);
 
+    /* CMPT 332 GROUP 67 Change, Fall 2024 */
+  thread_free();
   /*current_thread->state = FREE;*/
   /*thread_schedule();*/
 }
