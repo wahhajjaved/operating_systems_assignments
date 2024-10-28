@@ -17,7 +17,7 @@
 #include <list.h>
 
 #define STKSIZE 65536
-#define QUEUESIZE 25
+#define QUEUESIZE 20
 #define BUFSIZE 100
 #define SUCCESS 1
 #define FAILURE 0
@@ -28,17 +28,16 @@ typedef struct message {
 	u_int size;
 } Message;
 
-u_int exitFlag = 0;
 RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
 RttThreadId networkOutTid;
+struct addrinfo *localAddrInfo, *remoteAddrInfo;
+int localSockFd;
+u_int exitFlag = 0;
 
 int getSockets(
 	char* src_port, 
 	char* dst_ip,
-	char* dst_port,
-	struct addrinfo** localAddrInfo,
-	int *localSockFd,
-	struct addrinfo** remoteAddrInfo
+	char* dst_port
 ) {
 	int r;
 	struct addrinfo hints;
@@ -50,27 +49,27 @@ int getSockets(
 	hints.ai_socktype = SOCK_DGRAM;
 	hints.ai_flags = AI_PASSIVE;
 	
-	r = getaddrinfo(NULL, src_port, &hints, localAddrInfo);
+	r = getaddrinfo(NULL, src_port, &hints, &localAddrInfo);
 	if(r != 0) {
 		perror("getSockets: Error getting addr info for local socket.\n");
-		freeaddrinfo(*localAddrInfo);
+		freeaddrinfo(localAddrInfo);
 		return 0;
 	}
 	
-	*localSockFd = socket(
-		(*localAddrInfo)->ai_family,
-		(*localAddrInfo)->ai_socktype | SOCK_NONBLOCK,
-		(*localAddrInfo)->ai_protocol
+	localSockFd = socket(
+		(localAddrInfo)->ai_family,
+		(localAddrInfo)->ai_socktype | SOCK_NONBLOCK,
+		(localAddrInfo)->ai_protocol
 	);
-	if(*localSockFd == -1) {
+	if(localSockFd == -1) {
 		perror("getSockets: Could not create socket.\n");
 		return 0;
 	}
 	
-	r = bind(*localSockFd, (*localAddrInfo)->ai_addr, (*localAddrInfo)->ai_addrlen);
+	r = bind(localSockFd, (localAddrInfo)->ai_addr, (localAddrInfo)->ai_addrlen);
 	if(r != 0) {
 		perror("getSockets: Error binding local socket.\n");
-		close(*localSockFd);
+		close(localSockFd);
 		return 0;
 	}
 	
@@ -80,11 +79,11 @@ int getSockets(
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_DGRAM;
 	
-	r = getaddrinfo(dst_ip, dst_port, &hints, remoteAddrInfo);
+	r = getaddrinfo(dst_ip, dst_port, &hints, &remoteAddrInfo);
 	if(r != 0) {
-		close(*localSockFd);
+		close(localSockFd);
 		perror("getSockets: Error getting addr info for remote socket.\n");
-		freeaddrinfo(*remoteAddrInfo);
+		freeaddrinfo(remoteAddrInfo);
 		return 0;
 	}
 	
@@ -221,6 +220,7 @@ RTTTHREAD server() {
 				
 			}
 			else {
+				/*
 				Message* message = ListTrim(consoleOutFreeList);
 				printf("server(): message from consoleIn.\n");
 				message->size = len;
@@ -228,9 +228,10 @@ RTTTHREAD server() {
 				ListPrepend(consoleOutQueue, message);
 				reply = SUCCESS;
 				RttReply(from, &reply, replyLen);
+				*/
 
-				message = ListTrim(networkOutFreeList);
-				printf("server(): message from networkIn.\n");
+				Message* message = ListTrim(networkOutFreeList);
+				printf("server(): message from networkOut.\n");
 				message->size = len;
 				memcpy(message->message, data, message->size);
 				ListPrepend(networkOutQueue, message);
@@ -366,21 +367,25 @@ RTTTHREAD networkIn() {
 
 RTTTHREAD networkOut() {
 	int r, sentMsg;
-	char message[BUFSIZE+1];
+	char message[BUFSIZE];
 	u_int messageLen=BUFSIZE;
 	sentMsg = SUCCESS;
 	
-	
 	printf("networkOut(): starting.\n");
 	while(exitFlag != 1) {
+		messageLen=BUFSIZE;
 		r = RttSend(serverTid, &sentMsg, 1, &message, &messageLen);
 		if(r != RTTOK) {
 			printf("Could not get message from server.\n");
 		}
 		printf("networkOut: %u bytes recieved.\n", messageLen);
-		message[messageLen] = '\0';
-		printf("networkOut: %s\n", message);
-
+		
+		r = sendto(localSockFd, message, messageLen, 0, remoteAddrInfo->ai_addr, remoteAddrInfo->ai_addrlen );
+		if(r == -1) {
+			perror("sendto failed.\n");
+			continue;
+		}
+		printf("sendto: %d bytes sent.\n", r);
 	}
 	printf("networkOut(): exiting.\n");
 	
@@ -407,8 +412,7 @@ int mainp(int argc, char* argv[])
 {
 	int r;
 	char *src_port, *dst_ip, *dst_port;
-	struct addrinfo *localAddrInfo, *remoteAddrInfo;
-	int localSockFd;
+	
 	RttSchAttr attr;
 	
 	setbuf(stdout, 0);
@@ -436,10 +440,7 @@ int mainp(int argc, char* argv[])
 	r = getSockets(
 		src_port, 
 		dst_ip,
-		dst_port,
-		&localAddrInfo,
-		&localSockFd,
-		&remoteAddrInfo
+		dst_port
 	);
 	if(r != 1) {
 		return 1;
