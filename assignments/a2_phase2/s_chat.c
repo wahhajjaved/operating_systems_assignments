@@ -32,6 +32,67 @@ u_int exitFlag = 0;
 RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
 RttThreadId networkOutTid;
 
+int getSockets(
+	char* src_port, 
+	char* dst_ip,
+	char* dst_port,
+	struct addrinfo** localAddrInfo,
+	int *localSockFd,
+	struct addrinfo** remoteAddrInfo
+) {
+	int r;
+	struct addrinfo hints;
+	
+	
+	/*Local*/
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_DGRAM;
+	hints.ai_flags = AI_PASSIVE;
+	
+	r = getaddrinfo(NULL, src_port, &hints, localAddrInfo);
+	if(r != 0) {
+		perror("getSockets: Error getting addr info for local socket.\n");
+		freeaddrinfo(*localAddrInfo);
+		return 0;
+	}
+	
+	*localSockFd = socket(
+		(*localAddrInfo)->ai_family,
+		(*localAddrInfo)->ai_socktype | SOCK_NONBLOCK,
+		(*localAddrInfo)->ai_protocol
+	);
+	if(*localSockFd == -1) {
+		perror("getSockets: Could not create socket.\n");
+		return 0;
+	}
+	
+	r = bind(*localSockFd, (*localAddrInfo)->ai_addr, (*localAddrInfo)->ai_addrlen);
+	if(r != 0) {
+		perror("getSockets: Error binding local socket.\n");
+		close(*localSockFd);
+		return 0;
+	}
+	
+	
+	/*Remote*/
+	memset(&hints, 0, sizeof(hints));
+	hints.ai_family = AF_INET;
+	hints.ai_socktype = SOCK_DGRAM;
+	
+	r = getaddrinfo(dst_ip, dst_port, &hints, remoteAddrInfo);
+	if(r != 0) {
+		close(*localSockFd);
+		perror("getSockets: Error getting addr info for remote socket.\n");
+		freeaddrinfo(*remoteAddrInfo);
+		return 0;
+	}
+	
+	return 1;
+}
+
+
+
 int configureLists(LIST** consoleOutFreeList, LIST** consoleOutQueue) {
 	int i;
 	*consoleOutQueue = ListCreate();
@@ -218,11 +279,17 @@ RTTTHREAD consoleOut(void) {
 	
 	
 }
+
 RTTTHREAD networkIn() {
 	printf("networkIn not yet implemented.\n");
 	
 }
+
 RTTTHREAD networkOut() {
+	while(exitFlag != 1) {
+		
+		
+	}
 	printf("networkOut not yet implemented.\n");
 	
 }
@@ -243,60 +310,51 @@ void exitFunction() {
 	}
 }
 
-void parseArguments(
-	int argc,
-	char* argv[],
-	uint32_t* src_port,
-	uint32_t* dst_ip,
-	uint32_t* dst_port
-) {
-	int status;
-	struct addrinfo hints, *res;
-	struct sockaddr_in *ipv4;
 
+int mainp(int argc, char* argv[])
+{
+	int r;
+	char *src_port, *dst_ip, *dst_port;
+	struct addrinfo *localAddrInfo, *remoteAddrInfo;
+	int localSockFd;
+	RttSchAttr attr;
+	
+	setbuf(stdout, 0);
 	if (argc != 4) {
 		printf("Incorrect number of arguments.\n");
 		printf("Usage: s-chat <src_port> <dst_host_name> <dst_port>\n");
 		exit(EXIT_FAILURE);
 	}
-	
-	*src_port = atoi(argv[1]);
-	*dst_port = atoi(argv[3]);
-	
-	
-	memset(&hints, 0, sizeof(hints));
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	status = getaddrinfo(argv[2], NULL, &hints, &res);
-	if (status != 0) {
-		fprintf(stderr, "getaddrinfo: %s\n", gai_strerror(status));
-		exit(EXIT_FAILURE);
-	}
-	ipv4 = (struct sockaddr_in *)res->ai_addr;
-	*dst_ip = ipv4->sin_addr.s_addr;
-	freeaddrinfo(res);
-}
-
-int mainp(int argc, char* argv[])
-{
-	int temp;
-	uint32_t src_port, dst_ip, dst_port;	
-	RttSchAttr attr;
-	
-	setbuf(stdout, 0);
-	parseArguments(argc, argv, &src_port, &dst_ip, &dst_port);
-	printf("Starting s-chat. src port: %u, dst ip: %u, dst port: %u.\n",
+	src_port = argv[1];
+	dst_ip = argv[2];
+	dst_port = argv[3];
+	printf("Starting s-chat. src port: %s, dst ip: %s, dst port: %s.\n",
 		src_port, 
 		dst_ip, 
 		dst_port
 	);
 	
 	/*Configure stdin to be non blocking*/
-	temp = fcntl(0, F_SETFL, O_NONBLOCK);
-	if(temp == -1) {
+	r = fcntl(0, F_SETFL, O_NONBLOCK);
+	if(r == -1) {
 		perror("main(): Could not set std in to be non-blocking.\n");
 		return 1;
 	}
+	
+	r = getSockets(
+		src_port, 
+		dst_ip,
+		dst_port,
+		&localAddrInfo,
+		&localSockFd,
+		&remoteAddrInfo
+	);
+	if(r != 1) {
+		return 1;
+	}
+	
+	
+	
 	
 	RttRegisterExitRoutine(&exitFunction);
 	
@@ -304,7 +362,7 @@ int mainp(int argc, char* argv[])
 	attr.startingtime = RTTZEROTIME;
 	attr.priority = RTTNORM;
 	attr.deadline = RTTNODEADLINE;
-	temp = RttCreate(
+	r = RttCreate(
 		&serverTid, 
 		(void(*)()) server,
 		STKSIZE,
@@ -313,10 +371,10 @@ int mainp(int argc, char* argv[])
 		attr,
 		RTTUSR
 	);
-	if (temp == RTTFAILED) perror("Failed to create server thread.");
+	if (r == RTTFAILED) perror("Failed to create server thread.");
 	printf("server thread created.\n");
 
-	temp = RttCreate(
+	r = RttCreate(
 		&consoleInTid, 
 		(void(*)()) consoleIn,
 		STKSIZE,
@@ -325,13 +383,13 @@ int mainp(int argc, char* argv[])
 		attr,
 		RTTUSR
 	);
-	if (temp == RTTFAILED) {
+	if (r == RTTFAILED) {
 		perror("Failed to create consoleIn thread.");
 		return 1;
 	}
 	printf("ConsoleIn thread created.\n");
 	
- 	temp = RttCreate(
+ 	r = RttCreate(
 		&consoleOutTid, 
 		(void(*)()) consoleOut,
 		STKSIZE,
@@ -340,13 +398,13 @@ int mainp(int argc, char* argv[])
 		attr,
 		RTTUSR
 	);
-	if (temp != RTTOK) {
+	if (r != RTTOK) {
 		perror("Failed to create consoleOut thread.");
 		return 1;
 	}
 	printf("ConsoleOut thread created.\n");
 
-/* 	temp = RttCreate(
+/* 	r = RttCreate(
 		&networkInTid, 
 		(void(*)()) networkIn,
 		STKSIZE,
@@ -355,9 +413,9 @@ int mainp(int argc, char* argv[])
 		attr,
 		RTTUSR
 	);
-	if (temp == RTTFAILED) perror("Failed to create networkIn thread.");
+	if (r == RTTFAILED) perror("Failed to create networkIn thread.");
  */
-/* 	temp = RttCreate(
+/* 	r = RttCreate(
 		&networkOutTid, 
 		(void(*)()) networkOut,
 		STKSIZE,
@@ -366,7 +424,7 @@ int mainp(int argc, char* argv[])
 		attr,
 		RTTUSR
 	);
-	if (temp == RTTFAILED) perror("Failed to create networkOut thread.");
+	if (r == RTTFAILED) perror("Failed to create networkOut thread.");
  */	
 	RttSleep(1);
 	return(0);
