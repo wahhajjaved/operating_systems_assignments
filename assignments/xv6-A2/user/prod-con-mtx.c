@@ -14,7 +14,7 @@ static int mtx, buffMax, buffSize;
 void prod(void){
     printf("Producer created\n");
     thread_yield();
-
+    /*run till all are produced*/
     for (;;){
         mtx_lock(mtx);
         if (buffSize < buffMax){
@@ -33,6 +33,7 @@ void prod(void){
 void con(void){
     printf("Consumer created\n");
     thread_yield();
+    /*run till all are consumed*/
     for (;;){
         mtx_lock(mtx);
         if (buffSize > 1){
@@ -54,6 +55,7 @@ int main(int argc, char *argv[]){
     buffSize=buffSizeVal;
     buffMax=buffMaxVal;
 
+    /*checking for invalid */
     if (buffMax < 1){
         printf("prod-con-mtx: bufferMax cant not be less than 1\n");
         exit(1);
@@ -64,6 +66,7 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
+    /* create producer and consumer threads*/
     thread_init(); 
     thread_create(prod);
     thread_create(con);
