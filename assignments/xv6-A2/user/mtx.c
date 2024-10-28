@@ -18,7 +18,6 @@ int mtx_lock(int lock_id){
     if (lock_id >0){
         return -1; /*invalid output */
     }
-    
     /* wait untill lock is aquired, blocking others  */
     while (mutexes[lock_id].locked){
         thread_yeild(); 
@@ -29,10 +28,9 @@ int mtx_lock(int lock_id){
 
 }
 int mtx_unlocked(int lock_id){
-if (lock_id >0){
+    if (lock_id >0){
         return -1; /*invalid output */
     }
-
     /*release lock */
     mutexes[lock_id].locked =0;
     return 0;
