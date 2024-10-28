@@ -42,7 +42,7 @@ thread_switch:
         ld s7, 72(a1)
         ld s8, 80(a1)
         ld s9, 88(a1)
-        ld s10, 96(a0)
-        ld s11, 104(a0)
+        ld s10, 96(a1)
+        ld s11, 104(a1)
 
         ret    /* return to ra */

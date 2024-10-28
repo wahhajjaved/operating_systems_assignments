@@ -13,7 +13,8 @@
 #define RUNNING     0x1
 #define RUNNABLE    0x2
 
-#define STACK_SIZE  8192
+/*#define STACK_SIZE  8192*/
+#define STACK_SIZE  8180
 #define MAX_THREAD  4
 
 
