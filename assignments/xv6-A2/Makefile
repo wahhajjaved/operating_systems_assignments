@@ -167,6 +167,7 @@ $U/_prod-con-sem: $U/prod-con-sem.o $U/sem.o $(UTHREAD)  $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_prod-con-sem \
         $U/prod-con-sem.o $U/sem.o $(UTHREAD) $(ULIB)
 
+
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
 

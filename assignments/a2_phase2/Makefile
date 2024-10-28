@@ -1,9 +1,12 @@
 # @author Wahhaj Javed, muj975, 11135711
 # @author Nakhba Mubashir, epl482, 11317060
 
+kernel := $(shell uname -s)
+arch := $(shell uname -m)
+
 .PHONY: all clean
 
-all:reader-writer-test dining-philosopher  s-chat
+all:reader-writer-test dining-philosopher s_chat_$(kernel)$(arch)
 
 mkdirs: 
 	mkdir -p $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir)
@@ -24,20 +27,9 @@ LIST_OBJ=build/list/list_adders.o build/list/list_movers.o\
 #linking 
 
 LINK_pthreads=-L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads
-LINK_RT_X86=-L/student/cmpt332/rtt/lib/Linuxx86_64 -lRtt
-LINK_RT_PPC=-L/student/cmpt332/rtt/lib/Linuxppc -lRtt
-LINK_RT_ARM=-L/student/cmpt332/rtt/lib/Linuxarmv7l -lRtt
-
-
-kernel := $(shell uname -s)
-arch := $(shell uname -m)
-ifeq ($(kernel), Linux)
-    os = Linux
-else ifeq ($(findstring MINGW, $(kernel)), MINGW)
-    os = Windows
-else
-    $(error Only Window and Linux are supported in this make file)
-endif
+LINK_RT_X86=-L/student/cmpt332/rtt/lib/Linuxx86_64 -lRtt -lRttUtils -ltirpc
+LINK_RT_PPC=-L/student/cmpt332/rtt/lib/Linuxppc -lRtt -lRttUtils -ltirpc
+LINK_RT_ARM=-L/student/cmpt332/rtt/lib/Linuxarmv7l -lRtt -lRttUtils -ltirpc
 
 
 #directories
@@ -117,12 +109,13 @@ $(PartB_dir)/dining-philosopher-monitor.o: dining-philosopher-monitor.c \
 ################################################################
 ###################### Part C ##################################
 
-s-chat: $(obj_dir)/s-chat.o
-	$(compile) -o s-chat $(obj_dir)/s-chat.o $(LINK_RT_X86) -ltirpc
+s_chat_$(kernel)$(arch): $(obj_dir)/s_chat.o
+	$(compile) -o s_chat_$(kernel)$(arch) $(obj_dir)/s_chat.o \
+	$(LINK_RT_X86) -L$(lib_dir) -llist 
 
-$(obj_dir)/s-chat.o: s-chat.c
-	$(compile) -c s-chat.c -o $(obj_dir)/s-chat.o
+$(obj_dir)/s_chat.o: s_chat.c
+	$(compile) -c s_chat.c -o $(obj_dir)/s_chat.o
 
 clean: 
 	rm -rf $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir) \
-		reader-writer-test dining-philosopher s-chat
+		reader-writer-test dining-philosopher s_chat_$(kernel)$(arch)
