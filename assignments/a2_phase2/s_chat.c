@@ -239,6 +239,25 @@ RTTTHREAD server() {
 
 			}
 		}
+		/*process message from networkIn */
+		
+		if (newMessage && RTTTHREADEQUAL(from, networkInTid) ) {
+			if (ListCount(consoleOutFreeList) == 0) {
+				fprintf(stderr, "server: Cannot buffer any more messages from "
+					"networkInTid.\n"
+				);
+				
+			}
+			else {
+				Message* message = ListTrim(consoleOutFreeList);
+				printf("server(): message from networkIn.\n");
+				message->size = len;
+				memcpy(message->message, data, message->size);
+				ListPrepend(consoleOutQueue, message);
+				reply = SUCCESS;
+				RttReply(from, &reply, replyLen);
+			}
+		}
 
 		/*Process message from consoleOut*/
 		if (newMessage && RTTTHREADEQUAL(from, consoleOutTid) ) {
@@ -358,13 +377,7 @@ RTTTHREAD consoleOut(void) {
 	
 	
 }
-void *get_in_addr(struct sockaddr *sa)
-{
-if (sa->sa_family == AF_INET) {
-return &(((struct sockaddr_in*)sa)->sin_addr);
-}
-return &(((struct sockaddr_in6*)sa)->sin6_addr);
-}
+
 RTTTHREAD networkIn() {
 	char inputBuffer[BUFSIZE];
 	int bytesRead;
@@ -372,7 +385,6 @@ RTTTHREAD networkIn() {
 	struct sockaddr_storage from;
 	socklen_t addr_len;
 	int r;
-	char s[INET_ADDRSTRLEN];
 	u_int replyLen = 1;
 	addr_len = sizeof(from);
 	
@@ -382,7 +394,7 @@ RTTTHREAD networkIn() {
 		RttUSleep(10);
 		replyLen = 1;
 		
-		r = recvfrom(
+		bytesRead = recvfrom(
 			localSockFd,
 			inputBuffer,
 			BUFSIZE,
@@ -391,22 +403,17 @@ RTTTHREAD networkIn() {
 			&addr_len
 		);
 		
-		if(r == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
+		if(bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
 			perror("networkIn(): Error encountered when reading from stdin.");
 			break;
 		}
 		
-		else if (r > 0){ 
-			printf("networkIn(): Got %d byte long message from %s.\n",
-				r,
-				inet_ntop(
-					from.ss_family,
-					get_in_addr((struct sockaddr *)&from),
-					s, sizeof s
-				)
-			);
-			inputBuffer[r-1] = '\0';
-			printf("networkIn(): \"%s\"\n", inputBuffer);
+		else if (bytesRead > 0){
+			printf("networkIn(): %d bytes read.\n", bytesRead);
+			r = RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
+			if(r != RTTOK) {
+				printf("Could not send message from networkIn to server.\n");
+			}
 		}
 	}
 	printf("networkIn(): exiting.\n");
