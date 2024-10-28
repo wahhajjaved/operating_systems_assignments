@@ -52,16 +52,18 @@ thread_free():
     current_thread->state = FREE;
     thread_schedule();
 
-____
+**********
 
 Mutex:
 
 mtx.c:
 struct mutex{lock}
 lock flag for checking, 1 for lock and 0 for unlock
+mutex mutexes[Num];
 
 int mtx_create(int locked):
-
+    initialize the mutexes with lock, the index is MutexNum
+    and return MutexNum;
 
 int mtx_lock(int lock_id):
     if the lock id is valid:
@@ -75,7 +77,7 @@ prod-con-mtx:
 
 int buffMax   // max buffer size
 int buffSize  // size of buffer, how many items are in buffer
-innt mutex
+int mutex
 
 prod:
     for (;;;) //used for loop because prof said its cheaper than while(1)
@@ -101,10 +103,26 @@ main:
     the buffersize and buffermax can be comand line arguments, if want 
     diffrenent size every time.
 
+**********
+
+counting semaphore using mutex:
+
+sem:
+used mtx.c to construct sem
+
+prod-con-sem.c
+used prod-con-mtx as an outline, changed it so it works with semaphore
+int mtx, full, empty  //3 semaphoes
+                      // empty tracks the available spaces
+                      // full tracks the filled slots
+//making empty and full seperately will prevent deadlock and it will allow 
+//the prouducer and consumer to work independently 
+
+prod:
 
     
 ---
 
 Makefile:
-
+added the target rules for uthread,mtx and sem
 

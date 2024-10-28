@@ -18,36 +18,34 @@ void prod(void){
     thread_yield();
     /*run till all are produced*/
     for (;;){
-        
-        if (buffSize < buffMax){
-                thread_yield();
+        if (buffSize <= buffMax){
+                P(empty);
+                P(mtx); /* locks the critical section*/
                 buffSize++;
                 printf("Producer: added to the buffer: %d / %d \n",buffSize,
             buffMax );
-                mtx_unlocked(mtx);
-        }else{
-        mtx_unlocked(mtx);
-        thread_yield();
         }
+        V(mtx);
+        V(full);
+        thread_yield();
     }
 }
 
 void con(void){
     printf("Consumer created\n");
     thread_yield();
-    /*run till all are consumed*/
+    /*run till all are produced*/
     for (;;){
-        mtx_lock(mtx);
-        if (buffSize > 1){
-                thread_yield();
+        if (buffSize <= buffMax){
+                P(full);
+                P(mtx); /* locks the critical section*/
                 buffSize--;
-                printf("Producer: removed from the buffer: %d / %d \n",
-                    buffSize, buffMax );
-                mtx_unlocked(mtx);
-        }else{
-        mtx_unlocked(mtx);
-        thread_yield();
+                printf("Consumer:removed from the buffer:%d / %d \n",buffSize,
+            buffMax );
         }
+        V(mtx);
+        V(empty);
+        thread_yield();
     }
 }
 
