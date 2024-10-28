@@ -371,3 +371,46 @@ Producer: removed from the buffer: 3 / 6
 Producer: removed from the buffer: 2 / 6 
 Producer: removed QEMU: Terminated
 
+*********BONUS ***************8
+for bonus:
+max buffer size is set inside pro-con-sem file,the invalid is delt within
+the main function
+
+Steps for running the test:
+    1. navigate to xv6 folder
+    2. make and run the xv6
+        make
+        make qemu
+    3. then excecute the commands
+        prod-con-sem
+
+output:
+Producer created
+Consumer created
+Producer: added to the buffer: 1 / 6 
+Consumer:removed from the buffer:1 / 6 
+Producer: added to the buffer: 2 / 6 
+Consumer:removed from the buffer:2 / 6 
+Producer: added to the buffer: 3 / 6 
+Consumer:removed from the buffer:3 / 6 
+Producer: added to the buffer: 4 / 6 
+Consumer:removed from the buffer:4 / 6 
+Producer: added to the buffer: 5 / 6 
+Consumer:removed from the buffer:5 / 6 
+Producer: added to the buffer: 6 / 6 
+Consumer:removed from the buffer:6 / 6 
+Producer created
+Consumer created
+Producer: added to the buffer: 1 / 6 
+Consumer:removed from the buffer:1 / 6 
+Producer: added to the buffer: 2 / 6 
+Consumer:removed from the buffer:2 / 6 
+Producer: added to the buffer: 3 / 6 
+.
+.
+.
+Producer: added to the buffer: 4 / 6 
+Consumer:removed from the buffer:4 / 6 
+Producer: added to the buffer: 5 / 6 
+QEMU: Terminated
+
