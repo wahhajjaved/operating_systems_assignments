@@ -4,57 +4,131 @@
 ------------------------------------
 Monitors Part c
 
-mutex = NewSem(1) // start mutex with wait 
-monList
+int urgent         // semaphore that are urgent in monsignal
+int urgentNum      // to store how many urgent are waiting 
+int mutex          // semaphore for the enter state
+
+int *monList       // array to keep track of waiting process in the monitor
+                   // in each condition
+int *sem           // array of semaphors for each CV
+LIST **condVar     // array of list that hold for each condition
 
 
-struct listData: //the struct holds all the data used by the monitors
-    sem      // semaphore
-    count
-    listItems
+// in phase 1 i chose to use struct to store the semaphores and it's count
+and item, but in this phase i am changing into list as it simplier to use/
+impliement and already i used list for monitor in lab 4. 
+
 
 Procedures:
+MonInit:
+    mutex= NewSem(1)
+    urgent= NewSem(0)
+    urgentNum=0
+    
+    memory allocation for monList , each index initialized to 0
+    memory allocation for sem, each index intialized to NewSem(o)
+    memory allocation for condVar, each indext create a list
+
 
 MonEnter()
     P(mutex) // wait for signal
 
 MonLeave() 
-    V(mutex) // send signal to leave
+    if the UrgentNum > 0: V(urgent
+    else V(mutex) // send signal to leave
 
 MonWait()
-    // search the list for conditional variable 
-    ListSearch(MonList, comparator, cmp)
-    // cmp is the conditional variable
-    // the comparator() function will be defined
+    //add the current PID to the list
+    ListAppend(condVar, PID)
 
-    if cmp not in list then add it to the list
-        listData = memory allocation
-        newData.sem =NewSem(0) 
-        newData.count=0
-        add to list by listAdd(MonList,newData)
+    //release the mutex so other processes can run
+    // to prevent deadlock
+    if the UrgentNum > 0: V(urgent
+    else V(mutex) // send signal to leave
 
-    newData.count ++
-
-    V(mutex)  //send the signal to mutex 
-
-    P(MonList.sem) // wait for the signal
-    MonList.count --
+    P(sem[CV]); // from sem wait for the CV 
+    ListRemove(condVar[CV]); // remove from the list
+    monList[CV] --; 
 
 MonSignal()
-    // search the list for conditional variable
-    ListSearch(MonList, comparator, cmp)
-    // cmp is the conditional variable
-    // the comparator() function will be defined
-
-    //if atleast one thread waiting 
-    if (ListData count >0)
-        V(listData.sem)
-
+    //if there are processes in monitor
+    if monList[CV] > 0
+        increase urgent process 
+        ListRemove(condVar[CV]); // remove the process from list
+        V(sem[CV]); // send the single to wake up the waiting processes
+        P(urgent); // wait for the urgent to finish
+        urgentNum--; // decrease the urgent count
+    
 ____________________________________________
 
-changes made 
+changes made to other files 
 
-reader-writer
+reader-writer:
 changed rt threads to ubc pthreads
+
+list_adder.c list_remover.c list_movers.c:
+for the list modifiers i removed the print statements of when invalid or 
+unexpected parameters are give, now they are handled without telling the 
+user.
+-------------------------------------------------------------
+PART A BONUS- DINING PHILOSOPER'S PROBLEM
+
+problem: 5 philosopher, 5 chopsticks, each need two to eat.
+states: thinking, ready to eat(hungry), eating
+        thinking is also when the pholosoper is done eating and have
+        put down the chop stick
+issues: avoid deadlock, and starvation.
+
+the formate/design of the bonus is same as reader-writer. i used reader
+-writer.c to construct dining-phosopher.c
+
+
+dining-philosopher-monitor:
+enum (thinking, hungry, eating) state [phil]
+mutex
+sem[phil] 
+
+init:
+    mutext=newSem(1)
+    initialize all sem to newSem(0)
+
+//left philosopher
+int left(phil):
+    get the left philosopher to the currrent one
+
+//right philosopher 
+int right(phil):
+    get the right philosopher to the currrent one
+
+//check to see if the current philosopher can eat
+void checkifready:
+    //there are only 5 chopsticks so if the left and right are both eating
+    // then only one chop stick is left. i am not checking the other philo-
+    //-sophers because if everyone checks their left and right, starvation
+    // should not be a problem
+    if current state== hungry && left != eating && right !=eating 
+        then state= eating
+        V(sem) //send signal
+
+getchopstick:
+    P(mutex) // wait for signal
+    state= hungry 
+    checkifready
+    if the state is not eating then P(sem)
+        V(mutex)
+
+//this allows the neighbouring philosophers to eat
+putchopstick:
+    P(mutex) // wait for signal
+    state= thinking // so others can eat
+    checkifready(left)
+    checkifready(right)
+    V(mutex)
+
+
+____________________________
+testing:
+the test results are in PartB.testresults.txt, as the test runs for a long 
+time, a portion is copied and put in the file.
 
 

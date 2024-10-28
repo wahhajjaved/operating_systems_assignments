@@ -1,0 +1,162 @@
+/*
+ *@author Wahhaj Javed, muj975, 11135711
+ *@author Nakhba Mubashir, epl482, 11317060
+ */
+
+CMPT332 Assignment 2 Group 67: PART B test
+
+tested by runing ./reader-writer-test in terminal
+
+**************OUTPUT*************
+Reader and Writer processes created
+1000 start read
+starting value of numReaders = 1
+1000 Reading
+500 start write
+1001 start read
+starting value of numReaders = 2
+1001 Reading
+1002 start read
+starting value of numReaders = 3
+1002 Reading
+501 start write
+stopping value of numReaders = 2
+1000 stop read
+stopping value of numReaders = 1
+1002 stop read
+stopping value of numReaders = 0
+500 writing
+1001 stop read
+1001 start read
+1000 start read
+1002 start read
+starting value of numReaders = 1
+starting value of numReaders = 2
+starting value of numReaders = 3
+1002 Reading
+500 stop write
+1000 Reading
+1001 Reading
+500 start write
+stopping value of numReaders = 2
+1002 stop read
+stopping value of numReaders = 1
+1001 stop read
+1001 start read
+starting value of numReaders = 2
+1001 Reading
+1002 start read
+starting value of numReaders = 3
+1002 Reading
+stopping value of numReaders = 2
+1001 stop read
+stopping value of numReaders = 1
+1000 stop read
+1000 start read
+starting value of numReaders = 2
+1000 Reading
+1001 start read
+starting value of numReaders = 3
+1001 Reading
+stopping value of numReaders = 2
+1002 stop read
+stopping value of numReaders = 1
+1000 stop read
+stopping value of numReaders = 0
+501 writing
+1001 stop read
+1001 start read
+1002 start read
+1000 start read
+starting value of numReaders = 1
+starting value of numReaders = 2
+starting value of numReaders = 3
+1000 Reading
+501 stop write
+1002 Reading
+1001 Reading
+stopping value of numReaders = 2
+1001 stop read
+stopping value of numReaders = 1
+1002 stop read
+stopping value of numReaders = 0
+500 writing
+
+-------------------------------------------------------------
+PART B BONUS test
+
+tested by runing ./dining-philosopher in terminal
+philosopher processes created
+1000 Philosopher is thinding 
+1001 Philosopher is thinding 
+1002 Philosopher is thinding 
+1003 Philosopher is thinding 
+1004 Philosopher is thinding 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1003 Philosopher is hungry 
+1003 Philosopher is eating 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1003 philosopher is done
+1003 Philosopher is thinding 
+1002 Philosopher is hungry 
+1002 Philosopher is eating 
+1002 philosopher is done
+1002 Philosopher is thinding 
+1001 Philosopher is hungry 
+1001 Philosopher is eating 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1001 philosopher is done
+1001 Philosopher is thinding 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1002 Philosopher is hungry 
+1002 Philosopher is eating 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1002 philosopher is done
+1002 Philosopher is thinding 
+1003 Philosopher is hungry 
+1003 Philosopher is eating 
+1003 philosopher is done
+1003 Philosopher is thinding 
+1003 Philosopher is hungry 
+1003 Philosopher is eating 
+1003 philosopher is done
+1003 Philosopher is thinding 
+1001 Philosopher is hungry 
+1001 Philosopher is eating 
+1000 Philosopher is hungry 
+1000 Philosopher is eating 
+1002 Philosopher is hungry 
+1002 Philosopher is eating 
+1001 philosopher is done
+1001 Philosopher is thinding 
+1004 Philosopher is hungry 
+1004 Philosopher is eating 
+1004 philosopher is done
+1004 Philosopher is thinding 
+1002 philosopher is done
+1002 Philosopher is thinding 
+1000 philosopher is done
+1000 Philosopher is thinding 
+1001 Philosopher is hungry 
+1001 Philosopher is eating 
+1002 Philosopher is hungry 
+

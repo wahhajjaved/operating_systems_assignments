@@ -1,0 +1,209 @@
+commit 6ac31a44a2c135d629daf987d291cb41e4824058
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 21:23:16 2024 -0600
+
+    started the mutex section of A1, designed and implemented the lock and 
+unlock of mutx
+
+commit 3a04ee5e44ad5812efb0e7c676247efb33de6ce5
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 20:37:31 2024 -0600
+
+    added the test output to the file
+
+commit 6072e450a69274a9648947b43ec47ce2b8c1feda
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Oct 27 20:23:29 2024 -0600
+
+    Added -mno-relax to makefile
+
+commit de42b48fc49908b94c1740e3e7b55e5ae45fca4c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 19:42:32 2024 -0600
+
+    edited while testing
+
+commit 3289cb5aa1a1a3533ece209a409004735397f96a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 15:04:26 2024 -0600
+
+    added the test section in partb test
+
+commit 6f37384e1b114fd92ce1478169bcbf460caa06f6
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 15:01:50 2024 -0600
+
+    added the bonus part of part b
+
+commit df20a949d400ae378f55ab804ca06ae62fee8c15
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 15:01:09 2024 -0600
+
+    fixed spelling mistakes and minor errors like missing ending }, 
+wrong type, while running the makefile
+
+commit 5ff8c79f9fd9ae29bbf62e8f37626fb168b5edb8
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 14:42:39 2024 -0600
+
+    changed name to correcrt spellings
+
+commit 2b276d6493f264133a4957e3751eee9397d45b93
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 14:26:43 2024 -0600
+
+     erote the design of part b
+
+commit 048a730b45a4ff8caf7570a4992311d8c5bd697c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 14:26:23 2024 -0600
+
+     added the bonus of part b
+
+commit 92b5e8ccbc485f2ed63b04928aac5c7ef89e56f1
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 12:17:27 2024 -0600
+
+    edited wile testing
+
+commit 1d519b70704a75100fd4d4dfc9cce1e31131f32f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 22:09:43 2024 -0600
+
+    added the new funct free
+
+commit 52f8821f31a3b675ea9100e246a3d4b3b926988c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 22:08:50 2024 -0600
+
+     edited with makefile, so it compiles
+
+commit 01c4e989807f0755f0c168fe884b100fdaa9a339
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 22:07:45 2024 -0600
+
+    fixed minor errors in makefile to make it work
+
+commit f65b50a1489b56bbbb706c5bf87e12723c92cebf
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 21:34:41 2024 -0600
+
+    removed the thread a b c from u threads and placed them into uthreadtest,
+ also in uthreads added thread_free()
+
+commit 1eb870a70d6948b39b480966917cc6a325f3a5de
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 17:19:19 2024 -0600
+
+    added the .h file for the part a Design
+
+commit e42088f35d1feb756229444f271b31aec74ea73e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 17:18:32 2024 -0600
+
+    added the uthread to makefile
+
+commit 80c6777a5354122c783d7427c472eb68863c026a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 17:16:24 2024 -0600
+
+    added the make file to use switching of thread
+
+commit 5b8f92e7e64461b57aded01681adfea6f9acb4e4
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 17:15:49 2024 -0600
+
+     added the thread_create
+
+commit 3d3d15675410c441623e1bdb3e9d89421ddeed77
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 16:34:42 2024 -0600
+
+    added the uthread to the makefile
+
+commit 83faddc7bc6f22a44aa448003148ea4e79edf276
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 15:59:53 2024 -0600
+
+    strted the implementation of Part a uthreads, write the dign od uthread 
+switch and uthread scedule
+
+commit 25da21f105c1d01a5edf1d14b97d022f6ab8dca2
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Oct 26 14:51:13 2024 -0600
+
+    added the uthread files from given folder
+
+commit d418710cd9499833dc1e57103062d69027d85324
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 16:03:09 2024 -0600
+
+    added the xv6 from prev a1
+
+commit 0d62705bccc024372d7830cb49d292c37214ebe4
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 15:09:47 2024 -0600
+
+    added initialization to reader-writer and removed commented code
+
+commit ca6cc1822c4a9f0cd81e83844ed911220a3e34dd
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 15:04:25 2024 -0600
+
+     added the design document for part b
+
+commit 7f49ff8685e16643159f433ddd93133710e21819
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 14:55:03 2024 -0600
+
+    added the monitor.c: the the procedures are implemnted using list
+
+commit f5fd1592820f66ec2551495508785e735e8e4ead
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 14:38:44 2024 -0600
+
+    added the testresult for partB where it shows the monitor procedures
+
+commit 74f349338dc10e70700d18252545f74a33335e93
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 14:28:12 2024 -0600
+
+    for the list modifiers i removed the print statements of when invalid or 
+unexpected parameters are give, they are handled without telling the user
+
+commit 90bb3681bbae95a44e417284bda997332662a007
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 11:54:55 2024 -0600
+
+    uncommented the Moninit
+
+commit d4ff23d44686dbf9023f0f9e434f918f94df3b58
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 11:53:49 2024 -0600
+
+    edited the header files to add the iitialization
+
+commit 9677f832033c9a9a222bdd7998510a8b2766b8a0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 08:44:57 2024 -0600
+
+    changed the variable names for better readability
+
+commit c43fc9da437a075262a5b41f878b631f2bfc8ecd
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 08:40:38 2024 -0600
+
+    changed the include statement double qoutes to <>
+
+commit 3f928ba082b7a3b9d242b44928c4be6579a69188
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 08:19:32 2024 -0600
+
+    for phase 2 edited the started editing monitor according to feedback and 
+updated knowledge
+
+commit 85c4275e5eed276dc441fb95aae4921abcf95bab
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Oct 19 15:34:54 2024 -0600
+
+    A2 phase 2 start

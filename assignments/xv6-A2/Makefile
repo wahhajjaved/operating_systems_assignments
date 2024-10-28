@@ -60,6 +60,7 @@ CFLAGS = -Wall -Werror -O -fno-omit-frame-pointer -ggdb -gdwarf-2
 CFLAGS += -MD
 CFLAGS += -mcmodel=medany
 # CFLAGS += -ffreestanding -fno-common -nostdlib -mno-relax
+CFLAGS += -mno-relax
 CFLAGS += -fno-common -nostdlib
 CFLAGS += -fno-builtin-strncpy -fno-builtin-strncmp -fno-builtin-strlen -fno-builtin-memset
 CFLAGS += -fno-builtin-memmove -fno-builtin-memcmp -fno-builtin-log -fno-builtin-bzero
@@ -142,6 +143,26 @@ UPROGS=\
 	$U/_pingpong\
 	$U/_primes\
 	$U/_trace\
+	$U/_uthread\
+	$U/_prod-con-mtx\
+ 
+#CMPT 332 GROUP 67 Change, Fall 2024 
+
+UTHREAD=$U/uthread.o $U/uthread_switch.o
+
+$U/uthread_switch.o: $U/uthread_switch.S
+	$(CC) $(CFLAGS) -c -o $U/uthread_switch.o $U/uthread_switch.S
+
+$U/_uthread: $U/uthreadtest.o  $U/uthread.o $U/uthread_switch.o $(ULIB)
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_uthread $U/uthread.o \
+		$U/uthread_switch.o $U/uthreadtest.o $(ULIB)
+	$(OBJDUMP) -S $U/_uthread > $U/uthread.asm
+
+$U/_prod-con-mtx: $U/prod-con-mtx.o $U/mtx.o $(UTHREAD)  $(ULIB)
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_prod-con-mtx \
+        $U/prod-con-mtx.o $U/mtx.o $(UTHREAD) $(ULIB)
+
+
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)

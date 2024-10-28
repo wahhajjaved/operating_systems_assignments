@@ -106,7 +106,7 @@ LIST *ListCreate(){
     }
 
     if (aviableList==NULL) {
-        printf("ERROR: no aviable list \n");
+        /*printf("ERROR: no aviable list \n");*/
         return NULL;
     }
     /*get new list and initilize it */
@@ -129,15 +129,15 @@ int ListAdd(LIST *list,void *item){
 /*    
   if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
+      /*  printf("ERROR: list is NULL \n");*/
         return -1;
     }
     if (item == NULL){
-        printf("ERROR: item is NULL");
+        /*printf("ERROR: item is NULL");*/
         return -1;   
     }
     if (aviableNode ==NULL){
-        printf("ERROR: no aviabkle node");
+        /*printf("ERROR: no aviabkle node");*/
         return -1;   }
 
     if (nodeNum == MIN_NODES){
@@ -180,11 +180,11 @@ int ListInsert(LIST *list,void *item){
     NODE *newNode;
      /* if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
+       /* printf("ERROR: list is NULL \n");*/
         return -1;
     }
     if (item == NULL){
-        printf("ERROR: item is NULL");
+        /*printf("ERROR: item is NULL");*/
         return -1;
     }
     if (nodeNum == MIN_NODES){
@@ -225,11 +225,11 @@ int ListAppend(LIST *list, void *item){
     NODE *newNode; 
     /* if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
+        /*printf("ERROR: list is NULL \n");*/
         return -1;
     }
     if (item == NULL){
-        printf("ERROR: item is NULL");
+       /* printf("ERROR: item is NULL");*/
         return -1;
     }
     if (nodeNum == MIN_NODES){
@@ -264,11 +264,11 @@ int ListPrepend(LIST *list,void *item){
     NODE *newNode;
      /* if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
+        /*printf("ERROR: list is NULL \n");*/
         return -1;
     }
     if (item == NULL){
-        printf("ERROR: item is NULL");
+        /*printf("ERROR: item is NULL");*/
         return -1;
     }
     if (nodeNum == MIN_NODES){
