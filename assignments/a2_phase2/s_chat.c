@@ -487,11 +487,25 @@ int mainp(int argc, char* argv[])
 	if (argc != 4) {
 		printf("Incorrect number of arguments.\n");
 		printf("Usage: s-chat <src_port> <dst_host_name> <dst_port>\n");
+		printf("Ports must be between 30001 and 40000.\n");
 		exit(EXIT_FAILURE);
 	}
 	src_port = argv[1];
 	dst_ip = argv[2];
 	dst_port = argv[3];
+	if(atoi(src_port) < 30001 || atoi(src_port) > 40000){
+		printf("Ports must be between 30001 and 40000.\n");
+		exit(EXIT_FAILURE);
+	}
+	if(atoi(dst_port) < 30001 || atoi(dst_port) > 40000){
+		printf("Ports must be between 30001 and 40000.\n");
+		exit(EXIT_FAILURE);
+	}
+	if(atoi(dst_port) == atoi(src_port)){
+		printf("src and dst ports must be different.\n");
+		exit(EXIT_FAILURE);
+		
+	}
 	printf("Starting s-chat. src port: %s, dst: %s, dst port: %s.\n",
 		src_port, 
 		dst_ip, 
