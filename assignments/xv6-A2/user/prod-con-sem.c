@@ -5,7 +5,7 @@
 
 #include "user/sem.h"
 
-#define buffSizeVal 5
+#define buffSizeVal 6
 #define buffMaxVal 6
 
 static int mtx, buffMax, buffSize, empty, full;
@@ -15,43 +15,58 @@ void prod(void){
     thread_yield();
     /*run till all are produced*/
     for (;;){
-        if (buffSize <= buffMax){
-                P(empty);
-                P(mtx); /* locks the critical section*/
-                buffSize++;
-                printf("Producer: added to the buffer: %d / %d \n",buffSize,
+        P(empty);
+        P(mtx); /* locks the critical section*/
+            thread_yield();
+        buffSize++;
+        printf("Producer: added to the buffer: %d / %d \n",buffSize,
             buffMax );
-        }
         V(mtx);
         V(full);
+        sleep(10); /*to slow it down*/
         thread_yield();
     }
 }
 
-void con(void){
+void con1(void){
     printf("Consumer created\n");
     thread_yield();
     /*run till all are produced*/
     for (;;){
-        if (buffSize <= buffMax){
-                P(full);
-                P(mtx); /* locks the critical section*/
-                buffSize--;
-                printf("Consumer:removed from the buffer:%d / %d \n",buffSize,
+        P(full);
+        P(mtx); /* locks the critical section*/
+        thread_yield();
+        buffSize--;
+        printf("Consumer:removed from the buffer:%d / %d \n",buffSize,
             buffMax );
-        }
         V(mtx);
         V(empty);
         thread_yield();
     }
 }
 
+void con2(void){
+    printf("Consumer created\n");
+    thread_yield();
+    /*run till all are produced*/
+    for (;;){
+        P(full);
+        P(mtx); /* locks the critical section*/
+        buffSize--;
+        printf("Consumer:removed from the buffer:%d / %d \n",buffSize,
+            buffMax );
+        V(mtx);
+        V(empty);
+        thread_yield();
+    }
+}
 int main(int argc, char *argv[]){
     /*initialize the mutex */
-    mtx= sem_create(0);
     buffSize=buffSizeVal;
     buffMax=buffMaxVal;
-
+    full= sem_create(buffSize);
+    empty=sem_create(buffMax-buffSize);
+    mtx= sem_create(1);
     /*checking for invalid */
     if (buffMax < 1){
         printf("prod-con-mtx: bufferMax cant not be less than 1\n");
@@ -66,12 +81,10 @@ int main(int argc, char *argv[]){
     /* create producer and consumer threads*/
     thread_init(); 
     thread_create(prod);
-    thread_create(con);
+    thread_create(con1);
     thread_schedule();
 
     exit(0);
-    
-
 }
 
 

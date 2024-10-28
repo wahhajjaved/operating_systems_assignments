@@ -11,16 +11,20 @@ typedef struct _semaphore{
 #define NUM_SEM 5
 
 Semaphore sem[NUM_SEM];
-static int mtx;
+static int mtx=-1;
 
 int sem_create(int val){
     int i;
-    mtx= mtx_create(1);
+    mtx_lock(mtx);
     for (i=0; i<NUM_SEM; i++){
-        sem[i].value= val;
-    }
+        if (sem[i].value==0){
+            sem[i].value= val;
+            mtx_unlocked(mtx);
+            return i;
+        }
+     }
     mtx_unlocked(mtx);
-    return i;
+    return -1;
 }
 
 int P(int semVal){
