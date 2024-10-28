@@ -14,35 +14,138 @@
 
 #include <rtthreads.h>
 #include <RttCommon.h>
+#include <list.h>
 
 #define STKSIZE 65536
+#define QUEUESIZE 50
 #define BUFSIZE 100
 #define SUCCESS 1
 #define FAILURE 0
 
-u_int exitFlag = 0;
 
+typedef struct message {
+	char message[BUFSIZE];
+	u_int size;
+} Message;
+
+u_int exitFlag = 0;
 RttThreadId serverTid, consoleInTid, consoleOutTid, networkInTid;
 RttThreadId networkOutTid;
 
+int configureLists(LIST** consoleOutFreeList, LIST** consoleOutQueue) {
+	int i;
+	*consoleOutQueue = ListCreate();
+	*consoleOutFreeList = ListCreate();
+	
+	if(*consoleOutQueue == NULL) {
+		fprintf(stderr, "Error: consoleOutQueue not created.\n");
+		return 0;
+	}
+	if(*consoleOutFreeList == NULL) {
+		fprintf(stderr, "Error: consoleOutFreeList not created.\n");
+		return 0;
+	}
+	
+	for(i = 0; i < QUEUESIZE; i++) {
+		Message* message = malloc(sizeof(Message));
+		if(message == NULL) {
+			perror("configureLists(): malloc returned NULL.");
+			return 0;
+		}
+		message->size = 0;
+		message->message[0] = '\0';
+		if(ListAppend(*consoleOutFreeList, message) == -1) {
+			fprintf(stderr, "Error: ListAppend to consoleOutFreeList failed.\n");
+			return 0;
+		}
+	}
+	return 1;
+}
+
 RTTTHREAD server() {
-	int r, reply;
+	int r, reply, newMessage;
 	RttThreadId from;
 	char data[BUFSIZE+1];
 	u_int len, replyLen;
+	u_int consoleOutReady;
+	Message* consoleOutCurMessage;
+	LIST *consoleOutFreeList, *consoleOutQueue;
+	
+	if(configureLists(&consoleOutFreeList, &consoleOutQueue) != 1) {
+		fprintf(stderr, "Error: configureLists() did not return 1.\n");
+		exitFlag = 1;
+	}
+	
+	consoleOutReady = 0;
 	replyLen = 1;
+	printf("Starting server main loop\n");
 	
 	while(exitFlag != 1) {
+		newMessage = 0;
 		len = BUFSIZE;
-		r = RttReceive(&from, data, &len);
-		if (r == RTTFAILED) {
-			perror("server(): RttReceive() failed.\n");
-			continue;
+		/*Get a message if there are any waiting*/
+		if(RttMsgWaits()) {
+			r = RttReceive(&from, data, &len);
+			if (r == RTTFAILED) {
+				perror("server(): RttReceive() failed.\n");
+				continue;
+			}
+			newMessage = 1;
+			printf("server(): %u bytes recieved.\n", len);
 		}
-		data[len] = '\0';
-		printf("server(): %u character message from consoleIn() - %s\n", len, data);
-		reply = SUCCESS;
-		RttReply(from, &reply, replyLen);
+		
+		/*empty message indicates EOF so exit all threads*/
+		if(newMessage && len == 0) {
+			exitFlag = 1;
+			if(consoleOutReady) {
+				RttReply(consoleOutTid, NULL, 0);
+			}
+			break;
+		}
+		
+		/*process message from consoleIn */
+		/*TODO*/
+		if (newMessage && RTTTHREADEQUAL(from, consoleInTid) ) {
+			if (ListCount(consoleOutFreeList) == 0) {
+				fprintf(stderr, "server: Cannot buffer any more messages from "
+					"consoleIn.\n"
+				);
+			}
+		}
+		
+		
+		/*Handlers for incoming messages from consoleIn and networkIn threads*/
+		if(len > 0 && RTTTHREADEQUAL(from, consoleInTid) && ListCount(consoleOutFreeList) > 0) {
+			Message* message = ListTrim(consoleOutFreeList);
+			printf("server(): message from consoleIn.\n");
+			message->size = len;
+			memcpy(message->message, data, message->size);
+			ListPrepend(consoleOutQueue, message);
+			reply = SUCCESS;
+			RttReply(from, &reply, replyLen);
+		}
+		
+		/*Handlers for sends from consoleOut and networkOut*/
+		else if (RTTTHREADEQUAL(from, consoleOutTid) && consoleOutCurMessage != NULL) {
+			printf("server(): consoleOut message handled. Clearing consoleOutCurMessage.\n");
+			consoleOutCurMessage->message[0] = '\0';
+			consoleOutCurMessage->size = 0;
+			ListAppend(consoleOutFreeList, consoleOutCurMessage);
+			consoleOutReady = 1;
+		}
+		
+		/*message dispatch to consoleOut and networkOut*/
+		if(consoleOutReady == 1 && ListCount(consoleOutQueue) > 0) {
+			printf("server(): sending message to consoleOut.\n");
+			consoleOutCurMessage = ListTrim(consoleOutQueue);
+			if(consoleOutCurMessage != NULL) {
+				printf("server(): Sending %u bytes to consoleOut.\n", consoleOutCurMessage->size);
+				RttReply(consoleOutTid, 
+					consoleOutCurMessage->message,
+					consoleOutCurMessage->size
+				);
+			}
+		}
 	}
 
 	printf("server(): exiting.\n");
@@ -57,6 +160,7 @@ RTTTHREAD consoleIn(void) {
 	
 	printf("consoleIn(): starting. \n");
 	while(exitFlag != 1) {
+		replyLen = 1;
 		bytesRead = read(0, inputBuffer, BUFSIZE);
 		if(bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
 			perror("consoleIn(): Error encountered when reading from stdin.");
@@ -81,8 +185,25 @@ RTTTHREAD consoleIn(void) {
 	printf("consoleIn(): exiting.\n");
 }
 
-RTTTHREAD consoleOut() {
-	printf("consoleOut not yet implemented.\n");
+RTTTHREAD consoleOut(void) {
+	int r;
+	char message[BUFSIZE+1];
+	u_int messageLen=BUFSIZE;
+	
+	printf("consoleOut(): starting.\n");
+	while(exitFlag != 1) {
+		messageLen=BUFSIZE;
+		r = RttSend(serverTid, NULL, 0, &message, &messageLen);
+		if(r != RTTOK) {
+			printf("Could not get message from server.\n");
+		}
+		printf("consoleOut: %u bytes recieved.\n", messageLen);
+		message[messageLen] = '\0';
+		printf("consoleOut: %s\n", message);
+
+	}
+	printf("consoleOut(): exiting.\n");
+	
 	
 }
 RTTTHREAD networkIn() {
@@ -169,7 +290,7 @@ int mainp(int argc, char* argv[])
 	
 	/*Thread creations*/
 	attr.startingtime = RTTZEROTIME;
-	attr.priority = RTTNORM;
+	attr.priority = RTTHIGH;
 	attr.deadline = RTTNODEADLINE;
 	temp = RttCreate(
 		&serverTid, 
@@ -181,7 +302,9 @@ int mainp(int argc, char* argv[])
 		RTTUSR
 	);
 	if (temp == RTTFAILED) perror("Failed to create server thread.");
+	printf("server thread created.\n");
 
+	attr.priority = RTTLOW;
 	temp = RttCreate(
 		&consoleInTid, 
 		(void(*)()) consoleIn,
@@ -195,19 +318,24 @@ int mainp(int argc, char* argv[])
 		perror("Failed to create consoleIn thread.");
 		return 1;
 	}
-		
-
-/* 	temp = RttCreate(
+	printf("ConsoleIn thread created.\n");
+	
+	attr.priority = RTTNORM;
+ 	temp = RttCreate(
 		&consoleOutTid, 
 		(void(*)()) consoleOut,
 		STKSIZE,
 		"consoleOut",
 		NULL,
 		attr,
-		RTTSYS
+		RTTUSR
 	);
-	if (temp == RTTFAILED) perror("Failed to create consoleOut thread.");
- */
+	if (temp != RTTOK) {
+		perror("Failed to create consoleOut thread.");
+		return 1;
+	}
+	printf("ConsoleOut thread created.\n");
+
 /* 	temp = RttCreate(
 		&networkInTid, 
 		(void(*)()) networkIn,
@@ -215,7 +343,7 @@ int mainp(int argc, char* argv[])
 		"networkIn",
 		NULL,
 		attr,
-		RTTSYS
+		RTTUSR
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkIn thread.");
  */
@@ -226,9 +354,10 @@ int mainp(int argc, char* argv[])
 		"networkOut",
 		NULL,
 		attr,
-		RTTSYS
+		RTTUSR
 	);
 	if (temp == RTTFAILED) perror("Failed to create networkOut thread.");
  */	
+	RttSleep(1);
 	return(0);
 }
