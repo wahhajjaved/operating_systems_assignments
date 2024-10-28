@@ -17,7 +17,7 @@
 #include <list.h>
 
 #define STKSIZE 65536
-#define QUEUESIZE 50
+#define QUEUESIZE 25
 #define BUFSIZE 100
 #define SUCCESS 1
 #define FAILURE 0
@@ -93,11 +93,16 @@ int getSockets(
 
 
 
-int configureLists(LIST** consoleOutFreeList, LIST** consoleOutQueue) {
+int configureLists(
+	LIST** consoleOutFreeList,
+	LIST** consoleOutQueue,
+	LIST** networkOutFreeList, 
+	LIST** networkOutQueue
+) {
 	int i;
+
 	*consoleOutQueue = ListCreate();
 	*consoleOutFreeList = ListCreate();
-	
 	if(*consoleOutQueue == NULL) {
 		fprintf(stderr, "Error: consoleOutQueue not created.\n");
 		return 0;
@@ -106,7 +111,6 @@ int configureLists(LIST** consoleOutFreeList, LIST** consoleOutQueue) {
 		fprintf(stderr, "Error: consoleOutFreeList not created.\n");
 		return 0;
 	}
-	
 	for(i = 0; i < QUEUESIZE; i++) {
 		Message* message = malloc(sizeof(Message));
 		if(message == NULL) {
@@ -120,6 +124,31 @@ int configureLists(LIST** consoleOutFreeList, LIST** consoleOutQueue) {
 			return 0;
 		}
 	}
+	
+	*networkOutQueue = ListCreate();
+	*networkOutFreeList = ListCreate();
+	if(*networkOutQueue == NULL) {
+		fprintf(stderr, "Error: networkOutQueue not created.\n");
+		return 0;
+	}
+	if(*networkOutFreeList == NULL) {
+		fprintf(stderr, "Error: networkOutFreeList not created.\n");
+		return 0;
+	}
+	
+	for(i = 0; i < QUEUESIZE; i++) {
+		Message* message = malloc(sizeof(Message));
+		if(message == NULL) {
+			perror("configureLists(): malloc returned NULL.");
+			return 0;
+		}
+		message->size = 0;
+		message->message[0] = '\0';
+		if(ListAppend(*networkOutFreeList, message) == -1) {
+			fprintf(stderr, "Error: ListAppend to networkOutFreeList failed.\n");
+			return 0;
+		}
+	}
 	return 1;
 }
 
@@ -128,19 +157,28 @@ RTTTHREAD server() {
 	RttThreadId from;
 	char data[BUFSIZE+1];
 	u_int len, replyLen;
-	u_int consoleOutReady;
-	Message* consoleOutCurMessage;
+	u_int consoleOutReady, networkOutReady;
+	Message *consoleOutCurMessage, *networkOutCurMessage;
 	LIST *consoleOutFreeList, *consoleOutQueue;
+	LIST *networkOutFreeList, *networkOutQueue;
 	
-	if(configureLists(&consoleOutFreeList, &consoleOutQueue) != 1) {
+	r = configureLists (
+			&consoleOutFreeList,
+			&consoleOutQueue,
+			&networkOutFreeList,
+			&networkOutQueue
+		);
+	if(r != 1) {
 		fprintf(stderr, "Error: configureLists() did not return 1.\n");
 		exitFlag = 1;
 	}
 	
 	/*special case to handle first response from consoleOut*/
 	consoleOutCurMessage = ListFirst(consoleOutFreeList);
+	networkOutCurMessage = ListFirst(networkOutFreeList);
 	
 	consoleOutReady = 0;
+	networkOutReady = 0;
 	replyLen = 1;
 	
 	printf("Starting server main loop\n");
@@ -187,6 +225,15 @@ RTTTHREAD server() {
 				ListPrepend(consoleOutQueue, message);
 				reply = SUCCESS;
 				RttReply(from, &reply, replyLen);
+
+				message = ListTrim(networkOutFreeList);
+				printf("server(): message from networkIn.\n");
+				message->size = len;
+				memcpy(message->message, data, message->size);
+				ListPrepend(networkOutQueue, message);
+				reply = SUCCESS;
+				RttReply(from, &reply, replyLen);
+
 			}
 		}
 
@@ -203,6 +250,19 @@ RTTTHREAD server() {
 			}
 		}
 		
+		/*Process message from networkOut*/
+		if (newMessage && RTTTHREADEQUAL(from, networkOutTid) ) {
+			if (networkOutCurMessage == NULL) {
+				fprintf(stderr, "server: networkOutCurMessage is NULL.\n");
+			}
+			else { 
+			networkOutCurMessage->message[0] = '\0';
+			networkOutCurMessage->size = 0;
+			ListAppend(networkOutFreeList, networkOutCurMessage);
+			networkOutReady = 1;
+			}
+		}
+		
 		
 		/*Send message to consoleOut if its ready*/
 		if(consoleOutReady == 1 && ListCount(consoleOutQueue) > 0) {
@@ -211,9 +271,25 @@ RTTTHREAD server() {
 			if(consoleOutCurMessage != NULL) {
 				printf("server(): Sending %u bytes to consoleOut.\n", consoleOutCurMessage->size);
 				consoleOutReady = 0;
-				RttReply(consoleOutTid, 
+				RttReply(
+					consoleOutTid, 
 					consoleOutCurMessage->message,
 					consoleOutCurMessage->size
+				);
+			}
+		}
+		
+		/*Send message to networkOut if its ready*/
+		if(networkOutReady == 1 && ListCount(networkOutQueue) > 0) {
+			printf("server(): sending message to networkOut.\n");
+			networkOutCurMessage = ListTrim(networkOutQueue);
+			if(networkOutCurMessage != NULL) {
+				printf("server(): Sending %u bytes to networkOut.\n", networkOutCurMessage->size);
+				networkOutReady = 0;
+				RttReply(
+					networkOutTid, 
+					networkOutCurMessage->message,
+					networkOutCurMessage->size
 				);
 			}
 		}
@@ -286,11 +362,24 @@ RTTTHREAD networkIn() {
 }
 
 RTTTHREAD networkOut() {
+	int r, sentMsg;
+	char message[BUFSIZE+1];
+	u_int messageLen=BUFSIZE;
+	sentMsg = SUCCESS;
+	
+	
+	printf("networkOut(): starting.\n");
 	while(exitFlag != 1) {
-		
-		
+		r = RttSend(serverTid, &sentMsg, 1, &message, &messageLen);
+		if(r != RTTOK) {
+			printf("Could not get message from server.\n");
+		}
+		printf("networkOut: %u bytes recieved.\n", messageLen);
+		message[messageLen] = '\0';
+		printf("networkOut: %s\n", message);
+
 	}
-	printf("networkOut not yet implemented.\n");
+	printf("networkOut(): exiting.\n");
 	
 }
 
@@ -354,6 +443,7 @@ int mainp(int argc, char* argv[])
 	}
 	
 	/*Socket send test*/
+	/*
 	r = sendto(localSockFd, "Hello nc", 9, 0, remoteAddrInfo->ai_addr, remoteAddrInfo->ai_addrlen );
 	if(r == -1) {
 		perror("sendto failed.\n");
@@ -361,7 +451,7 @@ int mainp(int argc, char* argv[])
 	}
 	printf("sendto: %d bytes sent.\n", r);
 	return 0;
-	
+	*/
 	
 	
 	
@@ -425,7 +515,7 @@ int mainp(int argc, char* argv[])
 	);
 	if (r == RTTFAILED) perror("Failed to create networkIn thread.");
  */
-/* 	r = RttCreate(
+	r = RttCreate(
 		&networkOutTid, 
 		(void(*)()) networkOut,
 		STKSIZE,
@@ -435,7 +525,7 @@ int mainp(int argc, char* argv[])
 		RTTUSR
 	);
 	if (r == RTTFAILED) perror("Failed to create networkOut thread.");
- */	
+
 	RttSleep(1);
 	return(0);
 }
