@@ -76,11 +76,16 @@ RTTTHREAD server() {
 		exitFlag = 1;
 	}
 	
+	/*special case to handle first response from consoleOut*/
+	consoleOutCurMessage = ListFirst(consoleOutFreeList);
+	
 	consoleOutReady = 0;
 	replyLen = 1;
-	printf("Starting server main loop\n");
 	
+	printf("Starting server main loop\n");
 	while(exitFlag != 1) {
+		/*Allow other threads to run*/
+		RttUSleep(10);
 		newMessage = 0;
 		len = BUFSIZE;
 		/*Get a message if there are any waiting*/
@@ -97,49 +102,54 @@ RTTTHREAD server() {
 		/*empty message indicates EOF so exit all threads*/
 		if(newMessage && len == 0) {
 			exitFlag = 1;
+			
+			RttReply(consoleInTid, NULL, 0);
 			if(consoleOutReady) {
 				RttReply(consoleOutTid, NULL, 0);
 			}
 			break;
 		}
-		
+
 		/*process message from consoleIn */
-		/*TODO*/
 		if (newMessage && RTTTHREADEQUAL(from, consoleInTid) ) {
 			if (ListCount(consoleOutFreeList) == 0) {
 				fprintf(stderr, "server: Cannot buffer any more messages from "
 					"consoleIn.\n"
 				);
+				
+			}
+			else {
+				Message* message = ListTrim(consoleOutFreeList);
+				printf("server(): message from consoleIn.\n");
+				message->size = len;
+				memcpy(message->message, data, message->size);
+				ListPrepend(consoleOutQueue, message);
+				reply = SUCCESS;
+				RttReply(from, &reply, replyLen);
 			}
 		}
-		
-		
-		/*Handlers for incoming messages from consoleIn and networkIn threads*/
-		if(len > 0 && RTTTHREADEQUAL(from, consoleInTid) && ListCount(consoleOutFreeList) > 0) {
-			Message* message = ListTrim(consoleOutFreeList);
-			printf("server(): message from consoleIn.\n");
-			message->size = len;
-			memcpy(message->message, data, message->size);
-			ListPrepend(consoleOutQueue, message);
-			reply = SUCCESS;
-			RttReply(from, &reply, replyLen);
-		}
-		
-		/*Handlers for sends from consoleOut and networkOut*/
-		else if (RTTTHREADEQUAL(from, consoleOutTid) && consoleOutCurMessage != NULL) {
-			printf("server(): consoleOut message handled. Clearing consoleOutCurMessage.\n");
+
+		/*Process message from consoleOut*/
+		if (newMessage && RTTTHREADEQUAL(from, consoleOutTid) ) {
+			if (consoleOutCurMessage == NULL) {
+				fprintf(stderr, "server: consoleOutCurMessage is NULL.\n");
+			}
+			else { 
 			consoleOutCurMessage->message[0] = '\0';
 			consoleOutCurMessage->size = 0;
 			ListAppend(consoleOutFreeList, consoleOutCurMessage);
 			consoleOutReady = 1;
+			}
 		}
 		
-		/*message dispatch to consoleOut and networkOut*/
+		
+		/*Send message to consoleOut if its ready*/
 		if(consoleOutReady == 1 && ListCount(consoleOutQueue) > 0) {
 			printf("server(): sending message to consoleOut.\n");
 			consoleOutCurMessage = ListTrim(consoleOutQueue);
 			if(consoleOutCurMessage != NULL) {
 				printf("server(): Sending %u bytes to consoleOut.\n", consoleOutCurMessage->size);
+				consoleOutReady = 0;
 				RttReply(consoleOutTid, 
 					consoleOutCurMessage->message,
 					consoleOutCurMessage->size
@@ -160,6 +170,8 @@ RTTTHREAD consoleIn(void) {
 	
 	printf("consoleIn(): starting. \n");
 	while(exitFlag != 1) {
+		/*Allow other threads to run*/
+		RttUSleep(10);
 		replyLen = 1;
 		bytesRead = read(0, inputBuffer, BUFSIZE);
 		if(bytesRead == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
@@ -186,14 +198,14 @@ RTTTHREAD consoleIn(void) {
 }
 
 RTTTHREAD consoleOut(void) {
-	int r;
+	int r, sentMsg;
 	char message[BUFSIZE+1];
 	u_int messageLen=BUFSIZE;
-	
+	sentMsg = SUCCESS;
 	printf("consoleOut(): starting.\n");
 	while(exitFlag != 1) {
 		messageLen=BUFSIZE;
-		r = RttSend(serverTid, NULL, 0, &message, &messageLen);
+		r = RttSend(serverTid, &sentMsg, 1, &message, &messageLen);
 		if(r != RTTOK) {
 			printf("Could not get message from server.\n");
 		}
@@ -290,7 +302,7 @@ int mainp(int argc, char* argv[])
 	
 	/*Thread creations*/
 	attr.startingtime = RTTZEROTIME;
-	attr.priority = RTTHIGH;
+	attr.priority = RTTNORM;
 	attr.deadline = RTTNODEADLINE;
 	temp = RttCreate(
 		&serverTid, 
@@ -304,7 +316,6 @@ int mainp(int argc, char* argv[])
 	if (temp == RTTFAILED) perror("Failed to create server thread.");
 	printf("server thread created.\n");
 
-	attr.priority = RTTLOW;
 	temp = RttCreate(
 		&consoleInTid, 
 		(void(*)()) consoleIn,
@@ -320,7 +331,6 @@ int mainp(int argc, char* argv[])
 	}
 	printf("ConsoleIn thread created.\n");
 	
-	attr.priority = RTTNORM;
  	temp = RttCreate(
 		&consoleOutTid, 
 		(void(*)()) consoleOut,
