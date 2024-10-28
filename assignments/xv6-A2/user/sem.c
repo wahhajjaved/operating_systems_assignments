@@ -17,11 +17,9 @@ int sem_create(int val){
     int i;
     mtx_lock(mtx);
     for (i=0; i<NUM_SEM; i++){
-        if (sem[i].value==0){
             sem[i].value= val;
             mtx_unlocked(mtx);
             return i;
-        }
      }
     mtx_unlocked(mtx);
     return -1;
