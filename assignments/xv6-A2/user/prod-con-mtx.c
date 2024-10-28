@@ -14,11 +14,14 @@ static int mtx, buffMax, buffSize;
 void prod(void){
     printf("Producer created\n");
     thread_yield();
+
     for (;;){
         mtx_lock(mtx);
         if (buffSize < buffMax){
                 thread_yield();
                 buffSize++;
+                printf("Producer: added to the buffer: %d / %d \n",buffSize,
+            buffMax );
                 mtx_unlocked(mtx);
         }else{
         mtx_unlocked(mtx);
@@ -32,9 +35,11 @@ void con(void){
     thread_yield();
     for (;;){
         mtx_lock(mtx);
-        if (buffSize > 0){
+        if (buffSize > 1){
                 thread_yield();
                 buffSize--;
+                printf("Producer: removed from the buffer: %d / %d \n",
+                    buffSize, buffMax );
                 mtx_unlocked(mtx);
         }else{
         mtx_unlocked(mtx);
@@ -48,6 +53,17 @@ int main(int argc, char *argv[]){
     mtx= mtx_create(0);
     buffSize=buffSizeVal;
     buffMax=buffMaxVal;
+
+    if (buffMax < 1){
+        printf("prod-con-mtx: bufferMax cant not be less than 1\n");
+        exit(1);
+    }
+    if (buffSize <0 || buffSize >buffMax){
+        printf("prod-con-mtx: bufferSize cant not be less than 0\n" 
+                " or more than buffermax\n");
+        exit(1);
+    }
+
     thread_init(); 
     thread_create(prod);
     thread_create(con);
