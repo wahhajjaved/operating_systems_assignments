@@ -56,7 +56,19 @@ ____
 
 Mutex:
 
+struct mutex{lock}
+lock flag for checking, 1 for lock and 0 for unlock
 
+int mtx_create(int locked):
+
+
+int mtx_lock(int lock_id):
+    if the lock id is valid:
+        then spin untill lock
+        set mutext.lock to 1
+
+int mtx_unlocked(int lock_id):
+    set mutex.lock to unlock
 
 
 
