@@ -353,6 +353,16 @@ int mainp(int argc, char* argv[])
 		return 1;
 	}
 	
+	/*Socket send test*/
+	r = sendto(localSockFd, "Hello nc", 9, 0, remoteAddrInfo->ai_addr, remoteAddrInfo->ai_addrlen );
+	if(r == -1) {
+		perror("sendto failed.\n");
+		return 1;
+	}
+	printf("sendto: %d bytes sent.\n", r);
+	return 0;
+	
+	
 	
 	
 	

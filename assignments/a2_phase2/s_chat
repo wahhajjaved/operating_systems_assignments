@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./s_chat_Linuxx86_64 5000 localhost 5000
+./s_chat_Linuxx86_64 5000 localhost 5001
 
 # print_help() {
 # 	echo "Incorrect number of arguments."
