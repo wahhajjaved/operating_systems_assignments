@@ -5,51 +5,53 @@
  */
 
 #include "user/mtx.h"
+#include "user/uthread.h"
 
-#define buffSize 5
-#define buffMax 6
-static int mutex;
+#define buffSizeVal 5
+#define buffMaxVal 6
+static int mtx, buffMax, buffSize;
 
 void prod(void){
     printf("Producer created\n");
-    thread_yeild();
-    for (;;;){
-        mtx_lock(mutex);
+    thread_yield();
+    for (;;){
+        mtx_lock(mtx);
         if (buffSize < buffMax){
-                thread_yeild();
+                thread_yield();
                 buffSize++;
                 mtx_unlocked(mtx);
         }else{
         mtx_unlocked(mtx);
-        thread_yeild();
+        thread_yield();
         }
     }
 }
 
 void con(void){
     printf("Consumer created\n");
-    thread_yeild();
-    for (;;;){
-        mtx_lock(mutex);
+    thread_yield();
+    for (;;){
+        mtx_lock(mtx);
         if (buffSize > 0){
-                thread_yeild();
+                thread_yield();
                 buffSize--;
                 mtx_unlocked(mtx);
         }else{
         mtx_unlocked(mtx);
-        thread_yeild();
+        thread_yield();
         }
     }
 }
 
 int main(int argc, char *argv[]){
     /*initialize the mutex */
-    mutex= mtx_mtx_create(0);
-
+    mtx= mtx_create(0);
+    buffSize=buffSizeVal;
+    buffMax=buffMaxVal;
     thread_init(); 
     thread_create(prod);
     thread_create(con);
-    thread_scedule();
+    thread_schedule();
 
     exit(0);
     
