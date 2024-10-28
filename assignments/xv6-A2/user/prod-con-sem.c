@@ -3,10 +3,7 @@
  *@author Nakhba Mubashir, epl482, 11317060
  */
 
-#include "kernel/types.h"
-#include "user/user.h"
-#include "kernel/param.h"
-#include "user/uthread.h"
+#include "user/sem.h"
 
 #define buffSizeVal 5
 #define buffMaxVal 6
@@ -51,7 +48,7 @@ void con(void){
 
 int main(int argc, char *argv[]){
     /*initialize the mutex */
-    mtx= mtx_create(0);
+    mtx= sem_create(0);
     buffSize=buffSizeVal;
     buffMax=buffMaxVal;
 
