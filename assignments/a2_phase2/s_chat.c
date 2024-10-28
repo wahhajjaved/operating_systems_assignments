@@ -17,7 +17,8 @@
 #include <list.h>
 
 #define STKSIZE 65536
-#define QUEUESIZE 20
+#define SERVERSTKSIZE 8388608
+#define QUEUESIZE 50
 #define BUFSIZE 100
 #define SUCCESS 1
 #define FAILURE 0
@@ -173,8 +174,8 @@ RTTTHREAD server() {
 	}
 	
 	/*special case to handle first response from consoleOut*/
-	consoleOutCurMessage = ListFirst(consoleOutFreeList);
-	networkOutCurMessage = ListFirst(networkOutFreeList);
+	consoleOutCurMessage = ListTrim(consoleOutFreeList);
+	networkOutCurMessage = ListTrim(networkOutFreeList);
 	
 	consoleOutReady = 0;
 	networkOutReady = 0;
@@ -220,7 +221,6 @@ RTTTHREAD server() {
 				
 			}
 			else {
-				/*
 				Message* message = ListTrim(consoleOutFreeList);
 				printf("server(): message from consoleIn.\n");
 				message->size = len;
@@ -228,9 +228,8 @@ RTTTHREAD server() {
 				ListPrepend(consoleOutQueue, message);
 				reply = SUCCESS;
 				RttReply(from, &reply, replyLen);
-				*/
 
-				Message* message = ListTrim(networkOutFreeList);
+				message = ListTrim(networkOutFreeList);
 				printf("server(): message from networkOut.\n");
 				message->size = len;
 				memcpy(message->message, data, message->size);
@@ -446,20 +445,6 @@ int mainp(int argc, char* argv[])
 		return 1;
 	}
 	
-	/*Socket send test*/
-	/*
-	r = sendto(localSockFd, "Hello nc", 9, 0, remoteAddrInfo->ai_addr, remoteAddrInfo->ai_addrlen );
-	if(r == -1) {
-		perror("sendto failed.\n");
-		return 1;
-	}
-	printf("sendto: %d bytes sent.\n", r);
-	return 0;
-	*/
-	
-	
-	
-	
 	RttRegisterExitRoutine(&exitFunction);
 	
 	/*Thread creations*/
@@ -469,7 +454,7 @@ int mainp(int argc, char* argv[])
 	r = RttCreate(
 		&serverTid, 
 		(void(*)()) server,
-		STKSIZE,
+		SERVERSTKSIZE,
 		"server",
 		NULL,
 		attr,
