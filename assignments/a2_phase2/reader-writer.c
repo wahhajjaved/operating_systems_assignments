@@ -12,13 +12,7 @@
    *********** reader-writer.c ***********
 */
 
-/*
-#include <stdio.h>
-
-#include <os.h>
-#include <standards.h>
-*/
-#include "reader-writer-monitor.h"
+#include <reader-writer-monitor.h>
 #include <os.h>
 #include <stdio.h>
 #include <standards.h>
@@ -68,6 +62,9 @@ int mainp()
 
     srand(71);
 
+    Initialize();
+
+
     tempPid = Create((void(*)()) reader, 16000, "R1", (void *) 1000, 
 		      NORM, USR );
     if (tempPid == PNUL) perror("Create");
@@ -84,7 +81,7 @@ int mainp()
 		       NORM, USR );
     if (temp3 == PNUL) perror("Create");
     printf("Reader and Writer processes created\n");
-    
+
     return(0);
 }
 

@@ -21,8 +21,8 @@
    *********** reader-writer.c ***********
 */
 
-#include "Monitor.h"
-#include "reader-writer-monitor.h"
+#include <Monitor.h>
+#include <reader-writer-monitor.h>
 
 /* INITIALIZATION CODE */
 #define OKtoWrite 1
@@ -36,8 +36,8 @@ static int busyWriting =0;
 /* MONITOR PROCEDURES */
 void Initialize(void)
 {
-/*      MonInit(numConds);
-*/
+      MonInit(numConds);
+
 }
 
 void StartRead()

@@ -73,13 +73,13 @@ void *ListRemove(LIST *list){
 
     /* if the List struct pointer is not right */
     if (list == NULL) { 
-        printf("ERROR: list is NULL \n");
+       /* printf("ERROR: list is NULL \n");*/
         return NULL;
     }
 
     /* check if the list is empty or not */
     if (list-> size ==0){ 
-        printf("ERROR: list empty \n");
+        /*printf("ERROR: list empty \n");*/
         return NULL;
     }
 
@@ -131,7 +131,7 @@ void ListFree(LIST *list, ITEMFREE itemFree){
     /* if the List struct pointer is not right
     */
     if (list == NULL) {
-        printf("ERROR: list or itemfree is NULL \n");
+        /*printf("ERROR: list or itemfree is NULL \n");*/
         return ;
     }
 
@@ -172,13 +172,13 @@ void *ListTrim(LIST *list){
 
     /* if the List struct pointer is not right */
     if (list == NULL) { 
-        printf( "ERROR: list is NULL \n");
+        /*printf( "ERROR: list is NULL \n");*/
         return NULL;
     }
 
     /* check if the list is empty or not */
     if (list-> size ==0){ 
-        printf("ERROR: list empty \n");
+        /*printf("ERROR: list empty \n");*/
         return NULL;
     }
 
@@ -216,11 +216,11 @@ void *ListTrim(LIST *list){
 void ListConcat(LIST *list1, LIST *list2){
      /* if the List struct pointer is not right*/
     if (list1 == NULL || list2== NULL) {
-        printf("ERROR: list1 AND list2 is NULL \n");
+       /* printf("ERROR: list1 AND list2 is NULL \n");*/
         return;
     }
     if (list1 == list2) {
-        printf("ERROR: IN listConcat, both list are same \n");
+       /* printf("ERROR: IN listConcat, both list are same \n");*/
         return ;
     }
 

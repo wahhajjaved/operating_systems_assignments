@@ -6,7 +6,7 @@ arch := $(shell uname -m)
 
 .PHONY: all clean
 
-all:reader-writer-test s_chat_$(kernel)$(arch)
+all:reader-writer-test dining-philosopher s_chat_$(kernel)$(arch)
 
 mkdirs: 
 	mkdir -p $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir)
@@ -85,6 +85,27 @@ $(PartB_dir)/reader-writer-monitor.o: reader-writer-monitor.c\
 	$(compile) -o $(PartB_dir)/reader-writer-monitor.o -c \
 		reader-writer-monitor.c
 
+##########PART B bonus #######################
+
+dining-philosopher: $(PartB_dir)/dining-philosopher.o \
+    $(PartB_dir)/dining-philosopher-monitor.o \
+    $(lib_dir)/libMonitor.a
+	$(CC) -o dining-philosopher $(PartB_dir)/dining-philosopher.o \
+        $(PartB_dir)/dining-philosopher-monitor.o \
+        ${LINK_pthreads} -L$(lib_dir) -lMonitor 
+
+$(PartB_dir)/dining-philosopher.o: dining-philosopher.c dining-philosopher.h \
+	 | mkdirs
+	$(compile) -o $(PartB_dir)/dining-philosopher.o -c dining-philosopher.c
+
+$(PartB_dir)/dining-philosopher-monitor.o: dining-philosopher-monitor.c \
+    dining-philosopher.h Monitor.h | mkdirs
+	$(compile) -c -o $(PartB_dir)/dining-philosopher-monitor.o \
+    dining-philosopher-monitor.c
+
+
+
+
 ################################################################
 ###################### Part C ##################################
 
@@ -97,4 +118,4 @@ $(obj_dir)/s_chat.o: s_chat.c
 
 clean: 
 	rm -rf $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir) \
-		reader-writer-test s_chat_$(kernel)$(arch)
+		reader-writer-test dining-philosopher s_chat_$(kernel)$(arch)
