@@ -56,6 +56,7 @@ ____
 
 Mutex:
 
+mtx.c:
 struct mutex{lock}
 lock flag for checking, 1 for lock and 0 for unlock
 
@@ -70,8 +71,38 @@ int mtx_lock(int lock_id):
 int mtx_unlocked(int lock_id):
     set mutex.lock to unlock
 
+prod-con-mtx:
+
+int buffMax   // max buffer size
+int buffSize  // size of buffer, how many items are in buffer
+innt mutex
+
+prod:
+    for (;;;) //used for loop because prof said its cheaper than while(1)
+    lock mutex
+    if buffer not full
+        incriment through the buffer, unlock the buffer
+    else: unlock and consumew the thread through thread_yeild()
+
+con:
+    for (;;;) //used for loop because prof said its cheaper than while(1)
+    lock mutex
+    if buffer more than 0 // we dont care if buffer is full or not
+                          // it should just have any items to consume
+        decreament through the buffer, unlock the buffer
+    else: unlock and consumew the thread through thread_yeild()
+
+main:
+    initialize all the variables
+    create/ initialize the mutex
+    create 1 producer and 1 consumer threa
+    used the main from uthread to construct this main
+
+    the buffersize and buffermax can be comand line arguments, if want 
+    diffrenent size every time.
 
 
+    
 ---
 
 Makefile:
