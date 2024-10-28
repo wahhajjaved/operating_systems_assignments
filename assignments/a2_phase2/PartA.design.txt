@@ -110,17 +110,73 @@ counting semaphore using mutex:
 sem:
 used mtx.c to construct sem
 
+typedef struct _semaphore{
+    int value; /*holds the semaphore value */
+}Semaphore;
+
+#define NUM_SEM 5 
+
+int sem_create(int val):
+     initialize mutex
+    lock the mutex to make sure only one thread at a time
+    set each semaphore to val
+    unlock
+    return the index
+
+int P(int semVal):
+    lock the mutex to make sure only one thread at a time
+    reduce the semaphore value
+    unlock
+    return 0 if sucessfull
+
+int v(int semVal)
+    lock the mutex to make sure only one thread at a time
+    increase the semaphore value
+    unlock
+    return 0 if sucessfull
+
 prod-con-sem.c
 used prod-con-mtx as an outline, changed it so it works with semaphore
 int mtx, full, empty  //3 semaphoes
-                      // empty tracks the available spaces
-                      // full tracks the filled slots
+                      // empty tracks the available spaces so set to max value
+                      // full tracks the filled slots so set to 0
 //making empty and full seperately will prevent deadlock and it will allow 
 //the prouducer and consumer to work independently 
 
 prod:
+    for all the items in buffer
+        P(empty);
+        P(mtx); /* locks the critical section*/
+        increase the buffer
+        V(mtx);
+        V(full);
+        sleep(10); /*to slow it down*/
+        thread yeild so other threads can run
 
-    
+con:
+    for all the items in buffer
+        P(full);
+        P(mtx); /* locks the critical section*/
+        increase the buffer
+        V(mtx);
+        V(empty);
+         thread yeild so other threads can run
+
+
+main:
+    initialize all the variable
+    check the variables and border cases
+    create consumer and producer thread
+
+
+it was changing veryfast so added sleep(10) to prod
+
+problem with solution:
+everytime buffer is used up, new producer and consumer are created, i dont
+think new producer and consumer are supposed to be created each time. there
+is a for loop with buffermaxsize as value, thats why its created each time.
+if i sont put the buffermaxsize then it only run for 1 and 0.
+
 ---
 
 Makefile:
