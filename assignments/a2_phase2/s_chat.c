@@ -181,7 +181,7 @@ RTTTHREAD server() {
 	networkOutReady = 0;
 	replyLen = 1;
 	
-	printf("Starting server main loop\n");
+	/* printf("Starting server main loop\n"); */
 	while(exitFlag != 1) {
 		/*Allow other threads to run*/
 		RttUSleep(10);
@@ -195,7 +195,7 @@ RTTTHREAD server() {
 				continue;
 			}
 			newMessage = 1;
-			printf("server(): %u bytes recieved.\n", len);
+			/* printf("server(): %u bytes recieved.\n", len); */
 		}
 		
 		/*empty message indicates EOF so exit all threads*/
@@ -221,16 +221,19 @@ RTTTHREAD server() {
 				
 			}
 			else {
-				Message* message = ListTrim(consoleOutFreeList);
-				printf("server(): message from consoleIn.\n");
+			
+				/* Message* message = ListTrim(consoleOutFreeList); */
+				/* printf("server(): message from consoleIn.\n"); */
+				/*
 				message->size = len;
 				memcpy(message->message, data, message->size);
 				ListPrepend(consoleOutQueue, message);
 				reply = SUCCESS;
 				RttReply(from, &reply, replyLen);
+				*/
 
-				message = ListTrim(networkOutFreeList);
-				printf("server(): message from networkOut.\n");
+				Message* message = ListTrim(networkOutFreeList);
+				/* printf("server(): message from networkOut.\n"); */
 				message->size = len;
 				memcpy(message->message, data, message->size);
 				ListPrepend(networkOutQueue, message);
@@ -239,8 +242,8 @@ RTTTHREAD server() {
 
 			}
 		}
-		/*process message from networkIn */
 		
+		/*process message from networkIn */
 		if (newMessage && RTTTHREADEQUAL(from, networkInTid) ) {
 			if (ListCount(consoleOutFreeList) == 0) {
 				fprintf(stderr, "server: Cannot buffer any more messages from "
@@ -250,7 +253,7 @@ RTTTHREAD server() {
 			}
 			else {
 				Message* message = ListTrim(consoleOutFreeList);
-				printf("server(): message from networkIn.\n");
+				/* printf("server(): message from networkIn.\n"); */
 				message->size = len;
 				memcpy(message->message, data, message->size);
 				ListPrepend(consoleOutQueue, message);
@@ -288,10 +291,11 @@ RTTTHREAD server() {
 		
 		/*Send message to consoleOut if its ready*/
 		if(consoleOutReady == 1 && ListCount(consoleOutQueue) > 0) {
-			printf("server(): sending message to consoleOut.\n");
+			/* printf("server(): sending message to consoleOut.\n"); */
 			consoleOutCurMessage = ListTrim(consoleOutQueue);
 			if(consoleOutCurMessage != NULL) {
-				printf("server(): Sending %u bytes to consoleOut.\n", consoleOutCurMessage->size);
+				/* printf("server(): Sending %u bytes to consoleOut.\n",
+				 consoleOutCurMessage->size); */
 				consoleOutReady = 0;
 				RttReply(
 					consoleOutTid, 
@@ -303,10 +307,11 @@ RTTTHREAD server() {
 		
 		/*Send message to networkOut if its ready*/
 		if(networkOutReady == 1 && ListCount(networkOutQueue) > 0) {
-			printf("server(): sending message to networkOut.\n");
+			/* printf("server(): sending message to networkOut.\n"); */
 			networkOutCurMessage = ListTrim(networkOutQueue);
 			if(networkOutCurMessage != NULL) {
-				printf("server(): Sending %u bytes to networkOut.\n", networkOutCurMessage->size);
+				/* printf("server(): Sending %u bytes to networkOut.\n",
+				 networkOutCurMessage->size); */
 				networkOutReady = 0;
 				RttReply(
 					networkOutTid, 
@@ -317,7 +322,7 @@ RTTTHREAD server() {
 		}
 	}
 
-	printf("server(): exiting.\n");
+	/* printf("server(): exiting.\n"); */
 }
 
 RTTTHREAD consoleIn(void) {
@@ -327,7 +332,7 @@ RTTTHREAD consoleIn(void) {
 	u_int replyLen = 1;
 	int r;
 	
-	printf("consoleIn(): starting. \n");
+	/* printf("consoleIn(): starting. \n"); */
 	while(exitFlag != 1) {
 		/*Allow other threads to run*/
 		RttUSleep(10);
@@ -339,21 +344,21 @@ RTTTHREAD consoleIn(void) {
 		}
 
 		else if (bytesRead == 0) {
-			printf("consoleIn(): EOF detected on stdin.\n");
+			/* printf("consoleIn(): EOF detected on stdin.\n"); */
 			exitFlag = 1;
 			RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
 			break;
 		}
 
 		else if(bytesRead > 0) {
-			printf("consoleIn(): %d bytes read.\n", bytesRead);
+			/* printf("consoleIn(): %d bytes read.\n", bytesRead); */
 			r = RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
 			if(r != RTTOK) {
-				printf("Could not send message from consoleIn to server.\n");
+				/* printf("Could not send message from consoleIn to server.\n"); */
 			}
 		}
 	}
-	printf("consoleIn(): exiting.\n");
+	/* printf("consoleIn(): exiting.\n"); */
 }
 
 RTTTHREAD consoleOut(void) {
@@ -361,19 +366,19 @@ RTTTHREAD consoleOut(void) {
 	char message[BUFSIZE+1];
 	u_int messageLen=BUFSIZE;
 	sentMsg = SUCCESS;
-	printf("consoleOut(): starting.\n");
+	/* printf("consoleOut(): starting.\n"); */
 	while(exitFlag != 1) {
 		messageLen=BUFSIZE;
 		r = RttSend(serverTid, &sentMsg, 1, &message, &messageLen);
 		if(r != RTTOK) {
-			printf("Could not get message from server.\n");
+			/* printf("Could not get message from server.\n"); */
 		}
-		printf("consoleOut: %u bytes recieved.\n", messageLen);
+		/* printf("consoleOut: %u bytes recieved.\n", messageLen); */
 		message[messageLen] = '\0';
 		printf("consoleOut: %s\n", message);
 
 	}
-	printf("consoleOut(): exiting.\n");
+	/* printf("consoleOut(): exiting.\n"); */
 	
 	
 }
@@ -388,7 +393,7 @@ RTTTHREAD networkIn() {
 	u_int replyLen = 1;
 	addr_len = sizeof(from);
 	
-	printf("networkIn(): starting. \n");
+	/* printf("networkIn(): starting. \n"); */
 	while(exitFlag != 1) {
 		/*Allow other threads to run*/
 		RttUSleep(10);
@@ -409,14 +414,16 @@ RTTTHREAD networkIn() {
 		}
 		
 		else if (bytesRead > 0){
-			printf("networkIn(): %d bytes read.\n", bytesRead);
+			/*printf("networkIn(): %d bytes read.\n", bytesRead);*/
 			r = RttSend(serverTid, inputBuffer, bytesRead, &reply, &replyLen);
 			if(r != RTTOK) {
-				printf("Could not send message from networkIn to server.\n");
+				fprintf(
+					stderr,
+					"Could not send message from networkIn to server.\n");
 			}
 		}
 	}
-	printf("networkIn(): exiting.\n");
+	/* printf("networkIn(): exiting.\n"); */
 }
 
 RTTTHREAD networkOut() {
@@ -425,23 +432,30 @@ RTTTHREAD networkOut() {
 	u_int messageLen=BUFSIZE;
 	sentMsg = SUCCESS;
 	
-	printf("networkOut(): starting.\n");
+	/* printf("networkOut(): starting.\n"); */
 	while(exitFlag != 1) {
 		messageLen=BUFSIZE;
 		r = RttSend(serverTid, &sentMsg, 1, &message, &messageLen);
 		if(r != RTTOK) {
-			printf("Could not get message from server.\n");
+			fprintf(stderr, "Could not get message from server.\n");
 		}
-		printf("networkOut: %u bytes recieved.\n", messageLen);
+		/* printf("networkOut: %u bytes recieved.\n", messageLen); */
 		/*TODO: Check return value to ensure the entire message was written*/
-		r = sendto(localSockFd, message, messageLen, 0, remoteAddrInfo->ai_addr, remoteAddrInfo->ai_addrlen );
+		r = sendto(
+			localSockFd,
+			message,
+			messageLen,
+			0,
+			remoteAddrInfo->ai_addr,
+			remoteAddrInfo->ai_addrlen 
+		);
 		if(r == -1) {
 			perror("sendto failed.\n");
 			continue;
 		}
-		printf("sendto: %d bytes sent.\n", r);
+		/* printf("sendto: %d bytes sent.\n", r); */
 	}
-	printf("networkOut(): exiting.\n");
+	/* printf("networkOut(): exiting.\n"); */
 	
 }
 
@@ -478,7 +492,7 @@ int mainp(int argc, char* argv[])
 	src_port = argv[1];
 	dst_ip = argv[2];
 	dst_port = argv[3];
-	printf("Starting s-chat. src port: %s, dst ip: %s, dst port: %s.\n",
+	printf("Starting s-chat. src port: %s, dst: %s, dst port: %s.\n",
 		src_port, 
 		dst_ip, 
 		dst_port
@@ -516,7 +530,7 @@ int mainp(int argc, char* argv[])
 		RTTUSR
 	);
 	if (r == RTTFAILED) perror("Failed to create server thread.");
-	printf("server thread created.\n");
+	/* printf("server thread created.\n"); */
 
 	r = RttCreate(
 		&consoleInTid, 
@@ -531,7 +545,7 @@ int mainp(int argc, char* argv[])
 		perror("Failed to create consoleIn thread.");
 		return 1;
 	}
-	printf("ConsoleIn thread created.\n");
+	/* printf("ConsoleIn thread created.\n"); */
 	
  	r = RttCreate(
 		&consoleOutTid, 
@@ -546,7 +560,7 @@ int mainp(int argc, char* argv[])
 		perror("Failed to create consoleOut thread.");
 		return 1;
 	}
-	printf("ConsoleOut thread created.\n");
+	/* printf("ConsoleOut thread created.\n"); */
 
  	r = RttCreate(
 		&networkInTid, 
