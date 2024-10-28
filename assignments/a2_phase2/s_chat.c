@@ -358,10 +358,58 @@ RTTTHREAD consoleOut(void) {
 	
 	
 }
-
+void *get_in_addr(struct sockaddr *sa)
+{
+if (sa->sa_family == AF_INET) {
+return &(((struct sockaddr_in*)sa)->sin_addr);
+}
+return &(((struct sockaddr_in6*)sa)->sin6_addr);
+}
 RTTTHREAD networkIn() {
-	printf("networkIn not yet implemented.\n");
+	char inputBuffer[BUFSIZE];
+	int bytesRead;
+	int reply;
+	struct sockaddr_storage from;
+	socklen_t addr_len;
+	int r;
+	char s[INET_ADDRSTRLEN];
+	u_int replyLen = 1;
+	addr_len = sizeof(from);
 	
+	printf("networkIn(): starting. \n");
+	while(exitFlag != 1) {
+		/*Allow other threads to run*/
+		RttUSleep(10);
+		replyLen = 1;
+		
+		r = recvfrom(
+			localSockFd,
+			inputBuffer,
+			BUFSIZE,
+			0,
+			(struct sockaddr *)&from,
+			&addr_len
+		);
+		
+		if(r == -1 && errno != EAGAIN && errno != EWOULDBLOCK) {
+			perror("networkIn(): Error encountered when reading from stdin.");
+			break;
+		}
+		
+		else if (r > 0){ 
+			printf("networkIn(): Got %d byte long message from %s.\n",
+				r,
+				inet_ntop(
+					from.ss_family,
+					get_in_addr((struct sockaddr *)&from),
+					s, sizeof s
+				)
+			);
+			inputBuffer[r-1] = '\0';
+			printf("networkIn(): \"%s\"\n", inputBuffer);
+		}
+	}
+	printf("networkIn(): exiting.\n");
 }
 
 RTTTHREAD networkOut() {
@@ -378,7 +426,7 @@ RTTTHREAD networkOut() {
 			printf("Could not get message from server.\n");
 		}
 		printf("networkOut: %u bytes recieved.\n", messageLen);
-		
+		/*TODO: Check return value to ensure the entire message was written*/
 		r = sendto(localSockFd, message, messageLen, 0, remoteAddrInfo->ai_addr, remoteAddrInfo->ai_addrlen );
 		if(r == -1) {
 			perror("sendto failed.\n");
@@ -493,7 +541,7 @@ int mainp(int argc, char* argv[])
 	}
 	printf("ConsoleOut thread created.\n");
 
-/* 	r = RttCreate(
+ 	r = RttCreate(
 		&networkInTid, 
 		(void(*)()) networkIn,
 		STKSIZE,
@@ -503,7 +551,7 @@ int mainp(int argc, char* argv[])
 		RTTUSR
 	);
 	if (r == RTTFAILED) perror("Failed to create networkIn thread.");
- */
+
 	r = RttCreate(
 		&networkOutTid, 
 		(void(*)()) networkOut,
