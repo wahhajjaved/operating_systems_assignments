@@ -206,6 +206,9 @@ RTTTHREAD server() {
 			if(consoleOutReady) {
 				RttReply(consoleOutTid, NULL, 0);
 			}
+			if(networkOutReady) {
+				RttReply(networkOutTid, NULL, 0);
+			}
 			break;
 		}
 
