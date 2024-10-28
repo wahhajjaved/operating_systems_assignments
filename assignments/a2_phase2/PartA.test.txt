@@ -324,3 +324,50 @@ thread_c: exit after 100
 thread_a: exit after 100
 thread_b: exit after 100
 thread_schedule: no runnable threads
+
+
+********* mutex ***********
+in my code i have a macro for buffermax and size value, we can change directly
+there. for invalid buffer size or buffer size more than max, i have added an
+error statement in the code. i can also change the buffersize value from 
+macro to comand line argument for more rebustness. 
+
+
+Steps for running the test:
+    1. navigate to xv6 folder
+    2. make and run the xv6
+        make
+        make qemu
+    3. then excecute the commands
+        prod-con-mtx 
+
+output:
+$ prod-con-mtx
+prod-con-mtx: bufferMax cant not be less than 1
+
+$ prod-con-mtx
+Producer created
+Consumer created
+Producer: added to the buffer: 6 / 6 
+Producer: removed from the buffer: 5 / 6 
+Producer: removed from the buffer: 4 / 6 
+Producer: removed from the buffer: 3 / 6 
+Producer: removed from the buffer: 2 / 6 
+Producer: removed from the buffer: 1 / 6 
+Producer: added to the buffer: 2 / 6 
+Producer: added to the buffer: 3 / 6 
+Producer: added to the buffer: 4 / 6 
+Producer: added to the buffer: 5 / 6 
+Producer: added to the buffer: 6 / 6 
+Producer: removed from the buffer: 5 / 6 
+Producer: removed from the buffer: 4 / 6 
+Producer: removed from the buffer: 3 / 6 
+Producer: removed from the buffer: 2 / 6 
+Producer: removed from the buffer: 1 / 6 
+.
+.
+.
+Producer: removed from the buffer: 3 / 6 
+Producer: removed from the buffer: 2 / 6 
+Producer: removed QEMU: Terminated
+
