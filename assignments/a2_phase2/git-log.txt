@@ -2,6 +2,91 @@
 @author Nakhba Mubashir, epl482, 11317060
 @date 2024-10-28
 
+commit 1bef114782d5adc84229988aad7d5eb3b59ebc11
+Merge: 1e7ac36 a516d47
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 29 11:50:11 2024 -0600
+
+    Merge branch 'wahhaj_assignments'
+
+commit 1e7ac3696dc6718ba02a28b5e50a75e12efc2c36
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 29 11:50:04 2024 -0600
+
+    Documentation about serialize and unserialize
+
+commit a516d4770af9ddd1fd0bdb79f2c7451ed034abb7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 29 11:47:13 2024 -0600
+
+    Serialization and dserialization functions added but they don't fully work
+
+commit 97472410cac9d1059236861304694abd0fc23776
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 29 09:28:07 2024 -0600
+
+    new submission file
+
+commit a9686e7fc2b459c1a6c2364841cfae81827b01b1
+Merge: acc8ef3 d37873c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 29 09:23:43 2024 -0600
+
+    Merge branch 'wahhaj_assignments'
+
+commit d37873ce0a7dcc3e7f2b0a2dd0e935d7eb904995
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Oct 29 09:22:45 2024 -0600
+
+    Fix port validation bug
+
+commit acc8ef35b6d758bfe35cf98f97c46755f755d79b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 09:10:41 2024 -0600
+
+    removed old tar
+
+commit f274d407c5fe70676009f36ed600bbb53f01071c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 09:08:05 2024 -0600
+
+    new tar file
+
+commit 1ce4db1a64c5839162b904310542ff9136648b78
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 09:03:08 2024 -0600
+
+    added the diff file to tar_file.txt
+
+commit b59f7c5378b586999b53b2fba334146583025d65
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 09:01:04 2024 -0600
+
+    added the diff file to tar_file.txt
+
+commit 831f9f2661d2563b0dc347db8fc3f259db71a41b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 08:57:45 2024 -0600
+
+    changed name of the file
+
+commit 66545f3ae12cbeaed43e8e8dd585c28301c6b08e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 08:54:08 2024 -0600
+
+    updated xv6 diff
+
+commit f7ff493a3d169172cd046d656a53c1faa4376eb7
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Oct 29 08:31:18 2024 -0600
+
+    diff file
+
+commit 0b126c7bfb5dce9e59042424e8c67e0edb9a8fe8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 23:45:24 2024 -0600
+
+    submission ready
 
 commit 536c6605d9020112adb9f22ad6a9d5194202eb60
 Author: Wahhaj Javed <muj975@usask.ca>
@@ -118,8 +203,8 @@ commit 54c2ca5b4ca19607c7a2c7104f08d7e20e2a7c24
 Author: Wahhaj Javed <muj975@usask.ca>
 Date:   Mon Oct 28 15:51:00 2024 -0600
 
-    networkIn() now able to receive network packets and print to stdout. Tested
-    using nc.
+    networkIn() now able to receive network packets and print to stdout. 
+    Tested using nc.
 
 commit 9f48caad6ad04091eea166880ba6bff22fe07c11
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -144,8 +229,8 @@ commit 86373e8abf3b333e39826b1b754895e69627a59b
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Mon Oct 28 14:49:36 2024 -0600
 
-    adde the V() P() and sem_create functions in sem.c, in prod-con-sem.c, i 
-    added the producer, consumer that uses the semaphore
+    adde the V() P() and sem_create functions in sem.c, in prod-con-sem.c, 
+    i added the producer, consumer that uses the semaphore
 
 commit 53c8911c409383991f8cbf22e77996265e4ee81d
 Author: Wahhaj Javed <muj975@usask.ca>
@@ -190,15 +275,15 @@ commit 5d8a85f2a6a9bb320b2be6f6acc7debc9282958b
 Author: Wahhaj Javed <muj975@usask.ca>
 Date:   Mon Oct 28 12:09:26 2024 -0600
 
-    sendto protoype properly working. nc is able to see test message sent by 
-    s_chat.
+    sendto protoype properly working. nc is able to see test message 
+    sent by s_chat.
 
 commit ab926633ff5c2690ba79efe329df2b5c27a9e019
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Mon Oct 28 12:00:10 2024 -0600
 
-     copied the prod-con-mutex file for the foundation of prod-con-sem, the 
-     both files will have the same structure
+     copied the prod-con-mutex file for the foundation of prod-con-sem, 
+     the both files will have the same structure
 
 commit 49973c1f9940487187a99185cf1f7d6d58e97007
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -241,8 +326,8 @@ commit 574bfc1d13e83b558efe067e3d0000af6515b314
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Mon Oct 28 09:14:31 2024 -0600
 
-    added the producer consumer for mutex, it uses the buffer dize and buffer 
-    max
+    added the producer consumer for mutex, it uses the buffer dize and 
+    buffer max
 
 commit 9777f1a2e5f2d2c79daa0d841977e82985e92b04
 Author: Wahhaj Javed <muj975@usask.ca>
@@ -310,7 +395,7 @@ Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Oct 27 15:01:09 2024 -0600
 
     fixed spelling mistakes and minor errors like missing ending }, wrong type,
-    while running the makefile
+     while running the makefile
 
 commit 5ff8c79f9fd9ae29bbf62e8f37626fb168b5edb8
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -462,9 +547,8 @@ commit 74f349338dc10e70700d18252545f74a33335e93
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Fri Oct 25 14:28:12 2024 -0600
 
-    for the list modifiers i removed the print statements of when invalid 
-    or unexpected parameters are give, they are handled without telling 
-    the user
+    for the list modifiers i removed the print statements of when invalid or 
+    unexpected parameters are give, they are handled without telling the user
 
 commit 90bb3681bbae95a44e417284bda997332662a007
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -494,8 +578,8 @@ commit 3f928ba082b7a3b9d242b44928c4be6579a69188
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Fri Oct 25 08:19:32 2024 -0600
 
-    for phase 2 edited the started editing monitor according to feedback and 
-    updated knowledge
+    for phase 2 edited the started editing monitor according to feedback 
+    and updated knowledge
 
 commit 1b2e842ed013ee21e7849110f26051b72079b943
 Author: Wahhaj Javed <muj975@usask.ca>
@@ -507,8 +591,8 @@ commit a35020b9d60ff83ad4d7a681b28d1b6884bfaf93
 Author: Wahhaj Javed <muj975@usask.ca>
 Date:   Mon Oct 21 13:14:32 2024 -0600
 
-    Run script for s_chat created. Currently only runs s_chat on preset ports 
-    for testing
+    Run script for s_chat created. Currently only runs s_chat on preset 
+    ports for testing
 
 commit 2d4e9cb7e378bb8f4ad010e211a232840ca4a587
 Author: Wahhaj Javed <muj975@usask.ca>
@@ -539,4 +623,3 @@ Author: Wahhaj Javed <muj975@usask.ca>
 Date:   Sat Oct 19 15:34:54 2024 -0600
 
     A2 phase 2 start
-
