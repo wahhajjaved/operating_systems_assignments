@@ -21,4 +21,4 @@ reader-writer.c
 s_chat
 s_chat.c
 xv6-riscv.tar
-xv6-sync.diff
+xv6-synch.diff
