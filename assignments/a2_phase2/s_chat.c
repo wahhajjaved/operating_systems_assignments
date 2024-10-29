@@ -11,6 +11,8 @@
 #include <netdb.h>
 #include <arpa/inet.h>
 #include <fcntl.h>
+#include <time.h>
+#include <sys/time.h>
 
 #include <rtthreads.h>
 #include <RttCommon.h>
@@ -20,6 +22,7 @@
 #define SERVERSTKSIZE 8388608
 #define QUEUESIZE 50
 #define BUFSIZE 100
+#define MSGSIZE 100 + BUFSIZE
 #define SUCCESS 1
 #define FAILURE 0
 
@@ -151,6 +154,101 @@ int configureLists(
 	}
 	return 1;
 }
+
+void serializeMessage(
+	struct timeval *tp,
+	char* message,
+	uint32_t messageSize,
+	unsigned char* serializedMessage,
+	uint32_t* serializedMessageSize
+	) {
+
+	uint32_t sec, usec, msgSize;
+	sec = htonl(tp->tv_sec);
+	usec = htonl(tp->tv_usec);
+	msgSize = htonl(messageSize);
+	printf("serializing message.\n");
+	memcpy(
+		serializedMessage,
+		&sec, 
+		sizeof(sec)
+	);
+	memcpy(
+		serializedMessage+sizeof(sec),
+		&usec,
+		sizeof(usec)
+	);
+	memcpy(
+		serializedMessage+sizeof(sec)+sizeof(usec),
+		&msgSize,
+		sizeof(msgSize)
+	);
+	memcpy(
+		serializedMessage+sizeof(sec)+sizeof(usec)+sizeof(msgSize),
+		message,
+		sizeof(messageSize)
+	);
+	*serializedMessageSize = sizeof(sec)+sizeof(usec)+sizeof(msgSize) + messageSize;
+	printf("msgSize %d.\n", msgSize);
+	printf("serializing done.\n");
+
+}
+
+void unserializeMessage(
+	unsigned char* serializedMessage,
+	uint32_t serializedMessageSize,
+	char* message,
+	uint32_t* messageSize
+) {
+	struct timeval tp;
+	uint32_t sec, usec, msgSize;
+	char* msg[MSGSIZE];
+	char t[64];
+	uint32_t tSize;
+	
+	memcpy(
+		&sec, 
+		serializedMessage,
+		sizeof(sec)
+	);
+	memcpy(
+		&usec,
+		serializedMessage+sizeof(sec),
+		sizeof(usec)
+	);
+	memcpy(
+		&msgSize,
+		serializedMessage+sizeof(sec)+sizeof(usec),
+		sizeof(msgSize)
+	);
+	
+	memcpy(&sec, serializedMessage, sizeof(sec));
+	memcpy(&usec, serializedMessage+sizeof(sec), sizeof(usec));
+	memcpy(&msgSize, serializedMessage+sizeof(sec)+sizeof(usec), 
+		sizeof(msgSize));
+	
+	
+	tp.tv_sec = ntohl(sec);
+	tp.tv_usec = ntohl(usec);
+	*messageSize = ntohl(msgSize);
+	
+	memcpy(
+		msg,
+		serializedMessage+sizeof(sec)+sizeof(usec)+sizeof(msgSize),
+		*messageSize
+	);
+	
+	
+	
+	tSize = strftime(t, sizeof(t), "%Y-%m-%d %H:%M:%S", localtime(&(tp.tv_sec)));
+	/*Don't want to copy the null terminator to it is overwritten with tab*/
+	t[tSize] = '\t'; 
+	memcpy(message, t, tSize);
+	memcpy(message+tSize, msg, *messageSize);
+	printf("dserialized message size %d.\n", *messageSize);
+	
+}
+
 
 RTTTHREAD server() {
 	int r, reply, newMessage;
