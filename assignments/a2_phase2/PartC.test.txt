@@ -1,0 +1,47 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-10-28
+
+
+Testing for s_chat was largely done during the development phase. Many of the
+prints used for testing are still in the code but have been commented out. All
+tests were done manually.
+
+- First the consoleIn thread was implemented and it just echoed the output 
+	it read to stdout. 
+
+- Then consoleIn was updated to send messages to the server and the server
+	thread was implemented just enough so that it received the messages from
+	consoleIn and printed them out.
+
+- After that, the consoleOut thread was implemented and code was added to the
+	server so that it sent messages from consoleIn to consoleOut
+
+- The networking part of the code was tested using netcat during development
+
+- Following the previous pattern, first the networkOut thread was implemented
+	to just send a string to a port on localhost. netcat was set to listen to
+	that port and confirm that the message was properly sent.
+
+- Then instead of sending a hardcoded string, networkOut was updated to get
+	its message from the server. netcat was again used to confirm that the 
+	message was being transmitted properly
+
+- Similar process was used for the networkIn thread. First it was configured
+	to get a message from the network and then print it out immediately. 
+	Messages were sent to s_chat using netcat.
+
+- Once that was working, the received messages were sent to the server instead
+	of being printed out. 
+	
+- After confirming each of the individual pieces were working, one instance of
+	s_chat was tested using two instances of netcat. One instance of netcat
+	listened to messages sent by s_chat and the other instance was used to
+	send messages to s_chat. All of this was done on localhost.
+
+- Once s_chat was properly working with netcat, two instances were spawned on
+	the same machine to confirm that they worked properly with each other
+
+- Lastly, s_chat was cross compiled on arm and ppc and two instances were 
+	tested across the various combinations of arm, ppc, and x86
+
