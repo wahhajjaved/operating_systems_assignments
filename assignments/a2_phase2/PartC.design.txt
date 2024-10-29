@@ -157,7 +157,10 @@
 	
 	- RttMsgWaits() is used to check if there a message waiting for the server.
 		If there is one it is fetched using RttReceive() and the newMessage
-		flag is set.
+		flag is set. 
+	
+	- Since RttMsgWaits() is non-blocking, RttUSleep() is needed at the top of
+		the loop. See [ consoleIn Thread ].
 	
 	- In the final version of the code, RttMsgWaits() doesn't seem necessary
 		but I left it in there becaues I don't have time to confirm that 
@@ -183,7 +186,50 @@
 		
 	- networkOutFreeList is a list of dynamically allocated Message structs. 
 		These structs are allocated once at startup to avoid repeated calls
-		to malloc and free. This create a bounded buffer.
+		to malloc and free. configureLists() creates the lists and Messages.
+		
+		Note: This could be done statically but in the earlier version of the
+			code, I was planning on implementing message passing in a way that
+			would have required dynamic memory. 
+	
+	- When a new message comes in from consoleIn, the server removes a Message
+		from the free list, fills in the struct with the received message, and
+		adds it to networkOutQueue. If there are no available Message structs,
+		the message is dropped and a error is printed to stderr.
+		
+	- Messages arriving from networkIn are processed in the same way. Except
+		messages from networkIn are sent to consoleOut. consoleOut has its own
+		set of queues and Messages but the basic idea is the same
+		
+	- Messages from consoleIn and networkIn are replied to immediately after
+		queueing so that those threads may go back to accepting new messages.
+	
+	- Messages from consoleOut and networkOut don't contain anything. They are
+		just used to signal that the respective threads are ready to handle
+		the next message. So after receiving a message from these two threads,
+		the server just resets its internal state with respect to these two
+		threads. No reply is sent here. This is explained more further down.
+	
+	- Finally, the server needs to dispatch messages to networkOut and 
+		consoleOut. The method for both of these is the same, with just the 
+		variables differing
+		
+	- ConsoleOut uses RttSend() to indicate to the server that it is ready to
+		print a new chat message. When the server gets this message, it will 
+		set the consoleOutReady flag. 
+	
+	- If consoleOutReady is set and there is a message waiting, then the server
+		dequeues a message from the consoleOutQueue and saves it inside 
+		consoleOutCurMessage. This variable is used to track what the 
+		consoleOut thread is currently processing to prevent it from being 
+		altered during processing. Later, when consoleOut is done processing,
+		consoleOutCurMessage is returned to the consoleOutFreeList.
+	
+	- RttReply() is used to send the a message for processing following the
+		administrator IPC model.
+	
+	- The steps for sending messages to networkOut are the same.
+	
 	
 	
 	
