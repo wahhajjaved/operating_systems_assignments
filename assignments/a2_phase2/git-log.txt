@@ -1,9 +1,273 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-10-28
+
+
+commit 536c6605d9020112adb9f22ad6a9d5194202eb60
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 23:25:15 2024 -0600
+
+    rename
+
+commit 0c00e59bf09053c448d7f69c6f89d2b2d230734e
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 23:24:49 2024 -0600
+
+    a2 version of xv6 moved to a2 directory
+
+commit ade413860097ad48189141386c2b9b496e43769e
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 23:12:59 2024 -0600
+
+    TODOs added
+
+commit f3e1873aff5cc2f4bd77022d4ed41f2f324b0f20
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 22:51:35 2024 -0600
+
+    Basic testing documentation added
+
+commit b3e76ff2517717e2788dc1306eb7fdd9b15fb2f4
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 22:28:37 2024 -0600
+
+    Design doc for part C done
+
+commit 660e5415bdb188dc2d6d795931d81ba17c524ba3
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 20:42:30 2024 -0600
+
+    Design doc for worker threads done
+
+commit dc5ced5cd99097160c9a3005a020b972c90f29bd
+Merge: 3cfa6b1 f5d1698
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 18:41:35 2024 -0600
+
+    Merge branch 'main' into wahhaj_assignments
+
+commit 3cfa6b1a895e31f88a4f5e56e309a40a5760821d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 18:39:29 2024 -0600
+
+    Run script for s_chat done
+
+commit c4d4d0c0523e92331d4848646e113243f8db68cd
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 18:32:38 2024 -0600
+
+    Cross compiling for s_chat added
+
+commit f5d169870e5270bae201d88a57c46b27a33fe410
+Merge: d257874 9abdd22
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 17:59:36 2024 -0600
+
+    Merge branch 'main' into nakhba_assignments
+
+commit d2578741a27dfefba247f846d09f277aa943d161
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 17:57:17 2024 -0600
+
+    added the plan for part a bonus
+
+commit 98165a4889d8aae635b4be501ee728e7e4abbf78
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 17:51:00 2024 -0600
+
+     makefile with bonus for part a
+
+commit 1f798454998c54c710183ea1e6fe8a4d7074c3b2
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 17:50:16 2024 -0600
+
+    updated version of working semaphore
+
+commit 354c919ba947b5e054faa52fd490552e7e1ecce9
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 17:42:22 2024 -0600
+
+    the test and test result for bonus is added
+
+commit 9abdd22a3984d9039e04c4e0db75e0afa9f36c19
+Merge: 1f71c74 6ff7960
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 17:07:52 2024 -0600
+
+    Merge branch 'main' into wahhaj_assignments
+
+commit 1f71c7400601c9b4e28e7f772782dfc607f165e6
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 16:56:56 2024 -0600
+
+    Added port number error bounds checking
+
+commit 7e6ec6d6fb7a2ba3474c360b3f3a6ea20d96f876
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 16:51:24 2024 -0600
+
+    Removed debug printf statements
+
+commit 75470bd9c3ceaae69f9aa8bc7db3f0c41d28e7e5
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 16:32:53 2024 -0600
+
+    messages from network now printed by consoleOut thread
+
+commit 54c2ca5b4ca19607c7a2c7104f08d7e20e2a7c24
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 15:51:00 2024 -0600
+
+    networkIn() now able to receive network packets and print to stdout. Tested
+    using nc.
+
+commit 9f48caad6ad04091eea166880ba6bff22fe07c11
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 15:50:30 2024 -0600
+
+     edited and compiled, but the output is wrong its switching beteen 6 and 7 
+     when its supposed to go from 6 to 0
+
+commit 77e4d969845ebf32c772023fabd03471be86ee8a
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 15:05:56 2024 -0600
+
+    NetworkOut thread working properly. Tested with nc
+
+commit b201708c334f6028e6c0d6c45ccb8d6fd4a1275c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 15:05:08 2024 -0600
+
+    Bug in Decrease_node_memory(). Commented out its uses.
+
+commit 86373e8abf3b333e39826b1b754895e69627a59b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 14:49:36 2024 -0600
+
+    adde the V() P() and sem_create functions in sem.c, in prod-con-sem.c, i 
+    added the producer, consumer that uses the semaphore
+
+commit 53c8911c409383991f8cbf22e77996265e4ee81d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 13:38:05 2024 -0600
+
+    networkOut can now send messages over udp. Tested using nc.
+    
+    Bugs in list library needs to be fixed before further development.
+
+commit 0a04284dac9964ec5bb88cf49796d27dd6cc07e3
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 13:05:22 2024 -0600
+
+    networkOut now exits properly on EOF
+
+commit 2bdd08887950b5617ec5ae01e65e890d55b84db4
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 13:03:57 2024 -0600
+
+    networkOut now prints message from server to console
+
+commit 6ff7960a074c3ad22a250bb7ea5bac803aa76878
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 12:39:52 2024 -0600
+
+    removed unwanted files
+
+commit 57b850180a1ee886c773665b4170673e44678830
+Merge: e9d4ba7 10adaa2
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 12:39:02 2024 -0600
+
+    merged nakhb_assignmnet into main
+
+commit 10adaa23f1b425dfbfa8f13d80fbb6d85e755a9f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 12:33:21 2024 -0600
+
+     started the implementation of semaphore
+
+commit 5d8a85f2a6a9bb320b2be6f6acc7debc9282958b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 28 12:09:26 2024 -0600
+
+    sendto protoype properly working. nc is able to see test message sent by 
+    s_chat.
+
+commit ab926633ff5c2690ba79efe329df2b5c27a9e019
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 12:00:10 2024 -0600
+
+     copied the prod-con-mutex file for the foundation of prod-con-sem, the 
+     both files will have the same structure
+
+commit 49973c1f9940487187a99185cf1f7d6d58e97007
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 11:39:07 2024 -0600
+
+     added the testing for mutex of Part A
+
+commit f94783ce41179064b9ffb23e3b28d67a0c65258a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 11:37:57 2024 -0600
+
+    added the documentation and the author info
+
+commit 888645e91b542fcf9af58760483b011f34303c93
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 11:31:49 2024 -0600
+
+    added the border case to the testing of prod-con-mtx
+
+commit d5a64a324130b599d110231e71b248cb33663585
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 11:03:18 2024 -0600
+
+    while compiling, fixed minor errors like spelling miskate, missing ;, 
+    missing value, etc
+
+commit 2d449e9efd415fb332082e968a5908fa2dfa2094
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 11:02:15 2024 -0600
+
+    adeed the mutex section to the make file
+
+commit c90d4e373e6f4b3186212cbe80f48208ffb65251
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 09:19:25 2024 -0600
+
+    added the functions in the mtx.c, not sure about the mtx_create function
+
+commit 574bfc1d13e83b558efe067e3d0000af6515b314
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Oct 28 09:14:31 2024 -0600
+
+    added the producer consumer for mutex, it uses the buffer dize and buffer 
+    max
+
+commit 9777f1a2e5f2d2c79daa0d841977e82985e92b04
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Oct 27 23:36:16 2024 -0600
+
+    local socket and remote adderinfo configured. Compiles but not tested
+
+commit 1a790844fc9772475a903b22f2f113a5c9ab5401
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sun Oct 27 21:28:09 2024 -0600
+
+    log
+
 commit 6ac31a44a2c135d629daf987d291cb41e4824058
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Oct 27 21:23:16 2024 -0600
 
     started the mutex section of A1, designed and implemented the lock and 
-unlock of mutx
+    unlock of mutx
+
+commit dd2af4ce2cfab591759d883d4eba116e21660e07
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Oct 27 21:06:22 2024 -0600
+
+    Messages from consoleIn now get printed by consoleOut through the server
 
 commit 3a04ee5e44ad5812efb0e7c676247efb33de6ce5
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -16,6 +280,12 @@ Author: Wahhaj Javed <muj975@usask.ca>
 Date:   Sun Oct 27 20:23:29 2024 -0600
 
     Added -mno-relax to makefile
+
+commit cd507b547761076471dac9f5a066d67ee2548372
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Oct 27 19:43:20 2024 -0600
+
+    messages to consoleOut partially done.
 
 commit de42b48fc49908b94c1740e3e7b55e5ae45fca4c
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -39,8 +309,8 @@ commit df20a949d400ae378f55ab804ca06ae62fee8c15
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sun Oct 27 15:01:09 2024 -0600
 
-    fixed spelling mistakes and minor errors like missing ending }, 
-wrong type, while running the makefile
+    fixed spelling mistakes and minor errors like missing ending }, wrong type,
+    while running the makefile
 
 commit 5ff8c79f9fd9ae29bbf62e8f37626fb168b5edb8
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -66,6 +336,24 @@ Date:   Sun Oct 27 12:17:27 2024 -0600
 
     edited wile testing
 
+commit f2a48b2bb142bc8535ae1bd7c5f04a6ced9cba6b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Oct 27 12:10:21 2024 -0600
+
+    List library linked with s-chat
+
+commit 3fa763414ab95ee528428225519d08f805353953
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Oct 26 23:27:10 2024 -0600
+
+    Server can now receive data from consoleIn and print it out
+
+commit f0672716a981b37142440d3b4acd3766a3893655
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Oct 26 22:32:16 2024 -0600
+
+    EOF exit added. stdin now becomes blocking on exit
+
 commit 1d519b70704a75100fd4d4dfc9cce1e31131f32f
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sat Oct 26 22:09:43 2024 -0600
@@ -88,8 +376,8 @@ commit f65b50a1489b56bbbb706c5bf87e12723c92cebf
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sat Oct 26 21:34:41 2024 -0600
 
-    removed the thread a b c from u threads and placed them into uthreadtest,
- also in uthreads added thread_free()
+    removed the thread a b c from u threads and placed them into uthreadtest, 
+    also in uthreads added thread_free()
 
 commit 1eb870a70d6948b39b480966917cc6a325f3a5de
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -126,7 +414,7 @@ Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Sat Oct 26 15:59:53 2024 -0600
 
     strted the implementation of Part a uthreads, write the dign od uthread 
-switch and uthread scedule
+    switch and uthread scedule
 
 commit 25da21f105c1d01a5edf1d14b97d022f6ab8dca2
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -139,6 +427,12 @@ Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Fri Oct 25 16:03:09 2024 -0600
 
     added the xv6 from prev a1
+
+commit e9d4ba7697b82a0491380e73cfb7039114ba7279
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Oct 25 15:20:00 2024 -0600
+
+     copied the previous xv6 to xv6-A2 for the assignment2
 
 commit 0d62705bccc024372d7830cb49d292c37214ebe4
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -168,8 +462,9 @@ commit 74f349338dc10e70700d18252545f74a33335e93
 Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Fri Oct 25 14:28:12 2024 -0600
 
-    for the list modifiers i removed the print statements of when invalid or 
-unexpected parameters are give, they are handled without telling the user
+    for the list modifiers i removed the print statements of when invalid 
+    or unexpected parameters are give, they are handled without telling 
+    the user
 
 commit 90bb3681bbae95a44e417284bda997332662a007
 Author: Nakhba Mubashir <epl482@usask.ca>
@@ -200,10 +495,48 @@ Author: Nakhba Mubashir <epl482@usask.ca>
 Date:   Fri Oct 25 08:19:32 2024 -0600
 
     for phase 2 edited the started editing monitor according to feedback and 
-updated knowledge
+    updated knowledge
+
+commit 1b2e842ed013ee21e7849110f26051b72079b943
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 21 13:32:40 2024 -0600
+
+    s_chat compiles, reads from stdin and prints num bytes read
+
+commit a35020b9d60ff83ad4d7a681b28d1b6884bfaf93
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 21 13:14:32 2024 -0600
+
+    Run script for s_chat created. Currently only runs s_chat on preset ports 
+    for testing
+
+commit 2d4e9cb7e378bb8f4ad010e211a232840ca4a587
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 21 13:08:34 2024 -0600
+
+    name change
+
+commit 1ec73e21595170f97cd9e5a8e2971bf395000103
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 21 13:08:16 2024 -0600
+
+    consoleIn thread can now read from stdin and echo input.
+
+commit 424133b5beaecb4ad167a0cfa5e5d259e0a346e7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Oct 21 12:55:34 2024 -0600
+
+    s_chat binary named updated
+
+commit c537da0bdbb6c261532a4e9dbc213b9ccf7fca5d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sat Oct 19 17:16:54 2024 -0600
+
+    Input argument parsing complete.
 
 commit 85c4275e5eed276dc441fb95aae4921abcf95bab
 Author: Wahhaj Javed <muj975@usask.ca>
 Date:   Sat Oct 19 15:34:54 2024 -0600
 
     A2 phase 2 start
+
