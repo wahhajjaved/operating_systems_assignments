@@ -10,7 +10,7 @@ Makefile
 Monitor.c
 Monitor.h
 PartA.design.txt
-PartA.test.txt
+xv6-kernel-output.txt
 PartB.design.txt
 PartB.testresults.txt
 PartC.design.txt
@@ -21,3 +21,4 @@ reader-writer.c
 s_chat
 s_chat.c
 xv6-riscv.tar
+xv6-sync.diff
