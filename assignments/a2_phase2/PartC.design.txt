@@ -245,11 +245,15 @@ time to properly implement
 
 - Make the output of the program prettier by right aliging remote messages
 
-- Attach time stamps and sender to messages
+- Attach time stamps and sender to messages. This is meant to be done using
+	the serialize and unserialize functions but I wan't able to get them 
+	working properly.
 
 - The BUFSIZE macro defines the maximum number of chars allowed for each
 	message. This macros is used extensively. However, there is no enforcement
 	of the max message size when reading from stdin
 
 - It is possible for sendto() to not send the entire message. This case is not
-	currently handled
+	currently handled. However, according to Beej's guide, this is only really
+	an issue of the data to be sent it larger than 1k so the current 
+	implementation should be fine.
