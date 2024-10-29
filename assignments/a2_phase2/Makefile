@@ -6,7 +6,8 @@ arch := $(shell uname -m)
 
 .PHONY: all clean
 
-all:reader-writer-test dining-philosopher s_chat_$(kernel)$(arch)
+all:reader-writer-test dining-philosopher s_chat_$(kernel)$(arch) \
+s_chat_Linuxarmv7l s_chat_Linuxppc
 
 mkdirs: 
 	mkdir -p $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir)
@@ -109,6 +110,7 @@ $(PartB_dir)/dining-philosopher-monitor.o: dining-philosopher-monitor.c \
 ################################################################
 ###################### Part C ##################################
 
+
 s_chat_$(kernel)$(arch): $(obj_dir)/s_chat.o
 	$(compile) -o s_chat_$(kernel)$(arch) $(obj_dir)/s_chat.o \
 	$(LINK_RT_X86) -L$(lib_dir) -llist 
@@ -116,6 +118,68 @@ s_chat_$(kernel)$(arch): $(obj_dir)/s_chat.o
 $(obj_dir)/s_chat.o: s_chat.c
 	$(compile) -c s_chat.c -o $(obj_dir)/s_chat.o
 
+
+###############################################################################
+###################### Part C Cross Compile Linuxarmv7l #######################
+compiler_arm = arm-linux-gnueabihf-gcc-10 $(CFLAGS) $(CPPFLAGS)
+list_obj_arm=$(build_list)/list_adders_arm.o $(build_list)/list_movers_arm.o \
+			$(build_list)/list_removers_arm.o
+
+s_chat_Linuxarmv7l: $(obj_dir)/s_chat_Linuxarmv7l.o \
+					$(lib_dir)/liblist_Linuxarmv7l.a
+	$(compiler_arm) -o s_chat_Linuxarmv7l $(obj_dir)/s_chat_Linuxarmv7l.o \
+	$(LINK_RT_ARM) -L$(lib_dir) -llist_Linuxarmv7l 
+
+$(obj_dir)/s_chat_Linuxarmv7l.o: s_chat.c
+	$(compiler_arm) -c s_chat.c -o $(obj_dir)/s_chat_Linuxarmv7l.o
+
+
+
+$(lib_dir)/liblist_Linuxarmv7l.a: ${list_obj_arm}
+	ar rcs $(lib_dir)/liblist_Linuxarmv7l.a ${list_obj_arm} 
+
+$(build_list)/list_movers_arm.o: list_movers.c list.h | mkdirs
+	$(compiler_arm) -o $(build_list)/list_movers_arm.o -c list_movers.c
+
+$(build_list)/list_adders_arm.o: list_adders.c list.h | mkdirs
+	$(compiler_arm) -o $(build_list)/list_adders_arm.o -c list_adders.c
+
+$(build_list)/list_removers_arm.o: list_removers.c list.h | mkdirs
+	$(compiler_arm) -o $(build_list)/list_removers_arm.o -c list_removers.c
+	
+	
+	
+###############################################################################
+###################### Part C Cross Compile PPC ###############################
+compiler_ppc = powerpc-linux-gnu-gcc-10 $(CFLAGS) $(CPPFLAGS) $(I)
+list_obj_ppc=build/list/list_adders_ppc.o build/list/list_movers_ppc.o\
+		 build/list/list_removers_ppc.o
+
+s_chat_Linuxppc: $(obj_dir)/s_chat_Linuxppc.o $(lib_dir)/liblist_Linuxppc.a
+	$(compiler_ppc) -o s_chat_Linuxppc $(obj_dir)/s_chat_Linuxppc.o \
+	$(LINK_RT_PPC) -L$(lib_dir) -llist_Linuxppc 
+
+$(obj_dir)/s_chat_Linuxppc.o: s_chat.c
+	$(compiler_ppc) -c s_chat.c -o $(obj_dir)/s_chat_Linuxppc.o
+
+
+
+$(lib_dir)/liblist_Linuxppc.a: ${list_obj_ppc}
+	ar -rcs $(lib_dir)/liblist_Linuxppc.a ${list_obj_ppc} 
+
+$(build_list)/list_movers_ppc.o: list_movers.c list.h | mkdirs
+	$(compiler_ppc) -o $(build_list)/list_movers_ppc.o -c list_movers.c
+
+$(build_list)/list_adders_ppc.o: list_adders.c list.h | mkdirs
+	$(compiler_ppc) -o $(build_list)/list_adders_ppc.o -c list_adders.c
+
+$(build_list)/list_removers_ppc.o: list_removers.c list.h | mkdirs
+	$(compiler_ppc) -o $(build_list)/list_removers_ppc.o -c list_removers.c
+
+
+
+
 clean: 
 	rm -rf $(PartB_dir) $(lib_dir) $(build_list) $(obj_dir) \
-		reader-writer-test dining-philosopher s_chat_$(kernel)$(arch)
+		reader-writer-test dining-philosopher s_chat_$(kernel)$(arch) \
+		s_chat_Linuxarmv7l s_chat_Linuxppc
