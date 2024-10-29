@@ -203,6 +203,7 @@ RTTTHREAD server() {
 			exitFlag = 1;
 			
 			RttReply(consoleInTid, NULL, 0);
+			RttReply(networkInTid, NULL, 0);
 			if(consoleOutReady) {
 				RttReply(consoleOutTid, NULL, 0);
 			}
@@ -371,7 +372,7 @@ RTTTHREAD consoleOut(void) {
 		messageLen=BUFSIZE;
 		r = RttSend(serverTid, &sentMsg, 1, &message, &messageLen);
 		if(r != RTTOK) {
-			/* printf("Could not get message from server.\n"); */
+			fprintf(stderr,"Could not get message from server.\n");
 		}
 		/* printf("consoleOut: %u bytes recieved.\n", messageLen); */
 		message[messageLen] = '\0';

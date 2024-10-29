@@ -1,38 +1,190 @@
 @author Wahhaj Javed, muj975, 11135711
 @author Nakhba Mubashir, epl482, 11317060
-@date 2024-10-08
+@date 2024-10-28
 
 
-- <src_port> <dest_hostname> <dest_port>
-- Ports must be between 30001 and 40000
 
 
-[ Threads ]
-- 5 threads are needed:
-	-- Thread 1 handles keyboard input from console
-	-- Thread 2 handles output to console
-	-- Thread 3 listens for UDP datagrams
-	-- Thread 4 sends UDP datagrams
-	-- Thread 5 is the server which coordinates sending of messages
-	-- Threads are created using RttCreate. For now all threads have a stack
-		size of 65536 and have RTTNORM priority. These parameters may need to
-		be fine tuned as the program develops
-	- Threads functions don't need to take any input parameters as each is 
-		responsible for its own thing
+
+- Only ports between 30001 and 40000 are allowed to be used for s_chat.
+	The input arguments are validated to ensure this. Same source and 
+	destination ports are not allowed to make it possible to run two instances
+	of s_chat on the same machine to make testing easier.
+
+- stdin is set to non-blocking using fcntl() with the O_NONBLOCK flag
+	because RT threads is a user program. If any thread reads stdin using 
+	read(), it will block all all threads. 
+
+- To send and receive messages over the network, a udp socket is used. It is
+	created in the getSockets() function and stored in localSockFd. 
+	The function is poorly named. It only creates one socket for the app to 
+	use. It also creates struct addrinfo *localAddrInfo, *remoteAddrInfo, 
+	which contain information about the hosts. localAddrInfo is used only to
+	create the socket but remoteAddrInfo is used for sending messages to the
+	other instance of s_chat.
+
+- Like with stdin, the socket needs to be set to non-blocking. This can be done
+	with fcntl() like with stdin, but since I am creating the socket myself, 
+	I can bitwise or SOCK_NONBLOCK with the second argument to socket() saving
+	the extra call to fcntl(). This method is recomended by the socket() 
+	man page.
+
+- localSockFd, localAddrInfo, and remoteAddrInfo are stored as global variables
+	because I didn't want to deal with passing arguments to the thread 
+	functions through RttCreate().
+
+- mainp() will exit after creating the threads. So to handle cleanup, 
+	RttRegisterExitRoutine() is used to register a cleanup function which gets
+	called when all RT threads exit. This function just sets stdin back to
+	blocking and closes the socket.
+
+
+- 5 threads are used to handle everything. These are created in mainp().
+	These threads start immediately, have no deadline, and normal priority.
+	Their stack sizes are set to 2^16 bytes, except for the sever which is
+	set to 2^23 bytes or 8MB. The server needs a big stack because of all the
+	lists is stores. 
+
+- Each thread runs in a while loop while exitFlag isn't set. exitFlag is a 
+	global variable that is used to tell all threads to exit so that the 
+	program can exit gracefully. 
+
+- The server thread cannot block but its fine for the other threads to block.
+	The threads are configured using the administrator IPC model with the 
+	server being the administrator
+
+- EOF is used to exit s_chat.
+
+
+[ consoleIn Thread ]
+	
+	- This thread handles reading input from the user on stdin using the read()
+		system call.
+		
+	- According to Beej's Guide to Network Programming, when stdin was made 
+		non-blocking, read() will return immediately with -1 if there is not 
+		data to read. -1 is also returned by read() in the event of errors. 
+		
+	- However, when there is no data, read() will also set either errno to
+		either EAGAIN or EWOULDBLOCK. Which one gets set depends on the system,
+		so errno needs to be checked against both for portability.
+	
+	- If read() return -1 but errno isn't set to either EAGAIN or EWOULDBLOCK,
+		that indicates an error. In this case this thread will exit. Otherwise
+		if read() returned -1, then the thread just loops because there is no
+		input.
+	
+	- If read() returns 0, that indicates EOF, which is how users quit s_chat.
+		When this happens, exitFlag is set by this thread and a message is 
+		sent to the server containing EOF
+	
+	- If read() returns a positive integer, that means that many bytes were 
+		read from the console. The read message is sent as is to the server
+		using RttSend. 
+	
+	- Both EOF and valid input case basically do the same thing but were
+		separated out into two separate if statements to make debugging easier.
+	
+	- RttSend is blocking but the server is configured to reply immediately
+		so the block shouldn't be too long.
+	
+	- RT threads do not preempt running threads unless a higher priority thread
+		is ready. Since all threads are configured at the same priority level,
+		it is possible for consoleIn thread to keep running forever and not
+		give the other threads a chance to run.
+	 
+	- Once the consoleIn threads gets to this state, the only way for it
+		give the server a chance to run is for it to read input from stdin, 
+		which will cause it use block at RttSend().
+	
+	- But this is bad behaviour as there could be many messages from the 
+		network which need to be processed by the server. 
+	
+	- To fix this, RttUSleep(10) is used at the start of every loop. A 10 micro
+		second sleep isn't significant but it does allow for other threads to
+		run. The other way to do this would be to change the RttSchAttr flags
+		on the running thread, but RttUSleep() is a single function call.
+		Setting RttSchAttr of the running thread will be more.
+	
+
+[ consoleOut Thread ]
+
+	- This thread handles printing messages to stdout. This is a very simple
+		thread.
+	
+	- It send a message to the server using RttSend(). The message just 
+		contains the macro SUCCESS. The next message to print out will be 
+		returned as the reply from the server. (Admninistrator IPC model)
+	
+	- Since RttSend() is blocking, there is no need to use RttUSleep() like
+		with consoleIn thread.
+	
+	- This thread assumes that the string it receives isn't null terminated
+		so it appends a null terminator to the end of the recieved message
+		and uses printf() to print it out.
+	
+
+
+[ networkIn Thread ]
+
+	- This one is basically the same consoleIn. The only real difference is
+		that recvfrom() is used to get the message from the socket instead
+		of read() being used to get the message from stdin.
+	
+	- See [ consoleIn Thread ] for the rest of the explanation on design
+		decisions in this function
+
+
+[ networkOut Thread ]
+
+	- Basically the same as consoleOut except sendto() is used instead of 
+		printf(). sendto() will send a message through the socket.
+	
+	- The message is sent as it was received from the server.
+
+	- See [ consoleOut Thread ] for the rest of the explanation on design
+		decisions in this function
+
+
+
+[ server Thread ]
+
+	- This is the most complicated thread as it handles the coordination 
+		between all other threads.
+	
+	- The server needs to handle incoming messages from other threads, and also
+		handle replying to threads. 
+	
+	- RttMsgWaits() is used to check if there a message waiting for the server.
+		If there is one it is fetched using RttReceive() and the newMessage
+		flag is set.
+	
+	- In the final version of the code, RttMsgWaits() doesn't seem necessary
+		but I left it in there becaues I don't have time to confirm that 
+		removing it won't break the code
+	
+	- If the message if EOF, the server will set the exitFlag and then also 
+		reply to the other threads with a NULL message. This reply is needed
+		because the other threads may be blocked on RttSend() which means they
+		won't see the change in the exitFlag. The reply is meant to force these
+		threads to loop which will return in them breaking out of the loop and
+		the thread exiting.
+	
+	- The following blocks handle messages from each of the threads. The
+		first is messages from consoleIn
+	
+	- consoleIn will send a message using RttSend() to the server. Messages
+		from console in need to go to networkOut so that they can be send to
+		the other s_chat instance.
+	
+	- However, networkOut may be busy so the messages need to be buffered. The
+		server uses networkOutReady, networkOutCurMessage, and the lists
+		networkOutFreeList and networkOutQueue to handle the buffering. 
+		
+	- networkOutFreeList is a list of dynamically allocated Message structs. 
+		These structs are allocated once at startup to avoid repeated calls
+		to malloc and free. This create a bounded buffer.
 	
 	
-[ Console Input ]
-	- Strings are read from the console and do not need to be parsed
-	- Console input is handled using fgets()
-	- Each string can be a max of 1000 chars
-	- fgets() will return newlines but these are not stripped as the output
-		on clients should match the input on the server
-	- Each input string is placed in a list so the messages can be buffered
-
-
-
-** Have a midterm the day this assignment is due so this is all the time 
-	I can spend on it.
-
-
-
+	
+	
