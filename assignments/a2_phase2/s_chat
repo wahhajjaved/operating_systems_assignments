@@ -1,32 +1,43 @@
 #!/bin/bash
 
-./s_chat_Linuxx86_64 5000 localhost 5001
+print_help() {
+	echo "Incorrect number of arguments."
+	echo "Usage: s-chat <src_port> <dst_host_name> <dst_port>"
+}
 
-# print_help() {
-# 	echo "Incorrect number of arguments."
-# 	echo "Usage: s-chat <src_port> <dst_host_name> <dst_port>"
-# }
+if [[ $# -ne 3 ]]; then
+	echo "Invalid number of arguments"
+	echo
+	print_help
+	exit 1
+fi
 
-# if [[ $# -ne 3 ]]; then
-# 	echo "Invalid number of arguments"
-# 	echo
-# 	print_help
-# 	exit 1
-# fi
+if [[ "$1" -lt 30001 || "$1" -gt 40000 ]]; then
+        echo "Ports must be between 30001 and 40000."
+        exit 1
+    fi
 
-# case "$(uname -m)" in
-# 	"x86_64")
-# 		./s_chat_Linuxx86_64 "$1" "$2" "$3"
-# 		;;
-# 	"armv7l")
-# 		./s_chat_Linuxarmv7l "$1" "$2" "$3"
-# 		;;
-# 	"ppc")
-# 		./s_chat_Linuxppc "$1" "$2" "$3"
-# 		;;
-# 	*)
-# 		echo "Unknown value: $(uname -m)"
-# 		echo
-# 		exit 1
-# 		;;
-# esac
+if [[ "$2" -lt 30001 || "$2" -gt 40000 ]]; then
+        echo "Ports must be between 30001 and 40000."
+        exit 1
+    fi
+
+case "$(uname -m)" in
+	"x86_64")
+		echo "Launching s_chat_Linuxx86_64"
+		./s_chat_Linuxx86_64 "$1" "$2" "$3"
+		;;
+	"armv7l")
+		echo "Launching s_chat_Linuxarmv7l"
+		./s_chat_Linuxarmv7l "$1" "$2" "$3"
+		;;
+	"ppc")
+		echo "Launching s_chat_Linuxppc"
+		./s_chat_Linuxppc "$1" "$2" "$3"
+		;;
+	*)
+		echo "Unknown value: $(uname -m)"
+		echo
+		exit 1
+		;;
+esac
