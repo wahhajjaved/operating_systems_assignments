@@ -4,7 +4,10 @@
 
 
 
+- s_chat is a bash script that will start the appropriate version of s_chat
+	for the architecture
 
+- EOF is used to exit s_chat.
 
 - Only ports between 30001 and 40000 are allowed to be used for s_chat.
 	The input arguments are validated to ensure this. Same source and 
@@ -25,7 +28,7 @@
 
 - Like with stdin, the socket needs to be set to non-blocking. This can be done
 	with fcntl() like with stdin, but since I am creating the socket myself, 
-	I can bitwise or SOCK_NONBLOCK with the second argument to socket() saving
+	I can bitwise or SOCK_NONBLOCK with the second argument to socket(), saving
 	the extra call to fcntl(). This method is recomended by the socket() 
 	man page.
 
@@ -43,7 +46,7 @@
 	These threads start immediately, have no deadline, and normal priority.
 	Their stack sizes are set to 2^16 bytes, except for the sever which is
 	set to 2^23 bytes or 8MB. The server needs a big stack because of all the
-	lists is stores. 
+	lists it uses. 
 
 - Each thread runs in a while loop while exitFlag isn't set. exitFlag is a 
 	global variable that is used to tell all threads to exit so that the 
@@ -53,7 +56,7 @@
 	The threads are configured using the administrator IPC model with the 
 	server being the administrator
 
-- EOF is used to exit s_chat.
+
 
 
 [ consoleIn Thread ]
@@ -230,7 +233,23 @@
 	
 	- The steps for sending messages to networkOut are the same.
 	
-	
-	
-	
-	
+
+[ TODOS ]
+
+This section contains things that could be improved but which I didn't have
+time to properly implement
+
+
+- The opened socket needs to be closed and addrinfo structs need to be free in 
+	exitFunction() for proper resource cleanup
+
+- Make the output of the program prettier by right aliging remote messages
+
+- Attach time stamps and sender to messages
+
+- The BUFSIZE macro defines the maximum number of chars allowed for each
+	message. This macros is used extensively. However, there is no enforcement
+	of the max message size when reading from stdin
+
+- It is possible for sendto() to not send the entire message. This case is not
+	currently handled

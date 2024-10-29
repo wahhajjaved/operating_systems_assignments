@@ -45,3 +45,12 @@ tests were done manually.
 - Lastly, s_chat was cross compiled on arm and ppc and two instances were 
 	tested across the various combinations of arm, ppc, and x86
 
+
+[ TODOS ]
+
+This section contains tests that should be run but weren't run due to lack of
+time
+
+- Testing with non-ascii characters
+
+- Testing strings longer than the max buffer size

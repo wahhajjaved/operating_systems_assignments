@@ -173,7 +173,7 @@ RTTTHREAD server() {
 		exitFlag = 1;
 	}
 	
-	/*special case to handle first response from consoleOut*/
+	/*special case to handle first response from consoleOut and networkOut*/
 	consoleOutCurMessage = ListTrim(consoleOutFreeList);
 	networkOutCurMessage = ListTrim(networkOutFreeList);
 	
