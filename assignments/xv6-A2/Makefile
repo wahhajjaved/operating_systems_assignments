@@ -145,10 +145,11 @@ UPROGS=\
 	$U/_trace\
 	$U/_uthread\
 	$U/_prod-con-mtx\
+	$U/_prod-con-sem\
  
 #CMPT 332 GROUP 67 Change, Fall 2024 
 
-UTHREAD=$U/uthread.o $U/uthread_switch.o
+UTHREAD=$U/uthread.o $U/uthread_switch.o $U/mtx.o
 
 $U/uthread_switch.o: $U/uthread_switch.S
 	$(CC) $(CFLAGS) -c -o $U/uthread_switch.o $U/uthread_switch.S
@@ -158,10 +159,13 @@ $U/_uthread: $U/uthreadtest.o  $U/uthread.o $U/uthread_switch.o $(ULIB)
 		$U/uthread_switch.o $U/uthreadtest.o $(ULIB)
 	$(OBJDUMP) -S $U/_uthread > $U/uthread.asm
 
-$U/_prod-con-mtx: $U/prod-con-mtx.o $U/mtx.o $(UTHREAD)  $(ULIB)
+$U/_prod-con-mtx: $U/prod-con-mtx.o $(UTHREAD)  $(ULIB)
 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_prod-con-mtx \
-        $U/prod-con-mtx.o $U/mtx.o $(UTHREAD) $(ULIB)
+        $U/prod-con-mtx.o  $(UTHREAD) $(ULIB)
 
+$U/_prod-con-sem: $U/prod-con-sem.o $U/sem.o $(UTHREAD)  $(ULIB)
+	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_prod-con-sem \
+        $U/prod-con-sem.o $U/sem.o $(UTHREAD) $(ULIB)
 
 
 fs.img: mkfs/mkfs README $(UPROGS)
