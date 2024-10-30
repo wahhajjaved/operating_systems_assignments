@@ -2,6 +2,8 @@
  *@author Wahhaj Javed, muj975, 11135711
  *@author Nakhba Mubashir, epl482, 11317060
  */
+#include <os.h>
+#include <standards.h>
 #include <Monitor.h>
 
 

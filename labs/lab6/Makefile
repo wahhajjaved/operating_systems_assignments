@@ -62,5 +62,5 @@ makedir:
 
 .PHONY: clean
 clean: 
-	rm -rf $(build_dir)
+	rm -rf $(build_dir) best_fit
 

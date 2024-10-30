@@ -8,8 +8,7 @@
 #include <list.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <os.h>
-#include <standards.h>
+
 
 void MonInit(int num);
 void MonEnter(void);
