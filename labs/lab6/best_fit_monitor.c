@@ -19,18 +19,18 @@ void init() {
 	m->size = TOTALMEMORY;
 	m->inUse = 0;
 	
-	ListCreate(memory);
+	memory = ListCreate();
 	ListAppend(memory, m);
 	
 	MonInit(1);
-	printf("best fit monitor initialized.\n");
+	printf("best fit monitor initialized. List size %d\n", ListCount(memory));
 }
 
-void* BFAllocate(int size){
-	
-	return 0;
+int* BFAllocate(int size){
+	MemoryBlock* m = ListFirst(memory);
+	return &m->startAddress;
 }
 
-void BFFree(void* address){
+void BFFree(int* address){
 	
 }

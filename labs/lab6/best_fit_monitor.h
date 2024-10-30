@@ -11,5 +11,5 @@ typedef struct memoryBlock {
 } MemoryBlock;
 
 void init();
-void* BFAllocate(int size);
-void BFFree(void* address);
+int* BFAllocate(int size);
+void BFFree(int* address);

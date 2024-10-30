@@ -6,23 +6,30 @@
 #include <stdio.h>
 #include <os.h>
 #include <standards.h>
+#include <kernelConfig.h>
 
-#include <Monitor.h>
+#include <list.h>
 #include <best_fit_monitor.h>
 
 
 #define MAXALLOCATION 100
 
 
+
 PROCESS thread1(void* args) {
 	int maxSleepTime, maxAllocation, freeProbability, numberOfIterations;
+	LIST* allocatedMemory;
+	
 	int* a = (int*)args;
 	maxSleepTime = a[0];
 	maxAllocation = a[1];
 	freeProbability = a[2];
 	numberOfIterations = a[3];
+	allocatedMemory = ListCreate();
 	
+
 	printf(
+		"thread1, "
 		"maxSleepTime = %d, "
 		"maxAllocation = %d, "
 		"freeProbability = %d, "
@@ -32,6 +39,29 @@ PROCESS thread1(void* args) {
 		freeProbability,
 		numberOfIterations
 	);
+	
+	while(numberOfIterations) {
+		int sleepTime, sleepTicks, memorySize, freeMemory, *memory;
+
+		memorySize = rand() % maxAllocation + 1;
+		sleepTime = rand() % maxSleepTime;
+		freeMemory = (rand() % 100) < freeProbability;
+		
+		printf("thread1 allocating %d blocks.\n", memorySize);
+		memory = BFAllocate(memorySize);
+		ListPrepend(allocatedMemory, memory);
+		printf("thread1 alloted memory starting at block %d .\n", *memory);
+		
+		if(freeMemory && ListCount(allocatedMemory)) {
+			int* m = ListTrim(allocatedMemory) ;
+			BFFree(m);
+			printf("thread1 freeing %d blocks.\n", *m);
+		}
+		
+		numberOfIterations--;
+		sleepTicks = sleepTime*1000000/TICKINTERVAL;
+		Sleep(sleepTicks);
+	}
 	
 }
 
@@ -87,6 +117,7 @@ int mainp(int argc, char* argv[]) {
 		return 1;
 	}
 	
+	srandom(1);
 	init();
 
 	args[0] = maxSleepTime;
