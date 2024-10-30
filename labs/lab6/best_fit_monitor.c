@@ -5,11 +5,32 @@
 
 #include <list.h>
 #include <Monitor.h>
+#include <best_fit_monitor.h>
+
+#define TOTALMEMORY 1000
+
+LIST* memory;
+
+void init() {
+	MemoryBlock* m;
+	m = malloc(sizeof(MemoryBlock));
+	m->startAddress = 0;
+	m->endAddress = TOTALMEMORY-1;
+	m->size = TOTALMEMORY;
+	m->inUse = 0;
+	
+	ListCreate(memory);
+	ListAppend(memory, m);
+	
+	MonInit(1);
+	printf("best fit monitor initialized.\n");
+}
 
 void* BFAllocate(int size){
+	
 	return 0;
 }
 
-void Free(void* address){
+void BFFree(void* address){
 	
 }

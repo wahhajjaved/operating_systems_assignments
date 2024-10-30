@@ -11,7 +11,7 @@
 #include <best_fit_monitor.h>
 
 
-#define MAXALLOCATION 1000
+#define MAXALLOCATION 100
 
 
 PROCESS thread1(void* args) {
@@ -86,6 +86,8 @@ int mainp(int argc, char* argv[]) {
 		perror("Error with malloc");
 		return 1;
 	}
+	
+	init();
 
 	args[0] = maxSleepTime;
 	args[1] = maxAllocation;

@@ -10,14 +10,16 @@ CPPFLAGS = -I. -I/student/cmpt332/pthreads
 
 compile = $(CC) $(CFLAGS) $(CPPFLAGS)
 link = -L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads
-link += -L$(build_dir) -llist
 link += -L$(build_dir) -lMonitor
+link += -L$(build_dir) -llist
 
 
 
 best_fit: $(build_dir)/best_fit.o $(build_dir)/best_fit_monitor.o \
 			$(build_dir)/libMonitor.a $(build_dir)/liblist.a
-	$(compile) -o best_fit $(build_dir)/best_fit.o $(link)
+	$(compile) -o best_fit \
+	$(build_dir)/best_fit.o $(build_dir)/best_fit_monitor.o \
+	$(link)
 
 $(build_dir)/best_fit.o: best_fit.c | makedir
 	$(compile) -o $(build_dir)/best_fit.o -c best_fit.c

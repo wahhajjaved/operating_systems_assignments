@@ -3,5 +3,13 @@
 @date 2024-10-31
 */
 
+typedef struct memoryBlock {
+	int startAddress;
+	int endAddress;
+	int size;
+	int inUse;
+} MemoryBlock;
+
+void init();
 void* BFAllocate(int size);
-void Free(void* address);
+void BFFree(void* address);

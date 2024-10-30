@@ -5,9 +5,9 @@
 #ifndef MONITOR
 #define MONITOR
 
-#include <list.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <list.h>
 
 
 void MonInit(int num);
