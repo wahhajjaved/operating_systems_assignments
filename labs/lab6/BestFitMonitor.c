@@ -9,8 +9,10 @@ static int freeCheck=0
 
 BF-init(void){
     Memory.size= MEM_SIZE ;
-    Memory.startAddress= 1;
-    Memory.endAddress= MEM_SIZE -1;
+    Memory.startAddressIndex= 1;
+    Memory.endAddressIndex= MEM_SIZE -1;
+    startAddressBlock= (int *) malloc (MAX_MEM_ALLOCATION* sizeof(int));
+    endAddressBlock= (int *) malloc (MAX_MEM_ALLOCATION* sizeof(int));
     Memory.blockNum=0;
     MonInit(num);
 

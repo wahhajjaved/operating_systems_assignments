@@ -2,8 +2,10 @@
 
 typedef struct memBlock{
     int size;
-    int startAddress;
-    int endAddress;
+    int startAddressIndex;
+    int endAddressIndex;
+    int *startAddressBlock;
+    int *endAddressBlock;
     int blockNum;
 }MemoryBlock;
 
