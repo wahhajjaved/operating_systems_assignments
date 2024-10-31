@@ -1,13 +1,39 @@
+/* Nakhba Mubashir, epl482, 11317060 */
 
+#include <BestFitMonitor.h>
+
+MemoryBlock Memory;
+
+static int allocationCheck=0;
+static int freeCheck=0
 
 BF-init(void){
+    Memory.size= MEM_SIZE ;
+    Memory.startAddress= 1;
+    Memory.endAddress= MEM_SIZE -1;
+    Memory.blockNum=0;
+    MonInit(num);
 
 }
 
 void BF-allocation(int size){
-
+    MonEnter();
+    
+    if (Memory.blockNum ==0){
+        Memory.b
+    }
 }
 
 void BF-free(int address){
+    int i;
+    MonEnter();
+    if (allocationCheck){
+        MonWait(0); /* 0 so deallocate*/
+    }
+    freeCheck++;
+    if (i=0; i< Memory.blockNum; i++){
+    
+    }
+
 
 }
