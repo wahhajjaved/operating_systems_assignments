@@ -1,0 +1,25 @@
+/*
+ *@author Wahhaj Javed, muj975, 11135711
+ *@author Nakhba Mubashir, epl482, 11317060
+ * from a2 
+ */
+#ifndef MONITOR
+#define MONITOR
+
+#include <list.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <os.h>
+#include <standards.h>
+
+void MonInit(int num);
+void MonEnter(void);
+
+void MonLeave(void);
+
+void MonWait(int CV);
+
+void MonSignal(int CV);
+
+#endif
+
