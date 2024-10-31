@@ -27,15 +27,26 @@ void BF-allocation(int size){
 }
 
 void BF-free(int address){
-    int i;
+    int i,j;
     MonEnter();
     if (allocationCheck){
         MonWait(0); /* 0 so deallocate*/
     }
     freeCheck++;
-    if (i=0; i< Memory.blockNum; i++){
-    
+    /* find and free memory */
+    for (i=0; i< Memory.blockNum; i++){
+        if (Memory.startAddressBlock == address){
+            for (j=i; j<Memory.blockNum-1 ;j++){
+                Memory.startAddressBlock[j]= Memory.startAddressBlock[j+1];
+                Memory.endAddressBlock[j]= Memory.endAddressBlock[j+1];
+            }
+            Memory.blockNum--;
+            break;
+        }
     }
-
-
+    freeCheck++;
+    if (freeCheck ==0){
+        MonSignal(0);
+    }
+    MonLeave();
 }
