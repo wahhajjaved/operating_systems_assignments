@@ -1,0 +1,67 @@
+ALL threads created
+0 Allocate
+Allocation of size: 2370068
+1 Allocate
+Allocation of size: 2494595
+2 Allocate
+Allocation of size: 3612026
+3 Allocate
+Allocation of size: 1556761
+0 FINISH allocaation
+1 FINISH allocaation
+2 FINISH allocaation
+0 Allocate
+Allocation of size: 942510
+1 Allocate
+Allocation of size: 2643965
+2 Allocate
+Allocation of size: 123145
+2 FINISH allocaation
+0 FINISH allocaation
+3 FINISH allocaation
+2 Allocate
+Allocation of size: 502514
+1 FINISH allocaation
+1 Allocate
+Allocation of size: 3696933
+1 FINISH allocaation
+3 Allocate
+Allocation of size: 1968122
+3 FINISH allocaation
+2 FINISH allocaation
+0 Allocate
+Allocation of size: 2474377
+0 FINISH allocaation
+2 Allocate
+Allocation of size: 2485324
+1 Allocate
+Allocation of size: 2958724
+1 FINISH allocaation
+0 Allocate
+Allocation of size: 4375998
+3 Allocate
+Allocation of size: 36348
+0 FINISH allocaation
+3 FINISH allocaation
+0 Allocate
+Allocation of size: 1806719
+2 FINISH allocaation
+2 Allocate
+Allocation of size: 2276562
+1 Allocate
+Allocation of size: 2842323
+0 FINISH allocaation
+3 Allocate
+Allocation of size: 3913781
+*****0 DONE ******
+3 FINISH allocaation
+3 Allocate
+Allocation of size: 1571684
+2 FINISH allocaation
+1 FINISH allocaation
+*****2 DONE ******
+*****1 DONE ******
+3 FINISH allocaation
+*****3 DONE ******
+
+exiting threads
