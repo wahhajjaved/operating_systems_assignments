@@ -2,15 +2,17 @@
 
 #include <BestFitMonitor.h>
 
+long SLEEPMAX=3;
 PROCESS BestFit(void *arg)
 {
+  int i;
   long myId;
   myId = (long) arg;
   
   for(i=0;i<MAX_THREAD_ITEM;i++)
     {
       printf("%ld Allocate\n", myId);
-      BF-allocation(rand() % (MEM_SIZE));
+      BF_allocation(rand() % (MEM_SIZE));
       Sleep((int) (rand() % SLEEPMAX*5));
       printf("%ld FINISH allocaation\n", myId);
       Sleep((int) (rand() % SLEEPMAX*6));
@@ -25,7 +27,7 @@ int mainp()
     setbuf(stdout, 0);
 
     srand(71);
-    BF-init();
+    BF_init();
 
     tempPid = Create((void(*)()) BestFit, 16000, "T1", NULL, NORM, USR );
     if (tempPid == PNUL) perror("Create");

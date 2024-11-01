@@ -7,7 +7,7 @@ MemoryBlock Memory;
 static int allocationCheck=0;
 static int freeCheck=0;
 
-BF_init(void){
+void BF_init(void){
     Memory.size= MEM_SIZE ;
     Memory.startAddressIndex= 1;
     Memory.endAddressIndex= MEM_SIZE -1;
@@ -35,7 +35,7 @@ void BF_free(int address){
     freeCheck++;
     /* find and free memory */
     for (i=0; i< Memory.blockNum; i++){
-        if (Memory.startAddressBlock == address){
+        if (Memory.startAddressBlock[i] == address){
             for (j=i; j<Memory.blockNum-1 ;j++){
                 Memory.startAddressBlock[j]= Memory.startAddressBlock[j+1];
                 Memory.endAddressBlock[j]= Memory.endAddressBlock[j+1];
