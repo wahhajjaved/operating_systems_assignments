@@ -12,7 +12,7 @@ compile= $(CC) $(CFLAGS) $(CPPFLAGS)
 Link_Libs=-L/student/cmpt332/pthreads/lib/Linuxx86_64 -lpthreads
 
 BestFitMonitor: BestFitMonitor.o BestFit.o libMonitor.a libList.a
-	$(CC) -o BestFitMonitor BestFitMonitor.o BestFit.o $(Link_Libs) \
+	$(CC) -o BestFitMonitor BestFitMonitor.o BestFit.o $(Link_Libs)\
 		-L. -lMonitor -lList 
 
 BestFit.o: BestFit.c BestFitMonitor.h
