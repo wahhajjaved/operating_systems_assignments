@@ -10,7 +10,7 @@ typedef struct memBlock{
     int blockNum;
 }MemoryBlock;
 
-#define MEM_SIZE 4000000 /**/
+#define MEM_SIZE 6000000 
 #define num 2
 #define MAX_MEM_ALLOCATION 20
 #define MAX_THREAD_ITEM 5
