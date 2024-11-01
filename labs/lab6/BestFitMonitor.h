@@ -1,5 +1,6 @@
 /* @author Nakhba Mubashir, epl482, 11317060 */
 
+#include <Monitor.h>
 typedef struct memBlock{
     int size;
     int startAddressIndex;
@@ -15,6 +16,6 @@ typedef struct memBlock{
 #define MAX_THREAD_ITEM 5
 
 
-void BF-init(void);
-void BF-allocation(int size);
-void BF-free(int address);
+void BF_init(void);
+void BF_allocation(int size);
+void BF_free(int address);

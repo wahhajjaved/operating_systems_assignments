@@ -5,28 +5,28 @@
 MemoryBlock Memory;
 
 static int allocationCheck=0;
-static int freeCheck=0
+static int freeCheck=0;
 
-BF-init(void){
+BF_init(void){
     Memory.size= MEM_SIZE ;
     Memory.startAddressIndex= 1;
     Memory.endAddressIndex= MEM_SIZE -1;
-    startAddressBlock= (int *) malloc (MAX_MEM_ALLOCATION* sizeof(int));
-    endAddressBlock= (int *) malloc (MAX_MEM_ALLOCATION* sizeof(int));
+    Memory.startAddressBlock= (int *) malloc (MAX_MEM_ALLOCATION* sizeof(int));
+    Memory.endAddressBlock= (int *) malloc (MAX_MEM_ALLOCATION* sizeof(int));
     Memory.blockNum=0;
     MonInit(num);
 
 }
 
-void BF-allocation(int size){
+void BF_allocation(int size){
     MonEnter();
     
     if (Memory.blockNum ==0){
-        Memory.b
+        
     }
 }
 
-void BF-free(int address){
+void BF_free(int address){
     int i,j;
     MonEnter();
     if (allocationCheck){
