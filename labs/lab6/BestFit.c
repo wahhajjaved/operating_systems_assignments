@@ -6,18 +6,18 @@ long SLEEPMAX=3;
 PROCESS BestFit(void *arg)
 {
   int i;
-  long myId;
+  /*long myId;
   myId = (long) arg;
-  
+  */
   for(i=0;i<MAX_THREAD_ITEM;i++)
     {
-      printf("%ld Allocate\n", myId);
+      printf("%ld Allocate\n", MyPid());
       BF_allocation(rand() % (MEM_SIZE));
       Sleep((int) (rand() % SLEEPMAX*5));
-      printf("%ld FINISH allocaation\n", myId);
+      printf("%ld FINISH allocaation\n", MyPid());
       Sleep((int) (rand() % SLEEPMAX*6));
     }
-    printf("*****%ld DONE ******\n", myId);
+    printf("*****%ld DONE ******\n", MyPid());
   
 }
 
