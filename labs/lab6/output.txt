@@ -1,3 +1,5 @@
+Nakhba Mubashir, epl482, 11317060
+
 ALL threads created
 0 Allocate
 Allocation of size: 2370068
