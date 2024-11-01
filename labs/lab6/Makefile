@@ -42,4 +42,4 @@ libList.a: list_movers.o list_adders.o list_removers.o
 	ar -rcs libList.a list_movers.o list_adders.o list_removers.o
 
 clean:
-	rm -rf *.o *.a BestfitMonitor
+	rm -rf *.o *.a BestFitMonitor
