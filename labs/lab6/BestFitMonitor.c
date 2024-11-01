@@ -21,9 +21,9 @@ void BF_init(void){
 void BF_allocation(int size){
     int i,j, spaceNeeded, freeIndex;
 
-    freeIndex=-1 /* -1 is invalid index*/
+    freeIndex=-1; /* -1 is invalid index*/
     MonEnter();
-    if (allocationCheck || freecheck ){
+    if (allocationCheck || freeCheck ){
         MonWait(1); /* 1 so allocate*/
     }
     allocationCheck=1;
@@ -36,16 +36,20 @@ void BF_allocation(int size){
             freeIndex= i;
         }
     }
-    if (Memory.size-1- endAddressIndex >= size){ /* end of memory block*/
+    /* end of the memory block*/
+/*
+    if (Memory.size-1-Memory.endAddressIndex >= size){
         freeIndex = Memory.blockNum-1;
         }
-    
+  */  
     if (freeIndex ==-1){ /*if no free block then wait*/
         MonWait(2);
     }
-    else if (freeIndex = Memory.blockNum-1){
-        Memory.endAddressBlock[Memory.blockNum]=endAddressIndex;
-    }
+    /* at the end of the block*/
+/*
+    else if (freeIndex == Memory.blockNum-1){
+        Memory.endAddressBlock[Memory.blockNum]=Memory.endAddressIndex;
+    }*/
     else{
         Memory.startAddressBlock[freeIndex+1]=
             Memory.endAddressBlock[freeIndex]+1;
@@ -56,7 +60,8 @@ void BF_allocation(int size){
     }
 
     Memory.blockNum++;
-    printf("Allocation: \n",  );
+    printf("Allocation of size %d at memory block %d\n", size, 
+Memory.startAddressBlock[Memory.blockNum-1]  );
     allocationCheck=0;
     MonSignal(0);
     MonLeave();
