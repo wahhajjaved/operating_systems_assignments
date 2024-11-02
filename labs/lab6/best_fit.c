@@ -16,8 +16,10 @@
 
 
 
-PROCESS thread1(void* args) {
+PROCESS thread(void* args) {
 	int maxSleepTime, maxAllocation, freeProbability, numberOfIterations;
+	int threadNumber;
+	
 	LIST* allocatedMemory;
 	
 	int* a = (int*)args;
@@ -25,15 +27,17 @@ PROCESS thread1(void* args) {
 	maxAllocation = a[1];
 	freeProbability = a[2];
 	numberOfIterations = a[3];
-	allocatedMemory = ListCreate();
+	threadNumber = a[4];
 	
+	allocatedMemory = ListCreate();
 
 	printf(
-		"thread1, "
+		"thread %d, "
 		"maxSleepTime = %d, "
 		"maxAllocation = %d, "
 		"freeProbability = %d, "
-		"numberOfIterations = %d, ",
+		"numberOfIterations = %d\n",
+		threadNumber,
 		maxSleepTime,
 		maxAllocation,
 		freeProbability,
@@ -47,15 +51,14 @@ PROCESS thread1(void* args) {
 		sleepTime = rand() % maxSleepTime;
 		freeMemory = (rand() % 100) < freeProbability;
 		
-		printf("thread1 allocating %d blocks.\n", memorySize);
+		printf("\nthread %d allocating %d blocks.\n", threadNumber, memorySize);
 		memory = BFAllocate(memorySize);
 		ListPrepend(allocatedMemory, memory);
-		printf("thread1 alloted memory starting at block %d .\n", *memory);
 		
 		if(freeMemory && ListCount(allocatedMemory)) {
 			int* m = ListTrim(allocatedMemory) ;
+			printf("thread %d freeing block at %d.\n", threadNumber, *m);
 			BFFree(m);
-			printf("thread1 freeing %d blocks.\n", *m);
 		}
 		
 		numberOfIterations--;
@@ -77,20 +80,24 @@ void printUsage() {
 		printf("maxAllocation: 0 - %d\n", MAXALLOCATION);
 		printf("freeProbability: 0 - 100\n");
 		printf("numberOfIterations: 1 - 10\n");
+		printf("numberOfThreads: 1 - 10\n");
 }
 
 int mainp(int argc, char* argv[]) {
 	int maxSleepTime, maxAllocation, freeProbability, numberOfIterations;
+	int numberOfThreads, i;
 	int* args;
-	if(argc != 5) {
+	
+	if(argc != 6) {
 		printUsage();
+		return 1;
 	}
-
 	maxSleepTime = atoi(argv[1]);
 	maxAllocation = atoi(argv[2]);
 	freeProbability = atoi(argv[3]);
 	numberOfIterations = atoi(argv[4]);
-	
+	numberOfThreads = atoi(argv[5]);
+
 	if(maxSleepTime < 0 || maxSleepTime > 10) {
 		printf("Max sleep time must be between 0 and 10.\n");
 		printUsage();
@@ -111,31 +118,37 @@ int mainp(int argc, char* argv[]) {
 		printUsage();
 		return 1;
 	}
-	
-	if((args = malloc(4 * sizeof(int))) == NULL){
-		perror("Error with malloc");
+	if(numberOfThreads < 0 || numberOfThreads > 10) {
+		printf("Number of threads must be between 0 and 10.\n");
+		printUsage();
 		return 1;
 	}
+	
 	
 	srandom(1);
 	init();
 
-	args[0] = maxSleepTime;
-	args[1] = maxAllocation;
-	args[2] = freeProbability;
-	args[3] = numberOfIterations;
 	
-	Create( 
-		(void(*)()) thread1,
-		65536,
-		"thread1",
-		(void *) args,
-		NORM,
-		USR
-	);
-
-
-	
+	for(i = 0; i < numberOfThreads; i++) {
+		if((args = malloc(5 * sizeof(int))) == NULL){
+			perror("Error with malloc");
+			return 1;
+		}
+		args[0] = maxSleepTime;
+		args[1] = maxAllocation;
+		args[2] = freeProbability;
+		args[3] = numberOfIterations;
+		args[4] = i;
+		
+		Create( 
+			(void(*)()) thread,
+			65536,
+			"thread",
+			(void *) args,
+			NORM,
+			USR
+		);
+	}
 	
 	return 0;
 }

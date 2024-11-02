@@ -15,6 +15,7 @@ LIST* memory;
 int compareMemory(void* a, void* b) {
 	return a == b;
 }
+
 int findAddress(void* a, void* b) {
 	return &(((MemoryBlock*)a)->startAddress) == (int*) b;
 }
@@ -52,17 +53,15 @@ void init() {
 	printf("best fit monitor initialized. List size %d\n", ListCount(memory));
 }
 
-
-
 MemoryBlock* bestFit(int size) {
-	MemoryBlock *m, *bestChunk, *best, *nextChunk;
+	MemoryBlock *m, *bestChunk, *best;
 	int bestSize;
 	bestSize = TOTALMEMORY+1;
 	
 	/*find the best chunk of free memory*/
 	if((m = ListFirst(memory)) == NULL) {
 		fprintf(stderr, "Error: No memory in memory list.\n");
-		return NULL;
+		exit(1);
 	}
 	do {
 		int diff;
@@ -99,23 +98,30 @@ MemoryBlock* bestFit(int size) {
 int* BFAllocate(int size){
 	MemoryBlock* m;
 	
+	MonEnter();
+	
 	printf("\n");
 	printf("\n------------------------------------------------------------\n");
 	printf("Allocating %d Memory: Current Memory Layout\n", size);
 	printMemory();
 	
-	m = bestFit(size);
+	while((m = bestFit(size)) == NULL){
+		MonWait(0);
+	}
 	
 	printf("------\n");
 	printf("Allocated %d Memory: New Memory Layout\n", size);
 	printMemory();
 	printf("------------------------------------------------------------\n");
 	
+	MonLeave();
 	return &m->startAddress;
 }
 
 void BFFree(int* address){
-	MemoryBlock *m, *prevChunk, *nextChunk, *newChunk;
+	MemoryBlock *m, *prevChunk, *nextChunk;
+	
+	MonEnter();
 	
 	printf("\n");
 	printf("\n------------------------------------------------------------\n");
@@ -125,13 +131,14 @@ void BFFree(int* address){
 	/*find the block to free*/
 	if((m = ListFirst(memory)) == NULL) {
 		fprintf(stderr, "Error: No memory in memory list.\n");
-		return;
+		exit(1);
 	}
 	m = ListSearch(memory, findAddress, address);
 	if(m == NULL){
 		fprintf(stderr, "Error: Address %d not found.\n", *address);
-		return;
+		exit(1);
 	}
+	
 	m->inUse = 0;
 	
 	/*combine prev chunk with current chunk*/
@@ -142,9 +149,11 @@ void BFFree(int* address){
 		ListRemove(memory);
 		free(prevChunk);
 	}
+	else if(prevChunk != NULL) {
+		m = ListNext(memory);
+	}
 	
 	/*combine next chunk with current chunk*/
-	m = ListCurr(memory);
 	nextChunk = ListNext(memory);
 	if(nextChunk != NULL && nextChunk->inUse == 0){
 		m->endAddress = nextChunk->endAddress;
@@ -157,8 +166,7 @@ void BFFree(int* address){
 	printf("Freed Memory at %d: New Memory Layout\n", *address);
 	printMemory();
 	printf("------------------------------------------------------------\n");
-	
-	
-	
-	
+
+	MonLeave();
+	MonSignal(0);
 }
