@@ -1,0 +1,234 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-10-31
+
+
+
+
+❯ ./best_fit 2 100 50 10 3
+best fit monitor initialized. List size 1
+thread 0, maxSleepTime = 2, maxAllocation = 100, freeProbability = 50, numberOfIterations = 10
+
+thread 0 allocating 84 blocks.
+
+
+------------------------------------------------------------
+Allocating 84 Memory: Current Memory Layout
+startAddress = 0     endAddress = 99    size = 100   inUse = 0     
+------
+Allocated 84 Memory: New Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 0     
+------------------------------------------------------------
+thread 1, maxSleepTime = 2, maxAllocation = 100, freeProbability = 50, numberOfIterations = 10
+
+thread 1 allocating 16 blocks.
+
+
+------------------------------------------------------------
+Allocating 16 Memory: Current Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 0     
+------
+Allocated 16 Memory: New Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 1     
+startAddress = 100   endAddress = 99    size = 0     inUse = 0     
+------------------------------------------------------------
+thread 1 freeing block at 84.
+
+
+------------------------------------------------------------
+Freeing Memory at 84: Current Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 1     
+startAddress = 100   endAddress = 99    size = 0     inUse = 0     
+------
+Freed Memory at 84: New Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 0     
+------------------------------------------------------------
+thread 2, maxSleepTime = 2, maxAllocation = 100, freeProbability = 50, numberOfIterations = 10
+
+thread 2 allocating 87 blocks.
+
+
+------------------------------------------------------------
+Allocating 87 Memory: Current Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 0     
+Allocating Memory: No memory available.
+
+thread 0 allocating 22 blocks.
+
+
+------------------------------------------------------------
+Allocating 22 Memory: Current Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 0     
+Allocating Memory: No memory available.
+
+thread 1 allocating 91 blocks.
+
+
+------------------------------------------------------------
+Allocating 91 Memory: Current Memory Layout
+startAddress = 0     endAddress = 83    size = 84    inUse = 1     
+startAddress = 84    endAddress = 99    size = 16    inUse = 0     
+Allocating Memory: No memory available.
+
+
+
+
+############### No Deadlock Output #############
+
+best fit monitor initialized. List size 1
+thread 0, maxSleepTime = 2, maxAllocation = 10, freeProbability = 50, numberOfIterations = 2
+
+thread 0 allocating 4 blocks.
+
+
+------------------------------------------------------------
+Allocating 4 Memory: Current Memory Layout
+startAddress = 0     endAddress = 99    size = 100   inUse = 0     
+------
+Allocated 4 Memory: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 99    size = 96    inUse = 0     
+------------------------------------------------------------
+thread 1, maxSleepTime = 2, maxAllocation = 10, freeProbability = 50, numberOfIterations = 2
+
+thread 1 allocating 6 blocks.
+
+
+------------------------------------------------------------
+Allocating 6 Memory: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 99    size = 96    inUse = 0     
+------
+Allocated 6 Memory: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 9     size = 6     inUse = 1     
+startAddress = 10    endAddress = 99    size = 90    inUse = 0     
+------------------------------------------------------------
+thread 1 freeing block at 4.
+
+
+------------------------------------------------------------
+Freeing Memory at 4: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 9     size = 6     inUse = 1     
+startAddress = 10    endAddress = 99    size = 90    inUse = 0     
+------
+Freed Memory at 4: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 99    size = 96    inUse = 0     
+------------------------------------------------------------
+thread 2, maxSleepTime = 2, maxAllocation = 10, freeProbability = 50, numberOfIterations = 2
+
+thread 2 allocating 7 blocks.
+
+
+------------------------------------------------------------
+Allocating 7 Memory: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 99    size = 96    inUse = 0     
+------
+Allocated 7 Memory: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 10    size = 7     inUse = 1     
+startAddress = 11    endAddress = 99    size = 89    inUse = 0     
+------------------------------------------------------------
+thread 2 freeing block at 4.
+
+
+------------------------------------------------------------
+Freeing Memory at 4: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 10    size = 7     inUse = 1     
+startAddress = 11    endAddress = 99    size = 89    inUse = 0     
+------
+Freed Memory at 4: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 99    size = 96    inUse = 0     
+------------------------------------------------------------
+
+thread 0 allocating 2 blocks.
+
+
+------------------------------------------------------------
+Allocating 2 Memory: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 99    size = 96    inUse = 0     
+------
+Allocated 2 Memory: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------------------------------------------------------------
+thread 0 freeing block at 0.
+
+
+------------------------------------------------------------
+Freeing Memory at 0: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 1     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------
+Freed Memory at 0: New Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------------------------------------------------------------
+
+thread 2 allocating 1 blocks.
+
+
+------------------------------------------------------------
+Allocating 1 Memory: Current Memory Layout
+startAddress = 0     endAddress = 3     size = 4     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------
+Allocated 1 Memory: New Memory Layout
+startAddress = 0     endAddress = 0     size = 1     inUse = 1     
+startAddress = 1     endAddress = 3     size = 3     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------------------------------------------------------------
+
+thread 1 allocating 7 blocks.
+
+
+------------------------------------------------------------
+Allocating 7 Memory: Current Memory Layout
+startAddress = 0     endAddress = 0     size = 1     inUse = 1     
+startAddress = 1     endAddress = 3     size = 3     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------
+Allocated 7 Memory: New Memory Layout
+startAddress = 0     endAddress = 0     size = 1     inUse = 1     
+startAddress = 1     endAddress = 3     size = 3     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 12    size = 7     inUse = 1     
+startAddress = 13    endAddress = 99    size = 87    inUse = 0     
+------------------------------------------------------------
+thread 1 freeing block at 6.
+
+
+------------------------------------------------------------
+Freeing Memory at 6: Current Memory Layout
+startAddress = 0     endAddress = 0     size = 1     inUse = 1     
+startAddress = 1     endAddress = 3     size = 3     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 12    size = 7     inUse = 1     
+startAddress = 13    endAddress = 99    size = 87    inUse = 0     
+------
+Freed Memory at 6: New Memory Layout
+startAddress = 0     endAddress = 0     size = 1     inUse = 1     
+startAddress = 1     endAddress = 3     size = 3     inUse = 0     
+startAddress = 4     endAddress = 5     size = 2     inUse = 1     
+startAddress = 6     endAddress = 99    size = 94    inUse = 0     
+------------------------------------------------------------
+
+exiting threads

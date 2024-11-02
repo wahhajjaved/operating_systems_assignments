@@ -7,7 +7,7 @@
 #include <Monitor.h>
 #include <best_fit_monitor.h>
 
-#define TOTALMEMORY 50
+#define TOTALMEMORY 100
 
 LIST* memory;
 
