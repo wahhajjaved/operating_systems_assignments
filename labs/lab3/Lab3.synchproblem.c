@@ -7,71 +7,75 @@
 BarberShop
 */
 
-#include <semaphore.h>
+#include <os.h>
 
 #define MAXCUSTOMERS 5
 
 int customers = 0;
-sem_t mutex, customer, barber, customerDone, barberDone; 
+int mutex, customer, barber, customerDone, barberDone; 
 
 void customerThread() {
-	sem_wait(&customer);
+	P(customer);
 	
 	/*If no chairs, then release the lock and return*/
 	if(customers == MAXCUSTOMERS) {
-		sem_post(&customer);
+		V(customer);
 		return;
 	}
 	/*otherwise wait in the chair*/
 	customers++;
 	
-	sem_post(&customer);
-	sem_wait(&barber);
+	V(customer);
+	P(barber);
 	
-	getHairCut();
+	printf(
+		"Customer getting hair cut. \n"
+		"Total number of current customers = %d\n"
+		,customers
+	);
 	
-	sem_post(&customerDone);
-	sem_wait(&barberDone);
 	
-	sem_wait(&customer);
+	V(customerDone);
+	P(barberDone);
+	
+	P(customer);
 	customers--;
-	sem_post(&customer);
+	V(customer);
 }
 
 void barberThread() {
-	sem_wait(&customer);
-	sem_post(&barber);
+	P(customer);
+	V(barber);
 	
-	cutHair();
+	printf(
+		"Barber cutting hair. \n"
+		"Total number of current customers = %d\n"
+		,customers
+	);
 	
-	sem_wait(&customerDone);
-	sem_post(&barberDone);
+	P(customerDone);
+	V(barberDone);
 }
-int main() {
+int init() {
 	
-	if(sem_init(&mutex, 0, 1) == -1){
+	if((mutex = NewSem(1)) == -1){
 		perror("Could not create mutex semaphore.");
 		return 1;
 	}
-	if(sem_init(&customer, 0, 0) == -1){
+	if((customer = NewSem(0)) == -1){
 		perror("Could not create customer semaphore.");
 		return 1;
 	}
-	if(sem_init(&barber, 0, 0) == -1){
+	if((barber = NewSem(0)) == -1){
 		perror("Could not create barber semaphore.");
 		return 1;
 	}
-	if(sem_init(&custormerDone, 0, 0) == -1){
+	if((custormerDone = NewSem(0)) == -1){
 		perror("Could not create custormerDone semaphore.");
 		return 1;
 	}
-	if(sem_init(&barberDone, 0, 0) == -1){
+	if((barberDone = NewSem(0)) == -1){
 		perror("Could not create barberDone semaphore.");
 		return 1;
 	}
-	
-	
-	
-	
-	
 }
