@@ -1,0 +1,128 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-11-06
+
+
+Barber thread starting.
+New customer arrived.
+Barber cutting hair. 
+Total number of current customers = 1
+Customer getting hair cut. 
+Total number of current customers = 1
+Customer leaving.
+New customer arrived.
+Barber cutting hair. 
+Total number of current customers = 1
+Customer getting hair cut. 
+Total number of current customers = 1
+Customer leaving.
+New customer arrived.
+Barber cutting hair. 
+Total number of current customers = 1
+Customer getting hair cut. 
+Total number of current customers = 1
+Customer leaving.
+New customer arrived.
+Barber cutting hair. 
+Total number of current customers = 1
+Customer getting hair cut. 
+Total number of current customers = 1
+Customer leaving.
+New customer arrived.
+Barber cutting hair. 
+Total number of current customers = 1
+Customer getting hair cut. 
+Total number of current customers = 1
+Customer leaving.
+New customer arrived.
+Barber cutting hair. 
+Total number of current customers = 1
+Customer getting hair cut. 
+Total number of current customers = 1
+New customer arrived.
+New customer arrived.
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 3
+Barber cutting hair. 
+Total number of current customers = 3
+New customer arrived.
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 4
+Barber cutting hair. 
+Total number of current customers = 4
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 3
+Barber cutting hair. 
+Total number of current customers = 3
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 3
+Barber cutting hair. 
+Total number of current customers = 3
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 3
+Barber cutting hair. 
+Total number of current customers = 3
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 2
+Barber cutting hair. 
+Total number of current customers = 2
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 2
+Barber cutting hair. 
+Total number of current customers = 2
+New customer arrived.
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 3
+Barber cutting hair. 
+Total number of current customers = 3
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 2
+Barber cutting hair. 
+Total number of current customers = 2
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 2
+Barber cutting hair. 
+Total number of current customers = 2
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 2
+Barber cutting hair. 
+Total number of current customers = 2
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 2
+Barber cutting hair. 
+Total number of current customers = 2
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 1
+Barber cutting hair. 
+Total number of current customers = 1
+New customer arrived.
+Customer leaving.
+Customer getting hair cut. 
+Total number of current customers = 1
+Barber cutting hair. 
+Total number of current customers = 1
+Customer leaving.
+Closing shop.
+
+exiting threads
