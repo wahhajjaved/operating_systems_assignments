@@ -1,6 +1,6 @@
 /*
 @author Wahhaj Javed, muj975, 11135711
-@date 2024-10-16
+@date 2024-11-06
 */
 
 /*
@@ -13,9 +13,9 @@ BarberShop
 #include <Lab3.synchproblem.h>
 
 #define TOTALCUSTOMERS 50
-#define MAXSLEEPTIME 200
+#define MAXSLEEPTIME 75
 int total_customers;
-
+int shopOpen;
 void print_usage() {
 	printf(
 		"Usage ./Lab3.testsynchproblem.c <total_customers>\n"
@@ -25,17 +25,35 @@ void print_usage() {
 }
 void customerMaker() {
 	int i;
-	
+	PID pids[TOTALCUSTOMERS];
 	for(i = 0; i < total_customers; i++) {
 		Sleep(rand() & MAXSLEEPTIME);
-		Create( 
+		pids[i] = Create( 
 			customerThread,
-			65536,
+			4096,
 			"customerThread",
 			NULL,
 			NORM,
 			USR
 		);
+	}
+	while(1) {
+		int j, runningThreads;
+		runningThreads = 0;
+		for(j = 0; j < total_customers; j++) {
+			if(PExists(pids[j])) {
+				runningThreads++;
+			}
+		}
+		if(runningThreads == 0)
+			break;
+		Sleep(100);
+	}
+	printf("Closing shop.\n");
+	shopOpen = 0;
+	Sleep(100);
+	for(i = 0; i < TOTALCUSTOMERS; i++) {
+		Kill(pids[i]);
 	}
 }
 int mainp(int argc, char* argv[]) {
@@ -46,7 +64,7 @@ int mainp(int argc, char* argv[]) {
 	}
 	
 	total_customers = atoi(argv[1]);
-	if(total_customers < 0 || total_customers > TOTALCUSTOMERS) {
+	if(total_customers <= 0 || total_customers > TOTALCUSTOMERS) {
 		print_usage();
 		return 1;
 	}
@@ -54,10 +72,11 @@ int mainp(int argc, char* argv[]) {
 	if(init() == 1) {
 		return 1;
 	}
-	srandom(1);
+	srandom(2);
+	shopOpen = 1;
 	Create( 
 		barberThread,
-		65536,
+		4096,
 		"barber",
 		NULL,
 		NORM,
@@ -71,5 +90,7 @@ int mainp(int argc, char* argv[]) {
 		NORM,
 		USR
 	);
+	
+	return 0;
 
 }

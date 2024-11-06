@@ -6,8 +6,9 @@
 /*
 BarberShop
 */
-
+#include <stdio.h>
 #include <os.h>
+#include <Lab3.synchproblem.h>
 
 #define MAXCUSTOMERS 5
 
@@ -15,15 +16,18 @@ int customers = 0;
 int mutex, customer, barber, customerDone, barberDone; 
 
 void customerThread() {
-	P(customer);
+	P(mutex);
+	printf("New customer arrived.\n");
 	
 	/*If no chairs, then release the lock and return*/
-	if(customers == MAXCUSTOMERS) {
-		V(customer);
+	if(customers >= MAXCUSTOMERS) {
+		printf("No chair available.\n");
+		V(mutex);
 		return;
 	}
 	/*otherwise wait in the chair*/
 	customers++;
+	V(mutex);
 	
 	V(customer);
 	P(barber);
@@ -38,24 +42,29 @@ void customerThread() {
 	V(customerDone);
 	P(barberDone);
 	
-	P(customer);
+	P(mutex);
 	customers--;
-	V(customer);
+	printf("Customer leaving.\n");
+	V(mutex);
 }
 
 void barberThread() {
-	P(customer);
-	V(barber);
-	
-	printf(
-		"Barber cutting hair. \n"
-		"Total number of current customers = %d\n"
-		,customers
-	);
-	Sleep(100);
-	
-	P(customerDone);
-	V(barberDone);
+	printf("Barber thread starting.\n");
+	while(shopOpen) {
+		P(customer);
+		V(barber);
+		
+		printf(
+			"Barber cutting hair. \n"
+			"Total number of current customers = %d\n"
+			,customers
+		);
+		Sleep(50);
+		
+		P(customerDone);
+		V(barberDone);
+	}
+	printf("Barber thread ending.\n");
 }
 int init() {
 	
@@ -71,7 +80,7 @@ int init() {
 		perror("Could not create barber semaphore.");
 		return 1;
 	}
-	if((custormerDone = NewSem(0)) == -1){
+	if((customerDone = NewSem(0)) == -1){
 		perror("Could not create custormerDone semaphore.");
 		return 1;
 	}
@@ -79,4 +88,5 @@ int init() {
 		perror("Could not create barberDone semaphore.");
 		return 1;
 	}
+	return 0;
 }
