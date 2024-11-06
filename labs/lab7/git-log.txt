@@ -1,0 +1,33 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-11-07
+
+
+commit f1c4f1e5c93ca96d1e4e50fc25aba9fda7a75b7b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 14:15:44 2024 -0600
+
+    program output created
+
+commit 7675864061bf84fe697fbb10bbb796e660042de0
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 14:14:58 2024 -0600
+
+    test code commented out
+
+commit 0fe7101c3cd6283cd55bc0e8201407d610f8dfba
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 14:11:10 2024 -0600
+
+    find_victim_slot implemented and tested
+
+commit d847ed66eb4c4a16e3404b4d45e085b717da9bd2
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 12:28:25 2024 -0600
+
+    makefile done
+
+commit ca0145bffa9246e312b5089779a6b1b365beba4d
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 12:25:03 2024 -0600
+
+    Lab 7 Start
