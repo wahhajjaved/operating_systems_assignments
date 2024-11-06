@@ -1,0 +1,44 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-11-06
+
+commit 9a3bf896500241966961baece1e967e1a36a662c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 12:18:29 2024 -0600
+
+    program output file
+
+commit eff9f83a76fa0d94356311ef0524f8f3da927c8e
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 12:16:38 2024 -0600
+
+    Implemented automatic exit.
+
+commit ef7e2e96f7c4034a77e163c6e414666282bc1fb7
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 11:10:05 2024 -0600
+
+    Added sleeps in threads
+
+commit 26e6fee730e055963e228ea3923068a4d5661277
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 11:03:11 2024 -0600
+
+    Added test program and header
+
+commit 94f0ec53a11bd76cf8a06c7b468000892d73762c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 6 11:02:01 2024 -0600
+
+    Supposed to use UBC pthreads
+
+commit 69208e3313846903ea7fe0aa00973cda31aae5be
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Nov 4 12:08:50 2024 -0600
+
+    barbershop book solution implemented
+
+commit 309472c8c0e6b9c79a4392c380a75810d6376c89
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Mon Nov 4 11:38:10 2024 -0600
+
+    lab 3 start
