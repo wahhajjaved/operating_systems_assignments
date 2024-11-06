@@ -33,7 +33,7 @@ int oldestSlot;
  * Returns the pointer to the slot the victim is in. */
 struct page *find_victim_slot() {
     /* TODO: implement second chance page replacement algorithm */
-    
+    struct page *p;
     if (next_slot < nslots) {
         oldestSlot = next_slot;
         return slots + next_slot;
@@ -41,7 +41,7 @@ struct page *find_victim_slot() {
 
     while(1) {
         oldestSlot = (oldestSlot+1) % nslots;
-        struct page *p = &slots[oldestSlot];
+        p = &slots[oldestSlot];
         if(p->reference == 0 && p->dirty == 0) {
             return p;
         }
@@ -94,7 +94,6 @@ void testLoop() {
     );
     
     for(i = 0; i < 10; i++) {
-        /* printSlots(); */
         page = pagesRead[i];
         write = pagesWrite[i];
         if (write) {
@@ -175,7 +174,8 @@ int main(int argc, char **argv) {
         p->dirty = false;
     }
     
-    testLoop();
+    /* test code. Must be run as ./pagerep-sim 10 3 */
+    /* testLoop(); */
     
     while (times < 0 || times-- > 0) {
         page = npages * sqrt((double) rand() / RAND_MAX);
