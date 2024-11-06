@@ -13,6 +13,8 @@ BarberShop
 #include <Lab3.synchproblem.h>
 
 #define TOTALCUSTOMERS 50
+#define MAXSLEEPTIME 200
+int total_customers;
 
 void print_usage() {
 	printf(
@@ -21,9 +23,23 @@ void print_usage() {
 		"total_customers must be between 1 and 100. \n"
 	);
 }
-
-int main(int argc, char* argv[]) {
-	int total_customers, i;
+void customerMaker() {
+	int i;
+	
+	for(i = 0; i < total_customers; i++) {
+		Sleep(rand() & MAXSLEEPTIME);
+		Create( 
+			customerThread,
+			65536,
+			"customerThread",
+			NULL,
+			NORM,
+			USR
+		);
+	}
+}
+int mainp(int argc, char* argv[]) {
+	
 	if(argc != 2) {
 		print_usage();
 		return 1;
@@ -38,7 +54,7 @@ int main(int argc, char* argv[]) {
 	if(init() == 1) {
 		return 1;
 	}
-	
+	srandom(1);
 	Create( 
 		barberThread,
 		65536,
@@ -47,15 +63,13 @@ int main(int argc, char* argv[]) {
 		NORM,
 		USR
 	);
+	Create( 
+		customerMaker,
+		65536,
+		"customerMaker",
+		NULL,
+		NORM,
+		USR
+	);
 
-	for(i = 0; i < total_customers; i++) {
-		Create( 
-			customerThread,
-			65536,
-			"customerThread",
-			NULL,
-			NORM,
-			USR
-		);
-	}
 }

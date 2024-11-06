@@ -52,6 +52,7 @@ void barberThread() {
 		"Total number of current customers = %d\n"
 		,customers
 	);
+	Sleep(100);
 	
 	P(customerDone);
 	V(barberDone);
