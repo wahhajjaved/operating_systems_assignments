@@ -1,0 +1,38 @@
+@author Nakhba Mubashir, epl482, 11317060
+
+commit bd528d18ade13d4ba372ea554b98a4a5bbd3d69c (HEAD -> nakhba_labs)
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 09:48:45 2024 -0600
+
+    added the name and indentifiers
+
+commit 94df01e96726367ccc8e28cbeb98ed65e39c7371
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 09:47:21 2024 -0600
+
+    added the name and indentifiers
+
+commit 84745da5b0bf5743684ea81b6c431bcbdbd4b0dc (origin/nakhba_labs)
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 09:41:08 2024 -0600
+
+    added the outputfile
+
+commit 789127b17363eff2ba5d108952c2f1a14413e085
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 09:34:02 2024 -0600
+
+     implemented the second chance page replacement
+
+commit 81004dda4776b1f8f27f45226a640b3c6d8cf590
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 09:30:25 2024 -0600
+
+    created the makefile for lab7
+
+commit e0a1a6e5d51ebfc7a03d6b2d3dc4b28e313af058
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 09:06:15 2024 -0600
+
+    started the lab7 and copied the file from canvas
+
