@@ -25,12 +25,11 @@ struct page {
 /* Handles a page fault via the second-chance algorithm.
 * Returns the pointer to the slot the victim is in. */
 struct page *find_victim_slot() {
-    /* TODO: implement second chance page replacement algorithm */
+    /* TODO: implement second chance page replacement algorithm */ 
     int index=-1; /* set to -1 becuase it is invalid index*/
     while (1){
         index= (index +1) % nslots; 
         /* ensures that index goes circular*/
-
         if (slots[index].reference ==false){
             /* victim found*/
             break;
