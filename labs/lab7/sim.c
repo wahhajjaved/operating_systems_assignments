@@ -2,8 +2,8 @@
 Identification:
 Author: Jarrod Pas
 Modified by students: Nakhba Mubashir
-                        epl482
-                        11317060
+                   epl482
+                   11317060
 */
 /* Note: code intentionally not commented */
 #include <stdbool.h>
@@ -26,7 +26,21 @@ struct page {
 * Returns the pointer to the slot the victim is in. */
 struct page *find_victim_slot() {
     /* TODO: implement second chance page replacement algorithm */
-    return slots + (rand() % nslots);
+    int index=-1; /* set to -1 becuase it is invalid index*/
+    while (1){
+        index= (index +1) % nslots; 
+        /* ensures that index goes circular*/
+
+        if (slots[index].reference ==false){
+            /* victim found*/
+            break;
+        }
+        else{
+        /* give the page a second chance if refrence is true */
+        slots[index].reference=false;
+        }
+    }
+    return &slots[index];
 }
 
 int main(int argc, char **argv) {
