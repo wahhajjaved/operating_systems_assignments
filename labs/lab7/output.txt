@@ -1,3 +1,6 @@
+author: Nakhba Mubashir, epl482, 11317060
+
+> ./sim 10 3 30
 R on page 9. This triggered a page fault. There was a free slot!
 RW on page 8. This triggered a page fault. There was a free slot!
 RW on page 9.
