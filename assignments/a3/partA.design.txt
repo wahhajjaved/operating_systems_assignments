@@ -1,0 +1,35 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-11-19
+
+A group's share is defined as an integer between 0 and 100. The sum of group
+shares must be between 0 and 100
+
+Process groups are scheduled in batches, according to the number of shares
+allocated to the groups. For 3 groups A, B, and C with shares 1, 2, and 4,
+the schedule will be ABCBCCCC
+
+For groups, each such batch is called the group scheduling cycle
+
+Inside each group, all runnable processes are batched, similar to groups. Each
+such batch is called the process scheduling cycle
+
+In each process scheduling cycle, the CPU is divided evenly amongst all 
+runnable processes. 
+
+Fairness at the group level is defined as the guarenteed proportion of time
+given to a group in each group scheduling cycle. Groups forfeit any unused time
+
+At the process level, fairness is maintained by alloting an equal fraction of 
+the group's cpu time to all runnable processes in each process scheduling cycle
+
+Processes forfeit any unused time. Processes which become runnable while a 
+group is going through its process scheduling cycle must wait until the next
+cycle to be scheduled
+
+
+
+
+
+
+
