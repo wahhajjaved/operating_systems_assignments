@@ -80,3 +80,18 @@ kalloc(void)
     memset((char*)r, 5, PGSIZE); /* fill with junk */
   return (void*)r;
 }
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+int getNumFreePages(void){
+    int freepages=0;
+    struct run *r;
+
+    acquire(&kmem.lock);
+    r = kmem.freelist;
+
+    while(r){
+        freepages++;
+        kmem.freelist = r->next;
+    }
+    release(&kmem.lock);
+    return freepages;
+}

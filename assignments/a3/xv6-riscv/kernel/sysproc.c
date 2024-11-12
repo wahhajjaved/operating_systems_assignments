@@ -103,3 +103,6 @@ sys_trace(void)
     release (&p->lock);
     return 0;
 }
+uint64 sys_getNumFreePages(void){
+    return getNumFreePages();
+}
