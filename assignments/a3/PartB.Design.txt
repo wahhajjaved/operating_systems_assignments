@@ -1,0 +1,19 @@
+# @author Wahhaj Javed, muj975, 11135711
+# @author Nakhba Mubashir, epl482, 11317060
+
+CMPT332-GROUP-67 PartB Copy-on-Write Fork with xv6
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+
+-Add a system call getNumFreePages()
+    in kalloc.c added the getNumFreePages() kalloc is responsible for managing
+    the physical memory,
+    getNumFreePages(): count all the pages in the free list
+        aquire a lock so no other process can modify the free list while we
+        are count
+        struct r = kmem.freelist
+        count all the pages
+        release lock
+        return the freepage number
+
+    the system call: sys_getNumFreePages()
+        in sysprog.c add a function that returns getNumFreePages()
