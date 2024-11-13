@@ -49,7 +49,8 @@ is defined by the macro MAXGROUPS in proc.c
 The shares of each group are stored in int groupshares[MAXGROUPS] in proc.c.
 The int groupNumber is an index into this array.
 
-Default share for a group is 1
+Default share for a group is 1. proc.c:groupsinit() does the initialization
+for the groups when it is called from main.c.
 
 
 
@@ -103,6 +104,7 @@ processschedule[]'s size will need to be NPROC * MAXGROUPSHARE.
 This is a rather large array being declared statically. It would be ideal to
 use the list library instead of using processschedule[], however the assignment
 recommends against using it.
+
 
 
 

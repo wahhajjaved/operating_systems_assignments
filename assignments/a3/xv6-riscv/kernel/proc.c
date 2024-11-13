@@ -446,6 +446,13 @@ wait(uint64 addr)
 }
 
 /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+void groupsinit() {
+  int i;
+  for(i = 0; i < MAXGROUPS; i++){
+    groupshares[i] = 1;
+  }
+}
+
 void schedulegroups() {
 
 }
