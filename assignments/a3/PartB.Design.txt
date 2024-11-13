@@ -4,16 +4,29 @@
 CMPT332-GROUP-67 PartB Copy-on-Write Fork with xv6
 /*CMPT 332 GROUP 67 Change, Fall 2024 */
 
--Add a system call getNumFreePages()
-    in kalloc.c added the getNumFreePages() kalloc is responsible for managing
-    the physical memory,
-    getNumFreePages(): count all the pages in the free list
+Add a system call getNumFreePages()
+    -in kalloc.c added the getNumFreePages() kalloc is responsible for 
+    managing the physical memory,
+    -getNumFreePages(): count all the pages in the free list
         aquire a lock so no other process can modify the free list while we
         are count
         struct r = kmem.freelist
         count all the pages
         release lock
         return the freepage number
-
-    the system call: sys_getNumFreePages()
+    -the system call: sys_getNumFreePages()
         in sysprog.c add a function that returns getNumFreePages()
+
+tracking the refrence count of the pages
+    -a struct called refCount to store the refrence count
+    the arry size for the count is calculated by [(phystop-kernbase)/pgsize]
+    phystop is physical memory address, KERNBASE is th starting address of RAM
+    Pgsize is the size of a page
+    struct refCount{
+        int count[(phystop-kernbase)/pgsize];
+        spinlock lock;
+        }
+    -initRefCount(): initialize and set the refrence count to 1
+    -incriRefCount(): incriments the refrence count and returns it
+    -decriRefCount(): decriments the refrence count and returns it
+
