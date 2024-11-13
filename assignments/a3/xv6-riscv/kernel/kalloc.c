@@ -95,3 +95,38 @@ int getNumFreePages(void){
     release(&kmem.lock);
     return freepages;
 }
+struct refrenceCount{
+        int count[(PHYSTOP - KERNBASE) / PGSIZE];
+        spinlock lock;
+}refCount;
+
+void initRefCount(uint64 pa){
+    /*checks if pa starts at starting of the physical address*/
+    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+
+    aquire(&refCount.lock);
+    refCount.count[(pa - KERNBASE) / PGSIZE]=1;
+    release[&refCount.lock];
+}
+
+void incriRefCount(uint64 pa){
+    int count;
+    /*checks if pa starts at starting of the physical address*/
+    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+    
+    aquire(&refCount.lock);
+    count = refCount.count[(pa - KERNBASE) / PGSIZE]++;
+    release[&refCount.lock];
+    return count;
+}
+
+void decriRefCount(uint64 pa){
+    int count;
+    /*checks if pa starts at starting of the physical address*/
+    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+
+    aquire(&refCount.lock);
+    count = refCount.count[(pa - KERNBASE) / PGSIZE]--;
+    release[&refCount.lock];
+    return count;
+}
