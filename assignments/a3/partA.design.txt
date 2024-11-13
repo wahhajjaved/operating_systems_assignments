@@ -5,8 +5,8 @@
 
 [ Overall Scheduling Algorithm ]
 
-A group's share is defined as an integer between 0 and 100. The sum of group
-shares must be between 0 and 100
+A group's share is defined as an integer between 0 and MAXGROUPSHARE. The sum
+of group shares must be between 0 and MAXGROUPSHARE
 
 Process groups are scheduled in batches, according to the number of shares
 allocated to the groups. For 3 groups A, B, and C with shares 1, 2, and 4,
@@ -91,14 +91,14 @@ to schedule the next batch
 groupshares[] needs to have MAXGROUPS elements since each element is the share
 of that group.
 
-groupschedule[] needs to have 100 elements because the sum of all group shares
-must not be greater than 100.
+groupschedule[] needs to have MAXGROUPSHARE elements because the sum of all
+group shares must not be greater than MAXGROUPSHARE.
 
 processschedule[]'s size is tricky. The max number of processes in xv6 is
 defined by NPROC. If one group has NPROC runnable processes, then they all
 need to be added to processschedule[]. However, in each scheduling cycle, a
-group may appear more than once upto 100 times. So processschedule[]'s size
-will need to be NPROC * 100.
+group may appear more than once upto MAXGROUPSHARE times. So
+processschedule[]'s size will need to be NPROC * MAXGROUPSHARE.
 
 This is a rather large array being declared statically. It would be ideal to
 use the list library instead of using processschedule[], however the assignment
