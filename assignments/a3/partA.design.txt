@@ -86,7 +86,23 @@ to schedule the next batch
 
 
 
+[ Array Sizes ]
 
+groupshares[] needs to have MAXGROUPS elements since each element is the share
+of that group.
+
+groupschedule[] needs to have 100 elements because the sum of all group shares
+must not be greater than 100.
+
+processschedule[]'s size is tricky. The max number of processes in xv6 is
+defined by NPROC. If one group has NPROC runnable processes, then they all
+need to be added to processschedule[]. However, in each scheduling cycle, a
+group may appear more than once upto 100 times. So processschedule[]'s size
+will need to be NPROC * 100.
+
+This is a rather large array being declared statically. It would be ideal to
+use the list library instead of using processschedule[], however the assignment
+recommends against using it.
 
 
 
