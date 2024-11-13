@@ -71,12 +71,13 @@ optimization could be to only call schedulegroups() in setshare(), but this is
 not done in the current implementation
 
 processschedule[] contains the order in which the process will run in the
-current cycle. This array is filled by scheduleprocesses() in a similar manner
-to groupschedule[]. However, since each process in a group has the same share,
-processes only appear once inside processschedule[].
+current cycle. This array is filled by iterating over groupschedule[], getting
+all processes for that group, and adding them to processschedule[].
 
 Processes are added to processschedule[] in the same order as they appear in
 proc.c:struct proc proc[NPROC]
+
+Only RUNNABLE processes are added to processschedule[]
 
 Once processschedule[] is fully set for the current cycle, scheduler() then
 simply pulls the next process from the array and runs it. Once all processes
