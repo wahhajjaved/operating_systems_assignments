@@ -6,6 +6,16 @@
 #include "proc.h"
 #include "defs.h"
 
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+#define MAXGROUPS 10
+#define MAXGROUPSHARE 100
+int groupshares[MAXGROUPS];
+int groupschedule[MAXGROUPSHARE];
+struct proc *processschedule[NPROC * MAXGROUPSHARE];
+int processscheduleindex = 0;
+/* ************************************** */
+
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -434,6 +444,17 @@ wait(uint64 addr)
     sleep(p, &wait_lock);  /*DOC: wait-sleep */
   }
 }
+
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+void schedulegroups() {
+
+}
+
+void scheduleprocesses() {
+
+}
+/* ***************************** */
+
 
 /* Per-CPU process scheduler. */
 /* Each CPU calls scheduler() after setting itself up. */

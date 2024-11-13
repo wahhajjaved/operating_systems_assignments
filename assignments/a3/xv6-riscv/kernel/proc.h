@@ -93,6 +93,7 @@ struct proc {
   int pid;                     /* Process ID */
 
   int traceMask;             /* added for part E Mask of syscall for trace*/
+  int groupnumber;           /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
 
   /* wait_lock must be held when using this: */
   struct proc *parent;         /* Parent process */
