@@ -11,6 +11,7 @@
 #define MAXGROUPSHARE 100
 int groupshares[MAXGROUPS];
 int groupschedule[MAXGROUPSHARE];
+int groupschedulesize;
 struct proc *processschedule[NPROC * MAXGROUPSHARE];
 int processscheduleindex = 0;
 /* ************************************** */
@@ -454,6 +455,31 @@ void groupsinit() {
 }
 
 void schedulegroups() {
+  int i, j, totalshares, currentshares[MAXGROUPS];
+
+
+  totalshares = 0;
+  for(i = 0; i < MAXGROUPS; i++) {
+    currentshares[i] = groupshares[i];
+    totalshares += groupshares[i];
+  }
+
+  for(i = 0; i < MAXGROUPSHARE; i++){
+    groupschedule[i] = -1;
+  }
+
+  groupschedulesize = 0;
+  while(totalshares) {
+    for(i = 0; i < MAXGROUPS; i++) {
+      if(currentshares[i]) {
+        groupschedule[groupschedulesize] = i;
+        groupschedulesize++;
+        currentshares[i]--;
+        totalshares--;
+      }
+    }
+  }
+
 
 }
 
