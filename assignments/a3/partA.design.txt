@@ -2,6 +2,9 @@
 @author Nakhba Mubashir, epl482, 11317060
 @date 2024-11-19
 
+
+[ Overall Scheduling Algorithm ]
+
 A group's share is defined as an integer between 0 and 100. The sum of group
 shares must be between 0 and 100
 
@@ -14,18 +17,71 @@ For groups, each such batch is called the group scheduling cycle
 Inside each group, all runnable processes are batched, similar to groups. Each
 such batch is called the process scheduling cycle
 
-In each process scheduling cycle, the CPU is divided evenly amongst all 
-runnable processes. 
+In each process scheduling cycle, the CPU is divided evenly amongst all
+runnable processes.
 
 Fairness at the group level is defined as the guarenteed proportion of time
 given to a group in each group scheduling cycle. Groups forfeit any unused time
 
-At the process level, fairness is maintained by alloting an equal fraction of 
+At the process level, fairness is maintained by alloting an equal fraction of
 the group's cpu time to all runnable processes in each process scheduling cycle
 
-Processes forfeit any unused time. Processes which become runnable while a 
+Processes forfeit any unused time. Processes which become runnable while a
 group is going through its process scheduling cycle must wait until the next
 cycle to be scheduled
+
+
+
+
+
+[ Groups ]
+
+Each process is is tracked by struct proc, which is defined in proc.h.
+
+Each process must belong to a group. The integer groupnumber has been added to
+struct proc to track the group for the process
+
+Ideally, there should be functionality in the kernel to allow the creation of
+new groups. However, this will requiring implementing more system calls so to
+keep things simple, only set number of groups are created at compile time. This
+is defined by the macro MAXGROUPS in proc.c
+
+The shares of each group are stored in int groupshares[MAXGROUPS] in proc.c.
+The int groupNumber is an index into this array.
+
+Default share for a group is 1
+
+
+
+[ Scheduler ]
+
+Scheduling is done in proc.c:scheduler(). This function calls two helpers,
+schedulegroups() and scheduleprocesses(), to handle the scheduling.
+
+For the current group scheduling cycle, the schedule is stored in
+groupschedule[]. schedulegroups() fills this array when called. This is done
+by simply adding the group number to groupschedule[] the same number of times
+as its share.
+
+Groups are added in alternating order so that one group doesn't hog the cpu for
+an extended period of time. See example in [ Overall Scheduling Algorithm ]
+
+Since the group schedule will only change when its share changes, an
+optimization could be to only call schedulegroups() in setshare(), but this is
+not done in the current implementation
+
+processschedule[] contains the order in which the process will run in the
+current cycle. This array is filled by scheduleprocesses() in a similar manner
+to groupschedule[]. However, since each process in a group has the same share,
+processes only appear once inside processschedule[].
+
+Processes are added to processschedule[] in the same order as they appear in
+proc.c:struct proc proc[NPROC]
+
+Once processschedule[] is fully set for the current cycle, scheduler() then
+simply pulls the next process from the array and runs it. Once all processes
+have been run, schedulegroups() and scheduleprocesses() are called again
+to schedule the next batch
 
 
 
