@@ -456,7 +456,7 @@ void groupsinit() {
 }
 
 void schedulegroups() {
-  int i, j, totalshares, currentshares[MAXGROUPS];
+  int i, totalshares, currentshares[MAXGROUPS];
 
 
   totalshares = 0;
