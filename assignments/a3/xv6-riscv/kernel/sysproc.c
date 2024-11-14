@@ -103,3 +103,45 @@ sys_trace(void)
     release (&p->lock);
     return 0;
 }
+
+
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+uint64
+sys_setprocessgroup(void)
+{
+  int pid, groupnumber;
+  argint(0, &pid);
+  argint(1, &groupnumber);
+
+  return setprocessgroup(pid, groupnumber);
+
+
+
+}
+
+uint64
+sys_setshare(void)
+{
+  int groupnumber, newshare, remainingshares, r1, r2;
+  uint64 premainingshares;
+
+  argint(0, &groupnumber);
+  argint(1, &newshare);
+  argptr(2, &premainingshares);
+
+  r1 = setshare(groupnumber, newshare, &remainingshares);
+  r2 = copyout(
+        myproc()->pagetable,
+        premainingshares,
+        (char *)&remainingshares,
+        sizeof(int)
+      );
+
+  if(r1 == 1 && r1 == 1)
+    return 1;
+
+  return -1;
+
+}
+
+/* **********************************  */

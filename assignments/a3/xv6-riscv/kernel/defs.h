@@ -108,6 +108,11 @@ int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
 int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
 void            procdump(void);
 
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+int             setshare(int groupnumber, int newshare, int* remainingshares);
+int             setprocessgroup(int pid, int groupnumber);
+/* ************************************ */
+
 /* swtch.S */
 void            swtch(struct context*, struct context*);
 
