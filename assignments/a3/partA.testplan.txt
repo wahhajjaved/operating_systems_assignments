@@ -26,7 +26,7 @@ Expected Output: There should be 3 processes: init, sh, and schedulertests.
 
 Test Number: 2
 Description: change schedulertests' group using setprocessgroup(): negative pid
-Input: pid = -1
+Input: pid = -1, groupnumber = 1
 Expected Output: setprocessgroup() returns -1
                     procdump() shows schedulertests is still in group 0
 
@@ -34,7 +34,7 @@ Expected Output: setprocessgroup() returns -1
 Test Number: 3
 Description: change schedulertests' group using setprocessgroup(): pid
                 not found
-Input: pid = 10
+Input: pid = 10, groupnumber = 1
 Expected Output: setprocessgroup() returns -1
                     procdump() shows schedulertests is still in group 0
 
@@ -42,7 +42,7 @@ Expected Output: setprocessgroup() returns -1
 Test Number: 4
 Description: change schedulertests' group using setprocessgroup(): negative
                 group number
-Input: groupnumber = -1
+Input: pid = getpid(), groupnumber = -1
 Expected Output: setprocessgroup() returns -1
                     procdump() shows schedulertests is still in group 0
 
@@ -50,7 +50,7 @@ Expected Output: setprocessgroup() returns -1
 Test Number: 5
 Description: change schedulertests' group using setprocessgroup(): unknown
                 group number
-Input: groupnumber = 20
+Input: pid = getpid(), groupnumber = 20
 Expected Output: setprocessgroup() returns -1
                     procdump() shows schedulertests is still in group 0
 
@@ -58,7 +58,7 @@ Expected Output: setprocessgroup() returns -1
 Test Number: 6
 Description: change schedulertests' group using setprocessgroup(): Change
                 current process's group to 5
-Input: groupnumber = 5
+Input: pid = getpid(), groupnumber = 5
 Expected Output: setprocessgroup() returns 0
                     procdump() shows schedulertests is in group 5
 
