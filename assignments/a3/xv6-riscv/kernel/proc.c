@@ -512,7 +512,6 @@ void scheduleprocesses() {
 void
 scheduler(void)
 {
-  int i;
   struct proc *p;
   struct cpu *c = mycpu();
 
