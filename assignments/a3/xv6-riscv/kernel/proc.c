@@ -16,6 +16,7 @@ struct proc *processschedule[NPROC * MAXGROUPSHARE];
 int processschedulesize;
 int processscheduleindex;
 struct spinlock processscheduleindexlock;
+
 /* ************************************** */
 
 
@@ -449,6 +450,31 @@ wait(uint64 addr)
 }
 
 /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+static inline int calculateremainingshares() {
+  int i, total;
+  total = 0;
+  for(i = 0; i < MAXGROUPS; i++) {
+    total += groupshares[i];
+  }
+  return MAXGROUPSHARE - total;
+}
+
+int setshare(int groupnumber, int newshare, int* remainingshares) {
+  *remainingshares = calculateremainingshares();
+
+  if(groupnumber < 0 || groupnumber > MAXGROUPS-1) {
+    return -1;
+  }
+
+  if(newshare < 0 || newshare > *remainingshares) {
+    return -1;
+  }
+
+  groupshares[groupnumber] = newshare;
+  *remainingshares = calculateremainingshares();
+  return 0;
+}
+
 void groupsinit() {
   int i;
   for(i = 0; i < MAXGROUPS; i++){
