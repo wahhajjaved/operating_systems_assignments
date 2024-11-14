@@ -13,7 +13,8 @@ int groupshares[MAXGROUPS];
 int groupschedule[MAXGROUPSHARE];
 int groupschedulesize;
 struct proc *processschedule[NPROC * MAXGROUPSHARE];
-int processscheduleindex = 0;
+int processschedulesize;
+int processscheduleindex;
 /* ************************************** */
 
 
@@ -479,12 +480,23 @@ void schedulegroups() {
       }
     }
   }
-
-
 }
 
 void scheduleprocesses() {
+  int i;
+  struct proc *p;
 
+  processschedulesize = 0;
+  for(i = 0; i < groupschedulesize; i++) {
+    for(p = proc; p < &proc[NPROC]; p++) {
+      acquire(&p->lock);
+      if(p->groupnumber == groupschedule[i] && p->state == RUNNABLE) {
+        processschedule[processschedulesize] = p;
+        processschedulesize++;
+      }
+      release(&p->lock);
+    }
+  }
 }
 /* ***************************** */
 
