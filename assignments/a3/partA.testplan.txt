@@ -1,0 +1,107 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-11-19
+
+
+Tests are located in user/schedulertests.c. This file contains a combination
+of manual and automatic tests. Test output is printed to console.
+schedulertests should be run immediately after boot.
+
+
+[ setprocessgroup() ]
+
+Processes by default have the same group as their parent. Since the first
+process isn't explictly assigned a group, it will have the default group of 0.
+proc.c:procdump() has been modified to also print out the group number of
+processes. This can be used to manually test if process groups are being
+assigned properly
+
+Test Number: 1
+Description: Immediately after boot, call procdump() to check if all
+                processes are in group 0
+Input: none
+Expected Output: There should be 3 processes: init, sh, and schedulertests.
+                    All 3 should have group = 0
+
+
+Test Number: 2
+Description: change schedulertests' group using setprocessgroup(): negative pid
+Input: pid = -1
+Expected Output: setprocessgroup() returns -1
+                    procdump() shows schedulertests is still in group 0
+
+
+Test Number: 3
+Description: change schedulertests' group using setprocessgroup(): pid
+                not found
+Input: pid = 10
+Expected Output: setprocessgroup() returns -1
+                    procdump() shows schedulertests is still in group 0
+
+
+Test Number: 4
+Description: change schedulertests' group using setprocessgroup(): negative
+                group number
+Input: groupnumber = -1
+Expected Output: setprocessgroup() returns -1
+                    procdump() shows schedulertests is still in group 0
+
+
+Test Number: 5
+Description: change schedulertests' group using setprocessgroup(): unknown
+                group number
+Input: groupnumber = 20
+Expected Output: setprocessgroup() returns -1
+                    procdump() shows schedulertests is still in group 0
+
+
+Test Number: 6
+Description: change schedulertests' group using setprocessgroup(): Change
+                current process's group to 5
+Input: groupnumber = 5
+Expected Output: setprocessgroup() returns 0
+                    procdump() shows schedulertests is in group 5
+
+
+
+
+
+[ setshare() ]
+
+There is no way to see whether the shares are getting updated properly without
+adding another system call that exposes the kernel so these tests only check
+if setshare() is handling the arguments properly
+
+
+Test Number: 7
+Description: setshare(): negative groupnumber
+Input: groupnumber = -1, newshare = 2
+Expected Output: setshare() returns -1. remainingshares = 90
+
+
+Test Number: 8
+Description: setshare(): large groupnumber
+Input: groupnumber = 20, newshare = 2
+Expected Output: setshare() returns -1. remainingshares = 90
+
+
+Test Number: 9
+Description: setshare(): negative newshare
+Input: groupnumber = 0, newshare = -1
+Expected Output: setshare() returns -1. remainingshares = 90
+
+
+Test Number: 10
+Description: setshare(): newshare that pushes sum of shares over MAXGROUPSHARE
+Input: groupnumber = 0, newshare = 100
+Expected Output: setshare() returns -1. remainingshares = 90
+
+
+Test Number: 11
+Description: setshare(): remainingshares computer correctly
+Input: groupnumber = 0, newshare = 5
+Expected Output: setshare() returns 0. remainingshares = 85
+
+
+
+
