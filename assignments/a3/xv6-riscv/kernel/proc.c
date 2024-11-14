@@ -511,6 +511,7 @@ void scheduleprocesses() {
 void
 scheduler(void)
 {
+  int i;
   struct proc *p;
   struct cpu *c = mycpu();
 
@@ -522,7 +523,11 @@ scheduler(void)
     intr_on();
 
     int found = 0;
-    for(p = proc; p < &proc[NPROC]; p++) {
+    /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+    schedulegroups();
+    scheduleprocesses();
+    for(i = 0; i < processschedulesize; i++) {
+      p = processschedule[i];
       acquire(&p->lock);
       if(p->state == RUNNABLE) {
         /* Switch to chosen process.  It is the process's job */
