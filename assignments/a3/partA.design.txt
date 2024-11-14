@@ -106,5 +106,35 @@ use the list library instead of using processschedule[], however the assignment
 recommends against using it.
 
 
+[ Locking ]
+
+All locks used here are spinlocks because the operations are quick. Building
+the scheduler might be the longest task but when its being built, nothing
+should be running anyways so spinlocks are used here as well for simplicity.
+
+In xv6, each core runs its own scheduler(). This means that schedulegroups()
+and scheduleprocesses() can be called at the same time from multiple cores.
+
+For proper scheduling, schedulegroups() and scheduleprocesses() must only be
+called by a single core. While the schedule for the next cycle is being built
+the other cores must wait until its done.
+
+This condition is enforced by using a global scheduler lock called
+buildschedulelock. This lock must be held before schedulegroups() and
+scheduleprocesses() can be called
+
+It is possible for multiple cores to attempt to acquire the lock at the same
+time. If this happens, then as soon as one core is done building the schedule,
+the next one will try rebuild it
+
+To prevent this, the flag buildschedule is used. After acquiring the lock,
+schedulegroups() and scheduleprocesses() are only called if the flag is set.
+The flag is set when processschedule[] has been exhausted
+
+The processes to run are stored inside processschedule[]. This array is shared
+and therefore each core must synchronize its iteration over it. This is done
+using the shared variable processscheduleindex and its lock
+processscheduleindexlock.
+
 
 
