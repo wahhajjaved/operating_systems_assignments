@@ -21,3 +21,7 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_trace  22
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+#define SYS_setprocessgroup  23
+#define SYS_setshare  24
+/* ****************************** */
