@@ -360,12 +360,14 @@ uvmcow(void){
     struct proc *p = myproc();
     f_add= r_stval(); /* fault address*/
 
-    if((pte = walk(p->pagetable, f_add, 0)) == 0)
+    if((pte = walk(p->pagetable, f_add, 0)) == 0){
         panic("uvmcopy: pte should exist");
-  
-    if((*pte & PTE_V) == 0)
+        return -1;
+    }
+    if((*pte & PTE_V) == 0){
       panic("uvmcow: page not present");
-    
+      return -1;
+    }
     *pte |= PTE_W;/*sets write permission*/  
     pa = PTE2PA(*pte);
     refCount=decriRefCount(pa);
