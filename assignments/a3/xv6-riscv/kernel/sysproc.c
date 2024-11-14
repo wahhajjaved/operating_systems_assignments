@@ -107,6 +107,13 @@ sys_trace(void)
 
 /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
 uint64
+sys_procdump(void)
+{
+  procdump();
+  return 0;
+}
+
+uint64
 sys_setprocessgroup(void)
 {
   int pid, groupnumber;

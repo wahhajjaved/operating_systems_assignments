@@ -24,4 +24,5 @@
 /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
 #define SYS_setprocessgroup  23
 #define SYS_setshare  24
+#define SYS_procdump  25
 /* ****************************** */

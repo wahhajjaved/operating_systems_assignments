@@ -106,6 +106,7 @@ extern uint64 sys_trace(void);
 /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
 extern uint64 sys_setprocessgroup(void);
 extern uint64 sys_setshare(void);
+extern uint64 sys_procdump(void);
 /* ****************************** */
 
 /* An array mapping syscall numbers from syscall.h */
@@ -136,7 +137,8 @@ static uint64 (*syscalls[])(void) = {
 
 /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
 [SYS_setprocessgroup]  sys_setprocessgroup,
-[SYS_setshare]  sys_setshare
+[SYS_setshare]  sys_setshare,
+[SYS_procdump]  sys_procdump
 /* ****************************** */
 
 };
