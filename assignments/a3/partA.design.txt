@@ -52,6 +52,9 @@ The int groupNumber is an index into this array.
 Default share for a group is 1. proc.c:groupsinit() does the initialization
 for the groups when it is called from main.c.
 
+New processes inherit the group number of their parent process. Group number
+of a process can be changed by using the setprocessgroup() system call
+
 
 
 [ Scheduler ]
@@ -108,9 +111,6 @@ recommends against using it.
 
 [ Synchronization ]
 
-All locks used here are spinlocks because the operations are quick. Building
-the scheduler might be the longest task but when its being built, nothing
-should be running anyways so spinlocks are used here as well for simplicity.
 
 In xv6, each core runs its own scheduler(). This means that schedulegroups()
 and scheduleprocesses() can be called at the same time from multiple cores.
@@ -139,6 +139,9 @@ The synchronization requirements are as follows:
 All of these conditions can be satisfied with a single lock on
 processscheduleindex called processscheduleindexlock
 
+Building the scheduler might be a "long" task but when its being built, nothing
+should be running anyways so spinlocks are used here as well for simplicity.
+
 Requirement 3 is satisfied by only reading and writing processscheduleindex
 when processscheduleindexlock is held
 
@@ -153,3 +156,23 @@ schedule. When the next core gets this lock, the schedule will have been built
 and its check to see if its needs to be built will fail. This satisfies
 requirement 2
 
+
+[ System Calls ]
+
+Two additional system calls are needed for the scheduler to work properly.
+
+The first is setshare() which is the bonus assignment requirement. This system
+call takes in a group number and its new share value, and then simply updates
+groupshares[] with the new value
+
+It also takes in an output parameter, whose value is set to the remaining
+number of shares that can be allotted. This is basically
+MAXGROUPSHARE - sum of current shares
+
+setshare() returns 0 on success and -1 on error
+
+The second system call is called setprocessgroup(), which takes in a pid and
+a group number and moves that process to another group by changing its
+groupnumber in its process table entry
+
+setprocessgroup() returns 0 on success and -1 on error
