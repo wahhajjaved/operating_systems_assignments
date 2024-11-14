@@ -15,6 +15,7 @@ int groupschedulesize;
 struct proc *processschedule[NPROC * MAXGROUPSHARE];
 int processschedulesize;
 int processscheduleindex;
+struct spinlock processscheduleindexlock;
 /* ************************************** */
 
 
@@ -522,33 +523,39 @@ scheduler(void)
     /* processes are waiting. */
     intr_on();
 
-    int found = 0;
-    /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
-    schedulegroups();
-    scheduleprocesses();
-    for(i = 0; i < processschedulesize; i++) {
-      p = processschedule[i];
-      acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        /* Switch to chosen process.  It is the process's job */
-        /* to release its lock and then reacquire it */
-        /* before jumping back to us. */
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
-
-        /* Process is done running for now. */
-        /* It should have changed its p->state before coming back. */
-        c->proc = 0;
-        found = 1;
-      }
-      release(&p->lock);
+    acquire(&processscheduleindexlock);
+    if(processscheduleindex >= processschedulesize) {
+      schedulegroups();
+      scheduleprocesses();
+      processscheduleindex = 0;
     }
-    if(found == 0) {
+
+    if(processschedulesize == 0) {
       /* nothing to run; stop running on this core until an interrupt. */
+      release(&processscheduleindexlock);
       intr_on();
       asm volatile("wfi");
+      continue;
     }
+
+    p = processschedule[processscheduleindex];
+    processscheduleindex++;
+    release(&processscheduleindexlock);
+
+    acquire(&p->lock);
+    if(p->state == RUNNABLE) {
+      /* Switch to chosen process.  It is the process's job */
+      /* to release its lock and then reacquire it */
+      /* before jumping back to us. */
+      p->state = RUNNING;
+      c->proc = p;
+      swtch(&c->context, &p->context);
+
+      /* Process is done running for now. */
+      /* It should have changed its p->state before coming back. */
+      c->proc = 0;
+    }
+    release(&p->lock);
   }
 }
 
