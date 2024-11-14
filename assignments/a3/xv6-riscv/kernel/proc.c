@@ -475,6 +475,31 @@ int setshare(int groupnumber, int newshare, int* remainingshares) {
   return 0;
 }
 
+int setprocessgroup(int pid, int groupnumber) {
+  struct proc *p;
+
+  if(groupnumber < 0 || groupnumber > MAXGROUPS-1) {
+    return -1;
+  }
+  if(pid < 0) {
+    return -1;
+  }
+
+  for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if(p->pid == pid){
+      if(p->state != UNUSED){
+        p->groupnumber = groupnumber;
+      }
+      release(&p->lock);
+      return 0;
+    }
+    release(&p->lock);
+  }
+
+  return -1;
+}
+
 void groupsinit() {
   int i;
   for(i = 0; i < MAXGROUPS; i++){
