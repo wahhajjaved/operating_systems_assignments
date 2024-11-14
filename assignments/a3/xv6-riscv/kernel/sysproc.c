@@ -127,7 +127,7 @@ sys_setshare(void)
 
   argint(0, &groupnumber);
   argint(1, &newshare);
-  argptr(2, &premainingshares);
+  argaddr(2, &premainingshares);
 
   r1 = setshare(groupnumber, newshare, &remainingshares);
   r2 = copyout(
@@ -137,7 +137,7 @@ sys_setshare(void)
         sizeof(int)
       );
 
-  if(r1 == 1 && r1 == 1)
+  if(r1 == 1 && r2 == 1)
     return 1;
 
   return -1;
