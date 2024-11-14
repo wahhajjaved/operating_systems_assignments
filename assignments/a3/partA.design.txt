@@ -106,7 +106,7 @@ use the list library instead of using processschedule[], however the assignment
 recommends against using it.
 
 
-[ Locking ]
+[ Synchronization ]
 
 All locks used here are spinlocks because the operations are quick. Building
 the scheduler might be the longest task but when its being built, nothing
@@ -119,22 +119,37 @@ For proper scheduling, schedulegroups() and scheduleprocesses() must only be
 called by a single core. While the schedule for the next cycle is being built
 the other cores must wait until its done.
 
-This condition is enforced by using a global scheduler lock called
-buildschedulelock. This lock must be held before schedulegroups() and
-scheduleprocesses() can be called
-
-It is possible for multiple cores to attempt to acquire the lock at the same
-time. If this happens, then as soon as one core is done building the schedule,
-the next one will try rebuild it
-
-To prevent this, the flag buildschedule is used. After acquiring the lock,
-schedulegroups() and scheduleprocesses() are only called if the flag is set.
-The flag is set when processschedule[] has been exhausted
-
 The processes to run are stored inside processschedule[]. This array is shared
-and therefore each core must synchronize its iteration over it. This is done
-using the shared variable processscheduleindex and its lock
-processscheduleindexlock.
+and therefore each core must synchronize its iteration over it.
+
+processscheduleindex is used to iterate over processschedule[]. Each core gets
+the next process from processschedule[] and then increments
+processscheduleindex.
 
 
+The synchronization requirements are as follows:
+
+    1. Multiple cores must not build the schedule at the same time
+    2. Once one core has built a schedule, another core must not immediately
+        rebuild it
+    3. Two cores must not pick the same process to run and must not skip
+        processes
+
+
+All of these conditions can be satisfied with a single lock on
+processscheduleindex called processscheduleindexlock
+
+Requirement 3 is satisfied by only reading and writing processscheduleindex
+when processscheduleindexlock is held
+
+Once processscheduleindexlock has been acquired by a core, it checks if the
+schedule needs to be rebuilt. If it does, it will rebuild it. Since only one
+core can hold this lock at any given time, requirement 1 is satisfied
+
+If multiple cores are waiting to acquire this lock, the check to see if the
+schedule needs to be rebuilt happens inside the critical section of
+processscheduleindexlock. Therefore, the first core to get this lock builds the
+schedule. When the next core gets this lock, the schedule will have been built
+and its check to see if its needs to be built will fail. This satisfies
+requirement 2
 
