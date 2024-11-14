@@ -335,11 +335,10 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
     memmove(mem, (char*)pa, PGSIZE);*/
 
     if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
-      return -1;
-     /*kfree(mem);
-      goto err;*/
+     kfree(mem);
+     goto err;
     }
-    
+    sfence_vma(); /* flush stale entries from the TLB. */
   }
 
   return 0;

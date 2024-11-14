@@ -29,4 +29,22 @@ tracking the refrence count of the pages
     -initRefCount(): initialize and set the refrence count to 1
     -incriRefCount(): incriments the refrence count and returns it
     -decriRefCount(): decriments the refrence count and returns it
+ 
+
+uvmcopy:
+    changes made:
+        set pte to read only
+        incriment the ref count
+        and flush the TLB
+
+    -used ~PTE_W instead of PTE_R to set to read only, to clear only write 
+    bit while preserving all other bits in PTE,PTE_R will zero out all the
+    bits in PTE, which can cause other problems
+    -sfence_vma() /* flush stale entries from the TLB. */
+    - removed for uvmcow    
+        /*if((mem = kalloc()) == 0)
+        goto err;
+        memmove(mem, (char*)pa, PGSIZE);*/
+
+Trap handling
 
