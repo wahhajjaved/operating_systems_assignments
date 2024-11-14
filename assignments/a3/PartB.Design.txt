@@ -47,7 +47,9 @@ uvmcopy:
         memmove(mem, (char*)pa, PGSIZE);*/
 
 Trap handling: in trap.c
-
+    -devintr() return 3 if page fault for write to read only (scause==0xf)
+    - usertrap checks if devintr() returns 3 and page fault is because of 
+        uvmcow, if uvmcow return -1 then illegal address
 uvmcow:
     Pseudocode:
         get the current process with myproc()
@@ -64,6 +66,6 @@ uvmcow:
     used uvmcopy as refrencefor structure and error handling
     r_stval(): supervised trap value in riscv.h 
     *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
-        extract the flag of current page entry and convert the address 
+        extract `the flag of current page entry and convert the address 
         of the new page
 
