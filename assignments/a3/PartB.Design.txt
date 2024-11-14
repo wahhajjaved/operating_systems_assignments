@@ -46,5 +46,24 @@ uvmcopy:
         goto err;
         memmove(mem, (char*)pa, PGSIZE);*/
 
-Trap handling
+Trap handling: in trap.c
+
+uvmcow:
+    Pseudocode:
+        get the current process with myproc()
+        get the fault address
+        set the pte to the write 
+        find the address of the page
+        decriment the refrence count of page
+        check the refrence count to that page
+            copy the meory from old page to new by memove
+            update the page entry to a new copy of page
+            allocate and initilize the refcount
+        flush the TLB
+
+    used uvmcopy as refrencefor structure and error handling
+    r_stval(): supervised trap value in riscv.h 
+    *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
+        extract the flag of current page entry and convert the address 
+        of the new page
 

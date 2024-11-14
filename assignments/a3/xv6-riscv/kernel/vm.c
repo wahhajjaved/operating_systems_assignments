@@ -342,12 +342,55 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
   }
 
   return 0;
-/*
+
  err:
   uvmunmap(new, 0, i / PGSIZE, 1);
   return -1;
-*/
 }
+
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+
+int
+uvmcow(void){
+    pte_t *pte;
+    uint64 pa, f_add;
+    char *mem;
+    int refCount;
+
+    struct proc *p = myproc();
+    f_add= r_stval(); /* fault address*/
+
+    if((pte = walk(p->pagetable, f_add, 0)) == 0)
+        panic("uvmcopy: pte should exist");
+  
+    if((*pte & PTE_V) == 0)
+      panic("uvmcow: page not present");
+    
+    *pte |= PTE_W;/*sets write permission*/  
+    pa = PTE2PA(*pte);
+    refCount=decriRefCount(pa);
+
+    /* if the page have atleast one refrence then copy to a new page*/
+    if (refCount>0){
+        if((mem = kalloc()) == 0){
+            uvmunmap(p->pagetable, 0, 1, 1);
+            return -1;
+        }
+        memmove(mem, (char*)pa, PGSIZE);
+        /*update the page entry to a new copy of page*/
+        *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
+        initRefCount((uint64) mem);/* initilize */
+    }else{
+        /*only one refrence*/
+        initRefCount(pa); /*reset the count to 1*/
+    }      
+    sfence_vma(); /* flush stale entries from the TLB. */
+ 
+
+    return 0;
+}
+
+
 
 /* mark a PTE invalid for user access. */
 /* used by exec for the user stack guard page. */
