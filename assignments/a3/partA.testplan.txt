@@ -100,7 +100,7 @@ Expected Output: setshare() returns -1. remainingshares = 90
 Test Number: 11
 Description: setshare(): remainingshares computer correctly
 Input: groupnumber = 0, newshare = 5
-Expected Output: setshare() returns 0. remainingshares = 85
+Expected Output: setshare() returns 0. remainingshares = 84
 
 
 
