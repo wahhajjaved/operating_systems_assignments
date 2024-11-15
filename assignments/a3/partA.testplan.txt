@@ -111,3 +111,24 @@ Test Number: 12
 Description: check if child process has same group as parent after forking
 Input: none
 Expected Output: procdump() shows group 5 for parent and child
+
+
+Test Number: 13
+Description: After forking, the children sleep for a random amount of time and
+                compute square() for a random number of times
+Input: none
+Expected Output: All children should compute and print their output out
+                    order
+
+Test Number: 14
+Description:
+        After forking, the children sleep for a random amount of time and
+        compute square() for a random number of times. The children are
+        split among 3 groups with different shares
+Input:
+    group 6: shares = 10, children = 3
+    group 7: shares = 15, children = 2
+    group 8: shares = 5, children = 5
+
+Expected Output: All children should compute and print their output out
+                    order
