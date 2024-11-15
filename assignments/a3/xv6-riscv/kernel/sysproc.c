@@ -144,8 +144,8 @@ sys_setshare(void)
         sizeof(int)
       );
 
-  if(r1 == 1 && r2 == 1)
-    return 1;
+  if(r1 == 0 && r2 == 0)
+    return 0;
 
   return -1;
 
