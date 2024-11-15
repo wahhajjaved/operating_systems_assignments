@@ -79,10 +79,10 @@ void test7() {
     /*printf("******************** Test 7 ********************\n");*/
     r = setshare(-1, 2, &remainingshares);
     printf("***************** Test 7 ");
-    if(r == -1 && remainingshares != 90)
-        printf("Failed");
-    else
+    if(r == -1 && remainingshares == 90)
         printf("Passed");
+    else
+        printf("Failed");
     printf(" *****************\n");
 }
 
@@ -92,10 +92,10 @@ void test8() {
     /*printf("******************** Test 8 ********************\n");*/
     r = setshare(20, 2, &remainingshares);
     printf("***************** Test 8 ");
-    if(r == -1 && remainingshares != 90)
-        printf("Failed");
-    else
+    if(r == -1 && remainingshares == 90)
         printf("Passed");
+    else
+        printf("Failed");
     printf(" *****************\n");
 }
 
@@ -105,10 +105,10 @@ void test9() {
     /*printf("******************** Test 9 ********************\n");*/
     r = setshare(0, -2, &remainingshares);
     printf("***************** Test 9 ");
-    if(r == -1 && remainingshares != 90)
-        printf("Failed");
-    else
+    if(r == -1 && remainingshares == 90)
         printf("Passed");
+    else
+        printf("Failed");
     printf(" *****************\n");
 }
 
@@ -118,10 +118,10 @@ void test10() {
     /*printf("******************** Test 10 ********************\n");*/
     r = setshare(0, 100, &remainingshares);
     printf("***************** Test 10 ");
-    if(r == -1 && remainingshares != 90)
-        printf("Failed");
-    else
+    if(r == -1 && remainingshares == 90)
         printf("Passed");
+    else
+        printf("Failed");
     printf(" *****************\n");
 }
 
@@ -131,10 +131,10 @@ void test11() {
     /*printf("******************** Test 11 ********************\n");*/
     r = setshare(0, 5, &remainingshares);
     printf("***************** Test 11 ");
-    if(r == -1 && remainingshares != 90)
-        printf("Failed");
-    else
+    if(r == 0 && remainingshares == 85)
         printf("Passed");
+    else
+        printf("Failed ");
     printf(" *****************\n");
 }
 
