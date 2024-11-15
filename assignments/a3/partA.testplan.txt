@@ -105,3 +105,9 @@ Expected Output: setshare() returns 0. remainingshares = 86
 
 
 
+[ Forks ]
+
+Test Number: 12
+Description: check if child process has same group as parent after forking
+Input: none
+Expected Output: procdump() shows group 5 for parent and child
