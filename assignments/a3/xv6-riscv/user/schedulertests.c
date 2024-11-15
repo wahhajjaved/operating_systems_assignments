@@ -134,7 +134,7 @@ void test11() {
     int remainingshares = -1;
     printf("******************** Test 11 ********************\n");
     r = setshare(0, 5, &remainingshares);
-    printf("r = %d, remainingshares = %d\n"), r, remainingshares;
+    printf("r = %d, remainingshares = %d\n", r, remainingshares);
     printf("***************** Test 11 ");
     if(r == 0 && remainingshares == 85)
         printf("Passed");
