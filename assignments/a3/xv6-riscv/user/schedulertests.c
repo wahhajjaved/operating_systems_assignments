@@ -76,8 +76,9 @@ void test6() {
 void test7() {
     int r;
     int remainingshares = -1;
-    /*printf("******************** Test 7 ********************\n");*/
+    printf("******************** Test 7 ********************\n");
     r = setshare(-1, 2, &remainingshares);
+    printf("r = %d, remainingshares = %d\n");
     printf("***************** Test 7 ");
     if(r == -1 && remainingshares == 90)
         printf("Passed");
@@ -89,8 +90,9 @@ void test7() {
 void test8() {
     int r;
     int remainingshares = -1;
-    /*printf("******************** Test 8 ********************\n");*/
+    printf("******************** Test 8 ********************\n");
     r = setshare(20, 2, &remainingshares);
+    printf("r = %d, remainingshares = %d\n");
     printf("***************** Test 8 ");
     if(r == -1 && remainingshares == 90)
         printf("Passed");
@@ -102,8 +104,9 @@ void test8() {
 void test9() {
     int r;
     int remainingshares = -1;
-    /*printf("******************** Test 9 ********************\n");*/
+    printf("******************** Test 9 ********************\n");
     r = setshare(0, -2, &remainingshares);
+    printf("r = %d, remainingshares = %d\n");
     printf("***************** Test 9 ");
     if(r == -1 && remainingshares == 90)
         printf("Passed");
@@ -115,8 +118,9 @@ void test9() {
 void test10() {
     int r;
     int remainingshares = -1;
-    /*printf("******************** Test 10 ********************\n");*/
+    printf("******************** Test 10 ********************\n");
     r = setshare(0, 100, &remainingshares);
+    printf("r = %d, remainingshares = %d\n");
     printf("***************** Test 10 ");
     if(r == -1 && remainingshares == 90)
         printf("Passed");
@@ -128,8 +132,9 @@ void test10() {
 void test11() {
     int r;
     int remainingshares = -1;
-    /*printf("******************** Test 11 ********************\n");*/
+    printf("******************** Test 11 ********************\n");
     r = setshare(0, 5, &remainingshares);
+    printf("r = %d, remainingshares = %d\n");
     printf("***************** Test 11 ");
     if(r == 0 && remainingshares == 85)
         printf("Passed");
