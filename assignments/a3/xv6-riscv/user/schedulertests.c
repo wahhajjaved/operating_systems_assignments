@@ -1,6 +1,40 @@
 #include "kernel/types.h"
 #include "user/user.h"
 
+/* from grind.c. */
+int
+do_rand(unsigned long *ctx)
+{
+/*
+ * Compute x = (7^5 * x) mod (2^31 - 1)
+ * without overflowing 31 bits:
+ *      (2^31 - 1) = 127773 * (7^5) + 2836
+ * From "Random number generators: good ones are hard to find",
+ * Park and Miller, Communications of the ACM, vol. 31, no. 10,
+ * October 1988, p. 1195.
+ */
+    long hi, lo, x;
+
+    /* Transform to [1, 0x7ffffffe] range. */
+    x = (*ctx % 0x7ffffffe) + 1;
+    hi = x / 127773;
+    lo = x % 127773;
+    x = 16807 * lo - 2836 * hi;
+    if (x < 0)
+        x += 0x7fffffff;
+    /* Transform to [0, 0x7ffffffd] range. */
+    x--;
+    *ctx = x;
+    return (x);
+}
+
+unsigned long rand_next = 1;
+
+int
+rand(void)
+{
+    return (do_rand(&rand_next));
+}
 
 void test1() {
     printf("******************** Test 1 ********************\n");
@@ -155,6 +189,42 @@ void test12() {
     printf("************************************************\n");
 }
 
+
+
+void test13child() {
+    int times, i, square;
+
+    sleep(rand() % 1000 + 10);
+    times = rand() % 10000;
+    times += 10;
+    square = 0;
+    for(i = 0; i < times; i++) {
+        square = i * i;
+    }
+    printf("process %d: square of %d = %d\n", getpid(), times, square);
+}
+
+
+void test13() {
+    int r, s, numchildren, i;
+    numchildren = 10;
+    printf("******************** Test 13 ********************\n");
+
+    for(i = 0; i < numchildren; i++) {
+        r = fork();
+
+        /*child*/
+        if(r == 0) {
+            test13child();
+            exit(0);
+        }
+    }
+    for(i = 0; i < numchildren; i++) {
+        wait(&s);
+    }
+    printf("************************************************\n");
+}
+
 int main() {
     test1();
     printf("\n");
@@ -179,5 +249,7 @@ int main() {
     test11();
     printf("\n");
     test12();
+    printf("\n");
+    test13();
     printf("\n");
 }
