@@ -143,6 +143,18 @@ void test11() {
     printf(" *****************\n");
 }
 
+void test12() {
+    int r, s;
+    printf("******************** Test 11 ********************\n");
+    r = fork();
+    if(r == 0) {
+        procdump();
+        exit(0);
+    }
+    wait(&s);
+    printf("************************************************\n");
+}
+
 int main() {
     test1();
     printf("\n");
@@ -165,5 +177,7 @@ int main() {
     test10();
     printf("\n");
     test11();
+    printf("\n");
+    test12();
     printf("\n");
 }
