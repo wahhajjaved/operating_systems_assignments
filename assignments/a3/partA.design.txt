@@ -1,0 +1,178 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-11-19
+
+
+[ Overall Scheduling Algorithm ]
+
+A group's share is defined as an integer between 0 and MAXGROUPSHARE. The sum
+of group shares must be between 0 and MAXGROUPSHARE
+
+Process groups are scheduled in batches, according to the number of shares
+allocated to the groups. For 3 groups A, B, and C with shares 1, 2, and 4,
+the schedule will be ABCBCCCC
+
+For groups, each such batch is called the group scheduling cycle
+
+Inside each group, all runnable processes are batched, similar to groups. Each
+such batch is called the process scheduling cycle
+
+In each process scheduling cycle, the CPU is divided evenly amongst all
+runnable processes.
+
+Fairness at the group level is defined as the guarenteed proportion of time
+given to a group in each group scheduling cycle. Groups forfeit any unused time
+
+At the process level, fairness is maintained by alloting an equal fraction of
+the group's cpu time to all runnable processes in each process scheduling cycle
+
+Processes forfeit any unused time. Processes which become runnable while a
+group is going through its process scheduling cycle must wait until the next
+cycle to be scheduled
+
+
+
+
+
+[ Groups ]
+
+Each process is is tracked by struct proc, which is defined in proc.h.
+
+Each process must belong to a group. The integer groupnumber has been added to
+struct proc to track the group for the process
+
+Ideally, there should be functionality in the kernel to allow the creation of
+new groups. However, this will requiring implementing more system calls so to
+keep things simple, only set number of groups are created at compile time. This
+is defined by the macro MAXGROUPS in proc.c
+
+The shares of each group are stored in int groupshares[MAXGROUPS] in proc.c.
+The int groupNumber is an index into this array.
+
+Default share for a group is 1. proc.c:groupsinit() does the initialization
+for the groups when it is called from main.c.
+
+New processes inherit the group number of their parent process. Group number
+of a process can be changed by using the setprocessgroup() system call
+
+
+
+[ Scheduler ]
+
+Scheduling is done in proc.c:scheduler(). This function calls two helpers,
+schedulegroups() and scheduleprocesses(), to handle the scheduling.
+
+For the current group scheduling cycle, the schedule is stored in
+groupschedule[]. schedulegroups() fills this array when called. This is done
+by simply adding the group number to groupschedule[] the same number of times
+as its share.
+
+Groups are added in alternating order so that one group doesn't hog the cpu for
+an extended period of time. See example in [ Overall Scheduling Algorithm ]
+
+Since the group schedule will only change when its share changes, an
+optimization could be to only call schedulegroups() in setshare(), but this is
+not done in the current implementation
+
+processschedule[] contains the order in which the process will run in the
+current cycle. This array is filled by iterating over groupschedule[], getting
+all processes for that group, and adding them to processschedule[].
+
+Processes are added to processschedule[] in the same order as they appear in
+proc.c:struct proc proc[NPROC]
+
+Only RUNNABLE processes are added to processschedule[]
+
+Once processschedule[] is fully set for the current cycle, scheduler() then
+simply pulls the next process from the array and runs it. Once all processes
+have been run, schedulegroups() and scheduleprocesses() are called again
+to schedule the next batch
+
+
+
+[ Array Sizes ]
+
+groupshares[] needs to have MAXGROUPS elements since each element is the share
+of that group.
+
+groupschedule[] needs to have MAXGROUPSHARE elements because the sum of all
+group shares must not be greater than MAXGROUPSHARE.
+
+processschedule[]'s size is tricky. The max number of processes in xv6 is
+defined by NPROC. If one group has NPROC runnable processes, then they all
+need to be added to processschedule[]. However, in each scheduling cycle, a
+group may appear more than once upto MAXGROUPSHARE times. So
+processschedule[]'s size will need to be NPROC * MAXGROUPSHARE.
+
+This is a rather large array being declared statically. It would be ideal to
+use the list library instead of using processschedule[], however the assignment
+recommends against using it.
+
+
+[ Synchronization ]
+
+
+In xv6, each core runs its own scheduler(). This means that schedulegroups()
+and scheduleprocesses() can be called at the same time from multiple cores.
+
+For proper scheduling, schedulegroups() and scheduleprocesses() must only be
+called by a single core. While the schedule for the next cycle is being built
+the other cores must wait until its done.
+
+The processes to run are stored inside processschedule[]. This array is shared
+and therefore each core must synchronize its iteration over it.
+
+processscheduleindex is used to iterate over processschedule[]. Each core gets
+the next process from processschedule[] and then increments
+processscheduleindex.
+
+
+The synchronization requirements are as follows:
+
+    1. Multiple cores must not build the schedule at the same time
+    2. Once one core has built a schedule, another core must not immediately
+        rebuild it
+    3. Two cores must not pick the same process to run and must not skip
+        processes
+
+
+All of these conditions can be satisfied with a single lock on
+processscheduleindex called processscheduleindexlock
+
+Building the scheduler might be a "long" task but when its being built, nothing
+should be running anyways so spinlocks are used here as well for simplicity.
+
+Requirement 3 is satisfied by only reading and writing processscheduleindex
+when processscheduleindexlock is held
+
+Once processscheduleindexlock has been acquired by a core, it checks if the
+schedule needs to be rebuilt. If it does, it will rebuild it. Since only one
+core can hold this lock at any given time, requirement 1 is satisfied
+
+If multiple cores are waiting to acquire this lock, the check to see if the
+schedule needs to be rebuilt happens inside the critical section of
+processscheduleindexlock. Therefore, the first core to get this lock builds the
+schedule. When the next core gets this lock, the schedule will have been built
+and its check to see if its needs to be built will fail. This satisfies
+requirement 2
+
+
+[ System Calls ]
+
+Two additional system calls are needed for the scheduler to work properly.
+
+The first is setshare() which is the bonus assignment requirement. This system
+call takes in a group number and its new share value, and then simply updates
+groupshares[] with the new value
+
+It also takes in an output parameter, whose value is set to the remaining
+number of shares that can be allotted. This is basically
+MAXGROUPSHARE - sum of current shares
+
+setshare() returns 0 on success and -1 on error
+
+The second system call is called setprocessgroup(), which takes in a pid and
+a group number and moves that process to another group by changing its
+groupnumber in its process table entry
+
+setprocessgroup() returns 0 on success and -1 on error

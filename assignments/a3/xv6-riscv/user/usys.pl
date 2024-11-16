@@ -37,3 +37,8 @@ entry("sbrk");
 entry("sleep");
 entry("uptime");
 entry("trace");
+#/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+entry("setshare");
+entry("setprocessgroup");
+entry("procdump");
+#/* ************************************ */

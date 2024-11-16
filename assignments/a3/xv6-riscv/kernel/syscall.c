@@ -103,6 +103,12 @@ extern uint64 sys_mkdir(void);
 extern uint64 sys_close(void);
 extern uint64 sys_trace(void);
 
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+extern uint64 sys_setprocessgroup(void);
+extern uint64 sys_setshare(void);
+extern uint64 sys_procdump(void);
+/* ****************************** */
+
 /* An array mapping syscall numbers from syscall.h */
 /* to the function that handles the system call. */
 static uint64 (*syscalls[])(void) = {
@@ -127,7 +133,14 @@ static uint64 (*syscalls[])(void) = {
 [SYS_link]    sys_link,
 [SYS_mkdir]   sys_mkdir,
 [SYS_close]   sys_close,
-[SYS_trace]   sys_trace
+[SYS_trace]   sys_trace,
+
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+[SYS_setprocessgroup]  sys_setprocessgroup,
+[SYS_setshare]  sys_setshare,
+[SYS_procdump]  sys_procdump
+/* ****************************** */
+
 };
 
 /* array of sys call names */
