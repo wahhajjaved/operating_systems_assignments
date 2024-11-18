@@ -23,6 +23,11 @@ struct {
   struct run *freelist;
 } kmem;
 
+struct refrenceCount{
+        int count[(PHYSTOP - KERNBASE) / PGSIZE];
+        struct spinlock lock;
+}refCount;
+
 int decriRefCount(uint64 pa);
 int incriRefCount(uint64 pa);
 void initRefCount(uint64 pa);
@@ -31,6 +36,9 @@ void
 kinit()
 {
   initlock(&kmem.lock, "kmem");
+/*CMPT 332 GROUP 67 Change, Fall 2024 A3*/
+  initlock(&refCount.lock, "refCount");
+
   freerange(end, (void*)PHYSTOP);
 }
 
@@ -55,15 +63,17 @@ kfree(void *pa)
   if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
     panic("kfree");
 
-  /* Fill with junk to catch dangling refs. */
-  memset(pa, 1, PGSIZE);
+  if (decriRefCount((uint64) pa)==0){
+        /* Fill with junk to catch dangling refs. */
+        memset(pa, 1, PGSIZE);
 
-  r = (struct run*)pa;
+        r = (struct run*)pa;
 
-  acquire(&kmem.lock);
-  r->next = kmem.freelist;
-  kmem.freelist = r;
-  release(&kmem.lock);
+        acquire(&kmem.lock);
+        r->next = kmem.freelist;
+        kmem.freelist = r;
+        release(&kmem.lock);
+    }
 }
 
 /* Allocate one 4096-byte page of physical memory. */
@@ -82,7 +92,7 @@ kalloc(void)
 
   if(r){
     memset((char*)r, 5, PGSIZE); /* fill with junk */
-    initRefCount((uint64) r);
+    initRefCount((uint64) r);/*CMPT 332 GROUP 67 Change, Fall 2024 */
     }
     return (void*)r;
 }
@@ -92,19 +102,16 @@ int getNumFreePages(void){
     struct run *r;
 
     acquire(&kmem.lock);
-    r = kmem.freelist;
+    r = kmem.freelist; /* count of all the free pages*/
 
     while(r){
         freepages++;
-        kmem.freelist = r->next;
+        r= r->next;
+        /*kmem.freelist = r->next;*/
     }
     release(&kmem.lock);
     return freepages;
 }
-struct refrenceCount{
-        int count[(PHYSTOP - KERNBASE) / PGSIZE];
-        struct spinlock lock;
-}refCount;
 
 void initRefCount(uint64 pa){
     /*checks if pa starts at starting of the physical address*/

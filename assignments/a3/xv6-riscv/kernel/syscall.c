@@ -135,7 +135,7 @@ static uint64 (*syscalls[])(void) = {
 [SYS_close]   sys_close,
 [SYS_trace]   sys_trace,
 /*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
-[SYS_getNumFreePages] sys_getNumFreePages
+[SYS_getNumFreePages] sys_getNumFreePages,
 [SYS_setprocessgroup]  sys_setprocessgroup,
 [SYS_setshare]  sys_setshare,
 [SYS_procdump]  sys_procdump

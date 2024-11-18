@@ -314,9 +314,10 @@ int
 uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 {
   pte_t *pte;
-  uint64 pa, i;
-  uint flags;
-/*  char *mem;*/
+  uint64 pa, i, flags;
+
+  /*uint flags;
+char *mem;*/
 
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
@@ -341,16 +342,17 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
     }
 */
     if(mappages(new, i, PGSIZE, pa, flags) != 0){
-     goto err;
+     /*goto err;*/
+    return -1;
     }
     sfence_vma(); /* flush stale entries from the TLB. */
   }
 
   return 0;
-
+/*
  err:
   uvmunmap(new, 0, i / PGSIZE, 1);
-  return -1;
+  return -1;*/
 }
 
 /*CMPT 332 GROUP 67 Change, Fall 2024 */
@@ -373,9 +375,14 @@ uvmcow(void){
       panic("uvmcow: page not present");
       return -1;
     }
+    if (*pte & PTE_X) {
+	  panic("uvmcow: illegal range of va");
+      return -1;
+  }
+    refCount=decriRefCount(PTE2PA(*pte));
     *pte |= PTE_W;/*sets write permission*/  
     pa = PTE2PA(*pte);
-    refCount=decriRefCount(pa);
+    /*refCount=decriRefCount(pa);*/
 
     /* if the page have atleast one refrence then copy to a new page*/
     if (refCount>0){
@@ -387,8 +394,7 @@ uvmcow(void){
         /*update the page entry to a new copy of page*/
         *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
         initRefCount((uint64) mem);/* initilize */
-    }else{
-        /*only one refrence*/
+    } else{
         initRefCount(pa); /*reset the count to 1*/
     }      
     sfence_vma(); /* flush stale entries from the TLB. */
@@ -420,17 +426,45 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 {
   uint64 n, va0, pa0;
   pte_t *pte;
+  int refCount;
+  char *mem;
 
   while(len > 0){
     va0 = PGROUNDDOWN(dstva);
     if(va0 >= MAXVA)
       return -1;
     pte = walk(pagetable, va0, 0);
+    
     if(pte == 0 || (*pte & PTE_V) == 0 || (*pte & PTE_U) == 0 ||
-       (*pte & PTE_W) == 0)
+       ((*pte & PTE_W) == 0 && (*pte & PTE_X)))
       return -1;
+    /*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+
+    /* if on read only halndle the copy-on-Write*/
+    if ((*pte & PTE_W) == 0){
+        pa0= PTE2PA(*pte);
+        refCount= decriRefCount(pa0);
+        *pte |= PTE_W;
+        
+        if (refCount>0){
+            if((mem = kalloc()) == 0){
+                uvmunmap(pagetable, 0, 1, 1);
+                return -1;
+        }
+        memmove(mem, (char*)pa0, PGSIZE);
+        /*update the page entry to a new copy of page*/
+        *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
+        /*initRefCount((uint64) mem);*//* initilize */
+    }else{
+        /*only one refrence*/
+        initRefCount(pa0); /*reset the count to 1*/
+    }
+    sfence_vma(); /* flush stale entries from the TLB. */
+    }
+
     pa0 = PTE2PA(*pte);
     n = PGSIZE - (dstva - va0);
+    
     if(n > len)
       n = len;
     memmove((void *)(pa0 + (dstva - va0)), src, n);

@@ -81,10 +81,11 @@ usertrap(void)
     yield();
 
     /*CMPT 332 GROUP 67 Change, Fall 2024 */
-  if(which_dev == 3)
-    if (uvmcow() <0) setkilled(p);
-
-
+  if(which_dev == 3){
+    if (uvmcow() <0) {
+        setkilled(p);
+    }
+    }
   usertrapret();
 }
 
