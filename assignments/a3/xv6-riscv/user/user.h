@@ -23,7 +23,11 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int trace(int);
-
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+int             setshare(int groupnumber, int newshare, int* remainingshares);
+int             setprocessgroup(int pid, int groupnumber);
+int             procdump(void);
+/* ************************************ */
 
 /* ulib.c */
 int stat(const char*, struct stat*);

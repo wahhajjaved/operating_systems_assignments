@@ -6,6 +6,20 @@
 #include "proc.h"
 #include "defs.h"
 
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+#define MAXGROUPS 10
+#define MAXGROUPSHARE 100
+int groupshares[MAXGROUPS];
+int groupschedule[MAXGROUPSHARE];
+int groupschedulesize;
+struct proc *processschedule[NPROC * MAXGROUPSHARE];
+int processschedulesize;
+int processscheduleindex;
+struct spinlock processscheduleindexlock;
+
+/* ************************************** */
+
+
 struct cpu cpus[NCPU];
 
 struct proc proc[NPROC];
@@ -435,6 +449,110 @@ wait(uint64 addr)
   }
 }
 
+/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+static inline int calculateremainingshares() {
+  int i, total;
+  total = 0;
+  for(i = 0; i < MAXGROUPS; i++) {
+    total += groupshares[i];
+  }
+  return MAXGROUPSHARE - total;
+}
+
+int setshare(int groupnumber, int newshare, int* remainingshares) {
+  *remainingshares = calculateremainingshares();
+
+  if(groupnumber < 0 || groupnumber > MAXGROUPS-1) {
+    return -1;
+  }
+
+  if(newshare < 0 || newshare > *remainingshares) {
+    return -1;
+  }
+
+  groupshares[groupnumber] = newshare;
+  *remainingshares = calculateremainingshares();
+  return 0;
+}
+
+int setprocessgroup(int pid, int groupnumber) {
+  struct proc *p;
+
+  if(groupnumber < 0 || groupnumber > MAXGROUPS-1) {
+    return -1;
+  }
+  if(pid < 0) {
+    return -1;
+  }
+
+  for(p = proc; p < &proc[NPROC]; p++){
+    acquire(&p->lock);
+    if(p->pid == pid){
+      if(p->state != UNUSED){
+        p->groupnumber = groupnumber;
+      }
+      release(&p->lock);
+      return 0;
+    }
+    release(&p->lock);
+  }
+
+  return -1;
+}
+
+void groupsinit() {
+  int i;
+  for(i = 0; i < MAXGROUPS; i++){
+    groupshares[i] = 1;
+  }
+}
+
+void schedulegroups() {
+  int i, totalshares, currentshares[MAXGROUPS];
+
+
+  totalshares = 0;
+  for(i = 0; i < MAXGROUPS; i++) {
+    currentshares[i] = groupshares[i];
+    totalshares += groupshares[i];
+  }
+
+  for(i = 0; i < MAXGROUPSHARE; i++){
+    groupschedule[i] = -1;
+  }
+
+  groupschedulesize = 0;
+  while(totalshares) {
+    for(i = 0; i < MAXGROUPS; i++) {
+      if(currentshares[i]) {
+        groupschedule[groupschedulesize] = i;
+        groupschedulesize++;
+        currentshares[i]--;
+        totalshares--;
+      }
+    }
+  }
+}
+
+void scheduleprocesses() {
+  int i;
+  struct proc *p;
+
+  processschedulesize = 0;
+  for(i = 0; i < groupschedulesize; i++) {
+    for(p = proc; p < &proc[NPROC]; p++) {
+      acquire(&p->lock);
+      if(p->groupnumber == groupschedule[i] && p->state == RUNNABLE) {
+        processschedule[processschedulesize] = p;
+        processschedulesize++;
+      }
+      release(&p->lock);
+    }
+  }
+}
+/* ***************************** */
+
+
 /* Per-CPU process scheduler. */
 /* Each CPU calls scheduler() after setting itself up. */
 /* Scheduler never returns.  It loops, doing: */
@@ -455,29 +573,39 @@ scheduler(void)
     /* processes are waiting. */
     intr_on();
 
-    int found = 0;
-    for(p = proc; p < &proc[NPROC]; p++) {
-      acquire(&p->lock);
-      if(p->state == RUNNABLE) {
-        /* Switch to chosen process.  It is the process's job */
-        /* to release its lock and then reacquire it */
-        /* before jumping back to us. */
-        p->state = RUNNING;
-        c->proc = p;
-        swtch(&c->context, &p->context);
-
-        /* Process is done running for now. */
-        /* It should have changed its p->state before coming back. */
-        c->proc = 0;
-        found = 1;
-      }
-      release(&p->lock);
+    acquire(&processscheduleindexlock);
+    if(processscheduleindex >= processschedulesize) {
+      schedulegroups();
+      scheduleprocesses();
+      processscheduleindex = 0;
     }
-    if(found == 0) {
+
+    if(processschedulesize == 0) {
       /* nothing to run; stop running on this core until an interrupt. */
+      release(&processscheduleindexlock);
       intr_on();
       asm volatile("wfi");
+      continue;
     }
+
+    p = processschedule[processscheduleindex];
+    processscheduleindex++;
+    release(&processscheduleindexlock);
+
+    acquire(&p->lock);
+    if(p->state == RUNNABLE) {
+      /* Switch to chosen process.  It is the process's job */
+      /* to release its lock and then reacquire it */
+      /* before jumping back to us. */
+      p->state = RUNNING;
+      c->proc = p;
+      swtch(&c->context, &p->context);
+
+      /* Process is done running for now. */
+      /* It should have changed its p->state before coming back. */
+      c->proc = 0;
+    }
+    release(&p->lock);
   }
 }
 
@@ -674,9 +802,9 @@ procdump(void)
   static char *states[] = {
   [UNUSED]    "unused",
   [USED]      "used",
-  [SLEEPING]  "sleep ",
-  [RUNNABLE]  "runble",
-  [RUNNING]   "run   ",
+  [SLEEPING]  "sleeping",
+  [RUNNABLE]  "runnable",
+  [RUNNING]   "running",
   [ZOMBIE]    "zombie"
   };
   struct proc *p;
@@ -690,7 +818,13 @@ procdump(void)
       state = states[p->state];
     else
       state = "???";
-    printf("%d %s %s", p->pid, state, p->name);
+    printf(
+		"pid: %d, state: %s, name: %s, group: %d",
+		p->pid,
+		state,
+		p->name,
+		p->groupnumber
+	);
     printf("\n");
   }
 }
