@@ -5,7 +5,8 @@
 #include "riscv.h"
 #include "defs.h"
 #include "fs.h"
-
+#include "spinlock.h"
+#include "proc.h"
 /*
  * the kernel's page table.
  */
@@ -329,13 +330,17 @@ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
     flags = PTE_FLAGS(*pte);
 
     incriRefCount(pa);
-
-    /*if((mem = kalloc()) == 0)
+/*
+    if((mem = kalloc()) == 0)
       goto err;
-    memmove(mem, (char*)pa, PGSIZE);*/
+    memmove(mem, (char*)pa, PGSIZE);
 
     if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
      kfree(mem);
+     goto err;
+    }
+*/
+    if(mappages(new, i, PGSIZE, pa, flags) != 0){
      goto err;
     }
     sfence_vma(); /* flush stale entries from the TLB. */

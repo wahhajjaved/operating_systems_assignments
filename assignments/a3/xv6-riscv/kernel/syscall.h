@@ -21,3 +21,5 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_trace  22
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+#define SYS_getNumFreePages 23

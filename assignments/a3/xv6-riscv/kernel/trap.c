@@ -218,7 +218,7 @@ devintr()
     return 2;
   } 
     /*CMPT 332 GROUP 67 Change, Fall 2024 */
-    else if (scause == 0xfL)
+    else if (scause == 0xfL){
         return 3; /* means a page fault*/
    } else {
     return 0;

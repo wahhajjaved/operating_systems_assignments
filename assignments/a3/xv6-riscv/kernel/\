@@ -23,10 +23,6 @@ struct {
   struct run *freelist;
 } kmem;
 
-int decriRefCount(uint64 pa);
-int incriRefCount(uint64 pa);
-void initRefCount(uint64 pa);
-
 void
 kinit()
 {
@@ -80,11 +76,9 @@ kalloc(void)
     kmem.freelist = r->next;
   release(&kmem.lock);
 
-  if(r){
+  if(r)
     memset((char*)r, 5, PGSIZE); /* fill with junk */
-    initRefCount((uint64) r);
-    }
-    return (void*)r;
+  return (void*)r;
 }
 /*CMPT 332 GROUP 67 Change, Fall 2024 */
 int getNumFreePages(void){
