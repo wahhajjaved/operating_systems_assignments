@@ -2,8 +2,8 @@
 #include "user/user.h"
 
 /* from grind.c. */
-int
-do_rand(unsigned long *ctx)
+unsigned long rand_next;
+int do_rand(unsigned long *ctx)
 {
 /*
  * Compute x = (7^5 * x) mod (2^31 - 1)
@@ -28,7 +28,6 @@ do_rand(unsigned long *ctx)
     return (x);
 }
 
-unsigned long rand_next = 1;
 
 int
 rand(void)
@@ -192,16 +191,26 @@ void test12() {
 
 
 void test13child() {
-    int times, i, square;
-
-    sleep(rand() % 1000 + 10);
+    int times, i, square, sleepTime;
+	rand_next = getpid();
+	sleepTime = rand() % 100 + 10;
+	sleepTime = rand() % 300 + 10;
+	sleepTime = rand() % 500 + 10;
+	sleepTime = rand() % 200 + 10;
+	sleep(sleepTime);
     times = rand() % 10000;
-    times += 10;
+    times += 1000;
     square = 0;
     for(i = 0; i < times; i++) {
         square = i * i;
     }
-    printf("process %d: square of %d = %d\n", getpid(), times, square);
+    printf(
+		"process %d: Slept for %d and computed square of %d = %d\n", 
+		getpid(),
+		sleepTime,
+		times,
+		square
+		);
 }
 
 
@@ -226,6 +235,7 @@ void test13() {
 }
 
 int main() {
+	/*
     test1();
     printf("\n");
     test2();
@@ -250,6 +260,7 @@ int main() {
     printf("\n");
     test12();
     printf("\n");
+	*/
     test13();
     printf("\n");
 }
