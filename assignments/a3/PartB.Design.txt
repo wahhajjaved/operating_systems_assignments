@@ -1,0 +1,71 @@
+# @author Wahhaj Javed, muj975, 11135711
+# @author Nakhba Mubashir, epl482, 11317060
+
+CMPT332-GROUP-67 PartB Copy-on-Write Fork with xv6
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+
+Add a system call getNumFreePages()
+    -in kalloc.c added the getNumFreePages() kalloc is responsible for 
+    managing the physical memory,
+    -getNumFreePages(): count all the pages in the free list
+        aquire a lock so no other process can modify the free list while we
+        are count
+        struct r = kmem.freelist
+        count all the pages
+        release lock
+        return the freepage number
+    -the system call: sys_getNumFreePages()
+        in sysprog.c add a function that returns getNumFreePages()
+
+tracking the refrence count of the pages
+    -a struct called refCount to store the refrence count
+    the arry size for the count is calculated by [(phystop-kernbase)/pgsize]
+    phystop is physical memory address, KERNBASE is th starting address of RAM
+    Pgsize is the size of a page
+    struct refCount{
+        int count[(phystop-kernbase)/pgsize];
+        spinlock lock;
+        }
+    -initRefCount(): initialize and set the refrence count to 1
+    -incriRefCount(): incriments the refrence count and returns it
+    -decriRefCount(): decriments the refrence count and returns it
+ 
+
+uvmcopy:
+    changes made:
+        set pte to read only
+        incriment the ref count
+        and flush the TLB
+
+    -used ~PTE_W instead of PTE_R to set to read only, to clear only write 
+    bit while preserving all other bits in PTE,PTE_R will zero out all the
+    bits in PTE, which can cause other problems
+    -sfence_vma() /* flush stale entries from the TLB. */
+    - removed for uvmcow    
+        /*if((mem = kalloc()) == 0)
+        goto err;
+        memmove(mem, (char*)pa, PGSIZE);*/
+
+Trap handling: in trap.c
+    -devintr() return 3 if page fault for write to read only (scause==0xf)
+    - usertrap checks if devintr() returns 3 and page fault is because of 
+        uvmcow, if uvmcow return -1 then illegal address
+uvmcow:
+    Pseudocode:
+        get the current process with myproc()
+        get the fault address
+        set the pte to the write 
+        find the address of the page
+        decriment the refrence count of page
+        check the refrence count to that page
+            copy the meory from old page to new by memove
+            update the page entry to a new copy of page
+            allocate and initilize the refcount
+        flush the TLB
+
+    used uvmcopy as refrencefor structure and error handling
+    r_stval(): supervised trap value in riscv.h 
+    *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
+        extract `the flag of current page entry and convert the address 
+        of the new page
+

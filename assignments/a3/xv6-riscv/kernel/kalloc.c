@@ -69,7 +69,6 @@ void *
 kalloc(void)
 {
   struct run *r;
-
   acquire(&kmem.lock);
   r = kmem.freelist;
   if(r)
@@ -79,4 +78,55 @@ kalloc(void)
   if(r)
     memset((char*)r, 5, PGSIZE); /* fill with junk */
   return (void*)r;
+}
+
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+int getNumFreePages(void){
+    int freepages=0;
+    struct run *r;
+
+    acquire(&kmem.lock);
+    r = kmem.freelist;
+
+    while(r){
+        freepages++;
+        kmem.freelist = r->next;
+    }
+    release(&kmem.lock);
+    return freepages;
+}
+struct refrenceCount{
+        int count[(PHYSTOP - KERNBASE) / PGSIZE];
+        struct spinlock lock;
+}refCount;
+
+void initRefCount(uint64 pa){
+    /*checks if pa starts at starting of the physical address*/
+    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+
+    acquire(&refCount.lock);
+    refCount.count[(pa - KERNBASE) / PGSIZE]=1;
+    release(&refCount.lock);
+}
+
+int incriRefCount(uint64 pa){
+    int count;
+    /*checks if pa starts at starting of the physical address*/
+    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+    
+    acquire(&refCount.lock);
+    count = refCount.count[(pa - KERNBASE) / PGSIZE]++;
+    release(&refCount.lock);
+    return count;
+}
+
+int decriRefCount(uint64 pa){
+    int count;
+    /*checks if pa starts at starting of the physical address*/
+    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+
+    acquire(&refCount.lock);
+    count = refCount.count[(pa - KERNBASE) / PGSIZE]--;
+    release(&refCount.lock);
+    return count;
 }

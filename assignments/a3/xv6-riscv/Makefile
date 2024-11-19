@@ -146,8 +146,10 @@ UPROGS=\
 	$U/_uthread\
 	$U/_prod-con-mtx\
 	$U/_prod-con-sem\
- 
-#CMPT 332 GROUP 67 Change, Fall 2024 
+	$U/_cowtest\
+	$U/_schedulertests\
+
+#CMPT 332 GROUP 67 Change, Fall 2024
 
 UTHREAD=$U/uthread.o $U/uthread_switch.o $U/mtx.o
 

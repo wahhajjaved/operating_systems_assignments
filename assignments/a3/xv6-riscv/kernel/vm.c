@@ -5,7 +5,8 @@
 #include "riscv.h"
 #include "defs.h"
 #include "fs.h"
-
+#include "spinlock.h"
+#include "proc.h"
 /*
  * the kernel's page table.
  */
@@ -313,31 +314,96 @@ int
 uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
 {
   pte_t *pte;
-  uint64 pa, i;
-  uint flags;
-  char *mem;
+  uint64 pa, i, flags;
+
+  /*uint flags;
+char *mem;*/
 
   for(i = 0; i < sz; i += PGSIZE){
     if((pte = walk(old, i, 0)) == 0)
       panic("uvmcopy: pte should exist");
     if((*pte & PTE_V) == 0)
       panic("uvmcopy: page not present");
+    /*CMPT 332 GROUP 67 Change, Fall 2024 */
+    *pte &= ~PTE_W;  /*set to read only*/
+    
     pa = PTE2PA(*pte);
     flags = PTE_FLAGS(*pte);
+
+    incriRefCount(pa);
+/*
     if((mem = kalloc()) == 0)
       goto err;
     memmove(mem, (char*)pa, PGSIZE);
-    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
-      kfree(mem);
-      goto err;
-    }
-  }
-  return 0;
 
+    if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
+     kfree(mem);
+     goto err;
+    }
+*/
+    if(mappages(new, i, PGSIZE, pa, flags) != 0){
+     /*goto err;*/
+    return -1;
+    }
+    sfence_vma(); /* flush stale entries from the TLB. */
+  }
+
+  return 0;
+/*
  err:
   uvmunmap(new, 0, i / PGSIZE, 1);
-  return -1;
+  return -1;*/
 }
+
+/*CMPT 332 GROUP 67 Change, Fall 2024 */
+
+int
+uvmcow(void){
+    pte_t *pte;
+    uint64 pa, f_add;
+    char *mem;
+    int refCount;
+
+    struct proc *p = myproc();
+    f_add= r_stval(); /* fault address*/
+
+    if((pte = walk(p->pagetable, f_add, 0)) == 0){
+        panic("uvmcopy: pte should exist");
+        return -1;
+    }
+    if((*pte & PTE_V) == 0){
+      panic("uvmcow: page not present");
+      return -1;
+    }
+    if (*pte & PTE_X) {
+	  panic("uvmcow: illegal range of va");
+      return -1;
+  }
+    refCount=decriRefCount(PTE2PA(*pte));
+    *pte |= PTE_W;/*sets write permission*/  
+    pa = PTE2PA(*pte);
+    /*refCount=decriRefCount(pa);*/
+
+    /* if the page have atleast one refrence then copy to a new page*/
+    if (refCount>0){
+        if((mem = kalloc()) == 0){
+            uvmunmap(p->pagetable, 0, 1, 1);
+            return -1;
+        }
+        memmove(mem, (char*)pa, PGSIZE);
+        /*update the page entry to a new copy of page*/
+        *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
+        initRefCount((uint64) mem);/* initilize */
+    } else{
+        initRefCount(pa); /*reset the count to 1*/
+    }      
+    sfence_vma(); /* flush stale entries from the TLB. */
+ 
+
+    return 0;
+}
+
+
 
 /* mark a PTE invalid for user access. */
 /* used by exec for the user stack guard page. */
@@ -360,17 +426,45 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
 {
   uint64 n, va0, pa0;
   pte_t *pte;
+  int refCount;
+  char *mem;
 
   while(len > 0){
     va0 = PGROUNDDOWN(dstva);
     if(va0 >= MAXVA)
       return -1;
     pte = walk(pagetable, va0, 0);
+    
     if(pte == 0 || (*pte & PTE_V) == 0 || (*pte & PTE_U) == 0 ||
-       (*pte & PTE_W) == 0)
+       ((*pte & PTE_W) == 0 && (*pte & PTE_X)))
       return -1;
+    /*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+
+    /* if on read only halndle the copy-on-Write*/
+    if ((*pte & PTE_W) == 0){
+        pa0= PTE2PA(*pte);
+        refCount= decriRefCount(pa0);
+        *pte |= PTE_W;
+        
+        if (refCount>0){
+            if((mem = kalloc()) == 0){
+                uvmunmap(pagetable, 0, 1, 1);
+                return -1;
+        }
+        memmove(mem, (char*)pa0, PGSIZE);
+        /*update the page entry to a new copy of page*/
+        *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
+        /*initRefCount((uint64) mem);*//* initilize */
+    }else{
+        /*only one refrence*/
+        initRefCount(pa0); /*reset the count to 1*/
+    }
+    sfence_vma(); /* flush stale entries from the TLB. */
+    }
+
     pa0 = PTE2PA(*pte);
     n = PGSIZE - (dstva - va0);
+    
     if(n > len)
       n = len;
     memmove((void *)(pa0 + (dstva - va0)), src, n);

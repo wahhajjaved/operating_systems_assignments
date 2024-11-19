@@ -80,6 +80,12 @@ usertrap(void)
   if(which_dev == 2)
     yield();
 
+    /*CMPT 332 GROUP 67 Change, Fall 2024 */
+  if(which_dev == 3){
+    if (uvmcow() <0) {
+        setkilled(p);
+    }
+    }
   usertrapret();
 }
 
@@ -211,7 +217,11 @@ devintr()
     /* timer interrupt. */
     clockintr();
     return 2;
-  } else {
+  } 
+    /*CMPT 332 GROUP 67 Change, Fall 2024 */
+    else if (scause == 0xfL){
+        return 3; /* means a page fault*/
+   } else {
     return 0;
   }
 }
