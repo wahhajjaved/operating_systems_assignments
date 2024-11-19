@@ -366,7 +366,6 @@ uvmcow(void){
 
     struct proc *p = myproc();
     f_add= r_stval(); /* fault address*/
-    pte_t *pte;
 
     if((pte = walk(p->pagetable, f_add, 0)) == 0){
         panic("uvmcopy: pte should exist");
