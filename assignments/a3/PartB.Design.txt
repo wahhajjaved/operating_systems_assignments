@@ -46,6 +46,11 @@ uvmcopy:
         goto err;
         memmove(mem, (char*)pa, PGSIZE);*/
 
+
+other changes in kalloc.c
+    -in k-init added initlock(&refCount.lock, "refCount"); for refcount lock
+    -in kfree added the condition that only free the pages if no more 
+
 Trap handling: in trap.c
     -devintr() return 3 if page fault for write to read only (scause==0xf)
     - usertrap checks if devintr() returns 3 and page fault is because of 
@@ -69,3 +74,14 @@ uvmcow:
         extract `the flag of current page entry and convert the address 
         of the new page
 
+modified copyout in vm.c:
+    -check if its neither writable or excutable
+    -if the page on read only then 
+        - get the pa of the page, 
+        - decriment the count 
+        - temerarly allow to write on the page
+        - if the page is shared and have more then one refrence, copy to the
+            new page, update the pte to the new page
+        - else reset the refrence count to 1
+        - flush the TLB
+ 
