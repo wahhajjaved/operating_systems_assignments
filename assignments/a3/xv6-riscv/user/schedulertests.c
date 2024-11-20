@@ -257,23 +257,16 @@ void createChildren(int numChildren, int group) {
 			test13child();
 			exit(0);
 		}
-        else if(setprocessgroup(r, group)!=0) {
-            printf(
-                "ERROR: createChild could not setprocessgroup() for "
-                "r = %d, group = %d.\n",
-                r,
-                group
-            );
-        }
 	}
-	procdump();
+    if(group == 9)
+        procdump();
 	for(i = 0; i < numChildren; i++) {
 		wait(&s);
 	}
 }
 
 void test14() {
-	int s, numchildren, i, remainingShares;
+	int r, s, numchildren, i, remainingShares;
 	numchildren = 4;
 
     setshare(3, 40, &remainingShares);
@@ -282,10 +275,26 @@ void test14() {
     setshare(9, 5, &remainingShares);
 
 	printf("******************** Test 14 ********************\n");
-    createChildren(3, 3);
-    createChildren(9, 9);
-    createChildren(5, 5);
-    createChildren(7, 7);
+    r = fork();
+    if(r == 0){
+        createChildren(3, 3);
+        exit(0);
+    }
+    r = fork();
+    if(r == 0){
+        createChildren(5, 5);
+        exit(0);
+    }
+    r = fork();
+    if(r == 0){
+        createChildren(7, 7);
+        exit(0);
+    }
+    r = fork();
+    if(r == 0){
+        createChildren(9, 9);
+        exit(0);
+    }
 
 	for(i = 0; i < numchildren; i++) {
 		wait(&s);
@@ -294,7 +303,6 @@ void test14() {
 
 }
 int main() {
-	/*
     test1();
     printf("\n");
     test2();
@@ -321,7 +329,6 @@ int main() {
     printf("\n");
     test13();
     printf("\n");
-	*/
     test14();
     printf("\n");
 }

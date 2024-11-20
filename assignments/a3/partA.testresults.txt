@@ -1,0 +1,150 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-11-19
+
+
+$ schedulertests
+******************** Test 1 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: running, name: schedulertests, group: 0
+************************************************
+
+******************** Test 2 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: running, name: schedulertests, group: 0
+***************** Test 2 Passed *****************
+
+******************** Test 3 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: running, name: schedulertests, group: 0
+***************** Test 3 Passed *****************
+
+******************** Test 4 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: running, name: schedulertests, group: 0
+***************** Test 4 Passed *****************
+
+******************** Test 5 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: running, name: schedulertests, group: 0
+***************** Test 5 Passed *****************
+
+******************** Test 6 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: running, name: schedulertests, group: 5
+***************** Test 6 Passed *****************
+
+******************** Test 7 ********************
+r = -1, remainingshares = 90
+***************** Test 7 Passed *****************
+
+******************** Test 8 ********************
+r = -1, remainingshares = 90
+***************** Test 8 Passed *****************
+
+******************** Test 9 ********************
+r = -1, remainingshares = 90
+***************** Test 9 Passed *****************
+
+******************** Test 10 ********************
+r = -1, remainingshares = 90
+***************** Test 10 Passed *****************
+
+******************** Test 11 ********************
+r = 0, remainingshares = 86
+***************** Test 11 Passed *****************
+
+******************** Test 12 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: sleeping, name: schedulertests, group: 5
+pid: 4, state: running, name: schedulertests, group: 5
+************************************************
+
+******************** Test 13 ********************
+process 10: Slept for 12 and computed square of 10994 = 120846049
+process 5: Slept for 63 and computed square of 3638 = 13227769
+process 11: Slept for 70 and computed square of 6277 = 39388176
+process 6: Slept for 74 and computed square of 2568 = 6589489
+process 12: Slept for 128 and computed square of 5207 = 27102436
+process 7: Slept for 132 and computed square of 7851 = 61622500
+process 13: Slept for 139 and computed square of 10490 = 110019121
+process 8: Slept for 143 and computed square of 6781 = 45968400
+process 14: Slept for 197 and computed square of 9420 = 88717561
+process 9: Slept for 201 and computed square of 2064 = 4255969
+************************************************
+
+******************** Test 14 ********************
+
+pid: 1, state: sleeping, name: init, group: 0
+pid: 2, state: sleeping, name: sh, group: 0
+pid: 3, state: sleeping, name: schedulertests, group: 5
+pid: 15, state: sleeping, name: schedulertests, group: 3
+pid: 16, state: sleeping, name: schedulertests, group: 5
+pid: 17, state: sleeping, name: schedulertests, group: 7
+pid: 18, state: running, name: schedulertests, group: 9
+pid: 19, state: runnable, name: schedulertests, group: 3
+pid: 20, state: runnable, name: schedulertests, group: 5
+pid: 21, state: runnable, name: schedulertests, group: 3
+pid: 22, state: runnable, name: schedulertests, group: 5
+pid: 23, state: runnable, name: schedulertests, group: 7
+pid: 24, state: runnable, name: schedulertests, group: 5
+pid: 25, state: runnable, name: schedulertests, group: 7
+pid: 26, state: runnable, name: schedulertests, group: 5
+pid: 27, state: runnable, name: schedulertests, group: 7
+pid: 28, state: runnable, name: schedulertests, group: 3
+pid: 29, state: runnable, name: schedulertests, group: 7
+pid: 30, state: runnable, name: schedulertests, group: 9
+pid: 31, state: runnable, name: schedulertests, group: 5
+pid: 32, state: runnable, name: schedulertests, group: 9
+pid: 33, state: runnable, name: schedulertests, group: 7
+pid: 34, state: runnable, name: schedulertests, group: 9
+pid: 35, state: runnable, name: schedulertests, group: 7
+pid: 36, state: runnable, name: schedulertests, group: 9
+pid: 37, state: runnable, name: schedulertests, group: 7
+pid: 38, state: runnable, name: schedulertests, group: 9
+pid: 39, state: runnable, name: schedulertests, group: 9
+pid: 40, state: runnable, name: schedulertests, group: 9
+pid: 41, state: runnable, name: schedulertests, group: 9
+pid: 42, state: runnable, name: schedulertests, group: 9
+process 42: Slept for 10 and computed square of 4755 = 22600516
+process 26: Slept for 11 and computed square of 1051 = 1102500
+process 37: Slept for 14 and computed square of 7399 = 54730404
+process 21: Slept for 15 and computed square of 7342 = 53890281
+process 32: Slept for 18 and computed square of 3690 = 13608721
+process 27: Slept for 69 and computed square of 9981 = 99600400
+process 38: Slept for 72 and computed square of 6329 = 40043584
+process 22: Slept for 73 and computed square of 2625 = 6885376
+process 33: Slept for 76 and computed square of 8973 = 80496784
+process 28: Slept for 80 and computed square of 5264 = 27699169
+process 39: Slept for 83 and computed square of 1612 = 2595321
+process 23: Slept for 84 and computed square of 1555 = 2414916
+process 34: Slept for 87 and computed square of 7903 = 62441604
+process 29: Slept for 138 and computed square of 4194 = 17581249
+process 40: Slept for 141 and computed square of 10542 = 111112681
+process 24: Slept for 142 and computed square of 6838 = 46744569
+process 35: Slept for 145 and computed square of 3186 = 10144225
+process 19: Slept for 146 and computed square of 3129 = 9784384
+process 30: Slept for 149 and computed square of 9477 = 89794576
+process 41: Slept for 152 and computed square of 5825 = 33918976
+process 25: Slept for 200 and computed square of 5768 = 33258289
+process 36: Slept for 203 and computed square of 2116 = 4473225
+process 20: Slept for 204 and computed square of 8412 = 70744921
+process 31: Slept for 207 and computed square of 4760 = 22648081
+************************************************
+
+$ 
+
