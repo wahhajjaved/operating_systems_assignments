@@ -1,0 +1,59 @@
+commit 4da8864bc0c56b55087d62888b6f58c53490a536
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 17:00:40 2024 -0600
+
+     implemented the symlink, edited create so it handles the symlink and in sym_open added the symlink condition which reads the target and target len
+
+commit e1c5fc9180d5b91d9848d44aac4b5211b1f5ff5c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 16:44:21 2024 -0600
+
+    added the function sys_symlink(void) so function symlink is set
+
+commit 1925bf268a29e5f31b241c3550566add1424beb5
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 16:41:47 2024 -0600
+
+    edited the print statement because it was giving errors
+
+commit 6ff48721230e09ce637bb1327250e7890e0dfd4b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 16:40:48 2024 -0600
+
+    added the function prototype so the test and other parts can run
+
+commit 2d485c13d7a85570fa38d0bab5d6f301a908e730
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 15:11:52 2024 -0600
+
+    added the flag
+
+commit b67a66e1c92315564be607f59b924e90e02cf4ad
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 12:59:52 2024 -0600
+
+    added the new file type for symblink
+
+commit 7f13d0f76ffbdb1e849a3109163d3fa4904fa0fd
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 12:56:49 2024 -0600
+
+    started the implementation of the lab 0, added the sys call for symlink
+
+commit fa3de0f6ef6c3fe40aad5e5865a8fa66dbd4d402
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 12:55:47 2024 -0600
+
+    added the test file
+
+commit 9d580ad283bfc1c60d0134f11d9657bd4f3ecf6d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 21 11:47:56 2024 -0600
+
+    lab8 started
+
+commit 193e37ac46cb0d7f78737d3d4a51bf2b4359b503
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 7 12:30:54 2024 -0600
+
+    added the given file

@@ -1,0 +1,427 @@
+diff --git a/labs/lab8/xv6-riscv/Makefile b/labs/lab8/xv6-riscv/Makefile
+index 367a721..231fd32 100644
+--- a/labs/lab8/xv6-riscv/Makefile
++++ b/labs/lab8/xv6-riscv/Makefile
+@@ -148,6 +148,7 @@ UPROGS=\
+ 	$U/_prod-con-sem\
+ 	$U/_cowtest\
+ 	$U/_schedulertests\
++   $U/_symlinktest\
+ 
+ #CMPT 332 GROUP 67 Change, Fall 2024
+ 
+diff --git a/labs/lab8/xv6-riscv/kernel/defs.h b/labs/lab8/xv6-riscv/kernel/defs.h
+index c14e38b..e018175 100644
+--- a/labs/lab8/xv6-riscv/kernel/defs.h
++++ b/labs/lab8/xv6-riscv/kernel/defs.h
+@@ -197,3 +197,6 @@ void            virtio_disk_intr(void);
+ 
+ /* number of elements in fixed-size array */
+ #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
++
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++int symlink(char *target, char*path);
+diff --git a/labs/lab8/xv6-riscv/kernel/fcntl.h b/labs/lab8/xv6-riscv/kernel/fcntl.h
+index 44861b9..b071bb0 100644
+--- a/labs/lab8/xv6-riscv/kernel/fcntl.h
++++ b/labs/lab8/xv6-riscv/kernel/fcntl.h
+@@ -3,3 +3,6 @@
+ #define O_RDWR    0x002
+ #define O_CREATE  0x200
+ #define O_TRUNC   0x400
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++/*power of 2, bit 11= 0x800*/
++#define O_NOFOLLOW 0x800
+diff --git a/labs/lab8/xv6-riscv/kernel/stat.h b/labs/lab8/xv6-riscv/kernel/stat.h
+index 7670f3e..68c6825 100644
+--- a/labs/lab8/xv6-riscv/kernel/stat.h
++++ b/labs/lab8/xv6-riscv/kernel/stat.h
+@@ -1,6 +1,8 @@
+ #define T_DIR     1   /* Directory */
+ #define T_FILE    2   /* File */
+ #define T_DEVICE  3   /* Device */
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++#define T_SYMLINK  4   /* symlink */
+ 
+ struct stat {
+   int dev;     /* File system's disk device */
+diff --git a/labs/lab8/xv6-riscv/kernel/syscall.c b/labs/lab8/xv6-riscv/kernel/syscall.c
+index a0b8f35..8062bd0 100644
+--- a/labs/lab8/xv6-riscv/kernel/syscall.c
++++ b/labs/lab8/xv6-riscv/kernel/syscall.c
+@@ -108,6 +108,10 @@ extern uint64 sys_setprocessgroup(void);
+ extern uint64 sys_setshare(void);
+ extern uint64 sys_procdump(void);
+ /* ****************************** */
++/*NAKHBA MUBASHIR lab 08*/
++extern uint64 sys_symlink(void);
++
++
+ 
+ /* An array mapping syscall numbers from syscall.h */
+ /* to the function that handles the system call. */
+@@ -138,13 +142,14 @@ static uint64 (*syscalls[])(void) = {
+ [SYS_getNumFreePages] sys_getNumFreePages,
+ [SYS_setprocessgroup]  sys_setprocessgroup,
+ [SYS_setshare]  sys_setshare,
+-[SYS_procdump]  sys_procdump
++[SYS_procdump]  sys_procdump,
+ /* ****************************** */
+-
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++[SYS_symlink] sys_symlink
+ };
+ 
+ /* array of sys call names */
+-char syscallnames[22][10]= {
++char syscallnames[23][10]= {
+     "read",
+     "trace",
+     "exec",
+@@ -154,7 +159,8 @@ char syscallnames[22][10]= {
+     "kill",
+     "mkdir",
+     "pipe",
+-    "wait"
++    "wait",
++    "symlink"
+ 
+ };
+ 
+diff --git a/labs/lab8/xv6-riscv/kernel/syscall.h b/labs/lab8/xv6-riscv/kernel/syscall.h
+index 28ec4b0..7564ffd 100644
+--- a/labs/lab8/xv6-riscv/kernel/syscall.h
++++ b/labs/lab8/xv6-riscv/kernel/syscall.h
+@@ -27,3 +27,5 @@
+ #define SYS_procdump  25
+ #define SYS_getNumFreePages 26
+ /* ****************************** */
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++#define SYS_symlink 27
+diff --git a/labs/lab8/xv6-riscv/kernel/sysfile.c b/labs/lab8/xv6-riscv/kernel/sysfile.c
+index a0fa67d..0220fc4 100644
+--- a/labs/lab8/xv6-riscv/kernel/sysfile.c
++++ b/labs/lab8/xv6-riscv/kernel/sysfile.c
+@@ -256,7 +256,10 @@ create(char *path, short type, short major, short minor)
+   if((ip = dirlookup(dp, name, 0)) != 0){
+     iunlockput(dp);
+     ilock(ip);
+-    if(type == T_FILE && (ip->type == T_FILE || ip->type == T_DEVICE))
++    /*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++    /*added the simlink condition*/
++    if((type == T_FILE && (ip->type == T_FILE || ip->type == T_DEVICE))
++     || type == T_SYMLINK)
+       return ip;
+     iunlockput(ip);
+     return 0;
+@@ -340,6 +343,44 @@ sys_open(void)
+     end_op();
+     return -1;
+   }
++    /*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++    /* handles the symlink */
++        /* if the O_NOFOLLOW  is not set */
++    if ((ip->type == T_SYMLINK) && !(omode & O_NOFOLLOW)){
++    int count=0;
++    int LinkLimit = 10;/*to prevent infinite loop*/
++    int pathLen;
++
++    while(ip->type == T_SYMLINK && count < LinkLimit){
++    /*read and checks the target path len before reading */
++  	 readi(ip, 0, (uint64)&pathLen, 0, sizeof(int));
++
++     if(pathLen>MAXPATH){
++        panic("ERROR: path length is more then limit\n");
++     }
++    /*read the path*/
++     readi(ip, 0, (uint64)path, sizeof(int),pathLen + 1);
++    /*switch to the target I node*/ 
++    iunlockput(ip);
++    if((ip = namei(path)) == 0){
++        end_op();
++        return -1;
++    }
++    ilock(ip);
++
++    count++;
++   }
++
++    /*check the limit again*/
++    if(count > LinkLimit-1){
++        iunlockput(ip);
++        end_op();
++        return -1;
++    }
++  }
++
++
++
+ 
+   if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
+     if(f)
+@@ -503,3 +544,29 @@ sys_pipe(void)
+   }
+   return 0;
+ }
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++int symlink(char *target, char*path){
++    struct inode *iNode;
++    int len,totalLen;
++
++    begin_op(); /*begin*/
++    /* Create the inode for the symlink*/
++    iNode = create(path, T_SYMLINK, 0, 0);
++    if (iNode == 0) {
++        end_op();
++        panic("ERROR:inode not found\n");
++        return -1; /* return an error*/
++    }
++ 
++    len = strlen(target);
++    totalLen= len +1;
++    /* write the len and target */
++    writei(iNode, 0, (uint64)&len, 0, sizeof(int));
++    writei(iNode, 0, (uint64)target, sizeof(int), totalLen);
++
++    iupdate(iNode);
++    iunlockput(iNode);
++
++    end_op();
++    return 0;
++ }
+diff --git a/labs/lab8/xv6-riscv/kernel/sysproc.c b/labs/lab8/xv6-riscv/kernel/sysproc.c
+index 2747523..89b71bc 100644
+--- a/labs/lab8/xv6-riscv/kernel/sysproc.c
++++ b/labs/lab8/xv6-riscv/kernel/sysproc.c
+@@ -153,3 +153,12 @@ sys_setshare(void)
+ }
+ 
+ /* **********************************  */
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++uint64 sys_symlink(void)
++{
++  char target[MAXPATH];
++  char path[MAXPATH];
++  argstr(0, target, MAXPATH);
++  argstr(1, path, MAXPATH);
++    return symlink((char *) target, (char *) path);
++}
+diff --git a/labs/lab8/xv6-riscv/user/symlinktest.c b/labs/lab8/xv6-riscv/user/symlinktest.c
+new file mode 100644
+index 0000000..bb6249e
+--- /dev/null
++++ b/labs/lab8/xv6-riscv/user/symlinktest.c
+@@ -0,0 +1,189 @@
++#include "kernel/param.h"
++#include "kernel/types.h"
++#include "kernel/stat.h"
++#include "kernel/riscv.h"
++#include "kernel/fcntl.h"
++#include "kernel/spinlock.h"
++#include "kernel/sleeplock.h"
++#include "kernel/fs.h"
++#include "kernel/file.h"
++#include "user/user.h"
++
++#define fail(msg) do {printf("FAILURE: " msg "\n"); failed = 1; goto done;} while (0);
++static int failed = 0;
++
++static void testsymlink(void);
++static void concur(void);
++static void cleanup(void);
++
++int
++main(int argc, char *argv[])
++{
++  cleanup();
++  testsymlink();
++  concur();
++  exit(failed);
++}
++
++static void
++cleanup(void)
++{
++  unlink("/testsymlink/a");
++  unlink("/testsymlink/b");
++  unlink("/testsymlink/c");
++  unlink("/testsymlink/1");
++  unlink("/testsymlink/2");
++  unlink("/testsymlink/3");
++  unlink("/testsymlink/4");
++  unlink("/testsymlink/z");
++  unlink("/testsymlink/y");
++  unlink("/testsymlink");
++}
++
++// stat a symbolic link using O_NOFOLLOW
++static int
++stat_slink(char *pn, struct stat *st)
++{
++  int fd = open(pn, O_RDONLY | O_NOFOLLOW);
++  if(fd < 0)
++    return -1;
++  if(fstat(fd, st) != 0)
++    return -1;
++  return 0;
++}
++
++static void
++testsymlink(void)
++{
++  int r, fd1 = -1, fd2 = -1;
++  char buf[4] = {'a', 'b', 'c', 'd'};
++  char c = 0, c2 = 0;
++  struct stat st;
++    
++  printf("Start: test symlinks\n");
++
++  mkdir("/testsymlink");
++
++  fd1 = open("/testsymlink/a", O_CREATE | O_RDWR);
++  if(fd1 < 0) fail("failed to open a");
++
++  r = symlink("/testsymlink/a", "/testsymlink/b");
++  if(r < 0)
++    fail("symlink b -> a failed");
++
++  if(write(fd1, buf, sizeof(buf)) != 4)
++    fail("failed to write to a");
++
++  if (stat_slink("/testsymlink/b", &st) != 0)
++    fail("failed to stat b");
++  if(st.type != T_SYMLINK)
++    fail("b isn't a symlink");
++
++  fd2 = open("/testsymlink/b", O_RDWR);
++  if(fd2 < 0)
++    fail("failed to open b");
++  read(fd2, &c, 1);
++  if (c != 'a')
++    fail("failed to read bytes from b");
++
++  unlink("/testsymlink/a");
++  if(open("/testsymlink/b", O_RDWR) >= 0)
++    fail("Should not be able to open b after deleting a");
++
++  r = symlink("/testsymlink/b", "/testsymlink/a");
++  if(r < 0)
++    fail("symlink a -> b failed");
++
++  r = open("/testsymlink/b", O_RDWR);
++  if(r >= 0)
++    fail("Should not be able to open b (cycle b->a->b->..)\n");
++  
++  r = symlink("/testsymlink/nonexistent", "/testsymlink/c");
++  if(r != 0)
++    fail("Symlinking to nonexistent file should succeed\n");
++
++  r = symlink("/testsymlink/2", "/testsymlink/1");
++  if(r) fail("Failed to link 1->2");
++  r = symlink("/testsymlink/3", "/testsymlink/2");
++  if(r) fail("Failed to link 2->3");
++  r = symlink("/testsymlink/4", "/testsymlink/3");
++  if(r) fail("Failed to link 3->4");
++
++  close(fd1);
++  close(fd2);
++
++  fd1 = open("/testsymlink/4", O_CREATE | O_RDWR);
++  if(fd1<0) fail("Failed to create 4\n");
++  fd2 = open("/testsymlink/1", O_RDWR);
++  if(fd2<0) fail("Failed to open 1\n");
++
++  c = '#';
++  r = write(fd2, &c, 1);
++  if(r!=1) fail("Failed to write to 1\n");
++  r = read(fd1, &c2, 1);
++  if(r!=1) fail("Failed to read from 4\n");
++  if(c!=c2)
++    fail("Value read from 4 differed from value written to 1\n");
++
++  printf("test symlinks: ok\n");
++done:
++  close(fd1);
++  close(fd2);
++}
++
++static void
++concur(void)
++{
++  int pid, i;
++  int fd;
++  struct stat st;
++  int nchild = 2;
++
++  printf("Start: test concurrent symlinks\n");
++    
++  fd = open("/testsymlink/z", O_CREATE | O_RDWR);
++  if(fd < 0) {
++    printf("FAILED: open failed");
++    exit(1);
++  }
++  close(fd);
++
++  for(int j = 0; j < nchild; j++) {
++    pid = fork();
++    if(pid < 0){
++      printf("FAILED: fork failed\n");
++      exit(1);
++    }
++    if(pid == 0) {
++      int m = 0;
++      unsigned int x = (pid ? 1 : 97);
++      for(i = 0; i < 100; i++){
++        x = x * 1103515245 + 12345;
++        if((x % 3) == 0) {
++          symlink("/testsymlink/z", "/testsymlink/y");
++          if (stat_slink("/testsymlink/y", &st) == 0) {
++            m++;
++            if(st.type != T_SYMLINK) {
++              //printf("FAILED: not a symbolic link\n", st.type);
++              printf("FAILED: not a symbolic link\n");
++                exit(1);
++            }
++          }
++        } else {
++          unlink("/testsymlink/y");
++        }
++      }
++      exit(0);
++    }
++  }
++
++  int r;
++  for(int j = 0; j < nchild; j++) {
++    wait(&r);
++    if(r != 0) {
++      printf("test concurrent symlinks: failed\n");
++      exit(1);
++    }
++  }
++  printf("test concurrent symlinks: ok\n");
++}
+diff --git a/labs/lab8/xv6-riscv/user/user.h b/labs/lab8/xv6-riscv/user/user.h
+index 9059dbd..8101999 100644
+--- a/labs/lab8/xv6-riscv/user/user.h
++++ b/labs/lab8/xv6-riscv/user/user.h
+@@ -28,6 +28,9 @@ int             setshare(int groupnumber, int newshare, int* remainingshares);
+ int             setprocessgroup(int pid, int groupnumber);
+ int             procdump(void);
+ /* ************************************ */
++/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++int symlink(char *target, char*path);
++
+ 
+ /* ulib.c */
+ int stat(const char*, struct stat*);
+diff --git a/labs/lab8/xv6-riscv/user/usys.pl b/labs/lab8/xv6-riscv/user/usys.pl
+index 1dd153a..585153a 100755
+--- a/labs/lab8/xv6-riscv/user/usys.pl
++++ b/labs/lab8/xv6-riscv/user/usys.pl
+@@ -42,3 +42,5 @@ entry("setshare");
+ entry("setprocessgroup");
+ entry("procdump");
+ #/* ************************************ */
++#/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
++entry("symlink");

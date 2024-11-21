@@ -1,0 +1,19 @@
+NAKHBA MUBASHIR lab 08 11317060 epl482
+
+xv6 kernel is booting
+
+hart 2 starting
+hart 1 starting
+init: starting sh
+$ symlinktest
+Start: test symlinks
+test symlinks: ok
+Start: test concurrent symlinks
+usertrap(): unexpected scause 0x2 pid=3
+            sepc=0x1000 stval=0x9000
+usertrap(): unexpected scause 0x2 pid=2
+            sepc=0x1000 stval=0x2000
+usertrap(): unexpected scause 0xc pid=1
+            sepc=0x1000 stval=0x1000
+panic: init exiting
+QEMU: Terminated
