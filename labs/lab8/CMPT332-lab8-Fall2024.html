@@ -1,0 +1,121 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>CMPT 332 - Lab 8 - Fall 2024</title>
+</head>
+<body>
+<img src="splashBanner.gif" align="middle">
+<h1>
+    Computer Science 332 - Winter 2024<br>
+    University of Saskatchewan<br>
+    Lab 8: Symbolic Link implementation in xv6<br>
+</h1>
+
+<b>Instructor:</b> Dwight Makaroff <br>
+<b>Out: </b>November 18, 2024<br>
+<b>Due:</b>At the end of the tutorial (actually by 9:00 p.m. on
+   Thursday, November 21st, 2024, final deadline). <br>
+<b>TOTAL MARKS: 4 </b>
+
+
+<h2 id="resources">Available Resources</h2>
+The version of xv6 for A3 or A4 will be sufficient to get you going on this
+lab.
+
+<h2 id="overview">Part 1: Implementing symlink() system call</h2>
+
+<p> Symbolic links (or soft links) refer to a linked file by pathname;
+  when a symbolic link is opened, the kernel follows the link to the
+  referred file. Symbolic links resemble hard links, but hard links
+  are restricted to pointing to files on the same disk, while symbolic
+  links can cross disk devices. Although xv6 doesn't support multiple
+  devices, implementing this system call is a good exercise to
+  understand how pathname lookup works. In this lab, we will be
+  completing the symbolic link implementation.
+
+
+<div class="required">
+<p>You will implement the <tt>symlink(char *target, char *path)</tt>
+system call, which creates a new symbolic link at path that refers
+to file named by target. For further information, see the man page
+symlink.  To test, add symlinktest to the Makefile and run it. Your
+solution is complete when the tests produce the following output
+(including usertests succeeding).
+</div>
+
+
+<pre>
+$ symlinktest
+
+START: test symlinks
+Start: test symlinks
+test symlinks: ok
+Start: test concurrent symlinks
+test concurrent symlinks: ok
+$ usertests
+...
+ALL TESTS PASSED
+$
+</pre>
+
+
+
+<ul>
+  <li>    First, create a new system call number for symlink, add an
+    entry to user/usys.pl, user/user.h, and implement an empty
+    sys_symlink.</li>
+  <li> Add a new file type (T_SYMLINK) to kernel/stat.h to represent a
+    symbolic link.</li>
+  <li> Add a new flag to kernel/fcntl.h, (O_NOFOLLOW), that can be
+  used with the open system call. Note that flags passed to open are
+  combined using a bitwise OR operator, so your new flag should not
+  overlap with any existing flags. This will let you compile
+    user/symlinktest.c once you add it to the Makefile.</li>
+  <li> For initial debugging, have your symlink(target,path) system
+    call printout the values of its parameters from INSIDE the system call.</li>
+
+  <li>Implement the <tt>symlink(target, path)</tt> system call to create
+a new symbolic link at path that refers to target. Note that target
+does not need to exist for the system call to succeed. You will need
+to choose somewhere to store the target path of a symbolic link, for
+example, in the inode's data blocks.
+
+<li>Modify the <tt>open</tt> system call to handle the case where the path
+refers to a symbolic link. If the file does not exist, <tt>open</tt>
+must fail.  When a process specifies <tt>O_NOFOLLOW</tt> in the flags
+to <tt>open</tt>, <tt>open</tt> should open the symlink (and not
+follow the symbolic link).
+
+<li>If the linked file is also a symbolic link, you must recursively
+follow it until a non-link file is reached. If the links form a cycle,
+you must return an error code. You may approximate this by returning
+an error code if the depth of links reaches some threshold (e.g., 10).
+
+<li> Other system calls (e.g., link and unlink) must not
+  follow symbolic links; these system calls operate on the symbolic
+  link itself.
+
+<li>You do not have to handle symbolic links to directories for this
+assignment.
+
+
+  
+</ul>
+
+<h2>Deliverables</h2>
+<ul>
+  <li> A tar file of your <u>cleaned</u> xv6 directory. Include
+  the changes like in the assignments. </li>
+  <li> An output.txt that includes verification of  correctness. </li> 
+  <li> gitlog.txt</li>
+<li> All tarred together, as in the assignments.
+</ul>
+
+
+<h2>Grading Scheme</h2>
+
+<ul>
+    <li>Working symlink() system call function: 1 mark </li>
+    <li>Implementation of system call functionality: 1 mark </li>
+    <li>output.txt: 1 mark </li>
+    <li>gitlog.txt: 1 mark</li>
+<ul>
+</ul></ul></body></html>
