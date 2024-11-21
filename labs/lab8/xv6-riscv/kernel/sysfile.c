@@ -256,7 +256,10 @@ create(char *path, short type, short major, short minor)
   if((ip = dirlookup(dp, name, 0)) != 0){
     iunlockput(dp);
     ilock(ip);
-    if(type == T_FILE && (ip->type == T_FILE || ip->type == T_DEVICE))
+    /*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+    /*added the simlink condition*/
+    if((type == T_FILE && (ip->type == T_FILE || ip->type == T_DEVICE))
+     || type == T_SYMLINK)
       return ip;
     iunlockput(ip);
     return 0;
@@ -340,6 +343,44 @@ sys_open(void)
     end_op();
     return -1;
   }
+    /*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+    /* handles the symlink */
+        /* if the O_NOFOLLOW  is not set */
+    if ((ip->type == T_SYMLINK) && !(omode & O_NOFOLLOW)){
+    int count=0;
+    int LinkLimit = 10;/*to prevent infinite loop*/
+    int pathLen;
+
+    while(ip->type == T_SYMLINK && count < LinkLimit){
+    /*read and checks the target path len before reading */
+  	 readi(ip, 0, (uint64)&pathLen, 0, sizeof(int));
+
+     if(pathLen>MAXPATH){
+        panic("ERROR: path length is more then limit\n");
+     }
+    /*read the path*/
+     readi(ip, 0, (uint64)path, sizeof(int),pathLen + 1);
+    /*switch to the target I node*/ 
+    iunlockput(ip);
+    if((ip = namei(path)) == 0){
+        end_op();
+        return -1;
+    }
+    ilock(ip);
+
+    count++;
+   }
+
+    /*check the limit again*/
+    if(count > LinkLimit-1){
+        iunlockput(ip);
+        end_op();
+        return -1;
+    }
+  }
+
+
+
 
   if((f = filealloc()) == 0 || (fd = fdalloc(f)) < 0){
     if(f)
@@ -503,3 +544,29 @@ sys_pipe(void)
   }
   return 0;
 }
+/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+int symlink(char *target, char*path){
+    struct inode *iNode;
+    int len,totalLen;
+
+    begin_op(); /*begin*/
+    /* Create the inode for the symlink*/
+    iNode = create(path, T_SYMLINK, 0, 0);
+    if (iNode == 0) {
+        end_op();
+        panic("ERROR:inode not found\n");
+        return -1; /* return an error*/
+    }
+ 
+    len = strlen(target);
+    totalLen= len +1;
+    /* write the len and target */
+    writei(iNode, 0, (uint64)&len, 0, sizeof(int));
+    writei(iNode, 0, (uint64)target, sizeof(int), totalLen);
+
+    iupdate(iNode);
+    iunlockput(iNode);
+
+    end_op();
+    return 0;
+ }
