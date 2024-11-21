@@ -23,10 +23,17 @@ struct {
   struct run *freelist;
 } kmem;
 
+struct refrenceCount{
+        int count[(PHYSTOP - KERNBASE) / PGSIZE];
+        struct spinlock lock;
+}refCount;
+
 void
 kinit()
 {
   initlock(&kmem.lock, "kmem");
+/*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+  initlock(&refCount.lock, "refCount");
   freerange(end, (void*)PHYSTOP);
 }
 
@@ -51,7 +58,9 @@ kfree(void *pa)
   if(((uint64)pa % PGSIZE) != 0 || (char*)pa < end || (uint64)pa >= PHYSTOP)
     panic("kfree");
 
-  /* Fill with junk to catch dangling refs. */
+ 
+
+    /* Fill with junk to catch dangling refs. */
   memset(pa, 1, PGSIZE);
 
   r = (struct run*)pa;
@@ -60,6 +69,7 @@ kfree(void *pa)
   r->next = kmem.freelist;
   kmem.freelist = r;
   release(&kmem.lock);
+
 }
 
 /* Allocate one 4096-byte page of physical memory. */
@@ -75,9 +85,12 @@ kalloc(void)
     kmem.freelist = r->next;
   release(&kmem.lock);
 
-  if(r)
+  if(r){
     memset((char*)r, 5, PGSIZE); /* fill with junk */
-  return (void*)r;
+  /*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+    initRefCount((uint64) r);
+    }
+    return (void*)r;
 }
 
 /*CMPT 332 GROUP 67 Change, Fall 2024 */
@@ -95,11 +108,12 @@ int getNumFreePages(void){
     release(&kmem.lock);
     return freepages;
 }
+/*
 struct refrenceCount{
         int count[(PHYSTOP - KERNBASE) / PGSIZE];
         struct spinlock lock;
 }refCount;
-
+*/
 void initRefCount(uint64 pa){
     /*checks if pa starts at starting of the physical address*/
     if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
@@ -112,10 +126,10 @@ void initRefCount(uint64 pa){
 int incriRefCount(uint64 pa){
     int count;
     /*checks if pa starts at starting of the physical address*/
-    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+    if (pa % PGSIZE !=0) panic("incriRefCount: pa not valid");
     
     acquire(&refCount.lock);
-    count = refCount.count[(pa - KERNBASE) / PGSIZE]++;
+    count = ++refCount.count[(pa - KERNBASE) / PGSIZE];
     release(&refCount.lock);
     return count;
 }
@@ -123,10 +137,11 @@ int incriRefCount(uint64 pa){
 int decriRefCount(uint64 pa){
     int count;
     /*checks if pa starts at starting of the physical address*/
-    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
+    if (pa % PGSIZE !=0) panic("decriRefCount: pa not valid");
 
     acquire(&refCount.lock);
-    count = refCount.count[(pa - KERNBASE) / PGSIZE]--;
+    count = --refCount.count[(pa - KERNBASE) / PGSIZE];
     release(&refCount.lock);
     return count;
 }
+

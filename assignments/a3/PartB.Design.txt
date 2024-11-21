@@ -84,4 +84,22 @@ modified copyout in vm.c:
             new page, update the pte to the new page
         - else reset the refrence count to 1
         - flush the TLB
+
+problem with the code:
+    scause 0x2 which means that it is an illegal instruction, the program
+    is trying to excute in an unmapped memory space
+
+    sauce 0xc: mean that there is a page fault 
+
+the output
+$ cowtest
+simple: usertrap(): unexpected scause 0x2 pid=3
+            sepc=0x1000 stval=0xb000
+usertrap(): unexpected scause 0x2 pid=2
+            sepc=0x1002 stval=0x87f3
+usertrap(): unexpected scause 0xc pid=1
+            sepc=0x1000 stval=0x1000
+panic: init exiting
+QEMU: Terminated
+
  

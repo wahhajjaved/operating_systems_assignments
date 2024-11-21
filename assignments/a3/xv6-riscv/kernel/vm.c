@@ -365,7 +365,7 @@ uvmcow(void){
     int refCount;
 
     struct proc *p = myproc();
-    f_add= r_stval(); /* fault address*/
+    f_add= r_stval();  /*fault address*/
 
     if((pte = walk(p->pagetable, f_add, 0)) == 0){
         panic("uvmcopy: pte should exist");
@@ -380,12 +380,12 @@ uvmcow(void){
       return -1;
   }
     refCount=decriRefCount(PTE2PA(*pte));
+
     *pte |= PTE_W;/*sets write permission*/  
     pa = PTE2PA(*pte);
-    /*refCount=decriRefCount(pa);*/
 
     /* if the page have atleast one refrence then copy to a new page*/
-    if (refCount>0){
+    if (refCount>1){
         if((mem = kalloc()) == 0){
             uvmunmap(p->pagetable, 0, 1, 1);
             return -1;

@@ -221,7 +221,12 @@ devintr()
     /*CMPT 332 GROUP 67 Change, Fall 2024 */
     else if (scause == 0xfL){
         return 3; /* means a page fault*/
-   } else {
+    }
+        else if (scause == 0xc){
+        return 3; /* means a page fault*/
+    }
+else {
+ 
     return 0;
   }
 }
