@@ -508,6 +508,8 @@ sys_pipe(void)
 uint64 sys_symlink(void) {
   char target[MAXPATH];
   char linkpath[MAXPATH];
+  struct inode *ip;
+  int r;
 
   if(argstr(0, target, MAXPATH) < 0) {
     return -1;
@@ -515,5 +517,27 @@ uint64 sys_symlink(void) {
   if(argstr(1, linkpath, MAXPATH) < 0) {
     return -1;
   }
-  return symlink(target, linkpath);
+
+  printf(
+    "creating symlink named %s to path %s.\n",
+    linkpath,
+    target
+  );
+
+  /*create an i node for storing the target*/
+  printf("Creating inode.\n");
+  begin_op();
+  ip = create(linkpath, T_SYMLINK, 0, 0);
+  printf("inode created. Now writing.\n");
+
+  r = writei(ip, 0, (uint64)target, 0, strlen(target));
+  if(strlen(target) != r) {
+    printf("writei wrote %d but needed to write %d.\n", r, strlen(target));
+    iunlock(ip);
+    end_op();
+    return -1;
+  }
+  iunlockput(ip);
+  end_op();
+  return 0;
 }

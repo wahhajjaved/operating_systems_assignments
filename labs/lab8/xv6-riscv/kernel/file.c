@@ -180,15 +180,3 @@ filewrite(struct file *f, uint64 addr, int n)
   return ret;
 }
 
-/* CMPT 332 Group 67 Lab 8 */
-int symlink(char* target, char* linkpath) {
-  printf(
-    "creating symlink named %s to path %s.\n",
-    linkpath,
-    target
-  );
-  return 0;
-
-}
-
-/**************************** */
