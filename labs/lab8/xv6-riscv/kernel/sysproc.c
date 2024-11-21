@@ -153,3 +153,12 @@ sys_setshare(void)
 }
 
 /* **********************************  */
+/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+uint64 sys_symlink(void)
+{
+  char target[MAXPATH];
+  char path[MAXPATH];
+  argstr(0, target, MAXPATH);
+  argstr(1, path, MAXPATH);
+    return symlink((char *) target, (char *) path);
+}
