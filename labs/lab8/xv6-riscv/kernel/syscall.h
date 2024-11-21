@@ -21,3 +21,6 @@
 #define SYS_mkdir  20
 #define SYS_close  21
 #define SYS_trace  22
+/* CMPT 332 Group 67 Lab 8 */
+#define SYS_symlink  23
+/******************************** */

@@ -23,6 +23,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int trace(int);
+int symlink(const char *target, const char *linkpath); /* CMPT 332 Group 67 Lab 8 */
 
 
 /* ulib.c */

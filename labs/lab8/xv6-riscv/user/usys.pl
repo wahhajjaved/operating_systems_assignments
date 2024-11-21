@@ -37,3 +37,4 @@ entry("sbrk");
 entry("sleep");
 entry("uptime");
 entry("trace");
+entry("symlink");# CMPT 332 Group 67 Lab 8
