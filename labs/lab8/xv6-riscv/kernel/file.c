@@ -89,7 +89,7 @@ filestat(struct file *f, uint64 addr)
 {
   struct proc *p = myproc();
   struct stat st;
-  
+
   if(f->type == FD_INODE || f->type == FD_DEVICE){
     ilock(f->ip);
     stati(f->ip, &st);
@@ -180,3 +180,15 @@ filewrite(struct file *f, uint64 addr, int n)
   return ret;
 }
 
+/* CMPT 332 Group 67 Lab 8 */
+int symlink(char* target, char* linkpath) {
+  printf(
+    "creating symlink named %s to path %s.\n",
+    linkpath,
+    target
+  );
+  return 0;
+
+}
+
+/**************************** */

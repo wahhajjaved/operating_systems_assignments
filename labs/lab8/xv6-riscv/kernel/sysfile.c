@@ -506,6 +506,14 @@ sys_pipe(void)
 
 /* CMPT 332 Group 67 Lab 8 */
 uint64 sys_symlink(void) {
-  printf("sys_symlink not yet implemented.\n");
-  return 0;
+  char target[MAXPATH];
+  char linkpath[MAXPATH];
+
+  if(argstr(0, target, MAXPATH) < 0) {
+    return -1;
+  }
+  if(argstr(1, linkpath, MAXPATH) < 0) {
+    return -1;
+  }
+  return symlink(target, linkpath);
 }

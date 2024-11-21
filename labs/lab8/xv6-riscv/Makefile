@@ -142,6 +142,7 @@ UPROGS=\
 	$U/_pingpong\
 	$U/_primes\
 	$U/_trace\
+	$U/_symlinktest\
 
 fs.img: mkfs/mkfs README $(UPROGS)
 	mkfs/mkfs fs.img README $(UPROGS)
