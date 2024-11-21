@@ -197,3 +197,6 @@ void            virtio_disk_intr(void);
 
 /* number of elements in fixed-size array */
 #define NELEM(x) (sizeof(x)/sizeof((x)[0]))
+
+/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+int symlink(char *target, char*path);

@@ -28,6 +28,9 @@ int             setshare(int groupnumber, int newshare, int* remainingshares);
 int             setprocessgroup(int pid, int groupnumber);
 int             procdump(void);
 /* ************************************ */
+/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+int symlink(char *target, char*path);
+
 
 /* ulib.c */
 int stat(const char*, struct stat*);
