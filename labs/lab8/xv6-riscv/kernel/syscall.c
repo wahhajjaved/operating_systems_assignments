@@ -108,6 +108,10 @@ extern uint64 sys_setprocessgroup(void);
 extern uint64 sys_setshare(void);
 extern uint64 sys_procdump(void);
 /* ****************************** */
+/*NAKHBA MUBASHIR lab 08*/
+extern uint64 sys_symlink(void);
+
+
 
 /* An array mapping syscall numbers from syscall.h */
 /* to the function that handles the system call. */
@@ -138,13 +142,14 @@ static uint64 (*syscalls[])(void) = {
 [SYS_getNumFreePages] sys_getNumFreePages,
 [SYS_setprocessgroup]  sys_setprocessgroup,
 [SYS_setshare]  sys_setshare,
-[SYS_procdump]  sys_procdump
+[SYS_procdump]  sys_procdump,
 /* ****************************** */
-
+/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+[SYS_symlink] sys_symlink
 };
 
 /* array of sys call names */
-char syscallnames[22][10]= {
+char syscallnames[23][10]= {
     "read",
     "trace",
     "exec",
@@ -154,7 +159,8 @@ char syscallnames[22][10]= {
     "kill",
     "mkdir",
     "pipe",
-    "wait"
+    "wait",
+    "symlink"
 
 };
 

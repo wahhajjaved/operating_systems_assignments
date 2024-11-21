@@ -148,6 +148,7 @@ UPROGS=\
 	$U/_prod-con-sem\
 	$U/_cowtest\
 	$U/_schedulertests\
+   $U/_symlinktest\
 
 #CMPT 332 GROUP 67 Change, Fall 2024
 

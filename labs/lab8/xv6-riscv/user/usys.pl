@@ -42,3 +42,5 @@ entry("setshare");
 entry("setprocessgroup");
 entry("procdump");
 #/* ************************************ */
+#/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+entry("symlink");

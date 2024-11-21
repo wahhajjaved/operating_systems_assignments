@@ -27,3 +27,5 @@
 #define SYS_procdump  25
 #define SYS_getNumFreePages 26
 /* ****************************** */
+/*NAKHBA MUBASHIR lab 08 11317060 epl482*/
+#define SYS_symlink 27
