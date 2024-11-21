@@ -258,8 +258,9 @@ void createChildren(int numChildren, int group) {
 			exit(0);
 		}
 	}
-    if(group == 9)
+    if(group == 9){
         procdump();
+	}
 	for(i = 0; i < numChildren; i++) {
 		wait(&s);
 	}
