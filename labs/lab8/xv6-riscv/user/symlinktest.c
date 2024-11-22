@@ -15,15 +15,11 @@ static int failed = 0;
 static void testsymlink(void);
 static void concur(void);
 static void cleanup(void);
-
+/*
 void mytests() {
-  char target[MAXPATH], linkpath[MAXPATH];
-  int fd1, fd2, r;
+  int fd1, fd2, fd3, r;
   struct stat st;
-
-  strcpy(target, "/mytests/a");
-  strcpy(linkpath, "/mytests/b");
-
+  unlink("/mytests");
   mkdir("/mytests");
 
   fd1 = open("/mytests/a", O_CREATE | O_RDWR);
@@ -63,15 +59,32 @@ void mytests() {
     st.nlink,
     st.size
   );
-
-
+  r = symlink("/mytests/b", "/mytests/c");
+  if(r < 0) {
+    printf("symlink c -> b failed.\n");
+  }
+  fd3 = open("/mytests/c", O_RDONLY);
+  fstat(fd3, &st);
+  printf(
+    "/mytests/c: \n"
+    "dev = %d\n"
+    "ino = %d\n"
+    "type = %d\n"
+    "nlink = %d\n"
+    "size = %ld\n\n",
+    st.dev,
+    st.ino,
+    st.type,
+    st.nlink,
+    st.size
+  );
 }
-
+*/
 int
 main(int argc, char *argv[])
 {
   cleanup();
-  mytests();
+/*  mytests();*/
   testsymlink();
   concur();
   exit(failed);
@@ -111,7 +124,6 @@ testsymlink(void)
   char buf[4] = {'a', 'b', 'c', 'd'};
   char c = 0, c2 = 0;
   struct stat st;
-  return;
   printf("Start: test symlinks\n");
 
   mkdir("/testsymlink");
@@ -190,7 +202,6 @@ concur(void)
   int fd;
   struct stat st;
   int nchild = 2;
-  return;
   printf("Start: test concurrent symlinks\n");
 
   fd = open("/testsymlink/z", O_CREATE | O_RDWR);

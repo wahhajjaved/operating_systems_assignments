@@ -301,6 +301,9 @@ create(char *path, short type, short major, short minor)
   return 0;
 }
 
+#define MAXSYMLINKDEPTH 10
+
+
 uint64
 sys_open(void)
 {
@@ -322,19 +325,64 @@ sys_open(void)
       end_op();
       return -1;
     }
-  } else {
+  }
+  else {
     if((ip = namei(path)) == 0){
       end_op();
       return -1;
     }
+
     ilock(ip);
     if(ip->type == T_DIR && omode != O_RDONLY){
       iunlockput(ip);
       end_op();
       return -1;
     }
-  }
+	}
+  /* CMPT 332 Group 67 Lab 8 */
+/*
+    if(ip->type == T_SYMLINK && omode != O_NOFOLLOW) {
+        char path[MAXPATH];
+        int r, i;
 
+        i = 0;
+        while(1) {
+          if(i++ > MAXSYMLINKDEPTH) {
+            iunlockput(ip);
+            end_op();
+            return -1;
+          }
+*/
+          /*read the path stored in the inode's data*/
+ /*         r = readi(ip, 0, (uint64)path, 0, MAXPATH);
+          if(r <= 0) {
+            iunlockput(ip);
+            end_op();
+            return -1;
+          }
+*/
+          /*load the path*/
+  /*        iunlockput(ip);
+          ip = namei(path);
+          if(ip == 0) {
+              iunlockput(ip);
+              end_op();
+              return -1;
+          }
+*/
+          /*If the loaded inode isn't a symlink, the end of the */
+          /*symlink has been reached*/
+  /*        ilock(ip);
+          if(ip->type != T_SYMLINK) {
+            break;
+          }
+        }
+    }
+  }
+  */
+
+
+  /******************************************** */
   if(ip->type == T_DEVICE && (ip->major < 0 || ip->major >= NDEV)){
     iunlockput(ip);
     end_op();
@@ -525,10 +573,8 @@ uint64 sys_symlink(void) {
   );
 
   /*create an i node for storing the target*/
-  printf("Creating inode.\n");
   begin_op();
   ip = create(linkpath, T_SYMLINK, 0, 0);
-  printf("inode created. Now writing.\n");
 
   r = writei(ip, 0, (uint64)target, 0, strlen(target));
   if(strlen(target) != r) {
@@ -541,3 +587,4 @@ uint64 sys_symlink(void) {
   end_op();
   return 0;
 }
+/****************************************** */
