@@ -1,0 +1,18 @@
+#@author Wahhaj Javed, muj975, 11135711
+#@date 2024-11-21
+
+xv6 kernel is booting
+
+hart 2 starting
+hart 1 starting
+init: starting sh
+$ symlinktest
+Start: test symlinks
+creating symlink named /testsymlink/b to path /testsymlink/a.
+FAILURE: failed to read bytes from b
+Start: test concurrent symlinks
+creating symlink named /testsymlink/y to path /testsymlink/z.
+creating symlink named /testsymlink/y to path /testsymlink/z.
+scause=0xd sepc=0x80003586 stval=0x4c
+panic: kerneltrap
+

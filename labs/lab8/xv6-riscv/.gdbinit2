@@ -1,0 +1,35 @@
+set confirm off
+set architecture riscv:rv64
+target remote 127.0.0.1:27511
+set disassemble-next-line auto
+set riscv use-compressed-breakpoints yes
+symbol-file kernel/kernel
+add-symbol-file kernel/bio.o
+add-symbol-file kernel/console.o
+add-symbol-file kernel/entry.o
+add-symbol-file kernel/exec.o
+add-symbol-file kernel/file.o
+add-symbol-file kernel/fs.o
+add-symbol-file kernel/kalloc.o
+add-symbol-file kernel/kernelvec.o
+add-symbol-file kernel/log.o
+add-symbol-file kernel/main.o
+add-symbol-file kernel/pipe.o
+add-symbol-file kernel/plic.o
+add-symbol-file kernel/printf.o
+add-symbol-file kernel/proc.o
+add-symbol-file kernel/sleeplock.o
+add-symbol-file kernel/spinlock.o
+add-symbol-file kernel/start.o
+add-symbol-file kernel/string.o
+add-symbol-file kernel/swtch.o
+add-symbol-file kernel/syscall.o
+add-symbol-file kernel/sysfile.o
+add-symbol-file kernel/sysproc.o
+add-symbol-file kernel/trampoline.o
+add-symbol-file kernel/trap.o
+add-symbol-file kernel/uart.o
+add-symbol-file kernel/virtio_disk.o
+add-symbol-file kernel/vm.o
+
+add-symbol-file user/_cowtest
