@@ -11,6 +11,21 @@ Memory block/space:
         *start //start pointer
         size   // the size of the memory
     
+Stats: store all stats for a single algorithm
+    struct stats
+        unsigned nodesSearched;     //how many block have been searched
+        unsigned numFreeMem;   
+        unsigned long totalAlloMem; //total memory allocated
+        unsigned long extFrag;      //memory holes, not counting last
+        unsigned long intFrag;      // allocated memory is larger then 
+                                    allocated space 
+    nodesSearched; and numFreeMem does not need too much space and it fits 
+    in unsigned range [32 bits] 
+    totalAlloMem tracks the total amount of memory allocation which can easily
+    reach gigabyte so to prevent overflow unsigned long is used. 
+    extFrag and intFrag can grow large over time so i used unsigned long
+    to be safe
+
 
 
 use Best fit and First fit Algorithm
@@ -22,9 +37,7 @@ used struct for memory allocation for both FF and BF for better management
     struct _FF{
         LIST *freeMem;         // list of free memory blocks
         List *allocateMem;     // list of allocated memory blocks
-        int totalFreeMem;      // total size of the free memory
-        int totalAllocateMem;  // total size of the allocation memory
-        int numAlloc;          // number of allocations performed
+        Stats stat;            // the stats of each algorithm
         }FF
         same for BF
 
