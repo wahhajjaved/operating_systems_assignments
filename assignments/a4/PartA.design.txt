@@ -1,0 +1,47 @@
+# @author Wahhaj Javed, muj975, 11135711
+# @author Nakhba Mubashir, epl482, 11317060
+
+Part A option 3 Contiguous Memory Management Simulation/Experiiment
+
+Simulation design:
+--------------------------------------
+Memory block/space:
+    created a struct to store all the memory block for allocation and freeing
+    struct :
+        *start //start pointer
+        size   // the size of the memory
+    
+
+
+use Best fit and First fit Algorithm
+    first fit allocate the memory block to the first large enough block to
+    fill the request.
+    best fit alloctaes the memory to the smallest block that fits our 
+    request
+used struct for memory allocation for both FF and BF for better management
+    struct _FF{
+        LIST *freeMem;         // list of free memory blocks
+        List *allocateMem;     // list of allocated memory blocks
+        int totalFreeMem;      // total size of the free memory
+        int totalAllocateMem;  // total size of the allocation memory
+        int numAlloc;          // number of allocations performed
+        }FF
+        same for BF
+
+--------------------------------------
+MALLOC:
+
+FfMalloc:
+    check the inputs
+    enter the critical section by entering the monitor
+    find the first free memory block
+    if there are no free memory then wait and try again
+    when a free memory block is found then allocate the memory and update the
+
+    search sequenctially from begining. the process stops as soon as a block
+    that is big enough is found
+
+BfMalloc:
+    the design is similar to FF but Best fit searches through all the free 
+    memory blocks and compare their sizes
+
