@@ -134,5 +134,15 @@ First Fit Using Free and Used Lists:
     O(n). 
 
 
+First Fit Using List Views:
+
+    In this approach, all memory segments are stored in just one linked list.
+    However, the segment metadata will now also track the next free or used
+    node, in addition to the segment's starting address, size, type. This will 
+    provide the benefits of using separate used and free lists while also
+    proving O(1) insertion time advantage of a single list.
+    
+    The disadvantage of this approach is that the list library will need to be
+    updated to handle iteration over views. 
 
 
