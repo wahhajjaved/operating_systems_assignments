@@ -58,3 +58,81 @@ BfMalloc:
     the design is similar to FF but Best fit searches through all the free 
     memory blocks and compare their sizes
 
+
+
+
+
+
+
+Data Structures:
+--------------------------------------
+
+For best performance, each memory management method will need a different data
+structure.
+
+
+First Fit Using Linked Lists:
+
+    All memory segments can be stored in a linked list. Segments are marked as 
+    used or free. Linked lists are a good choice because first fit always 
+    searces from the beginning of the memory and only looks for the first free
+    slot that's big enough. 
+    
+    The first free slot is segmented when allocating and adjacent free slots 
+    are merged when freeing. So the size of the list is equal to the number of 
+    segments. When segmenting the slots will need to remain sorted so that they
+    may be merged quickly.
+    
+    Worst case allocation time is O(n), where n is the number of segments. This
+    will happen if the viable free slot is at the tail of the list or if there
+    is no free space left. By keeping a pointer to the first free segment, 
+    allocation time can be slightly improved.
+    
+    Worst case free time is also O(n), because the slot being freed may be at
+    the end of the list and the entire list must be traversed.
+    
+    When allocating and freeing, the segmented and merged slots needs to be 
+    placed in the correct position in the list to keep it sorted. With a linked
+    list, this insertion time is O(1).
+    
+    Each node in the list must store the starting address which is 8 bytes;
+    size_t size of the segmenth which may also be 8 bytes; and a boolean to
+    track if the segment is used or free, which can be optimized to be 1 byte.
+    Overall each node will use 17 bytes. 
+    
+    The worst case space complexity will be when each segment is used for
+    allocated bytes. Then 17 bytes of metadata will be used to track 1 byte
+    of actual data.
+    
+
+First Fit Using Free and Used Lists:
+
+    The linked list usage can be optimized by separating out the free and used
+    segments into their own lists. Allocation will move a segment from the
+    free list to the used list and freeing will do the reverse.
+    
+    Now allocation time will be O(n) where n is the number of free segments. 
+    Free time will be O(m), where m is the number of used segments. The total
+    number of segments is still the same as when using one linked list, but
+    allocation no longer requires traversing over used segments and free
+    doesn't require traversing over free segments. With the two lists, the
+    used/free flag is also no longer needed.
+
+    The used list is needed to store the size of each segment as that is needed
+    when freeing it. So the elements in the used list don't need to be sorted.
+    Insertion into the used list will be O(1). 
+
+    A slight optimization on the used list can be achieved by prepending new
+    elements. This way, memory segments that have been allocated for a long 
+    time will eventually make their way to the back of the list. When freeing,
+    search for the address in the used list starts at the begining of the list
+    so the average search time will go down.
+
+    The main disadvantage of using two lists is the increased time to merge
+    nodes when freeing. Either the free list has to be kept sorted or segments
+    adjacent to the newely freed segment must be found. Both operations are
+    O(n). 
+
+
+
+
