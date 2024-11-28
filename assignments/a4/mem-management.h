@@ -15,9 +15,9 @@
 #include <RttCommon.h>
 #include <monitor.h>
 
-#define MEM_AVAILABLE  0x200000000l  /* 8 GiB */
+#define MEM_AVAILABLE  0x10000000l  /* 8 GiB */
 #define MEM_BASE       0x80000000l
-#define NUM_ALGS 2
+#define NUM_ALGS       2
 
 /* store all stats for a single algorithm */
 typedef struct {
