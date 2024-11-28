@@ -145,7 +145,7 @@ RTTTHREAD MallocTest(void *arg) {
 */
 		/* Allocate a block of memory */
 		allocatedAddrs[i] = MyMalloc(allocSizes[threadNo][i], algNo);
-		/*printf("%d-%d: allocated block: %p to %p\n", algNo, threadNo, 
+/*		printf("%d-%d: allocated block: %p to %p\n", algNo, threadNo, 
 				(void*) allocatedAddrs[i], 
 				(void*) ((long) allocatedAddrs[i] + allocSizes[threadNo][i] 
 				- 1)); 
@@ -167,10 +167,10 @@ RTTTHREAD MallocTest(void *arg) {
 				freeIndex = (freeIndex + 1) % (i + 1);	
 
 			MyFree(allocatedAddrs[freeIndex], algNo);
-/*		printf("%d-%d: freed block of allocated memory at 0x%lx\n", 
+/*	printf("%d-%d: freed block of allocated memory at 0x%lx\n", 
 				algNo, threadNo, (long) allocatedAddrs[freeIndex]); 
 			allocatedAddrs[freeIndex] = NULL;
-*/		}
+*/	}
 	}
 
 	Threadend(algNo);  /* Prints results if this is the last thread */
