@@ -140,21 +140,21 @@ RTTTHREAD MallocTest(void *arg) {
 
 	/* Main simulation loop */
 	for (i = 0; i < numIterations; i++) {
-		printf("%d-%d: attempting to allocate %u bytes\n", algNo, threadNo,
+/*		printf("%d-%d: attempting to allocate %u bytes\n", algNo, threadNo,
 				allocSizes[threadNo][i]); 
-
+*/
 		/* Allocate a block of memory */
 		allocatedAddrs[i] = MyMalloc(allocSizes[threadNo][i], algNo);
-		printf("%d-%d: allocated block: %p to %p\n", algNo, threadNo, 
+		/*printf("%d-%d: allocated block: %p to %p\n", algNo, threadNo, 
 				(void*) allocatedAddrs[i], 
 				(void*) ((long) allocatedAddrs[i] + allocSizes[threadNo][i] 
 				- 1)); 
-
+*/
 		/* Sleep for some time */
 		RttUSleep(sleepTimes[threadNo][i]);
-		printf("%d-%d: slept for %d ticks\n", algNo, threadNo,
+/*		printf("%d-%d: slept for %d ticks\n", algNo, threadNo,
 				sleepTimes[threadNo][i]); 
-
+*/
 		/* If freeing memory this iteration... */
 		if (doFree[threadNo][i]) {
 			int freeIndex;
@@ -167,10 +167,10 @@ RTTTHREAD MallocTest(void *arg) {
 				freeIndex = (freeIndex + 1) % (i + 1);	
 
 			MyFree(allocatedAddrs[freeIndex], algNo);
-			printf("%d-%d: freed block of allocated memory at 0x%lx\n", 
+/*		printf("%d-%d: freed block of allocated memory at 0x%lx\n", 
 				algNo, threadNo, (long) allocatedAddrs[freeIndex]); 
 			allocatedAddrs[freeIndex] = NULL;
-		}
+*/		}
 	}
 
 	Threadend(algNo);  /* Prints results if this is the last thread */

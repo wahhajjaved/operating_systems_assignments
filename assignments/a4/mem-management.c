@@ -25,7 +25,7 @@ struct _BF{
 
 
 void *FfMalloc(size_t size) {
-    MemorySpace *firstFit;
+    MemorySpace *firstFit=NULL;
     MemorySpace *freeBlock;
     MemorySpace *allocaBlock;
 
@@ -34,12 +34,8 @@ void *FfMalloc(size_t size) {
     if (size == 0) return NULL;
     RttMonEnter(); /* critical section*/
     /*find first free memory space */
-    firstFit = NULL;
-    freeBlock=NULL;
-    printf("size:%d\n", FF.freeMem->size);
-        printf("size:%ld\n", freeBlock->size);
-    freeBlock = (MemorySpace *)ListFirst(FF.freeMem);
-   printf("hello\n");
+    /*printf("size:%d\n", FF.freeMem->size);*/
+    freeBlock = ListFirst(FF.freeMem);
     FF.stat.nodesSearched++;
 
     while (freeBlock != NULL) {
@@ -51,17 +47,17 @@ void *FfMalloc(size_t size) {
         /*move to the next block*/
         freeBlock = ListNext(FF.freeMem);
         FF.stat.nodesSearched++;
-    
+    if (firstFit == NULL) {
+    printf("No free block found.\n");}
     }
     /* no fit found, wait until Free() and then try again */
     while (firstFit == NULL) {
         errx(1, "FfMalloc: no freea block\n");
         wait = 1;
         RttMonWait(FFMemAvail);
-        /*freeBlock = ListFirst(FF.freeMem);*/
-        freeBlock = (MemorySpace *)FF.freeMem->head->item;
+        freeBlock = ListFirst(FF.freeMem);
         FF.stat.nodesSearched++;
-        printf("hello\n");
+        printf("error2\n");
         while (freeBlock != NULL) {
             if (freeBlock->size >= size) {
                 firstFit = freeBlock;
@@ -73,7 +69,8 @@ void *FfMalloc(size_t size) {
     /* If still no fit was found, signal the next waiting thread */
 		if (firstFit == NULL)
 			RttMonSignal(FFMemAvail);
-        
+            RttMonLeave();
+            return NULL;
     }
 
     /* allocate and initialize the MemorySpace struct for 
@@ -330,40 +327,39 @@ void Initialize(int numThreads) {
 	FF.freeMem = ListCreate();
 	FF.allocateMem = ListCreate();
     if (FF.freeMem == NULL || FF.allocateMem == NULL) {
-        fprintf(stderr, "Error: Failed to create lists for FF\n");
+        printf("Error: Failed to create lists for FF\n");
         exit(EXIT_FAILURE);
     }
 
 	threadsLeft[0] = numThreads;
 	InitStats(&FF.stat);
 
-	/*freeMem = malloc(sizeof(MemorySpace));
-	*/
-    freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));
+	freeMem = malloc(sizeof(MemorySpace));
+    /*freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));*/
     if (freeMem == NULL) {
-        fprintf(stderr, "Error: Failed to allocate memory for FF\n");
+        printf("Error: Failed to allocate memory for FF\n");
         exit(EXIT_FAILURE);
     }
     freeMem->start = (char*) MEM_BASE;
 
 	freeMem->size = MEM_AVAILABLE;
     if (ListPrepend(FF.freeMem, freeMem)== -1) {
-        fprintf(stderr, "Error: Failed to prepend to FF freeMem\n");
+        printf( "Error: Failed to prepend to FF freeMem\n");
         exit(EXIT_FAILURE);
     }
 	/* BF  */
 	BF.freeMem = ListCreate();
 	BF.allocateMem = ListCreate();
     if (BF.freeMem == NULL || BF.allocateMem == NULL) {
-        fprintf(stderr, "Error: Failed to create lists for BF\n");
+        printf("Error: Failed to create lists for BF\n");
         exit(EXIT_FAILURE);
     }
 
 	threadsLeft[1] = numThreads;
 	InitStats(&BF.stat);
 
-	/*freeMem = malloc(sizeof(MemorySpace));*/
-    freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));
+	freeMem = malloc(sizeof(MemorySpace));
+    /*freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));*/
 	freeMem->start = (char*) MEM_BASE;
 	freeMem->size = MEM_AVAILABLE;
 	if (ListPrepend(BF.freeMem, freeMem) == -1) {
