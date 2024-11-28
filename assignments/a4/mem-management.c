@@ -33,10 +33,13 @@ void *FfMalloc(size_t size) {
 
     if (size == 0) return NULL;
     RttMonEnter(); /* critical section*/
-
     /*find first free memory space */
     firstFit = NULL;
-    freeBlock = ListFirst(FF.freeMem);
+    freeBlock=NULL;
+    printf("size:%d\n", FF.freeMem->size);
+        printf("size:%ld\n", freeBlock->size);
+    freeBlock = (MemorySpace *)ListFirst(FF.freeMem);
+   printf("hello\n");
     FF.stat.nodesSearched++;
 
     while (freeBlock != NULL) {
@@ -48,15 +51,17 @@ void *FfMalloc(size_t size) {
         /*move to the next block*/
         freeBlock = ListNext(FF.freeMem);
         FF.stat.nodesSearched++;
+    
     }
-
     /* no fit found, wait until Free() and then try again */
     while (firstFit == NULL) {
         errx(1, "FfMalloc: no freea block\n");
         wait = 1;
         RttMonWait(FFMemAvail);
-        freeBlock = ListFirst(FF.freeMem);
+        /*freeBlock = ListFirst(FF.freeMem);*/
+        freeBlock = (MemorySpace *)FF.freeMem->head->item;
         FF.stat.nodesSearched++;
+        printf("hello\n");
         while (freeBlock != NULL) {
             if (freeBlock->size >= size) {
                 firstFit = freeBlock;
@@ -87,7 +92,7 @@ void *FfMalloc(size_t size) {
         firstFit->size -= size;
     }
     FF.stat.totalAlloMem +=size;
-    FF.stat.numFreeMem - ListCount(FF.freeMem);
+    FF.stat.numFreeMem = ListCount(FF.freeMem);
     if (firstFit != ListLast(FF.freeMem))
 		FF.stat.extFrag -= size;
 
@@ -238,7 +243,7 @@ void FfFree(void *ptr) {
 	FF.stat.totalAlloMem -= size;
 	FF.stat.numFreeMem = ListCount(FF.freeMem);
 	FF.stat.extFrag += size;
-	if (mem == ListLast(FF.freeMem)) FF.stats.extFrag -= coalescedToEnd;
+	if (mem == ListLast(FF.freeMem)) FF.stat.extFrag -= coalescedToEnd;
 
 	RttMonSignal(FFMemAvail);
 	RttMonLeave();
@@ -302,7 +307,7 @@ void BfFree(void *ptr) {
     FF.stat.totalAlloMem -= size;
     FF.stat.numFreeMem = ListCount(FF.freeMem);
     FF.stat.extFrag += size;
-    if (mem == ListLast(FF.freeMem)) FF.stats.extFrag -= coalescedToEnd;
+    if (mem == ListLast(FF.freeMem)) FF.stat.extFrag -= coalescedToEnd;
 
     RttMonSignal(FFMemAvail);
     RttMonLeave();
@@ -320,31 +325,58 @@ void InitStats(Stats *stats) {
 /* Monitor Procedures */
 void Initialize(int numThreads) {
 	MemorySpace *freeMem;
-	int i;
 
 	/*FF */
 	FF.freeMem = ListCreate();
 	FF.allocateMem = ListCreate();
+    if (FF.freeMem == NULL || FF.allocateMem == NULL) {
+        fprintf(stderr, "Error: Failed to create lists for FF\n");
+        exit(EXIT_FAILURE);
+    }
+
 	threadsLeft[0] = numThreads;
 	InitStats(&FF.stat);
 
-	freeMem = malloc(sizeof(MemorySpace));
-	freeMem->start = (char*) MEM_BASE;
-	freeMem->size = MEM_AVAILABLE;
-	ListPrepend(FF.freeMem, freeMem);
+	/*freeMem = malloc(sizeof(MemorySpace));
+	*/
+    freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));
+    if (freeMem == NULL) {
+        fprintf(stderr, "Error: Failed to allocate memory for FF\n");
+        exit(EXIT_FAILURE);
+    }
+    freeMem->start = (char*) MEM_BASE;
 
+	freeMem->size = MEM_AVAILABLE;
+    if (ListPrepend(FF.freeMem, freeMem)== -1) {
+        fprintf(stderr, "Error: Failed to prepend to FF freeMem\n");
+        exit(EXIT_FAILURE);
+    }
 	/* BF  */
 	BF.freeMem = ListCreate();
 	BF.allocateMem = ListCreate();
+    if (BF.freeMem == NULL || BF.allocateMem == NULL) {
+        fprintf(stderr, "Error: Failed to create lists for BF\n");
+        exit(EXIT_FAILURE);
+    }
+
 	threadsLeft[1] = numThreads;
 	InitStats(&BF.stat);
 
-	freeMem = malloc(sizeof(MemorySpace));
+	/*freeMem = malloc(sizeof(MemorySpace));*/
+    freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));
 	freeMem->start = (char*) MEM_BASE;
 	freeMem->size = MEM_AVAILABLE;
-	ListPrepend(BF.freeMem, freeMem);
+	if (ListPrepend(BF.freeMem, freeMem) == -1) {
+        fprintf(stderr, "Error: Failed to prepend to BF freeMem\n");
+        exit(EXIT_FAILURE);
+    }
 
 	RttMonInit(numConds);
+        /* Debug prints to verify initialization*/
+    printf("FF initialized: Free memory start=%p, size=%lu\n", 
+    freeMem->start, freeMem->size);
+    printf("BF initialized: Free memory start=%p, size=%lu\n", 
+    freeMem->start, freeMem->size);
 }
 
 void Threadend(int alg) {
