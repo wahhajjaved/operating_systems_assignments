@@ -26,8 +26,7 @@ struct _BF{
 
 void *FfMalloc(size_t size) {
     MemorySpace *firstFit=NULL;
-    MemorySpace *freeBlock;
-    MemorySpace *allocaBlock;
+    MemorySpace *freeBlock, *allocaBlock;
 
     int wait= 0; /*wait flag*/
 
@@ -47,17 +46,16 @@ void *FfMalloc(size_t size) {
         /*move to the next block*/
         freeBlock = ListNext(FF.freeMem);
         FF.stat.nodesSearched++;
-    if (firstFit == NULL) {
-    printf("No free block found.\n");}
     }
     /* no fit found, wait until Free() and then try again */
     while (firstFit == NULL) {
         errx(1, "FfMalloc: no freea block\n");
         wait = 1;
         RttMonWait(FFMemAvail);
+        
         freeBlock = ListFirst(FF.freeMem);
         FF.stat.nodesSearched++;
-        printf("error2\n");
+
         while (freeBlock != NULL) {
             if (freeBlock->size >= size) {
                 firstFit = freeBlock;
@@ -68,9 +66,9 @@ void *FfMalloc(size_t size) {
         }
     /* If still no fit was found, signal the next waiting thread */
 		if (firstFit == NULL)
-			RttMonSignal(FFMemAvail);
+			/*RttMonSignal(FFMemAvail);*/
             RttMonLeave();
-            return NULL;
+            /*return NULL;*/
     }
 
     /* allocate and initialize the MemorySpace struct for 
@@ -255,58 +253,58 @@ void BfFree(void *ptr) {
     RttMonEnter();
 
     /* find the allocated memory block with the given address*/
-    mem = ListFirst(FF.allocateMem);
+    mem = ListFirst(BF.allocateMem);
     while (mem != NULL && mem ->start != start) {
-        mem = ListNext(FF.allocateMem);}
+        mem = ListNext(BF.allocateMem);}
 
     /*  remove the allocated memory block*/
     if (mem == NULL) {
-        printf("FfFree:no allocated memory block with the address %p found\n",
+        printf("BfFree:no allocated memory block with the address %p found\n",
             start);
         exit(1);
     }
 
-    ListRemove(FF.allocateMem);
+    ListRemove(BF.allocateMem);
     size = mem->size;
 
     /*find the memory blocks before and after the allocated block */
-    freeMemAfter = ListFirst(FF.freeMem);
-    FF.stat.nodesSearched++;
+    freeMemAfter = ListFirst(BF.freeMem);
+    BF.stat.nodesSearched++;
     while ((freeMemAfter != NULL) && ((freeMemAfter->start)<start)){
-        freeMemAfter = ListNext(FF.freeMem);
-        FF.stat.nodesSearched++;
+        freeMemAfter = ListNext(BF.freeMem);
+        BF.stat.nodesSearched++;
     }
 
     if (freeMemAfter == NULL)
-        freeMemBefore = ListLast(FF.freeMem);
+        freeMemBefore = ListLast(BF.freeMem);
     else
-        freeMemBefore = ListPrev(FF.freeMem);
+        freeMemBefore = ListPrev(BF.freeMem);
 
     /* If free block before is adjacent to block, combine them */
     if (freeMemBefore == NULL) {
-        ListPrepend(FF.freeMem, mem);
+        ListPrepend(BF.freeMem, mem);
     } else if (freeMemBefore->start + freeMemBefore->size == start) {
         freeMemBefore->size += mem->size;
         free(mem);
         mem = freeMemBefore;
     } else {  /* Otherwise, add block to the list b/w before and after */
-        ListAdd(FF.freeMem, mem);
+        ListAdd(BF.freeMem, mem);
     }
     coalescedToEnd = mem->size;
     /* If free block after is adjacent to block, combine them */
     if (freeMemAfter != NULL &&
             mem->start + mem->size == freeMemAfter->start) {
         mem->size += freeMemAfter->size;
-        ListNext(FF.freeMem);
-        free(ListRemove(FF.freeMem));
+        ListNext(BF.freeMem);
+        free(ListRemove(BF.freeMem));
     }
 
-    FF.stat.totalAlloMem -= size;
-    FF.stat.numFreeMem = ListCount(FF.freeMem);
-    FF.stat.extFrag += size;
-    if (mem == ListLast(FF.freeMem)) FF.stat.extFrag -= coalescedToEnd;
+    BF.stat.totalAlloMem -= size;
+    BF.stat.numFreeMem = ListCount(BF.freeMem);
+    BF.stat.extFrag += size;
+    if (mem == ListLast(BF.freeMem)) BF.stat.extFrag -= coalescedToEnd;
 
-    RttMonSignal(FFMemAvail);
+    RttMonSignal(BFMemAvail);
     RttMonLeave();
 
 }
