@@ -67,15 +67,56 @@ BfMalloc:
 Data Structures:
 --------------------------------------
 
-For best performance, each memory management method will need a different data
-structure.
+There are two types of segments: used and free. Operations on the used
+segments are insert, delete, and search by memory address. The used 
+segments do not need to be ordered so insertion can happen anywhere making
+it O(1). Deletion requires search. So the ideal data structure for used
+segments would be a hashmap which can do all operations in O(1). 
+
+The free segments also has these operations, but with different 
+considerations. The free segments must be ordered to make it easy to find
+adjacent segments. This ordering requirement further requires insertion
+inside the list at random places. The alternative is to have the free
+segments unordered and while that can make insertion O(1), the list still
+has to be searched to merge free segments. 
+
+The list also has to be searched when removing segments from the free
+list and this searching behaviour is different for different algorithms.
+For first fit, the search is done by memory address. For best fit, the 
+search is done using segment size. 
+
+So to summarize, the used list needs unordered insertion and search by 
+memory address, and deletion of searched item. And the free list needs 
+random insertion, search by memory address, and deletion of searched item. 
+For best fit, search by segment size is also needed. 
+
+The used list is th only one that benefits from the hash map. It could also
+benefit from a binary search tree to get O(log n) search time, at the cost
+of increasing insertion time from O(1) or O(log n).
+
+The free list won't benefit from a hash map, but best fit can benefit 
+from a search tree to find the optimal segment. An alternative would be
+a binary search of a sorted list by segment size. However, since segments
+sorted by memory address are still needed, the search tree or sorted list
+would have to be a separate copy which now must be kept in sync with the
+original free list.
+
+For these reasons, and the complexity of implementing a search tree and
+hash map, we have decided to just use the list library. The slowest 
+operation with linked lists will be searching but the other operations will
+be constant time. Furthermore, the free list can be kept sorted from the
+beginning, improving performance. 
+
+Linked lists can be used in the 3 different ways described below. Due to
+the overhead of implementing list views, the separate free and used list 
+configuration is used for the simulation.
 
 
-First Fit Using Linked Lists:
+One Linked List:
 
     All memory segments can be stored in a linked list. Segments are marked as 
     used or free. Linked lists are a good choice because first fit always 
-    searces from the beginning of the memory and only looks for the first free
+    searches from the beginning of the memory and only looks for the first free
     slot that's big enough. 
     
     The first free slot is segmented when allocating and adjacent free slots 
@@ -85,7 +126,7 @@ First Fit Using Linked Lists:
     
     Worst case allocation time is O(n), where n is the number of segments. This
     will happen if the viable free slot is at the tail of the list or if there
-    is no free space left. By keeping a pointer to the first free segment, 
+    is no free space left. By caching the pointer to the first free segment, 
     allocation time can be slightly improved.
     
     Worst case free time is also O(n), because the slot being freed may be at
@@ -103,9 +144,8 @@ First Fit Using Linked Lists:
     The worst case space complexity will be when each segment is used for
     allocated bytes. Then 17 bytes of metadata will be used to track 1 byte
     of actual data.
-    
 
-First Fit Using Free and Used Lists:
+Free and Used Lists:
 
     The linked list usage can be optimized by separating out the free and used
     segments into their own lists. Allocation will move a segment from the
@@ -131,10 +171,10 @@ First Fit Using Free and Used Lists:
     The main disadvantage of using two lists is the increased time to merge
     nodes when freeing. Either the free list has to be kept sorted or segments
     adjacent to the newely freed segment must be found. Both operations are
-    O(n). 
+    O(n), but keeping the list sorted makes is easier to use.
 
 
-First Fit Using List Views:
+List Views:
 
     In this approach, all memory segments are stored in just one linked list.
     However, the segment metadata will now also track the next free or used
@@ -144,5 +184,3 @@ First Fit Using List Views:
     
     The disadvantage of this approach is that the list library will need to be
     updated to handle iteration over views. 
-
-
