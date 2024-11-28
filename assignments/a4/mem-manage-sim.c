@@ -5,6 +5,7 @@
 
 #include <mem-management.h>
 
+#define STKSIZE 262144
 /* Limits of the simulation */
 #define MAX_THREADS    9
 #define MAX_ITERATIONS 10000
@@ -27,6 +28,7 @@ typedef struct _params {
 int numIterations;
 int numThreads;
 
+RTTTHREAD MallocTest(void *arg);
 
 void *MyMalloc(size_t size, int algNo) {
 	if (algNo == 0)return FfMalloc(size);
@@ -102,6 +104,75 @@ int mainp(int argc, char* argv[]) {
 	}	
 
 	Initialize(numThreads);  /* initialize the monitor */
- 
+	/* Create the threads for each algorithm */
+	for (j = 0; j < numThreads; j++) {
+		for (i = 0; i < NUM_ALGS; i++) {
+			params = malloc(sizeof(PARAMS));
+			params->threadNo = j;
+			params->algNo = i;
+
+			temp = RttCreate(&pid[i][j], (void(*)()) MallocTest, STKSIZE, NULL, 
+				 	params, attr, RTTUSR);
+			if (temp == RTTFAILED) {
+				perror("RttCreate");
+				exit(1);
+			}
+		}
+	} 
+
 	return 0;
 }
+
+
+
+RTTTHREAD MallocTest(void *arg) {
+	int i;
+	int algNo, threadNo;
+	void *allocatedAddrs[MAX_ITERATIONS];
+
+	threadNo = ((PARAMS*) arg)->threadNo;
+	algNo = ((PARAMS*) arg)->algNo;
+	free(arg);
+	printf("threadNo=%d, algNo=%d\n", threadNo, algNo); 
+
+	/* Initialize the allocated address array to all 0s (NULL) */
+	for (i = 0; i < numIterations; i++) allocatedAddrs[i] = NULL;
+
+	/* Main simulation loop */
+	for (i = 0; i < numIterations; i++) {
+		printf("%d-%d: attempting to allocate %u bytes\n", algNo, threadNo,
+				allocSizes[threadNo][i]); 
+
+		/* Allocate a block of memory */
+		allocatedAddrs[i] = MyMalloc(allocSizes[threadNo][i], algNo);
+		printf("%d-%d: allocated block: %p to %p\n", algNo, threadNo, 
+				(void*) allocatedAddrs[i], 
+				(void*) ((long) allocatedAddrs[i] + allocSizes[threadNo][i] 
+				- 1)); 
+
+		/* Sleep for some time */
+		RttUSleep(sleepTimes[threadNo][i]);
+		printf("%d-%d: slept for %d ticks\n", algNo, threadNo,
+				sleepTimes[threadNo][i]); 
+
+		/* If freeing memory this iteration... */
+		if (doFree[threadNo][i]) {
+			int freeIndex;
+			
+			/* Determine a random addr to free from the random alloc size */
+			freeIndex = allocSizes[threadNo][i] % (i + 1);
+
+			/* Linear probing if address has already been freed */
+			while (allocatedAddrs[freeIndex] == NULL)
+				freeIndex = (freeIndex + 1) % (i + 1);	
+
+			MyFree(allocatedAddrs[freeIndex], algNo);
+			printf("%d-%d: freed block of allocated memory at 0x%lx\n", 
+				algNo, threadNo, (long) allocatedAddrs[freeIndex]); 
+			allocatedAddrs[freeIndex] = NULL;
+		}
+	}
+
+	Threadend(algNo);  /* Prints results if this is the last thread */
+}
+

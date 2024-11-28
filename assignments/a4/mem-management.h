@@ -51,3 +51,6 @@ void *FfMalloc(size_t size);
 void *BfMalloc(size_t size);
 void FfFree(void *ptr);
 void BfFree(void *ptr);
+void Threadend(int alg);
+void MyMemStats(int algNo);
+

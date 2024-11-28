@@ -9,6 +9,8 @@
 #define FFMemAvail 0
 #define BFMemAvail 1
 
+int threadsLeft[NUM_ALGS];
+
 struct _FF{
     LIST *freeMem;         
     LIST *allocateMem;     
@@ -223,4 +225,66 @@ void FfFree(void *ptr) {
 	RttMonLeave();
 }
 void BfFree(void *ptr) {}
-void Initialize(int numThreads){}
+
+void InitStats(Stats *stats) {
+	stats->nodesSearched = 0;
+	stats->numFreeMem = 1;
+	stats->totalAlloMem = 0;
+	stats->extFrag = 0;
+	stats->intFrag = 0;
+}
+
+/* Monitor Procedures */
+void Initialize(int numThreads) {
+	MemorySpace *freeMem;
+	int i;
+
+	/*FF */
+	FF.freeMem = ListCreate();
+	FF.allocateMem = ListCreate();
+	threadsLeft[0] = numThreads;
+	InitStats(&FF.stat);
+
+	freeMem = malloc(sizeof(MemorySpace));
+	freeMem->start = (char*) MEM_BASE;
+	freeMem->size = MEM_AVAILABLE;
+	ListPrepend(FF.freeMem, freeMem);
+
+	/* BF  */
+	BF.freeMem = ListCreate();
+	BF.allocateMem = ListCreate();
+	threadsLeft[1] = numThreads;
+	InitStats(&BF.stat);
+
+	freeMem = malloc(sizeof(MemorySpace));
+	freeMem->start = (char*) MEM_BASE;
+	freeMem->size = MEM_AVAILABLE;
+	ListPrepend(BF.freeMem, freeMem);
+
+	RttMonInit(numConds);
+}
+
+void Threadend(int alg) {
+	RttMonEnter();
+	threadsLeft[alg]--;
+	if (threadsLeft[alg] == 0)
+		MyMemStats(alg);
+	RttMonLeave();
+}
+
+void MyMemStats(int algNo) {
+	Stats *stats;
+
+	if (algNo < 0 || algNo > 1)
+		errx(1, "algNo must be between 0 and 1");
+
+	if (algNo == 0)
+		stats = &FF.stat;
+	else if (algNo == 1)
+		stats = &BF.stat;
+
+	printf("%d: %d, %d, %ld, %ld, %ld\n", algNo, stats->nodesSearched, 
+			stats->numFreeMem, stats->totalAlloMem, 
+			stats->extFrag, stats->intFrag);
+}
+
