@@ -65,6 +65,9 @@ void *FfMalloc(size_t size) {
             freeBlock = ListNext(FF.freeMem);
             FF.stat.nodesSearched++;
         }
+    /* If still no fit was found, signal the next waiting thread */
+		if (firstFit == NULL)
+			RttMonSignal(FFMemAvail);
         
     }
 
@@ -98,9 +101,7 @@ void *FfMalloc(size_t size) {
 
 
 void *BfMalloc(size_t size) {
-    MemorySpace *bestFit;
-    MemorySpace *freeBlock;
-    MemorySpace *allocaBlock;
+    MemorySpace *bestFit, *freeBlock, *allocaBlock;
 
     int wait= 0; /*wait flag*/
 
@@ -114,10 +115,13 @@ void *BfMalloc(size_t size) {
 
     while (freeBlock != NULL) {
         if ((freeBlock->size >= size) && 
-            (bestFit == NULL || freeBlock->size < bestFit->size))
+            (bestFit == NULL || (freeBlock->size) < (bestFit->size)))
             bestFit = freeBlock;
+
         freeBlock = ListNext(BF.freeMem);
+        BF.stat.nodesSearched++;
     }
+
     /* no fit found, wait until Free() and then try again */
     while (bestFit == NULL) {
         errx(1, "BFMalloc: no free block\n");
@@ -125,6 +129,7 @@ void *BfMalloc(size_t size) {
         RttMonWait(BFMemAvail);
 
         freeBlock = ListFirst(BF.freeMem);
+        BF.stat.nodesSearched++;
 
         while (freeBlock != NULL) {
             if (freeBlock->size >= size) {
@@ -133,6 +138,7 @@ void *BfMalloc(size_t size) {
             }
 
             freeBlock = ListNext(BF.freeMem);
+            BF.stat.nodesSearched++;
         }
         /* If no fit was found, signal the next waiting */
         if (bestFit != NULL)
@@ -149,9 +155,11 @@ void *BfMalloc(size_t size) {
     if (bestFit->size == size) {
         /* refind the block since the pointer is at the end of the list */
         MemorySpace *memBlock = ListFirst(BF.freeMem);
-        while (memBlock != bestFit) 
+        BF.stat.nodesSearched++;
+        while (memBlock != bestFit){ 
             memBlock = ListNext(BF.freeMem);
-        
+            BF.stat.nodesSearched++;
+        }
         ListRemove(BF.freeMem);
         free(bestFit);
     } else {
@@ -161,11 +169,9 @@ void *BfMalloc(size_t size) {
 
     BF.stat.totalAlloMem += size;
 	BF.stat.numFreeMem = ListCount(BF.freeMem);
-    if (bestFit != ListLast(BF.freeMem))
-        BF.stat.extFrag -= size;
+    if (bestFit != ListLast(BF.freeMem)) BF.stat.extFrag -= size;
 
-    if (wait)
-        RttMonSignal(BFMemAvail);
+    if (wait) RttMonSignal(BFMemAvail);
 
     RttMonLeave();
 
@@ -176,7 +182,7 @@ void FfFree(void *ptr) {
 	MemorySpace *mem, *freeMemBefore, *freeMemAfter;
 	char *start;
 	int size;
-
+    int coalescedToEnd = 0;
 	start = ptr;
 
 	RttMonEnter();
@@ -219,12 +225,89 @@ void FfFree(void *ptr) {
 	} else {  /* Otherwise, add block to the list b/w before and after */
 		ListAdd(FF.freeMem, mem);
 	}
+	coalescedToEnd = mem->size;
+
+	/* If free block after is adjacent to block, combine them */
+	if (freeMemAfter != NULL &&
+			mem->start + mem->size == freeMemAfter->start) {
+		mem->size += freeMemAfter->size;
+		ListNext(FF.freeMem);
+		free(ListRemove(FF.freeMem));
+	}
+
+	FF.stat.totalAlloMem -= size;
+	FF.stat.numFreeMem = ListCount(FF.freeMem);
+	FF.stat.extFrag += size;
+	if (mem == ListLast(FF.freeMem)) FF.stats.extFrag -= coalescedToEnd;
 
 	RttMonSignal(FFMemAvail);
-
 	RttMonLeave();
 }
-void BfFree(void *ptr) {}
+void BfFree(void *ptr) {
+    MemorySpace *mem, *freeMemBefore, *freeMemAfter;
+    char *start;
+    int size;
+    int coalescedToEnd = 0;
+    start = ptr;
+
+    RttMonEnter();
+
+    /* find the allocated memory block with the given address*/
+    mem = ListFirst(FF.allocateMem);
+    while (mem != NULL && mem ->start != start) {
+        mem = ListNext(FF.allocateMem);}
+
+    /*  remove the allocated memory block*/
+    if (mem == NULL) {
+        printf("FfFree:no allocated memory block with the address %p found\n",
+            start);
+        exit(1);
+    }
+
+    ListRemove(FF.allocateMem);
+    size = mem->size;
+
+    /*find the memory blocks before and after the allocated block */
+    freeMemAfter = ListFirst(FF.freeMem);
+    FF.stat.nodesSearched++;
+    while ((freeMemAfter != NULL) && ((freeMemAfter->start)<start)){
+        freeMemAfter = ListNext(FF.freeMem);
+        FF.stat.nodesSearched++;
+    }
+
+    if (freeMemAfter == NULL)
+        freeMemBefore = ListLast(FF.freeMem);
+    else
+        freeMemBefore = ListPrev(FF.freeMem);
+
+    /* If free block before is adjacent to block, combine them */
+    if (freeMemBefore == NULL) {
+        ListPrepend(FF.freeMem, mem);
+    } else if (freeMemBefore->start + freeMemBefore->size == start) {
+        freeMemBefore->size += mem->size;
+        free(mem);
+        mem = freeMemBefore;
+    } else {  /* Otherwise, add block to the list b/w before and after */
+        ListAdd(FF.freeMem, mem);
+    }
+    coalescedToEnd = mem->size;
+    /* If free block after is adjacent to block, combine them */
+    if (freeMemAfter != NULL &&
+            mem->start + mem->size == freeMemAfter->start) {
+        mem->size += freeMemAfter->size;
+        ListNext(FF.freeMem);
+        free(ListRemove(FF.freeMem));
+    }
+
+    FF.stat.totalAlloMem -= size;
+    FF.stat.numFreeMem = ListCount(FF.freeMem);
+    FF.stat.extFrag += size;
+    if (mem == ListLast(FF.freeMem)) FF.stats.extFrag -= coalescedToEnd;
+
+    RttMonSignal(FFMemAvail);
+    RttMonLeave();
+
+}
 
 void InitStats(Stats *stats) {
 	stats->nodesSearched = 0;
