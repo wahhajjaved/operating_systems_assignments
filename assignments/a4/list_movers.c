@@ -54,8 +54,8 @@ void *ListLast(LIST *list){
 void *ListNext(LIST *list){
     /* if the List struct pointer is not right*/
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
-        return NULL;
+        /*printf("ERROR: list is NULL \n");
+       */ return NULL;
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
@@ -64,8 +64,8 @@ void *ListNext(LIST *list){
 
     /* check if the curser is not list last*/
     if (list -> curser == list -> tail) {
-        printf("ERROR: curser is list tail\n");
-        return NULL;
+       /* printf("ERROR: curser is list tail\n");
+       */ return NULL;
     }
     list->curser=list->curser->next;
     return list->curser->item;
@@ -75,8 +75,8 @@ void *ListPrev(LIST *list){
     /* if the List struct pointer is not right
     */
     if (list == NULL) {
-        printf("ERROR: list is NULL \n");
-        return NULL;
+        /*printf("ERROR: list is NULL \n");
+    */    return NULL;
     }
     /* check if the list is empty or not*/
     if (list-> size ==0){
@@ -85,8 +85,8 @@ void *ListPrev(LIST *list){
 
     /* check if the curser is not list head*/
     if (list -> curser == list -> head) {
-        printf("ERROR: curser is list tail\n");
-        return NULL;
+      /*  printf("ERROR: curser is list tail\n");
+        */return NULL;
     }
     list->curser=list->curser->prev;
     return list->curser->item;
