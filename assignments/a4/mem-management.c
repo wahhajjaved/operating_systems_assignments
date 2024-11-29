@@ -66,8 +66,8 @@ void *FfMalloc(size_t size) {
         }
     /* If still no fit was found, signal the next waiting thread */
 		if (firstFit == NULL)
-			/*RttMonSignal(FFMemAvail);*/
-            RttMonLeave();
+			RttMonSignal(FFMemAvail);
+           /* RttMonLeave();*/
             /*return NULL;*/
     }
 
