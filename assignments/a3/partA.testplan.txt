@@ -7,6 +7,10 @@ Tests are located in user/schedulertests.c. This file contains a combination
 of manual and automatic tests. Test output is printed to console.
 schedulertests should be run immediately after boot.
 
+NOTE: schedulertests does not run because the COW implementation is 
+incomplete. The results in partA.testresults.txt were obtained by running 
+schedulertests on a different branch without COW code.
+
 
 [ setprocessgroup() ]
 
@@ -117,18 +121,19 @@ Test Number: 13
 Description: After forking, the children sleep for a random amount of time and
                 compute square() for a random number of times
 Input: none
-Expected Output: All children should compute and print their output out
-                    order
+Expected Output: All children should compute and print their output
 
 Test Number: 14
 Description:
         After forking, the children sleep for a random amount of time and
         compute square() for a random number of times. The children are
-        split among 3 groups with different shares
+        split among 4 groups with different shares
 Input:
-    group 6: shares = 10, children = 3
-    group 7: shares = 15, children = 2
-    group 8: shares = 5, children = 5
+    group 3: shares = 40, children = 3
+    group 5: shares = 20, children = 4
+    group 7: shares = 10, children = 7
+    group 9: shares = 5, children = 9
 
-Expected Output: All children should compute and print their output out
-                    order
+Expected Output: All children should compute and print their output. Children
+    in group 3 should finish before children in group 5 unless group 3 children
+    sleep for longer. The same applies to the other groups.
