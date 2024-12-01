@@ -1,0 +1,37 @@
+The performance of a memory management algorithm can be judged by how fast it
+can allocate memory, how fast it can free it, how fragmented it leaves the
+memory. The memory is stored in two lists, one for used segments and one
+for free segments.
+
+Allocating memory requires searching the free list to find a suitable segment
+and moving it to the used list. Therefore, the allocation performance can be
+measured using the number of nodes in searched in the free list. The fewer
+nodes searched, the better the performance.
+
+First fit should perform better in this category than best fit as FF will use
+the first segment that is big enough, where as BF will search the entire
+free list every time.
+
+Deallocating memory requires searching the used list to find the segment and
+moving it to the free list. The segment must then be merged with adjacent
+segments if possible. Searching through the used list will take the same amount
+of time for both algorithms. However, merging adjacent segments in the free
+list is expected to be slightly different, because of different fragmentation
+levels.
+
+The last criteria if fragmentation. There can be two types of fragmentation:
+internal and external. FF and BF both allocate the request memory exactly so
+internal fragmentation will be 0. However, external fragmentation will be
+different for the two algorithms.
+
+BF aims to reduce fragmentation by searching for the closest block size so
+in the results, we should see BF outperform FF in the fragmentation category.
+Because of reduced fragmentation, the number of nodes searched when merging
+a deallocated memory segment should be fewer than FF.
+
+
+
+
+
+
+

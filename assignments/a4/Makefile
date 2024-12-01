@@ -25,9 +25,9 @@ dir:
 
 # Libraries
 LIST_LIB = $(LIB_DIR)/liblist.a
-MONITOR_LIB = $(LIB_DIR)/libmonitor.a 
+MONITOR_LIB = $(LIB_DIR)/libmonitor.a
 
-# Memory Management 
+# Memory Management
 mem-management-sim: $(OBJ_DIR)/mem-management-sim.o \
 		$(OBJ_DIR)/mem-management-monitor.o $(MONITOR_LIB) $(LIST_LIB)
 	$(CC) -o mem-management-sim $(OBJ_DIR)/mem-management-sim.o \

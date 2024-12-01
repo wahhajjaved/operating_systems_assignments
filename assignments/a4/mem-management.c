@@ -12,15 +12,15 @@
 int threadsLeft[NUM_ALGS];
 
 struct _FF{
-    LIST *freeMem;         
-    LIST *allocateMem;     
-    Stats stat;          
+    LIST *freeMem;
+    LIST *allocateMem;
+    Stats stat;
 }FF;
 
 struct _BF{
-    LIST *freeMem;         
-    LIST *allocateMem;     
-    Stats stat;      
+    LIST *freeMem;
+    LIST *allocateMem;
+    Stats stat;
 }BF;
 
 
@@ -52,7 +52,7 @@ void *FfMalloc(size_t size) {
         errx(1, "FfMalloc: no freea block\n");
         wait = 1;
         RttMonWait(FFMemAvail);
-        
+
         freeBlock = ListFirst(FF.freeMem);
         FF.stat.nodesSearched++;
 
@@ -71,7 +71,7 @@ void *FfMalloc(size_t size) {
             /*return NULL;*/
     }
 
-    /* allocate and initialize the MemorySpace struct for 
+    /* allocate and initialize the MemorySpace struct for
         allocated memory */
     allocaBlock = malloc(sizeof(MemorySpace));
     allocaBlock->start = firstFit->start;
@@ -114,7 +114,7 @@ void *BfMalloc(size_t size) {
     BF.stat.nodesSearched++;
 
     while (freeBlock != NULL) {
-        if ((freeBlock->size >= size) && 
+        if ((freeBlock->size >= size) &&
             (bestFit == NULL || (freeBlock->size) < (bestFit->size)))
             bestFit = freeBlock;
 
@@ -156,7 +156,7 @@ void *BfMalloc(size_t size) {
         /* refind the block since the pointer is at the end of the list */
         MemorySpace *memBlock = ListFirst(BF.freeMem);
         BF.stat.nodesSearched++;
-        while (memBlock != bestFit){ 
+        while (memBlock != bestFit){
             memBlock = ListNext(BF.freeMem);
             BF.stat.nodesSearched++;
         }
@@ -209,12 +209,12 @@ void FfFree(void *ptr) {
 		freeMemAfter = ListNext(FF.freeMem);
 		FF.stat.nodesSearched++;
 	}
-	
+
 	if (freeMemAfter == NULL)
 		freeMemBefore = ListLast(FF.freeMem);
 	else
 		freeMemBefore = ListPrev(FF.freeMem);
-	
+
 	/* If free block before is adjacent to block, combine them */
 	if (freeMemBefore == NULL) {
 		ListPrepend(FF.freeMem, mem);
@@ -367,9 +367,9 @@ void Initialize(int numThreads) {
 
 	RttMonInit(numConds);
         /* Debug prints to verify initialization*/
-    printf("FF initialized: Free memory start=%p, size=%lu\n", 
+    printf("FF initialized: Free memory start=%p, size=%lu\n",
     freeMem->start, freeMem->size);
-    printf("BF initialized: Free memory start=%p, size=%lu\n", 
+    printf("BF initialized: Free memory start=%p, size=%lu\n",
     freeMem->start, freeMem->size);
 }
 
@@ -386,14 +386,24 @@ void MyMemStats(int algNo) {
 
 	if (algNo < 0 || algNo > 1)
 		errx(1, "algNo must be between 0 and 1");
-
 	if (algNo == 0)
 		stats = &FF.stat;
 	else if (algNo == 1)
 		stats = &BF.stat;
 
-	printf("%d: %d, %d, %ld, %ld, %ld\n", algNo, stats->nodesSearched, 
-			stats->numFreeMem, stats->totalAlloMem, 
-			stats->extFrag, stats->intFrag);
+	printf(
+            "%d: "
+            "nodesSearched = %d, "
+            "numFreeMem = %d, "
+            "totalAlloMem = %ld, "
+            "extFrag = %ld, "
+            "intFrag = %ld\n",
+            algNo,
+            stats->nodesSearched,
+			stats->numFreeMem,
+            stats->totalAlloMem,
+			stats->extFrag,
+            stats->intFrag
+        );
 }
 
