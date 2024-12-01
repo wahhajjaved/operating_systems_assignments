@@ -11,198 +11,302 @@
 
 int threadsLeft[NUM_ALGS];
 
-LIST *ffFreeMem;
-LIST *ffAllocateMem;
-Stats ffStat;
+struct _FF{
+    LIST *freeMem;
+    LIST *allocateMem;
+    Stats stat;
+}FF;
 
-/* Checks if the addresses of two MemorySpace structs is equal */
-int memorySpaceAddressComparator(void* memSpace, void* start) {
-	MemorySpace *a;
-	char *b;
-	a = (MemorySpace*)memSpace;
-	b = (char*)start;
-	return a->start == b;
-}
-
-/*
-* Moves the current block from the free list to the usedList. The freeList
-* cursor must be at the block to be moved. If size is equal to the current
-* block is equal to the parameter size, then the item is moved as is to the
-* usedList. Otherwise, a new MemorySpace is malloc()ed, and added to the
-* usedList and the size of the current block in the freeList is reduced.
-*/
-MemorySpace* moveBlockFreeToAllocated(LIST* freeList, LIST* usedList, size_t size) {
-	MemorySpace *curBlock, *allocaBlock;
-
-	/* Everything inside the lists is dynamically allocated so this won't
-	* go out of scope when returned */
-	curBlock = ListCurr(freeList);
-
-	if (curBlock->size == size) {
-		ListRemove(freeList);
-		ListPrepend(usedList, curBlock);
-		return curBlock;
-	}
-	else {
-		allocaBlock = malloc(sizeof(MemorySpace));
-		if(allocaBlock == NULL) {
-			perror("moveBlockFreeToAllocated(): malloc failed \n");
-		}
-		allocaBlock->start = curBlock->start;
-		allocaBlock->size = size;
-		curBlock->start += size;
-		curBlock->size -= size;
-		ListPrepend(usedList, allocaBlock);
-		return allocaBlock;
-	}
-}
-
-/* Adds a MemorySpace the free list, merging adjacents segments if needed.
-* mem should have already been removed from the used list. stat.nodesSearched
-* is updated while iterating over the free list.
-*/
-void mergeMemory(LIST* freeList, MemorySpace* mem, Stats* stat) {
-	MemorySpace *freeMemBefore, *freeMemAfter;
-	char *start;
-	int size;
-	start = mem->start;
-
-	freeMemAfter = ListFirst(freeList);
-	stat->nodesSearched++;
-	while ((freeMemAfter != NULL) && ((freeMemAfter->start)<start)){
-		freeMemAfter = ListNext(freeList);
-		stat->nodesSearched++;
-	}
-	if (freeMemAfter == NULL)
-		freeMemBefore = ListLast(freeList);
-	else
-		freeMemBefore = ListPrev(freeList);
-
-
-	/*
-	- If both freeMemAfter and freeMemBefore are NULL that means the list is
-	empty and mem can simply be added in
-
-	- if freeMemAfter is NULL but freeMemBefore is not NULL, that means mem has
-	the highest address in the list so it must be placed at the end of the
-	list. It may need to be merged with freeMemBefore
-
-	- If freeMemAfter is not NULL but freeMemBefore is NULL, that means that mem
-	will need to be inserted at the beginning of the list and may potentially
-	need to be merged with freeMemAfter
-
-	- If both freeMemAfter and freeMemBefore are not NULL, then mem is inserted
-	between them and may possibly need to be merged with one or both
-	*/
-
-	if (freeMemBefore == NULL) {
-		ListPrepend(freeList, mem);
-	} else if (freeMemBefore->start + freeMemBefore->size == start) {
-		freeMemBefore->size += mem->size;
-		free(mem);
-		mem = freeMemBefore;
-	} else {
-		ListAdd(freeList, mem);
-	}
-
-	if (freeMemAfter != NULL &&
-			mem->start + mem->size == freeMemAfter->start) {
-		mem->size += freeMemAfter->size;
-		ListNext(freeList);
-		free(ListRemove(freeList));
-	}
-	size = mem->size;
-	stat->totalAlloMem -= size;
-	stat->numFreeMem = ListCount(freeList);
-	stat->extFrag += size;
-}
-
-MemorySpace* findFfFreeBlock(size_t size) {
-	MemorySpace *freeBlock, *firstFit;
-	firstFit = NULL;
-
-	freeBlock = ListFirst(ffFreeMem);
-	ffStat.nodesSearched++;
-	while (freeBlock != NULL) {
-		if (freeBlock->size >= size) {
-			firstFit = freeBlock;
-			break;
-		}
-		freeBlock = ListNext(ffFreeMem);
-		ffStat.nodesSearched++;
-	}
-	return firstFit;
-}
+struct _BF{
+    LIST *freeMem;
+    LIST *allocateMem;
+    Stats stat;
+}BF;
 
 
 void *FfMalloc(size_t size) {
-	MemorySpace *allocaBlock;
-	MemorySpace *firstFit=NULL;
+    MemorySpace *firstFit=NULL;
+    MemorySpace *freeBlock, *allocaBlock;
 
-	if (size == 0) return NULL;
+    int wait= 0; /*wait flag*/
 
-	RttMonEnter(); /* critical section*/
+    if (size == 0) return NULL;
+    RttMonEnter(); /* critical section*/
+    /*find first free memory space */
+    /*printf("size:%d\n", FF.freeMem->size);*/
+    freeBlock = ListFirst(FF.freeMem);
+    FF.stat.nodesSearched++;
 
-	/*printf("size:%d\n", FF.freeMem->size);*/
-	firstFit = findFfFreeBlock(size);
+    while (freeBlock != NULL) {
+        /* check if the size is large wnough*/
+        if (freeBlock->size >= size) {
+            firstFit = freeBlock;
+            break;
+        }
+        /*move to the next block*/
+        freeBlock = ListNext(FF.freeMem);
+        FF.stat.nodesSearched++;
+    }
+    /* no fit found, wait until Free() and then try again */
+    while (firstFit == NULL) {
+        errx(1, "FfMalloc: no freea block\n");
+        wait = 1;
+        RttMonWait(FFMemAvail);
 
-	/* no fit found, wait until Free() and then try again */
-	while (firstFit == NULL) {
-		errx(1, "FfMalloc: no freea block\n");
-		RttMonWait(FFMemAvail);
-		firstFit = findFfFreeBlock(size);
+        freeBlock = ListFirst(FF.freeMem);
+        FF.stat.nodesSearched++;
 
-		/* If still no fit was found, signal the next waiting thread */
+        while (freeBlock != NULL) {
+            if (freeBlock->size >= size) {
+                firstFit = freeBlock;
+                break;
+            }
+            freeBlock = ListNext(FF.freeMem);
+            FF.stat.nodesSearched++;
+        }
+    /* If still no fit was found, signal the next waiting thread */
 		if (firstFit == NULL)
 			RttMonSignal(FFMemAvail);
-	}
+           /* RttMonLeave();*/
+            /*return NULL;*/
+    }
 
-	/*allocate memory*/
-	allocaBlock = moveBlockFreeToAllocated(ffFreeMem, ffAllocateMem, size);
+    /* allocate and initialize the MemorySpace struct for
+        allocated memory */
+    allocaBlock = malloc(sizeof(MemorySpace));
+    allocaBlock->start = firstFit->start;
+    allocaBlock->size = size;
+    ListAppend(FF.allocateMem, allocaBlock);
 
-	ffStat.totalAlloMem +=size;
-	ffStat.numFreeMem = ListCount(ffFreeMem);
-	if (firstFit != ListLast(ffFreeMem))
-		ffStat.extFrag -= size;
+    /* If the free block equals size, remove it; otherwise, shrink it */
+    if (firstFit->size == size) {
+        ListRemove(FF.freeMem);
+        free(firstFit);
+    } else {
+        firstFit->start += size;
+        firstFit->size -= size;
+    }
+    FF.stat.totalAlloMem +=size;
+    FF.stat.numFreeMem = ListCount(FF.freeMem);
+    if (firstFit != ListLast(FF.freeMem))
+		FF.stat.extFrag -= size;
 
-	RttMonLeave();
+    if (wait)
+        RttMonSignal(FFMemAvail);
 
-	return allocaBlock->start;
+    RttMonLeave();
+
+    return allocaBlock->start;
 }
 
 
+void *BfMalloc(size_t size) {
+    MemorySpace *bestFit, *freeBlock, *allocaBlock;
 
+    int wait= 0; /*wait flag*/
+
+    if (size == 0) return NULL;
+    RttMonEnter(); /* critical section*/
+
+    /*find Best free memory space */
+    bestFit = NULL;
+    freeBlock = ListFirst(BF.freeMem);
+    BF.stat.nodesSearched++;
+
+    while (freeBlock != NULL) {
+        if ((freeBlock->size >= size) &&
+            (bestFit == NULL || (freeBlock->size) < (bestFit->size)))
+            bestFit = freeBlock;
+
+        freeBlock = ListNext(BF.freeMem);
+        BF.stat.nodesSearched++;
+    }
+
+    /* no fit found, wait until Free() and then try again */
+    while (bestFit == NULL) {
+        errx(1, "BFMalloc: no free block\n");
+        wait = 1;
+        RttMonWait(BFMemAvail);
+
+        freeBlock = ListFirst(BF.freeMem);
+        BF.stat.nodesSearched++;
+
+        while (freeBlock != NULL) {
+            if (freeBlock->size >= size) {
+                bestFit = freeBlock;
+                break;
+            }
+
+            freeBlock = ListNext(BF.freeMem);
+            BF.stat.nodesSearched++;
+        }
+        /* If no fit was found, signal the next waiting */
+        if (bestFit != NULL)
+            RttMonSignal(BFMemAvail);
+    }
+    /* allocate and initialize the MemorySpace struct for the memory */
+    allocaBlock = malloc(sizeof(MemorySpace));
+    allocaBlock->start = bestFit->start;
+    allocaBlock->size = size;
+    ListAppend(BF.allocateMem, allocaBlock);
+
+
+    /* if the free block equals size, remove it */
+    if (bestFit->size == size) {
+        /* refind the block since the pointer is at the end of the list */
+        MemorySpace *memBlock = ListFirst(BF.freeMem);
+        BF.stat.nodesSearched++;
+        while (memBlock != bestFit){
+            memBlock = ListNext(BF.freeMem);
+            BF.stat.nodesSearched++;
+        }
+        ListRemove(BF.freeMem);
+        free(bestFit);
+    } else {
+        bestFit->start += size;
+        bestFit->size -= size;
+    }
+
+    BF.stat.totalAlloMem += size;
+	BF.stat.numFreeMem = ListCount(BF.freeMem);
+    if (bestFit != ListLast(BF.freeMem)) BF.stat.extFrag -= size;
+
+    if (wait) RttMonSignal(BFMemAvail);
+
+    RttMonLeave();
+
+    return allocaBlock->start;
+}
 
 void FfFree(void *ptr) {
-	MemorySpace *mem;
+	MemorySpace *mem, *freeMemBefore, *freeMemAfter;
 	char *start;
+	int size;
+    int coalescedToEnd = 0;
 	start = ptr;
 
 	RttMonEnter();
 
 	/* find the allocated memory block with the given address*/
-	ListFirst(ffAllocateMem);
-	mem = ListSearch(ffAllocateMem, memorySpaceAddressComparator, start);
+	mem = ListFirst(FF.allocateMem);
+	while (mem != NULL && mem ->start != start) {
+		mem = ListNext(FF.allocateMem);}
+
+	/*  remove the allocated memory block*/
 	if (mem == NULL) {
 		printf("FfFree:no allocated memory block with the address %p found\n",
-			start);
+            start);
 		exit(1);
 	}
 
-	ListRemove(ffAllocateMem);
-	mergeMemory(ffFreeMem, mem, &ffStat);
+	ListRemove(FF.allocateMem);
+	size = mem->size;
+
+	/*find the memory blocks before and after the allocated block */
+	freeMemAfter = ListFirst(FF.freeMem);
+	FF.stat.nodesSearched++;
+	while ((freeMemAfter != NULL) && ((freeMemAfter->start)<start)){
+		freeMemAfter = ListNext(FF.freeMem);
+		FF.stat.nodesSearched++;
+	}
+
+	if (freeMemAfter == NULL)
+		freeMemBefore = ListLast(FF.freeMem);
+	else
+		freeMemBefore = ListPrev(FF.freeMem);
+
+	/* If free block before is adjacent to block, combine them */
+	if (freeMemBefore == NULL) {
+		ListPrepend(FF.freeMem, mem);
+	} else if (freeMemBefore->start + freeMemBefore->size == start) {
+		freeMemBefore->size += mem->size;
+		free(mem);
+		mem = freeMemBefore;
+	} else {  /* Otherwise, add block to the list b/w before and after */
+		ListAdd(FF.freeMem, mem);
+	}
+	coalescedToEnd = mem->size;
+
+	/* If free block after is adjacent to block, combine them */
+	if (freeMemAfter != NULL &&
+			mem->start + mem->size == freeMemAfter->start) {
+		mem->size += freeMemAfter->size;
+		ListNext(FF.freeMem);
+		free(ListRemove(FF.freeMem));
+	}
+
+	FF.stat.totalAlloMem -= size;
+	FF.stat.numFreeMem = ListCount(FF.freeMem);
+	FF.stat.extFrag += size;
+	if (mem == ListLast(FF.freeMem)) FF.stat.extFrag -= coalescedToEnd;
 
 	RttMonSignal(FFMemAvail);
 	RttMonLeave();
 }
-
-void *BfMalloc(size_t size) {
-	printf("BfMalloc not implemented/\n");
-	return NULL;
-}
-
 void BfFree(void *ptr) {
-	printf("BfFree not implemented/\n");
+    MemorySpace *mem, *freeMemBefore, *freeMemAfter;
+    char *start;
+    int size;
+    int coalescedToEnd = 0;
+    start = ptr;
+
+    RttMonEnter();
+
+    /* find the allocated memory block with the given address*/
+    mem = ListFirst(BF.allocateMem);
+    while (mem != NULL && mem ->start != start) {
+        mem = ListNext(BF.allocateMem);}
+
+    /*  remove the allocated memory block*/
+    if (mem == NULL) {
+        printf("BfFree:no allocated memory block with the address %p found\n",
+            start);
+        exit(1);
+    }
+
+    ListRemove(BF.allocateMem);
+    size = mem->size;
+
+    /*find the memory blocks before and after the allocated block */
+    freeMemAfter = ListFirst(BF.freeMem);
+    BF.stat.nodesSearched++;
+    while ((freeMemAfter != NULL) && ((freeMemAfter->start)<start)){
+        freeMemAfter = ListNext(BF.freeMem);
+        BF.stat.nodesSearched++;
+    }
+
+    if (freeMemAfter == NULL)
+        freeMemBefore = ListLast(BF.freeMem);
+    else
+        freeMemBefore = ListPrev(BF.freeMem);
+
+    /* If free block before is adjacent to block, combine them */
+    if (freeMemBefore == NULL) {
+        ListPrepend(BF.freeMem, mem);
+    } else if (freeMemBefore->start + freeMemBefore->size == start) {
+        freeMemBefore->size += mem->size;
+        free(mem);
+        mem = freeMemBefore;
+    } else {  /* Otherwise, add block to the list b/w before and after */
+        ListAdd(BF.freeMem, mem);
+    }
+    coalescedToEnd = mem->size;
+    /* If free block after is adjacent to block, combine them */
+    if (freeMemAfter != NULL &&
+            mem->start + mem->size == freeMemAfter->start) {
+        mem->size += freeMemAfter->size;
+        ListNext(BF.freeMem);
+        free(ListRemove(BF.freeMem));
+    }
+
+    BF.stat.totalAlloMem -= size;
+    BF.stat.numFreeMem = ListCount(BF.freeMem);
+    BF.stat.extFrag += size;
+    if (mem == ListLast(BF.freeMem)) BF.stat.extFrag -= coalescedToEnd;
+
+    RttMonSignal(BFMemAvail);
+    RttMonLeave();
+
 }
 
 void InitStats(Stats *stats) {
@@ -218,15 +322,15 @@ void Initialize(int numThreads) {
 	MemorySpace *freeMem;
 
 	/*FF */
-	ffFreeMem = ListCreate();
-	ffAllocateMem = ListCreate();
-    if (ffFreeMem == NULL || ffAllocateMem == NULL) {
+	FF.freeMem = ListCreate();
+	FF.allocateMem = ListCreate();
+    if (FF.freeMem == NULL || FF.allocateMem == NULL) {
         printf("Error: Failed to create lists for FF\n");
         exit(EXIT_FAILURE);
     }
 
 	threadsLeft[0] = numThreads;
-	InitStats(&ffStat);
+	InitStats(&FF.stat);
 
 	freeMem = malloc(sizeof(MemorySpace));
     /*freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));*/
@@ -237,14 +341,35 @@ void Initialize(int numThreads) {
     freeMem->start = (char*) MEM_BASE;
 
 	freeMem->size = MEM_AVAILABLE;
-    if (ListPrepend(ffFreeMem, freeMem) == -1) {
+    if (ListPrepend(FF.freeMem, freeMem)== -1) {
         printf( "Error: Failed to prepend to FF freeMem\n");
+        exit(EXIT_FAILURE);
+    }
+	/* BF  */
+	BF.freeMem = ListCreate();
+	BF.allocateMem = ListCreate();
+    if (BF.freeMem == NULL || BF.allocateMem == NULL) {
+        printf("Error: Failed to create lists for BF\n");
+        exit(EXIT_FAILURE);
+    }
+
+	threadsLeft[1] = numThreads;
+	InitStats(&BF.stat);
+
+	freeMem = malloc(sizeof(MemorySpace));
+    /*freeMem = (MemorySpace *)malloc(sizeof(MemorySpace));*/
+	freeMem->start = (char*) MEM_BASE;
+	freeMem->size = MEM_AVAILABLE;
+	if (ListPrepend(BF.freeMem, freeMem) == -1) {
+        fprintf(stderr, "Error: Failed to prepend to BF freeMem\n");
         exit(EXIT_FAILURE);
     }
 
 	RttMonInit(numConds);
         /* Debug prints to verify initialization*/
     printf("FF initialized: Free memory start=%p, size=%lu\n",
+    freeMem->start, freeMem->size);
+    printf("BF initialized: Free memory start=%p, size=%lu\n",
     freeMem->start, freeMem->size);
 }
 
@@ -261,14 +386,24 @@ void MyMemStats(int algNo) {
 
 	if (algNo < 0 || algNo > 1)
 		errx(1, "algNo must be between 0 and 1");
-
 	if (algNo == 0)
-		stats = &ffStat;
-	/*else if (algNo == 1)
-		stats = &BF.stat;*/
+		stats = &FF.stat;
+	else if (algNo == 1)
+		stats = &BF.stat;
 
-	printf("%d: %d, %d, %ld, %ld, %ld\n", algNo, stats->nodesSearched,
-			stats->numFreeMem, stats->totalAlloMem,
-			stats->extFrag, stats->intFrag);
+	printf(
+            "%d: "
+            "nodesSearched = %d, "
+            "numFreeMem = %d, "
+            "totalAlloMem = %ld, "
+            "extFrag = %ld, "
+            "intFrag = %ld\n",
+            algNo,
+            stats->nodesSearched,
+			stats->numFreeMem,
+            stats->totalAlloMem,
+			stats->extFrag,
+            stats->intFrag
+        );
 }
 
