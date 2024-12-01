@@ -199,3 +199,23 @@ List Views:
     
     The disadvantage of this approach is that the list library will need to be
     updated to handle iteration over views. 
+
+
+--------------------------------------
+testing:
+
+we can only test in two ways, either by changing the number of threads or
+the number of iterations
+
+edge cases:
+    -upper and lower bounds of thread count
+        minimum number of threads: 1 -> ./mem-management-sim 1 1000
+        maximum number of threads: 9 -> ./mem-management-sim 9 1000
+    -upper and lower bounds of iteration
+        minimum number of iterations: 1 -> mem-management-sim 4 1
+        maximum number of iterations: 10000 -> mem-management-sim 4 10000
+    - invalid input: ensure proper handling
+        no arguments: ./mem-management-sim
+        exceeding the max threads :./mem-management-sim 10 1000
+        exceeding the max iterations: ./mem-management-sim 4 10001
+
