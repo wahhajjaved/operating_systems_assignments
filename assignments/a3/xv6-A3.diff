@@ -1,0 +1,1293 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+@date 2024-11-19
+
+diff --git a/assignments/a3/xv6-riscv/.gitignore b/assignments/a3/xv6-riscv/.gitignore
+new file mode 100644
+index 0000000..80c4c28
+--- /dev/null
++++ b/assignments/a3/xv6-riscv/.gitignore
+@@ -0,0 +1,7 @@
++_*
++fs.img
++kernel/kernel
++mkfs
++initcode.out
++initcode
++usys.S
+\ No newline at end of file
+diff --git a/assignments/a3/xv6-riscv/Makefile b/assignments/a3/xv6-riscv/Makefile
+index 52062a2..367a721 100644
+--- a/assignments/a3/xv6-riscv/Makefile
++++ b/assignments/a3/xv6-riscv/Makefile
+@@ -146,8 +146,10 @@ UPROGS=\
+ 	$U/_uthread\
+ 	$U/_prod-con-mtx\
+ 	$U/_prod-con-sem\
+- 
+-#CMPT 332 GROUP 67 Change, Fall 2024 
++	$U/_cowtest\
++	$U/_schedulertests\
++
++#CMPT 332 GROUP 67 Change, Fall 2024
+ 
+ UTHREAD=$U/uthread.o $U/uthread_switch.o $U/mtx.o
+ 
+@@ -167,7 +169,10 @@ $U/_prod-con-sem: $U/prod-con-sem.o $U/sem.o $(UTHREAD)  $(ULIB)
+ 	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_prod-con-sem \
+         $U/prod-con-sem.o $U/sem.o $(UTHREAD) $(ULIB)
+ 
+-
++$U/_schedulertests: $U/schedulertests.o $(UTHREAD)  $(ULIB)
++	$(LD) $(LDFLAGS) -N -e main -Ttext 0 -o $U/_schedulertests \
++        $U/schedulertests.o  $(UTHREAD) $(ULIB)
++		
+ fs.img: mkfs/mkfs README $(UPROGS)
+ 	mkfs/mkfs fs.img README $(UPROGS)
+ 
+diff --git a/assignments/a3/xv6-riscv/kernel/defs.h b/assignments/a3/xv6-riscv/kernel/defs.h
+index f4d1493..c14e38b 100644
+--- a/assignments/a3/xv6-riscv/kernel/defs.h
++++ b/assignments/a3/xv6-riscv/kernel/defs.h
+@@ -63,6 +63,9 @@ void            ramdiskrw(struct buf*);
+ void*           kalloc(void);
+ void            kfree(void *);
+ void            kinit(void);
++int decriRefCount(uint64 pa);
++int incriRefCount(uint64 pa);
++void initRefCount(uint64 pa);
+ 
+ /* log.c */
+ void            initlog(int, struct superblock*);
+@@ -96,6 +99,7 @@ struct cpu*     mycpu(void);
+ struct cpu*     getmycpu(void);
+ struct proc*    myproc();
+ void            procinit(void);
++void            groupsinit();
+ void            scheduler(void) __attribute__((noreturn));
+ void            sched(void);
+ void            sleep(void*, struct spinlock*);
+@@ -107,6 +111,11 @@ int             either_copyout(int user_dst, uint64 dst, void *src, uint64 len);
+ int             either_copyin(void *dst, int user_src, uint64 src, uint64 len);
+ void            procdump(void);
+ 
++/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++int             setshare(int groupnumber, int newshare, int* remainingshares);
++int             setprocessgroup(int pid, int groupnumber);
++/* ************************************ */
++
+ /* swtch.S */
+ void            swtch(struct context*, struct context*);
+ 
+@@ -173,7 +182,8 @@ uint64          walkaddr(pagetable_t, uint64);
+ int             copyout(pagetable_t, uint64, char *, uint64);
+ int             copyin(pagetable_t, char *, uint64, uint64);
+ int             copyinstr(pagetable_t, char *, uint64, uint64);
+-
++int             uvmcow(void);
++int             getNumFreePages(void);
+ /* plic.c */
+ void            plicinit(void);
+ void            plicinithart(void);
+diff --git a/assignments/a3/xv6-riscv/kernel/kalloc.c b/assignments/a3/xv6-riscv/kernel/kalloc.c
+index e9e70b9..d3b3b8d 100644
+--- a/assignments/a3/xv6-riscv/kernel/kalloc.c
++++ b/assignments/a3/xv6-riscv/kernel/kalloc.c
+@@ -69,7 +69,6 @@ void *
+ kalloc(void)
+ {
+   struct run *r;
+-
+   acquire(&kmem.lock);
+   r = kmem.freelist;
+   if(r)
+@@ -80,3 +79,54 @@ kalloc(void)
+     memset((char*)r, 5, PGSIZE); /* fill with junk */
+   return (void*)r;
+ }
++
++/*CMPT 332 GROUP 67 Change, Fall 2024 */
++int getNumFreePages(void){
++    int freepages=0;
++    struct run *r;
++
++    acquire(&kmem.lock);
++    r = kmem.freelist;
++
++    while(r){
++        freepages++;
++        kmem.freelist = r->next;
++    }
++    release(&kmem.lock);
++    return freepages;
++}
++struct refrenceCount{
++        int count[(PHYSTOP - KERNBASE) / PGSIZE];
++        struct spinlock lock;
++}refCount;
++
++void initRefCount(uint64 pa){
++    /*checks if pa starts at starting of the physical address*/
++    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
++
++    acquire(&refCount.lock);
++    refCount.count[(pa - KERNBASE) / PGSIZE]=1;
++    release(&refCount.lock);
++}
++
++int incriRefCount(uint64 pa){
++    int count;
++    /*checks if pa starts at starting of the physical address*/
++    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
++    
++    acquire(&refCount.lock);
++    count = refCount.count[(pa - KERNBASE) / PGSIZE]++;
++    release(&refCount.lock);
++    return count;
++}
++
++int decriRefCount(uint64 pa){
++    int count;
++    /*checks if pa starts at starting of the physical address*/
++    if (pa % PGSIZE !=0) panic("initRefCount: pa not valid");
++
++    acquire(&refCount.lock);
++    count = refCount.count[(pa - KERNBASE) / PGSIZE]--;
++    release(&refCount.lock);
++    return count;
++}
+diff --git a/assignments/a3/xv6-riscv/kernel/main.c b/assignments/a3/xv6-riscv/kernel/main.c
+index 078d3ec..3ca7357 100644
+--- a/assignments/a3/xv6-riscv/kernel/main.c
++++ b/assignments/a3/xv6-riscv/kernel/main.c
+@@ -20,6 +20,7 @@ main()
+     kvminit();       /* create kernel page table */
+     kvminithart();   /* turn on paging */
+     procinit();      /* process table */
++    groupsinit();    /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+     trapinit();      /* trap vectors */
+     trapinithart();  /* install kernel trap vector */
+     plicinit();      /* set up interrupt controller */
+@@ -41,5 +42,5 @@ main()
+     plicinithart();   /* ask PLIC for device interrupts */
+   }
+ 
+-  scheduler();        
++  scheduler();
+ }
+diff --git a/assignments/a3/xv6-riscv/kernel/proc.c b/assignments/a3/xv6-riscv/kernel/proc.c
+index e9f6e65..bd191ad 100644
+--- a/assignments/a3/xv6-riscv/kernel/proc.c
++++ b/assignments/a3/xv6-riscv/kernel/proc.c
+@@ -6,6 +6,20 @@
+ #include "proc.h"
+ #include "defs.h"
+ 
++/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++#define MAXGROUPS 10
++#define MAXGROUPSHARE 100
++int groupshares[MAXGROUPS];
++int groupschedule[MAXGROUPSHARE];
++int groupschedulesize;
++struct proc *processschedule[NPROC * MAXGROUPSHARE];
++int processschedulesize;
++int processscheduleindex;
++struct spinlock processscheduleindexlock;
++
++/* ************************************** */
++
++
+ struct cpu cpus[NCPU];
+ 
+ struct proc proc[NPROC];
+@@ -295,6 +309,7 @@ fork(void)
+     return -1;
+   }
+   np->sz = p->sz;
++  np->groupnumber = p->groupnumber;
+ 
+   /* copy saved user registers. */
+   *(np->trapframe) = *(p->trapframe);
+@@ -435,6 +450,110 @@ wait(uint64 addr)
+   }
+ }
+ 
++/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++static inline int calculateremainingshares() {
++  int i, total;
++  total = 0;
++  for(i = 0; i < MAXGROUPS; i++) {
++    total += groupshares[i];
++  }
++  return MAXGROUPSHARE - total;
++}
++
++int setshare(int groupnumber, int newshare, int* remainingshares) {
++  *remainingshares = calculateremainingshares();
++
++  if(groupnumber < 0 || groupnumber > MAXGROUPS-1) {
++    return -1;
++  }
++
++  if(newshare < 0 || newshare > *remainingshares) {
++    return -1;
++  }
++
++  groupshares[groupnumber] = newshare;
++  *remainingshares = calculateremainingshares();
++  return 0;
++}
++
++int setprocessgroup(int pid, int groupnumber) {
++  struct proc *p;
++
++  if(groupnumber < 0 || groupnumber > MAXGROUPS-1) {
++    return -1;
++  }
++  if(pid < 0) {
++    return -1;
++  }
++
++  for(p = proc; p < &proc[NPROC]; p++){
++    acquire(&p->lock);
++    if(p->pid == pid){
++      if(p->state != UNUSED){
++        p->groupnumber = groupnumber;
++      }
++      release(&p->lock);
++      return 0;
++    }
++    release(&p->lock);
++  }
++
++  return -1;
++}
++
++void groupsinit() {
++  int i;
++  for(i = 0; i < MAXGROUPS; i++){
++    groupshares[i] = 1;
++  }
++}
++
++void schedulegroups() {
++  int i, totalshares, currentshares[MAXGROUPS];
++
++
++  totalshares = 0;
++  for(i = 0; i < MAXGROUPS; i++) {
++    currentshares[i] = groupshares[i];
++    totalshares += groupshares[i];
++  }
++
++  for(i = 0; i < MAXGROUPSHARE; i++){
++    groupschedule[i] = -1;
++  }
++
++  groupschedulesize = 0;
++  while(totalshares) {
++    for(i = 0; i < MAXGROUPS; i++) {
++      if(currentshares[i]) {
++        groupschedule[groupschedulesize] = i;
++        groupschedulesize++;
++        currentshares[i]--;
++        totalshares--;
++      }
++    }
++  }
++}
++
++void scheduleprocesses() {
++  int i;
++  struct proc *p;
++
++  processschedulesize = 0;
++  for(i = 0; i < groupschedulesize; i++) {
++    for(p = proc; p < &proc[NPROC]; p++) {
++      acquire(&p->lock);
++      if(p->groupnumber == groupschedule[i] && p->state == RUNNABLE) {
++        processschedule[processschedulesize] = p;
++        processschedulesize++;
++      }
++      release(&p->lock);
++    }
++  }
++}
++/* ***************************** */
++
++
+ /* Per-CPU process scheduler. */
+ /* Each CPU calls scheduler() after setting itself up. */
+ /* Scheduler never returns.  It loops, doing: */
+@@ -455,29 +574,39 @@ scheduler(void)
+     /* processes are waiting. */
+     intr_on();
+ 
+-    int found = 0;
+-    for(p = proc; p < &proc[NPROC]; p++) {
+-      acquire(&p->lock);
+-      if(p->state == RUNNABLE) {
+-        /* Switch to chosen process.  It is the process's job */
+-        /* to release its lock and then reacquire it */
+-        /* before jumping back to us. */
+-        p->state = RUNNING;
+-        c->proc = p;
+-        swtch(&c->context, &p->context);
+-
+-        /* Process is done running for now. */
+-        /* It should have changed its p->state before coming back. */
+-        c->proc = 0;
+-        found = 1;
+-      }
+-      release(&p->lock);
++    acquire(&processscheduleindexlock);
++    if(processscheduleindex >= processschedulesize) {
++      schedulegroups();
++      scheduleprocesses();
++      processscheduleindex = 0;
+     }
+-    if(found == 0) {
++
++    if(processschedulesize == 0) {
+       /* nothing to run; stop running on this core until an interrupt. */
++      release(&processscheduleindexlock);
+       intr_on();
+       asm volatile("wfi");
++      continue;
+     }
++
++    p = processschedule[processscheduleindex];
++    processscheduleindex++;
++    release(&processscheduleindexlock);
++
++    acquire(&p->lock);
++    if(p->state == RUNNABLE) {
++      /* Switch to chosen process.  It is the process's job */
++      /* to release its lock and then reacquire it */
++      /* before jumping back to us. */
++      p->state = RUNNING;
++      c->proc = p;
++      swtch(&c->context, &p->context);
++
++      /* Process is done running for now. */
++      /* It should have changed its p->state before coming back. */
++      c->proc = 0;
++    }
++    release(&p->lock);
+   }
+ }
+ 
+@@ -674,9 +803,9 @@ procdump(void)
+   static char *states[] = {
+   [UNUSED]    "unused",
+   [USED]      "used",
+-  [SLEEPING]  "sleep ",
+-  [RUNNABLE]  "runble",
+-  [RUNNING]   "run   ",
++  [SLEEPING]  "sleeping",
++  [RUNNABLE]  "runnable",
++  [RUNNING]   "running",
+   [ZOMBIE]    "zombie"
+   };
+   struct proc *p;
+@@ -690,7 +819,13 @@ procdump(void)
+       state = states[p->state];
+     else
+       state = "???";
+-    printf("%d %s %s", p->pid, state, p->name);
++    printf(
++		"pid: %d, state: %s, name: %s, group: %d",
++		p->pid,
++		state,
++		p->name,
++		p->groupnumber
++	);
+     printf("\n");
+   }
+ }
+diff --git a/assignments/a3/xv6-riscv/kernel/proc.h b/assignments/a3/xv6-riscv/kernel/proc.h
+index 50b7cf0..6050cdd 100644
+--- a/assignments/a3/xv6-riscv/kernel/proc.h
++++ b/assignments/a3/xv6-riscv/kernel/proc.h
+@@ -93,6 +93,7 @@ struct proc {
+   int pid;                     /* Process ID */
+ 
+   int traceMask;             /* added for part E Mask of syscall for trace*/
++  int groupnumber;           /* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
+ 
+   /* wait_lock must be held when using this: */
+   struct proc *parent;         /* Parent process */
+diff --git a/assignments/a3/xv6-riscv/kernel/syscall.c b/assignments/a3/xv6-riscv/kernel/syscall.c
+index 06e6ba1..a0b8f35 100644
+--- a/assignments/a3/xv6-riscv/kernel/syscall.c
++++ b/assignments/a3/xv6-riscv/kernel/syscall.c
+@@ -102,6 +102,12 @@ extern uint64 sys_link(void);
+ extern uint64 sys_mkdir(void);
+ extern uint64 sys_close(void);
+ extern uint64 sys_trace(void);
++extern uint64 sys_getNumFreePages(void);
++/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++extern uint64 sys_setprocessgroup(void);
++extern uint64 sys_setshare(void);
++extern uint64 sys_procdump(void);
++/* ****************************** */
+ 
+ /* An array mapping syscall numbers from syscall.h */
+ /* to the function that handles the system call. */
+@@ -127,7 +133,14 @@ static uint64 (*syscalls[])(void) = {
+ [SYS_link]    sys_link,
+ [SYS_mkdir]   sys_mkdir,
+ [SYS_close]   sys_close,
+-[SYS_trace]   sys_trace
++[SYS_trace]   sys_trace,
++/*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++[SYS_getNumFreePages] sys_getNumFreePages,
++[SYS_setprocessgroup]  sys_setprocessgroup,
++[SYS_setshare]  sys_setshare,
++[SYS_procdump]  sys_procdump
++/* ****************************** */
++
+ };
+ 
+ /* array of sys call names */
+diff --git a/assignments/a3/xv6-riscv/kernel/syscall.h b/assignments/a3/xv6-riscv/kernel/syscall.h
+index 1195113..28ec4b0 100644
+--- a/assignments/a3/xv6-riscv/kernel/syscall.h
++++ b/assignments/a3/xv6-riscv/kernel/syscall.h
+@@ -21,3 +21,9 @@
+ #define SYS_mkdir  20
+ #define SYS_close  21
+ #define SYS_trace  22
++/*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++#define SYS_setprocessgroup  23
++#define SYS_setshare  24
++#define SYS_procdump  25
++#define SYS_getNumFreePages 26
++/* ****************************** */
+diff --git a/assignments/a3/xv6-riscv/kernel/sysproc.c b/assignments/a3/xv6-riscv/kernel/sysproc.c
+index 7cd4860..2747523 100644
+--- a/assignments/a3/xv6-riscv/kernel/sysproc.c
++++ b/assignments/a3/xv6-riscv/kernel/sysproc.c
+@@ -103,3 +103,53 @@ sys_trace(void)
+     release (&p->lock);
+     return 0;
+ }
++/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++uint64 sys_getNumFreePages(void){
++    return getNumFreePages();
++}
++uint64
++sys_procdump(void)
++{
++  procdump();
++  return 0;
++}
++
++uint64
++sys_setprocessgroup(void)
++{
++  int pid, groupnumber;
++  argint(0, &pid);
++  argint(1, &groupnumber);
++
++  return setprocessgroup(pid, groupnumber);
++
++
++
++}
++
++uint64
++sys_setshare(void)
++{
++  int groupnumber, newshare, remainingshares, r1, r2;
++  uint64 premainingshares;
++
++  argint(0, &groupnumber);
++  argint(1, &newshare);
++  argaddr(2, &premainingshares);
++
++  r1 = setshare(groupnumber, newshare, &remainingshares);
++  r2 = copyout(
++        myproc()->pagetable,
++        premainingshares,
++        (char *)&remainingshares,
++        sizeof(int)
++      );
++
++  if(r1 == 0 && r2 == 0)
++    return 0;
++
++  return -1;
++
++}
++
++/* **********************************  */
+diff --git a/assignments/a3/xv6-riscv/kernel/trap.c b/assignments/a3/xv6-riscv/kernel/trap.c
+index 4c791b1..0b190e3 100644
+--- a/assignments/a3/xv6-riscv/kernel/trap.c
++++ b/assignments/a3/xv6-riscv/kernel/trap.c
+@@ -80,6 +80,12 @@ usertrap(void)
+   if(which_dev == 2)
+     yield();
+ 
++    /*CMPT 332 GROUP 67 Change, Fall 2024 */
++  if(which_dev == 3){
++    if (uvmcow() <0) {
++        setkilled(p);
++    }
++    }
+   usertrapret();
+ }
+ 
+@@ -211,7 +217,11 @@ devintr()
+     /* timer interrupt. */
+     clockintr();
+     return 2;
+-  } else {
++  } 
++    /*CMPT 332 GROUP 67 Change, Fall 2024 */
++    else if (scause == 0xfL){
++        return 3; /* means a page fault*/
++   } else {
+     return 0;
+   }
+ }
+diff --git a/assignments/a3/xv6-riscv/kernel/vm.c b/assignments/a3/xv6-riscv/kernel/vm.c
+index 975261f..ccde83c 100644
+--- a/assignments/a3/xv6-riscv/kernel/vm.c
++++ b/assignments/a3/xv6-riscv/kernel/vm.c
+@@ -5,7 +5,8 @@
+ #include "riscv.h"
+ #include "defs.h"
+ #include "fs.h"
+-
++#include "spinlock.h"
++#include "proc.h"
+ /*
+  * the kernel's page table.
+  */
+@@ -313,32 +314,97 @@ int
+ uvmcopy(pagetable_t old, pagetable_t new, uint64 sz)
+ {
+   pte_t *pte;
+-  uint64 pa, i;
+-  uint flags;
+-  char *mem;
++  uint64 pa, i, flags;
++
++  /*uint flags;
++char *mem;*/
+ 
+   for(i = 0; i < sz; i += PGSIZE){
+     if((pte = walk(old, i, 0)) == 0)
+       panic("uvmcopy: pte should exist");
+     if((*pte & PTE_V) == 0)
+       panic("uvmcopy: page not present");
++    /*CMPT 332 GROUP 67 Change, Fall 2024 */
++    *pte &= ~PTE_W;  /*set to read only*/
++    
+     pa = PTE2PA(*pte);
+     flags = PTE_FLAGS(*pte);
++
++    incriRefCount(pa);
++/*
+     if((mem = kalloc()) == 0)
+       goto err;
+     memmove(mem, (char*)pa, PGSIZE);
++
+     if(mappages(new, i, PGSIZE, (uint64)mem, flags) != 0){
+-      kfree(mem);
+-      goto err;
++     kfree(mem);
++     goto err;
+     }
++*/
++    if(mappages(new, i, PGSIZE, pa, flags) != 0){
++     /*goto err;*/
++    return -1;
++    }
++    sfence_vma(); /* flush stale entries from the TLB. */
+   }
+-  return 0;
+ 
++  return 0;
++/*
+  err:
+   uvmunmap(new, 0, i / PGSIZE, 1);
+-  return -1;
++  return -1;*/
+ }
+ 
++/*CMPT 332 GROUP 67 Change, Fall 2024 */
++
++int
++uvmcow(void){
++    pte_t *pte;
++    uint64 pa, f_add;
++    char *mem;
++    int refCount;
++
++    struct proc *p = myproc();
++    f_add= r_stval(); /* fault address*/
++
++    if((pte = walk(p->pagetable, f_add, 0)) == 0){
++        panic("uvmcopy: pte should exist");
++        return -1;
++    }
++    if((*pte & PTE_V) == 0){
++      panic("uvmcow: page not present");
++      return -1;
++    }
++    if (*pte & PTE_X) {
++	  panic("uvmcow: illegal range of va");
++      return -1;
++  }
++    refCount=decriRefCount(PTE2PA(*pte));
++    *pte |= PTE_W;/*sets write permission*/  
++    pa = PTE2PA(*pte);
++    /*refCount=decriRefCount(pa);*/
++
++    /* if the page have atleast one refrence then copy to a new page*/
++    if (refCount>0){
++        if((mem = kalloc()) == 0){
++            uvmunmap(p->pagetable, 0, 1, 1);
++            return -1;
++        }
++        memmove(mem, (char*)pa, PGSIZE);
++        /*update the page entry to a new copy of page*/
++        *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
++        initRefCount((uint64) mem);/* initilize */
++    } else{
++        initRefCount(pa); /*reset the count to 1*/
++    }      
++    sfence_vma(); /* flush stale entries from the TLB. */
++ 
++
++    return 0;
++}
++
++
++
+ /* mark a PTE invalid for user access. */
+ /* used by exec for the user stack guard page. */
+ void
+@@ -360,17 +426,45 @@ copyout(pagetable_t pagetable, uint64 dstva, char *src, uint64 len)
+ {
+   uint64 n, va0, pa0;
+   pte_t *pte;
++  int refCount;
++  char *mem;
+ 
+   while(len > 0){
+     va0 = PGROUNDDOWN(dstva);
+     if(va0 >= MAXVA)
+       return -1;
+     pte = walk(pagetable, va0, 0);
++    
+     if(pte == 0 || (*pte & PTE_V) == 0 || (*pte & PTE_U) == 0 ||
+-       (*pte & PTE_W) == 0)
++       ((*pte & PTE_W) == 0 && (*pte & PTE_X)))
+       return -1;
++    /*CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++
++    /* if on read only halndle the copy-on-Write*/
++    if ((*pte & PTE_W) == 0){
++        pa0= PTE2PA(*pte);
++        refCount= decriRefCount(pa0);
++        *pte |= PTE_W;
++        
++        if (refCount>0){
++            if((mem = kalloc()) == 0){
++                uvmunmap(pagetable, 0, 1, 1);
++                return -1;
++        }
++        memmove(mem, (char*)pa0, PGSIZE);
++        /*update the page entry to a new copy of page*/
++        *pte = PTE_FLAGS(*pte) | PA2PTE(mem);
++        /*initRefCount((uint64) mem);*//* initilize */
++    }else{
++        /*only one refrence*/
++        initRefCount(pa0); /*reset the count to 1*/
++    }
++    sfence_vma(); /* flush stale entries from the TLB. */
++    }
++
+     pa0 = PTE2PA(*pte);
+     n = PGSIZE - (dstva - va0);
++    
+     if(n > len)
+       n = len;
+     memmove((void *)(pa0 + (dstva - va0)), src, n);
+diff --git a/assignments/a3/xv6-riscv/user/cowtest.c b/assignments/a3/xv6-riscv/user/cowtest.c
+new file mode 100644
+index 0000000..6fec80a
+--- /dev/null
++++ b/assignments/a3/xv6-riscv/user/cowtest.c
+@@ -0,0 +1,197 @@
++/* */
++/* tests for copy-on-write fork() assignment. */
++/* */
++
++#include "kernel/types.h"
++#include "kernel/memlayout.h"
++#include "user/user.h"
++
++/* allocate more than half of physical memory, */
++/* then fork. this will fail in the default */
++/* kernel, which does not support copy-on-write. */
++void
++simpletest()
++{
++  uint64 phys_size = PHYSTOP - KERNBASE;
++  int sz = (phys_size / 3) * 2;
++
++  printf("simple: ");
++  
++  char *p = sbrk(sz);
++  if(p == (char*)0xffffffffffffffffL){
++    printf("sbrk(%d) failed\n", sz);
++    exit(-1);
++  }
++
++  for(char *q = p; q < p + sz; q += 4096){
++    *(int*)q = getpid();
++  }
++
++  int pid = fork();
++  if(pid < 0){
++    printf("fork() failed\n");
++    exit(-1);
++  }
++
++  if(pid == 0)
++    exit(0);
++
++  wait(0);
++
++  if(sbrk(-sz) == (char*)0xffffffffffffffffL){
++    printf("sbrk(-%d) failed\n", sz);
++    exit(-1);
++  }
++
++  printf("ok\n");
++}
++
++/* three processes all write COW memory. */
++/* this causes more than half of physical memory */
++/* to be allocated, so it also checks whether */
++/* copied pages are freed. */
++void
++threetest()
++{
++  uint64 phys_size = PHYSTOP - KERNBASE;
++  int sz = phys_size / 4;
++  int pid1, pid2;
++
++  printf("three: ");
++  
++  char *p = sbrk(sz);
++  if(p == (char*)0xffffffffffffffffL){
++    printf("sbrk(%d) failed\n", sz);
++    exit(-1);
++  }
++
++  pid1 = fork();
++  if(pid1 < 0){
++    printf("fork failed\n");
++    exit(-1);
++  }
++  if(pid1 == 0){
++    pid2 = fork();
++    if(pid2 < 0){
++      printf("fork failed");
++      exit(-1);
++    }
++    if(pid2 == 0){
++      for(char *q = p; q < p + (sz/5)*4; q += 4096){
++        *(int*)q = getpid();
++      }
++      for(char *q = p; q < p + (sz/5)*4; q += 4096){
++        if(*(int*)q != getpid()){
++          printf("wrong content\n");
++          exit(-1);
++        }
++      }
++      exit(-1);
++    }
++    for(char *q = p; q < p + (sz/2); q += 4096){
++      *(int*)q = 9999;
++    }
++    exit(0);
++  }
++
++  for(char *q = p; q < p + sz; q += 4096){
++    *(int*)q = getpid();
++  }
++
++  wait(0);
++
++  sleep(1);
++
++  for(char *q = p; q < p + sz; q += 4096){
++    if(*(int*)q != getpid()){
++      printf("wrong content\n");
++      exit(-1);
++    }
++  }
++
++  if(sbrk(-sz) == (char*)0xffffffffffffffffL){
++    printf("sbrk(-%d) failed\n", sz);
++    exit(-1);
++  }
++
++  printf("ok\n");
++}
++
++char junk1[4096];
++int fds[2];
++char junk2[4096];
++char buf[4096];
++char junk3[4096];
++
++/* test whether copyout() simulates COW faults. */
++void
++filetest()
++{
++  printf("file: ");
++  
++  buf[0] = 99;
++
++  for(int i = 0; i < 4; i++){
++    if(pipe(fds) != 0){
++      printf("pipe() failed\n");
++      exit(-1);
++    }
++    int pid = fork();
++    if(pid < 0){
++      printf("fork failed\n");
++      exit(-1);
++    }
++    if(pid == 0){
++      sleep(1);
++      if(read(fds[0], buf, sizeof(i)) != sizeof(i)){
++        printf("error: read failed\n");
++        exit(1);
++      }
++      sleep(1);
++      int j = *(int*)buf;
++      if(j != i){
++        printf("error: read the wrong value\n");
++        exit(1);
++      }
++      exit(0);
++    }
++    if(write(fds[1], &i, sizeof(i)) != sizeof(i)){
++      printf("error: write failed\n");
++      exit(-1);
++    }
++  }
++
++  int xstatus = 0;
++  for(int i = 0; i < 4; i++) {
++    wait(&xstatus);
++    if(xstatus != 0) {
++      exit(1);
++    }
++  }
++
++  if(buf[0] != 99){
++    printf("error: child overwrote parent\n");
++    exit(1);
++  }
++
++  printf("ok\n");
++}
++
++int
++main(int argc, char *argv[])
++{
++  simpletest();
++
++  /* check that the first simpletest() freed the physical memory. */
++  simpletest();
++
++  threetest();
++  threetest();
++  threetest();
++
++  filetest();
++
++  printf("ALL COW TESTS PASSED\n");
++
++  exit(0);
++}
+diff --git a/assignments/a3/xv6-riscv/user/schedulertests.c b/assignments/a3/xv6-riscv/user/schedulertests.c
+new file mode 100644
+index 0000000..d00a252
+--- /dev/null
++++ b/assignments/a3/xv6-riscv/user/schedulertests.c
+@@ -0,0 +1,334 @@
++#include "user/mtx.h"
++#include "kernel/types.h"
++#include "user/user.h"
++
++
++/* from grind.c. */
++unsigned long rand_next;
++int do_rand(unsigned long *ctx)
++{
++/*
++ * Compute x = (7^5 * x) mod (2^31 - 1)
++ * without overflowing 31 bits:
++ *      (2^31 - 1) = 127773 * (7^5) + 2836
++ * From "Random number generators: good ones are hard to find",
++ * Park and Miller, Communications of the ACM, vol. 31, no. 10,
++ * October 1988, p. 1195.
++ */
++	long hi, lo, x;
++
++	/* Transform to [1, 0x7ffffffe] range. */
++	x = (*ctx % 0x7ffffffe) + 1;
++	hi = x / 127773;
++	lo = x % 127773;
++	x = 16807 * lo - 2836 * hi;
++	if (x < 0)
++		x += 0x7fffffff;
++	/* Transform to [0, 0x7ffffffd] range. */
++	x--;
++	*ctx = x;
++	return (x);
++}
++
++
++int
++rand(void)
++{
++	return (do_rand(&rand_next));
++}
++
++void test1() {
++	printf("******************** Test 1 ********************\n");
++	procdump();
++	printf("************************************************\n");
++}
++
++void test2() {
++	int r;
++	printf("******************** Test 2 ********************\n");
++	r = setprocessgroup(-1, 1);
++	procdump();
++	printf("***************** Test 2 ");
++	if(r != -1)
++		printf("Failed");
++	else
++		printf("Passed");
++	printf(" *****************\n");
++}
++
++void test3() {
++	int r;
++	printf("******************** Test 3 ********************\n");
++	r = setprocessgroup(10, 1);
++	procdump();
++	printf("***************** Test 3 ");
++	if(r != -1)
++		printf("Failed");
++	else
++		printf("Passed");
++	printf(" *****************\n");
++}
++
++void test4() {
++	int r;
++	printf("******************** Test 4 ********************\n");
++	r = setprocessgroup(getpid(), -1);
++	procdump();
++	printf("***************** Test 4 ");
++	if(r != -1)
++		printf("Failed");
++	else
++		printf("Passed");
++	printf(" *****************\n");
++}
++
++void test5() {
++	int r;
++	printf("******************** Test 5 ********************\n");
++	r = setprocessgroup(getpid(), 20);
++	procdump();
++	printf("***************** Test 5 ");
++	if(r != -1)
++		printf("Failed");
++	else
++		printf("Passed");
++	printf(" *****************\n");
++}
++
++void test6() {
++	int r;
++	printf("******************** Test 6 ********************\n");
++	r = setprocessgroup(getpid(), 5);
++	procdump();
++	printf("***************** Test 6 ");
++	if(r != 0)
++		printf("Failed");
++	else
++		printf("Passed");
++	printf(" *****************\n");
++}
++
++void test7() {
++	int r;
++	int remainingshares = -1;
++	printf("******************** Test 7 ********************\n");
++	r = setshare(-1, 2, &remainingshares);
++	printf("r = %d, remainingshares = %d\n", r, remainingshares);
++	printf("***************** Test 7 ");
++	if(r == -1 && remainingshares == 90)
++		printf("Passed");
++	else
++		printf("Failed");
++	printf(" *****************\n");
++}
++
++void test8() {
++	int r;
++	int remainingshares = -1;
++	printf("******************** Test 8 ********************\n");
++	r = setshare(20, 2, &remainingshares);
++	printf("r = %d, remainingshares = %d\n", r, remainingshares);
++	printf("***************** Test 8 ");
++	if(r == -1 && remainingshares == 90)
++		printf("Passed");
++	else
++		printf("Failed");
++	printf(" *****************\n");
++}
++
++void test9() {
++	int r;
++	int remainingshares = -1;
++	printf("******************** Test 9 ********************\n");
++	r = setshare(0, -2, &remainingshares);
++	printf("r = %d, remainingshares = %d\n", r, remainingshares);
++	printf("***************** Test 9 ");
++	if(r == -1 && remainingshares == 90)
++		printf("Passed");
++	else
++		printf("Failed");
++	printf(" *****************\n");
++}
++
++void test10() {
++	int r;
++	int remainingshares = -1;
++	printf("******************** Test 10 ********************\n");
++	r = setshare(0, 100, &remainingshares);
++	printf("r = %d, remainingshares = %d\n", r, remainingshares);
++	printf("***************** Test 10 ");
++	if(r == -1 && remainingshares == 90)
++		printf("Passed");
++	else
++		printf("Failed");
++	printf(" *****************\n");
++}
++
++void test11() {
++	int r;
++	int remainingshares = -1;
++	printf("******************** Test 11 ********************\n");
++	r = setshare(0, 5, &remainingshares);
++	printf("r = %d, remainingshares = %d\n", r, remainingshares);
++	printf("***************** Test 11 ");
++	if(r == 0 && remainingshares == 86)
++		printf("Passed");
++	else
++		printf("Failed ");
++	printf(" *****************\n");
++}
++
++void test12() {
++	int r, s;
++	printf("******************** Test 12 ********************\n");
++	r = fork();
++	if(r == 0) {
++		procdump();
++		exit(0);
++	}
++	wait(&s);
++	printf("************************************************\n");
++}
++
++
++
++void test13child() {
++    int times, i, square, sleepTime;
++	rand_next = getpid();
++	sleepTime = rand() % 100 + 10;
++	sleepTime = rand() % 300 + 10;
++	sleepTime = rand() % 500 + 10;
++	sleepTime = rand() % 200 + 10;
++	sleep(sleepTime);
++    times = rand() % 10000;
++    times += 1000;
++    square = 0;
++    for(i = 0; i < times; i++) {
++        square = i * i;
++    }
++    printf(
++		"process %d: Slept for %d and computed square of %d = %d\n",
++		getpid(),
++		sleepTime,
++		times,
++		square
++		);
++}
++
++
++void test13() {
++	int r, s, numchildren, i;
++	numchildren = 10;
++	printf("******************** Test 13 ********************\n");
++
++	for(i = 0; i < numchildren; i++) {
++		r = fork();
++
++        /*child*/
++        if(r == 0) {
++            test13child();
++            exit(0);
++        }
++    }
++    for(i = 0; i < numchildren; i++) {
++        wait(&s);
++    }
++    printf("************************************************\n");
++}
++
++void createChildren(int numChildren, int group) {
++	int r, s, i;
++
++    r = getpid();
++    if(setprocessgroup(r, group)!=0) {
++            printf(
++                "ERROR: createChild could not setprocessgroup() for "
++                "r = %d, group = %d.\n",
++                r,
++                group
++            );
++    }
++
++    for(i = 0; i < numChildren; i++) {
++		r = fork();
++
++		/*child*/
++		if(r == 0) {
++			test13child();
++			exit(0);
++		}
++	}
++    if(group == 9)
++        procdump();
++	for(i = 0; i < numChildren; i++) {
++		wait(&s);
++	}
++}
++
++void test14() {
++	int r, s, numchildren, i, remainingShares;
++	numchildren = 4;
++
++    setshare(3, 40, &remainingShares);
++    setshare(5, 20, &remainingShares);
++    setshare(7, 10, &remainingShares);
++    setshare(9, 5, &remainingShares);
++
++	printf("******************** Test 14 ********************\n");
++    r = fork();
++    if(r == 0){
++        createChildren(3, 3);
++        exit(0);
++    }
++    r = fork();
++    if(r == 0){
++        createChildren(5, 5);
++        exit(0);
++    }
++    r = fork();
++    if(r == 0){
++        createChildren(7, 7);
++        exit(0);
++    }
++    r = fork();
++    if(r == 0){
++        createChildren(9, 9);
++        exit(0);
++    }
++
++	for(i = 0; i < numchildren; i++) {
++		wait(&s);
++	}
++	printf("************************************************\n");
++
++}
++int main() {
++    test1();
++    printf("\n");
++    test2();
++    printf("\n");
++    test3();
++    printf("\n");
++    test4();
++    printf("\n");
++    test5();
++    printf("\n");
++    test6();
++    printf("\n");
++    test7();
++    printf("\n");
++    test8();
++    printf("\n");
++    test9();
++    printf("\n");
++    test10();
++    printf("\n");
++    test11();
++    printf("\n");
++    test12();
++    printf("\n");
++    test13();
++    printf("\n");
++    test14();
++    printf("\n");
++}
+diff --git a/assignments/a3/xv6-riscv/user/user.h b/assignments/a3/xv6-riscv/user/user.h
+index 65bb0ef..9059dbd 100644
+--- a/assignments/a3/xv6-riscv/user/user.h
++++ b/assignments/a3/xv6-riscv/user/user.h
+@@ -23,7 +23,11 @@ char* sbrk(int);
+ int sleep(int);
+ int uptime(void);
+ int trace(int);
+-
++/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++int             setshare(int groupnumber, int newshare, int* remainingshares);
++int             setprocessgroup(int pid, int groupnumber);
++int             procdump(void);
++/* ************************************ */
+ 
+ /* ulib.c */
+ int stat(const char*, struct stat*);
+diff --git a/assignments/a3/xv6-riscv/user/usys.pl b/assignments/a3/xv6-riscv/user/usys.pl
+index 4c32c04..1dd153a 100755
+--- a/assignments/a3/xv6-riscv/user/usys.pl
++++ b/assignments/a3/xv6-riscv/user/usys.pl
+@@ -37,3 +37,8 @@ entry("sbrk");
+ entry("sleep");
+ entry("uptime");
+ entry("trace");
++#/* CMPT 332 GROUP 67 Change, Fall 2024 A3 */
++entry("setshare");
++entry("setprocessgroup");
++entry("procdump");
++#/* ************************************ */
