@@ -4,6 +4,7 @@
  * */
 
 #include <mem-management.h>
+#include <RttMutex.h>
 
 #define STKSIZE 262144
 /* Limits of the simulation */
@@ -28,6 +29,10 @@ typedef struct _params {
 int numIterations;
 int numThreads;
 
+int numRunningThreads;
+u_long numRunningThreadsLock;
+RttThreadId mainpId;
+
 RTTTHREAD MallocTest(void *arg);
 
 void *MyMalloc(size_t size, int algNo) {
@@ -51,6 +56,10 @@ int mainp(int argc, char* argv[]) {
 	RttSchAttr attr;
 	RttThreadId pid[NUM_ALGS][MAX_THREADS];
 	PARAM* params;
+
+	RttNewMutex(&numRunningThreadsLock);
+	numRunningThreads = 0;
+	mainpId = RttMyThreadId();
 
 	attr.startingtime = RTTZEROTIME;
 	attr.priority = RTTNORM;
@@ -119,10 +128,15 @@ int mainp(int argc, char* argv[]) {
 				perror("RttCreate");
 				exit(1);
 			}
+			RttMutexLock(numRunningThreadsLock);
+			numRunningThreads++;
+			RttMutexUnlock(numRunningThreadsLock);
+
 		}
 	}
 
-
+	RttSuspend();
+	exit(0);
 	return 0;
 }
 
@@ -172,5 +186,12 @@ RTTTHREAD MallocTest(void *arg) {
 	}
 
 	Threadend(algNo);  /* Print the results if its the last thread */
+	RttMutexLock(numRunningThreadsLock);
+	numRunningThreads--;
+	if (numRunningThreads == 0) {
+		RttMutexUnlock(numRunningThreadsLock);
+		RttResume(mainpId);
+	}
+	RttMutexUnlock(numRunningThreadsLock);
 }
 
