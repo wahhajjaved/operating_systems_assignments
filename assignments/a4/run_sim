@@ -1,0 +1,23 @@
+#!/bin/bash
+
+
+echo "Test Constant Iterations but Varying Threads" > results.txt
+echo "------------------" >> results.txt
+
+numIterations=1000
+
+for numThreads in {1..10}; do
+	echo "Running simulations with numThreads=$numThreads" >> results.txt
+	for run in {1..5}
+	do
+		echo "Run $run, numThreads=$numThreads, numIterations=$numIterations" >> results.txt
+		# Run sim and capture output
+		output=$(./sim $numThreads $numIterations)
+		# Append output to results.txt
+		echo "$output" >> results.txt
+		echo "" >> results.txt # Add a blank line for readability
+	done
+done
+
+echo "------------------" >> results.txt
+echo >> results.txt
