@@ -13,7 +13,7 @@
 
 
 #define MIN_LISTS 50
-#define MIN_NODES 500
+#define MIN_NODES 5000
 /*
  * comparator pointer for the parameter for ListSearch()
  */

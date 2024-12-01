@@ -17,7 +17,7 @@
 
 #define MEM_AVAILABLE  0x10000000l  /* 8 GiB */
 #define MEM_BASE       0x80000000l
-#define NUM_ALGS       2
+#define NUM_ALGS       1
 
 /* store all stats for a single algorithm */
 typedef struct {
@@ -28,17 +28,18 @@ typedef struct {
 	unsigned long intFrag; /* allocated memory is larger then
                                     allocated space */
 } Stats;
-
+/*
 typedef struct {
 	char *start;
 	size_t size;
 } MemorySpace;
-/*
+ */
+
 typedef struct {
 	long int start;
 	size_t size;
 } MemorySpace;
-*/
+
 
 /*
 typedef struct _FF{
