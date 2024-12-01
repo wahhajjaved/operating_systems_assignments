@@ -8,7 +8,7 @@
 
 #define STKSIZE 262144
 /* Limits of the simulation */
-#define MAX_THREADS    9
+#define MAX_THREADS    10
 #define MAX_ITERATIONS 10000
 
 /* Parameters */
