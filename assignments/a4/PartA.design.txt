@@ -10,28 +10,43 @@ Memory block/space:
     struct :
         *start //start pointer
         size   // the size of the memory
-    
+
 Stats: store all stats for a single algorithm
     struct stats
         unsigned nodesSearched;     //how many block have been searched
-        unsigned numFreeMem;   
+        unsigned numFreeMem;
         unsigned long totalAlloMem; //total memory allocated
         unsigned long extFrag;      //memory holes, not counting last
-        unsigned long intFrag;      // allocated memory is larger then 
-                                    allocated space 
-    nodesSearched; and numFreeMem does not need too much space and it fits 
-    in unsigned range [32 bits] 
+        unsigned long intFrag;      // allocated memory is larger then
+                                    allocated space
+    nodesSearched; and numFreeMem does not need too much space and it fits
+    in unsigned range [32 bits]
     totalAlloMem tracks the total amount of memory allocation which can easily
-    reach gigabyte so to prevent overflow unsigned long is used. 
+    reach gigabyte so to prevent overflow unsigned long is used.
     extFrag and intFrag can grow large over time so i used unsigned long
     to be safe
 
+    extfrag tracks the externel fragmenentation, externel fragmentation occurs
+    when the free memory is too small and there is not large enough memory
+    available.In the code extfrag is increase in malloc and decrese in free.
+    the code reduces the extfrag when allocated block matches the free block
+    size, the extfrag is increase based on the free block size.
+    when extfrag is larger, it shows that the algorithm is leaving memory
+    in fragments more. we can compare the extfrag from all algorithm to
+    see which algorithm leavers the most fragments.
+
+    intfrag tracks the size of memory given to a an algorithm, intfrag occurs
+    when memory allocation requires more space then needed, this extra memory
+    which is wasted is intfrag. in malloc, the intfrag is updated using,
+    allocated size - size. we can compare the intfrag from all algorithm to
+    see which algorithm wastes the most momory. higher the intFrag indicates
+    the inefficiency in how the memory is allocated to meet the request.
 
 
 use Best fit and First fit Algorithm
     first fit allocate the memory block to the first large enough block to
     fill the request.
-    best fit alloctaes the memory to the smallest block that fits our 
+    best fit alloctaes the memory to the smallest block that fits our
     request
 used struct for memory allocation for both FF and BF for better management
     struct _FF{
@@ -55,7 +70,7 @@ FfMalloc:
     that is big enough is found
 
 BfMalloc:
-    the design is similar to FF but Best fit searches through all the free 
+    the design is similar to FF but Best fit searches through all the free
     memory blocks and compare their sizes
 
 
@@ -68,33 +83,33 @@ Data Structures:
 --------------------------------------
 
 There are two types of segments: used and free. Operations on the used
-segments are insert, delete, and search by memory address. The used 
+segments are insert, delete, and search by memory address. The used
 segments do not need to be ordered so insertion can happen anywhere making
 it O(1). Deletion requires search. So the ideal data structure for used
-segments would be a hashmap which can do all operations in O(1). 
+segments would be a hashmap which can do all operations in O(1).
 
-The free segments also has these operations, but with different 
+The free segments also has these operations, but with different
 considerations. The free segments must be ordered to make it easy to find
 adjacent segments. This ordering requirement further requires insertion
 inside the list at random places. The alternative is to have the free
 segments unordered and while that can make insertion O(1), the list still
-has to be searched to merge free segments. 
+has to be searched to merge free segments.
 
 The list also has to be searched when removing segments from the free
 list and this searching behaviour is different for different algorithms.
-For first fit, the search is done by memory address. For best fit, the 
-search is done using segment size. 
+For first fit, the search is done by memory address. For best fit, the
+search is done using segment size.
 
-So to summarize, the used list needs unordered insertion and search by 
-memory address, and deletion of searched item. And the free list needs 
-random insertion, search by memory address, and deletion of searched item. 
-For best fit, search by segment size is also needed. 
+So to summarize, the used list needs unordered insertion and search by
+memory address, and deletion of searched item. And the free list needs
+random insertion, search by memory address, and deletion of searched item.
+For best fit, search by segment size is also needed.
 
 The used list is th only one that benefits from the hash map. It could also
 benefit from a binary search tree to get O(log n) search time, at the cost
 of increasing insertion time from O(1) or O(log n).
 
-The free list won't benefit from a hash map, but best fit can benefit 
+The free list won't benefit from a hash map, but best fit can benefit
 from a search tree to find the optimal segment. An alternative would be
 a binary search of a sorted list by segment size. However, since segments
 sorted by memory address are still needed, the search tree or sorted list
@@ -102,45 +117,45 @@ would have to be a separate copy which now must be kept in sync with the
 original free list.
 
 For these reasons, and the complexity of implementing a search tree and
-hash map, we have decided to just use the list library. The slowest 
+hash map, we have decided to just use the list library. The slowest
 operation with linked lists will be searching but the other operations will
 be constant time. Furthermore, the free list can be kept sorted from the
-beginning, improving performance. 
+beginning, improving performance.
 
 Linked lists can be used in the 3 different ways described below. Due to
-the overhead of implementing list views, the separate free and used list 
+the overhead of implementing list views, the separate free and used list
 configuration is used for the simulation.
 
 
 One Linked List:
 
-    All memory segments can be stored in a linked list. Segments are marked as 
-    used or free. Linked lists are a good choice because first fit always 
+    All memory segments can be stored in a linked list. Segments are marked as
+    used or free. Linked lists are a good choice because first fit always
     searches from the beginning of the memory and only looks for the first free
-    slot that's big enough. 
-    
-    The first free slot is segmented when allocating and adjacent free slots 
-    are merged when freeing. So the size of the list is equal to the number of 
+    slot that's big enough.
+
+    The first free slot is segmented when allocating and adjacent free slots
+    are merged when freeing. So the size of the list is equal to the number of
     segments. When segmenting the slots will need to remain sorted so that they
     may be merged quickly.
-    
+
     Worst case allocation time is O(n), where n is the number of segments. This
     will happen if the viable free slot is at the tail of the list or if there
-    is no free space left. By caching the pointer to the first free segment, 
+    is no free space left. By caching the pointer to the first free segment,
     allocation time can be slightly improved.
-    
+
     Worst case free time is also O(n), because the slot being freed may be at
     the end of the list and the entire list must be traversed.
-    
-    When allocating and freeing, the segmented and merged slots needs to be 
+
+    When allocating and freeing, the segmented and merged slots needs to be
     placed in the correct position in the list to keep it sorted. With a linked
     list, this insertion time is O(1).
-    
+
     Each node in the list must store the starting address which is 8 bytes;
     size_t size of the segmenth which may also be 8 bytes; and a boolean to
     track if the segment is used or free, which can be optimized to be 1 byte.
-    Overall each node will use 17 bytes. 
-    
+    Overall each node will use 17 bytes.
+
     The worst case space complexity will be when each segment is used for
     allocated bytes. Then 17 bytes of metadata will be used to track 1 byte
     of actual data.
@@ -150,8 +165,8 @@ Free and Used Lists:
     The linked list usage can be optimized by separating out the free and used
     segments into their own lists. Allocation will move a segment from the
     free list to the used list and freeing will do the reverse.
-    
-    Now allocation time will be O(n) where n is the number of free segments. 
+
+    Now allocation time will be O(n) where n is the number of free segments.
     Free time will be O(m), where m is the number of used segments. The total
     number of segments is still the same as when using one linked list, but
     allocation no longer requires traversing over used segments and free
@@ -160,10 +175,10 @@ Free and Used Lists:
 
     The used list is needed to store the size of each segment as that is needed
     when freeing it. So the elements in the used list don't need to be sorted.
-    Insertion into the used list will be O(1). 
+    Insertion into the used list will be O(1).
 
     A slight optimization on the used list can be achieved by prepending new
-    elements. This way, memory segments that have been allocated for a long 
+    elements. This way, memory segments that have been allocated for a long
     time will eventually make their way to the back of the list. When freeing,
     search for the address in the used list starts at the begining of the list
     so the average search time will go down.
@@ -178,9 +193,29 @@ List Views:
 
     In this approach, all memory segments are stored in just one linked list.
     However, the segment metadata will now also track the next free or used
-    node, in addition to the segment's starting address, size, type. This will 
+    node, in addition to the segment's starting address, size, type. This will
     provide the benefits of using separate used and free lists while also
     proving O(1) insertion time advantage of a single list.
-    
+
     The disadvantage of this approach is that the list library will need to be
-    updated to handle iteration over views. 
+    updated to handle iteration over views.
+
+
+--------------------------------------
+testing:
+
+we can only test in two ways, either by changing the number of threads or
+the number of iterations
+
+edge cases:
+    -upper and lower bounds of thread count
+        minimum number of threads: 1 -> ./mem-management-sim 1 1000
+        maximum number of threads: 9 -> ./mem-management-sim 9 1000
+    -upper and lower bounds of iteration
+        minimum number of iterations: 1 -> mem-management-sim 4 1
+        maximum number of iterations: 10000 -> mem-management-sim 4 10000
+    - invalid input: ensure proper handling
+        no arguments: ./mem-management-sim
+        exceeding the max threads :./mem-management-sim 10 1000
+        exceeding the max iterations: ./mem-management-sim 4 10001
+
