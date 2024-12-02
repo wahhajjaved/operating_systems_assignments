@@ -91,6 +91,7 @@ void *FfMalloc(size_t size) {
         RttMonSignal(FFMemAvail);
 
     RttMonLeave();
+    FF.stat.numAllocations++;
 
     return allocaBlock->start;
 }
@@ -166,6 +167,7 @@ void *BfMalloc(size_t size) {
     if (wait) RttMonSignal(BFMemAvail);
 
     RttMonLeave();
+    BF.stat.numAllocations++;
 
     return allocaBlock->start;
 }
@@ -223,6 +225,7 @@ void FfFree(void *ptr) {
 		free(ListRemove(FF.freeMem));
 	}
 
+    FF.stat.numDeallocations++;
 	RttMonSignal(FFMemAvail);
 	RttMonLeave();
 }
@@ -278,6 +281,8 @@ void BfFree(void *ptr) {
         free(ListRemove(BF.freeMem));
     }
 
+    BF.stat.numDeallocations++;
+	RttMonSignal(FFMemAvail);
     RttMonSignal(BFMemAvail);
     RttMonLeave();
 
