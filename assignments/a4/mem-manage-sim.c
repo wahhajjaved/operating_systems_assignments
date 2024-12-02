@@ -49,9 +49,42 @@ void MyFree(void *ptr, int algNo) {
 		errx(1, "MyFree: invalid algNo");
 }
 
+void printStats(int algNo, Stats* stats) {
+int i;
+printf(
+	"%d: "
+	"numAllocations: %ld, "
+	"numDeallocations: %ld, "
+	"numSearchedNodesAllocation: %ld, "
+	"numSearchedNodesDeallocation: %ld, "
+	"numAllocatedSegments: %ld, "
+	"numUnallocatedSegments: %ld\n"
+	,algNo
+	,stats->numAllocations
+	,stats->numDeallocations
+	,stats->numSearchedNodesAllocation
+	,stats->numSearchedNodesDeallocation
+	,stats->numAllocatedSegments
+	,stats->numUnallocatedSegments
+);	
+printf("Allocated Segments = [");
+for (i = 0; i < stats->numAllocatedSegments; i++) {
+	printf("%lx, ", stats->allocatedSegmentsSizes[i]);
+}
+printf("]\n");
+
+printf("Unallocated Segments = [");
+for (i = 0; i < stats->numUnallocatedSegments; i++) {
+	printf("%lx, ", stats->unallocatedSegmentsSizes[i]);
+}
+printf("]\n\n");
+}
+
+
 int mainp(int argc, char* argv[]) {
 	int i, j, temp;
     double u, x;
+	Stats ffStats, bfStats;
 
 	RttSchAttr attr;
 	RttThreadId pid[NUM_ALGS][MAX_THREADS];
@@ -136,6 +169,11 @@ int mainp(int argc, char* argv[]) {
 	}
 
 	RttSuspend();
+	MyMemStats(0, &ffStats);
+	MyMemStats(1, &bfStats);
+	printStats(0, &ffStats);
+	printStats(1, &bfStats);
+	RttSleep(1);
 	exit(0);
 	return 0;
 }
@@ -185,7 +223,8 @@ RTTTHREAD MallocTest(void *arg) {
 */	}
 	}
 
-	Threadend(algNo);  /* Print the results if its the last thread */
+	/*Threadend(algNo);*/  /* Print the results if its the last thread */
+	
 	RttMutexLock(numRunningThreadsLock);
 	numRunningThreads--;
 	if (numRunningThreads == 0) {

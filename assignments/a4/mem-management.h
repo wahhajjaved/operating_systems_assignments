@@ -21,12 +21,15 @@
 
 /* store all stats for a single algorithm */
 typedef struct {
-	unsigned nodesSearched; /*how many block have been searched*/
-	unsigned numFreeMem;
-	unsigned long totalAlloMem; /*total memory allocated*/
-	unsigned long extFrag;  /* memory holes, not counting last*/
-	unsigned long intFrag; /* allocated memory is larger then
-                                    allocated space */
+	unsigned long numAllocations;
+	unsigned long numDeallocations;
+	unsigned long numSearchedNodesAllocation;
+	unsigned long numSearchedNodesDeallocation;
+	unsigned long numAllocatedSegments;
+	unsigned long numUnallocatedSegments; /*number of holes*/
+	unsigned long* allocatedSegmentsSizes; /*array of allocated segments*/
+	unsigned long* unallocatedSegmentsSizes; /*array of free segments*/
+
 } Stats;
 
 typedef struct {
@@ -59,6 +62,6 @@ void *FfMalloc(size_t size);
 void *BfMalloc(size_t size);
 void FfFree(void *ptr);
 void BfFree(void *ptr);
-void Threadend(int alg);
-void MyMemStats(int algNo);
+void Threadend(int alg, void* statistics);
+void MyMemStats(int algNo, void* statistics);
 
