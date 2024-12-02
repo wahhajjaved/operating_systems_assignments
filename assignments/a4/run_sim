@@ -2,7 +2,7 @@
 
 
 echo "Test Constant Iterations but Varying Threads" > results.txt
-echo "------------------" >> results.txt
+echo "--------------------------------------------------------" >> results.txt
 
 numIterations=100
 
@@ -11,13 +11,39 @@ for numThreads in {1..10}; do
 	echo "Running simulations with numThreads=$numThreads" >> results.txt
 	echo "**********************************************" >> results.txt
 	echo "" >> results.txt
-	for run in {1..5}
+	for run in {1..3}
 	do
 		echo "Run $run, numThreads=$numThreads, numIterations=$numIterations"
 		echo "***** Run $run, numThreads=$numThreads, numIterations=$numIterations *****" >> results.txt
 		./mem-management-sim $numThreads $numIterations >> results.txt
 		echo "" >> results.txt
-		
+
+	done
+done
+
+echo "------------------" >> results.txt
+echo >> results.txt
+echo >> results.txt
+echo >> results.txt
+
+
+echo "Test Constant Threads but Varying Iterations" > results.txt
+echo "--------------------------------------------------------" >> results.txt
+
+num_threads=5
+
+for num_iterations in {1000..10000..1000}; do
+	echo "*****************************************************" >> results.txt
+	echo "Running simulations with num_iterations=$num_iterations" >> results.txt
+	echo "*****************************************************" >> results.txt
+	echo "" >> results.txt
+	for run in {1..3}
+	do
+		echo "Run $run, num_threads=$num_threads, num_iterations=$num_iterations"
+		echo "***** Run $run, num_threads=$num_threads, num_iterations=$num_iterations *****" >> results.txt
+		./mem-management-sim $num_threads $num_iterations >> results.txt
+		echo "" >> results.txt
+
 	done
 done
 
