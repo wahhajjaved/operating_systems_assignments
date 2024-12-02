@@ -11,37 +11,6 @@ Memory block/space:
         *start //start pointer
         size   // the size of the memory
 
-Stats: store all stats for a single algorithm
-    struct stats
-        unsigned nodesSearched;     //how many block have been searched
-        unsigned numFreeMem;
-        unsigned long totalAlloMem; //total memory allocated
-        unsigned long extFrag;      //memory holes, not counting last
-        unsigned long intFrag;      // allocated memory is larger then
-                                    allocated space
-    nodesSearched; and numFreeMem does not need too much space and it fits
-    in unsigned range [32 bits]
-    totalAlloMem tracks the total amount of memory allocation which can easily
-    reach gigabyte so to prevent overflow unsigned long is used.
-    extFrag and intFrag can grow large over time so i used unsigned long
-    to be safe
-
-    extfrag tracks the externel fragmenentation, externel fragmentation occurs
-    when the free memory is too small and there is not large enough memory
-    available.In the code extfrag is increase in malloc and decrese in free.
-    the code reduces the extfrag when allocated block matches the free block
-    size, the extfrag is increase based on the free block size.
-    when extfrag is larger, it shows that the algorithm is leaving memory
-    in fragments more. we can compare the extfrag from all algorithm to
-    see which algorithm leavers the most fragments.
-
-    intfrag tracks the size of memory given to a an algorithm, intfrag occurs
-    when memory allocation requires more space then needed, this extra memory
-    which is wasted is intfrag. in malloc, the intfrag is updated using,
-    allocated size - size. we can compare the intfrag from all algorithm to
-    see which algorithm wastes the most momory. higher the intFrag indicates
-    the inefficiency in how the memory is allocated to meet the request.
-
 
 use Best fit and First fit Algorithm
     first fit allocate the memory block to the first large enough block to
@@ -72,8 +41,6 @@ FfMalloc:
 BfMalloc:
     the design is similar to FF but Best fit searches through all the free
     memory blocks and compare their sizes
-
-
 
 
 
@@ -219,3 +186,74 @@ edge cases:
         exceeding the max threads :./mem-management-sim 10 1000
         exceeding the max iterations: ./mem-management-sim 4 10001
 
+
+
+Measurements
+--------------------------------------
+
+Measurements are stored in the Stats struct. The following measurements
+are taken for analysis:
+
+Number of allocations:
+        Recorded by incrementing a counter every time FfMalloc and BfMalloc
+        are called
+
+Number of deallocations:
+        Recorded by incrementing a counter every time FfFree and BfFree
+        are called
+
+Number of nodes searched during allocation:
+        When iterating over the free list, a counter is incremented for each
+        iteration
+
+Number of nodes searched during deallocation:
+        When iterating over the used list, a counter is incremented for each
+        iteration
+
+List of allocated segments:
+        The list of sizes of each segment in the used list
+
+List of free segments:
+        The list of sizes of each segment in the free list
+
+Number of holes in memory:
+        This is just the size of the free list. Usefull for iterating over list
+        of free segments
+
+Number of allocated segments in memory:
+        This is just the size of the used list. Usefull for iterating over list
+        of allocated segments
+
+
+
+
+Stats: store all stats for a single algorithm
+    struct stats
+        unsigned nodesSearched;     //how many block have been searched
+        unsigned numFreeMem;
+        unsigned long totalAlloMem; //total memory allocated
+        unsigned long extFrag;      //memory holes, not counting last
+        unsigned long intFrag;      // allocated memory is larger then
+                                    allocated space
+    nodesSearched; and numFreeMem does not need too much space and it fits
+    in unsigned range [32 bits]
+    totalAlloMem tracks the total amount of memory allocation which can easily
+    reach gigabyte so to prevent overflow unsigned long is used.
+    extFrag and intFrag can grow large over time so i used unsigned long
+    to be safe
+
+    extfrag tracks the externel fragmenentation, externel fragmentation occurs
+    when the free memory is too small and there is not large enough memory
+    available.In the code extfrag is increase in malloc and decrese in free.
+    the code reduces the extfrag when allocated block matches the free block
+    size, the extfrag is increase based on the free block size.
+    when extfrag is larger, it shows that the algorithm is leaving memory
+    in fragments more. we can compare the extfrag from all algorithm to
+    see which algorithm leavers the most fragments.
+
+    intfrag tracks the size of memory given to a an algorithm, intfrag occurs
+    when memory allocation requires more space then needed, this extra memory
+    which is wasted is intfrag. in malloc, the intfrag is updated using,
+    allocated size - size. we can compare the intfrag from all algorithm to
+    see which algorithm wastes the most momory. higher the intFrag indicates
+    the inefficiency in how the memory is allocated to meet the request.
