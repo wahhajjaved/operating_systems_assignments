@@ -12,8 +12,8 @@
 #include <err.h>
 
 
-#define MIN_LISTS 50
-#define MIN_NODES 5000
+#define MIN_LISTS 100
+#define MIN_NODES 20000
 /*
  * comparator pointer for the parameter for ListSearch()
  */

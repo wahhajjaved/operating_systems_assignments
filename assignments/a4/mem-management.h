@@ -28,18 +28,18 @@ typedef struct {
 	unsigned long intFrag; /* allocated memory is larger then
                                     allocated space */
 } Stats;
-/*
+
 typedef struct {
 	char *start;
 	size_t size;
 } MemorySpace;
- */
 
-typedef struct {
+
+/* typedef struct {
 	long int start;
 	size_t size;
 } MemorySpace;
-
+ */
 
 /*
 typedef struct _FF{

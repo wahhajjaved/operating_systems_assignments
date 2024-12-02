@@ -167,7 +167,7 @@ RTTTHREAD MallocTest(void *arg) {
 				- 1));
 */
 		/* Sleep for some time */
-		RttUSleep(sleepTime[threadNo][i]);
+		/* RttUSleep(sleepTime[threadNo][i]); */
 
 		/* freeing memory this */
 		if (doFree[threadNo][i]) {
