@@ -56,7 +56,7 @@ int main(void){
                 printf("consumer failed to open \n");
                 exit(1);
             }
-            memset(read_buf, '\0\', 10);
+            memset(read_buf, '\0', 10);
             while (size_read == EOF)size_read = read(fd, read_buf, 10);
             printf("buffer read: %s, buffer arr %s, byte %d of %ld\n",
                 read_buf,arr2[num], size-read,strlen(read_buf));
