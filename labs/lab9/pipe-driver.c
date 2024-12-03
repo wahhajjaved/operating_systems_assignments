@@ -24,12 +24,13 @@
 #define MAXBUFF 32
 
 
-struct _buff{
+struct Buffer{
     spinlock_t lock;
 	unsigned int writers;
 	unsigned int readers;
-}Buffer;
-static struct Buffer buf[N];
+};
+
+static struct Buffer buff[N];
 static int vfifofum_open(struct inode *, struct file *);
 static int vfifofum_release(struct inode *, struct file *);
 static ssize_t vfifofum_read(struct file *, char __user *, size_t, loff_t *);
@@ -97,7 +98,7 @@ static int vfifofum_open(struct inode *, struct file *)
   try_module_get(THIS_MODULE);
     spin_lock(&buff[i>>1].lock);
   if (i&0x1) buff[i>>1].readers++;
-  else buf[i>>1].writers++;
+  else buff[i>>1].writers++;
   spin_unlock(&buff[i>>1].lock);
   return 0;
 }
@@ -108,7 +109,7 @@ static int vfifofum_release(struct inode *, struct file *)
  int i=MAXBUFF;
     spin_lock(&buff[i>>1].lock);
   if (i&0x1) buff[i>>1].readers--;
-  else buf[i>>1].writers--;
+  else buff[i>>1].writers--;
   spin_unlock(&buff[i>>1].lock);
 
   module_put(THIS_MODULE);
@@ -118,13 +119,15 @@ static int vfifofum_release(struct inode *, struct file *)
 
 static ssize_t vfifofum_read(struct file *file, char __user *buffer, size_t length, loff_t *offset)
 {
-    spin_lock(&buff[i>>1].lock);
+    int i=MAXBUFF;
+  spin_lock(&buff[i>>1].lock);
   pr_alert("read not implmented!\n");
   return -EINVAL;
 }
 
 static ssize_t vfifofum_write(struct file *file, const char __user *buffer, size_t length, loff_t *offset)
 {
+    int i=MAXBUFF;
     spin_lock(&buff[i>>1].lock);
   pr_alert("write not implmented!\n");
   return -EINVAL;
