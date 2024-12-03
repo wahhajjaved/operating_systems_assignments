@@ -1,3 +1,7 @@
+/*
+ * NAKHBA MUBASHIR, EPL482, 11317060
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
