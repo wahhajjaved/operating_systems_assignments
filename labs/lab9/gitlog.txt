@@ -1,0 +1,59 @@
+commit 2a8bb876b1ef7eb76184d44aa404fd2d1109fe6f
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 20:08:24 2024 -0600
+
+    fixed errors while compiling
+
+commit 19f624ede45d778abbaf16ccd403d9448e5ea21a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 19:52:12 2024 -0600
+
+    sudo not working right now so commented it out
+
+commit 2891fcd3790d9e709b69e32d8011c9af491dcc4c
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 19:20:28 2024 -0600
+
+    imlemented open, release, init, exit
+
+commit e966351aaec3dcc469aae64f48c03ecb6cca8dd6
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 18:54:33 2024 -0600
+
+    added prod and cons to driver-PC
+
+commit 61c2b6594edd5a92b2939d0b4aae9fe321cadcb3
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 18:51:41 2024 -0600
+
+    add was set to wrong variable
+
+commit e0dbeb255f63e53613868325108fbe93bf55645d
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 18:43:21 2024 -0600
+
+    corrected the makefile but sudo does't work for me so i commented that part
+
+commit 14100acfa3f07174130147b7735e43665075673a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 18:27:06 2024 -0600
+
+    added the main for prod cons
+
+commit a552600c1786aa9bc4b5a8baf96b5a3f266f2799
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 09:11:18 2024 -0600
+
+    copied the given file
+
+commit 9dcc3be04198904358e98bccfb86f2df895d6b77
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 08:45:42 2024 -0600
+
+    added makefile
+
+commit c5e27f202b8ff385358877f9609a3e7acdd2dce5
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Mon Dec 2 08:44:13 2024 -0600
+
+    lab9 init
