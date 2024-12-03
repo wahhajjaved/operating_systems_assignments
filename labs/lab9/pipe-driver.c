@@ -1,8 +1,7 @@
 /*
  * vfifofum.c - implementation of a character based FIFO device driver
- * for CMPT 332 Lab 9 in 2023
- * NAME, NSID, Student Number
- *
+ * for CMPT 332 Lab 9 in 2024
+ * Nakhba Mubashir, epl482, 11317060
  */
 
 #include <linux/atomic.h> 
@@ -17,15 +16,19 @@
 #include <linux/uaccess.h>
 #include <linux/version.h>
 
+
+#define DEVICE_NAME "vfifofum"
+#define DEVNAME_SIZE 1024
+
 static int vfifofum_open(struct inode *, struct file *);
 static int vfifofum_release(struct inode *, struct file *);
 static ssize_t vfifofum_read(struct file *, char __user *, size_t, loff_t *);
 static ssize_t vfifofum_write(struct file *, const char __user *, size_t, loff_t *);
 
-static int major; /* our major number */
-#define DEVICE_NAME "vfifofum"
-static struct class *cls;
 
+
+static int major; /* our major number */
+static struct class *cls;
 static struct file_operations vfifofum_fops = {
   .read = vfifofum_read,
   .write = vfifofum_write,
@@ -33,7 +36,6 @@ static struct file_operations vfifofum_fops = {
   .release = vfifofum_release,
 };
 
-#define DEVNAME_SIZE 1024
 static int __init vfifofum_init(void)
 {
   
