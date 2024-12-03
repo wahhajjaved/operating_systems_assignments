@@ -1,5 +1,5 @@
-obj-m += hello-1.o
-driver := 
+obj-m += pipe-driver.o
+driver = pipe-driver
 
 CC=gcc
 CFLAGS=-g -I. 
@@ -11,13 +11,16 @@ PWD := $(CURDIR)
 all: pipe-driver
 
 pipe-driver: pipe-driver.c
-	$(MAKE) -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) modules
+	#sudo insmod $(driver).ko
 
-driver-PC: driver-PC.c pipe-driver.c 
-	{compile} -o driver-PC pipe-driver.c driver-PC.c
+driver-PC: pipe-driver driver-PC.o 
+	{compile} -o driver-PC  driver-PC.o
 
 driver-PC.o: driver-PC.c 
 	{compile} -c driver-PC.c
 
 clean: 
-	$(MAKE) -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	#sudo rmmod $(driver)
+	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+	rm -f *.o driver_PC
