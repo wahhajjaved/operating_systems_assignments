@@ -15,7 +15,7 @@
 #include <RttCommon.h>
 #include <monitor.h>
 
-#define MEM_AVAILABLE  0x10000000l  /* 8 GiB */
+#define MEM_AVAILABLE  0x80000000l  /* 8 GiB */
 #define MEM_BASE       0x80000000l
 #define NUM_ALGS       2
 
@@ -44,24 +44,12 @@ typedef struct {
 } MemorySpace;
  */
 
-/*
-typedef struct _FF{
-    LIST *freeMem;
-    LIST *allocateMem;
-    Stats stat;
-}FF;
 
-typedef struct _BF{
-    LIST *freeMem;
-    LIST *allocateMem;
-    Stats stat;
-}BF;
-*/
 void Initialize(int numThreads);
 void *FfMalloc(size_t size);
 void *BfMalloc(size_t size);
 void FfFree(void *ptr);
 void BfFree(void *ptr);
-void Threadend(int alg, void* statistics);
+void Threadend(int alg);
 void MyMemStats(int algNo, void* statistics);
 

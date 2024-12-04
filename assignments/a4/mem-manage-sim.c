@@ -6,13 +6,13 @@
 #include <mem-management.h>
 #include <RttMutex.h>
 
-#define STKSIZE 4194304 
+#define STKSIZE 4194304
 /* Limits of the simulation */
 #define MAX_THREADS    10
 #define MAX_ITERATIONS 10000
 
 /* Parameters */
-#define ALLOC_MEAN  0x20000    /* 128 KiB */
+#define ALLOC_MEAN  0x10000    /* 64 KiB */
 #define ALLOC_STDEV 0xC000     /* 48 KiB */
 #define SLEEP_MEAN  10000     /* 10 ms */
 
@@ -66,7 +66,7 @@ printf(
 	,stats->numSearchedNodesDeallocation
 	,stats->numAllocatedSegments
 	,stats->numUnallocatedSegments
-);	
+);
 printf("Allocated Segments = [");
 for (i = 0; i < stats->numAllocatedSegments; i++) {
 	printf("%lx, ", stats->allocatedSegmentsSizes[i]);
@@ -148,6 +148,7 @@ int mainp(int argc, char* argv[]) {
 
 
 	Initialize(numThreads);  /* initializefor BF and FF */
+	putchar('\n');
 	/* Create the threads for FF and BF */
 	for (j = 0; j < numThreads; j++) {
 		for (i = 0; i < NUM_ALGS; i++) {
@@ -187,7 +188,7 @@ RTTTHREAD MallocTest(void *arg) {
 	threadNo = ((PARAM*) arg)->threadNo;
 	algNo = ((PARAM*) arg)->algNo;
 	/*free(arg);*/
-	printf("threadNo=%d, algNo=%d\n", threadNo, algNo);
+	/* printf("threadNo=%d, algNo=%d\n", threadNo, algNo); */
 
 	/* Initialize the allocated address array to all 0s (NULL) */
 	for (i = 0; i < numIterations; i++) allocatedAddrs[i] = NULL;
@@ -205,7 +206,7 @@ RTTTHREAD MallocTest(void *arg) {
 				- 1));
 */
 		/* Sleep for some time */
-		RttUSleep(sleepTime[threadNo][i]); 
+		RttUSleep(sleepTime[threadNo][i]);
 
 		/* freeing memory this */
 		if (doFree[threadNo][i]) {
@@ -223,8 +224,9 @@ RTTTHREAD MallocTest(void *arg) {
 */	}
 	}
 
-	/*Threadend(algNo);*/  /* Print the results if its the last thread */
-	
+	Threadend(algNo);  /* Print the results if its the last thread */
+	/* printf("threadNo=%d, algNo=%d Finished\n", threadNo, algNo); */
+
 	RttMutexLock(numRunningThreadsLock);
 	numRunningThreads--;
 	if (numRunningThreads == 0) {

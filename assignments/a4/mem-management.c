@@ -26,7 +26,6 @@ struct _BF{
 int numFfWaitingThreads; /*protected by monitor*/
 void increment_ffwaiting_threads(size_t size) {
     numFfWaitingThreads++;
-	printf("size %lx: numFfWaitingThreads incremented: %d\n", size, numFfWaitingThreads);
     if (numFfWaitingThreads >= threadsLeft[0])
         errx(1, "FF Deadlocked.\n");
 }
@@ -34,7 +33,6 @@ void increment_ffwaiting_threads(size_t size) {
 int numBfWaitingThreads; /*protected by monitor*/
 void increment_bfwaiting_threads(size_t size) {
     numBfWaitingThreads++;
-	printf("size %lx: numBfWaitingThreads incremented: %d\n", size, numBfWaitingThreads);
     if (numBfWaitingThreads >= threadsLeft[0])
         errx(1, "BF Deadlocked.\n");
 }
@@ -68,7 +66,7 @@ void *FfMalloc(size_t size) {
         RttMonWait(FFMemAvail);
 		numFfWaitingThreads--;
 		printf("size %lx: numFfWaitingThreads decremented: %d\n", size, numFfWaitingThreads);
-		
+
         freeBlock = ListFirst(FF.freeMem);
         FF.stat.numSearchedNodesAllocation++;
 
@@ -128,13 +126,13 @@ void *BfMalloc(size_t size) {
     }
 
     /* no fit found, wait until Free() and then try again */
-    while (bestFit == NULL) { 
+    while (bestFit == NULL) {
 		printf("BfMalloc: no freea block for size = %lx\n", size);
 		increment_bfwaiting_threads(size);
         RttMonWait(BFMemAvail);
 		numBfWaitingThreads--;
 		printf("size %lx: numBfWaitingThreads decremented: %d\n", size, numBfWaitingThreads);
-	
+
         freeBlock = ListFirst(BF.freeMem);
         BF.stat.numSearchedNodesAllocation++;
 
@@ -306,6 +304,8 @@ void InitStats(Stats *stats) {
 /* Monitor Procedures */
 void Initialize(int numThreads) {
 	MemorySpace *freeMem;
+    numFfWaitingThreads = 0;
+    numBfWaitingThreads = 0;
 
 	/*FF */
 	FF.freeMem = ListCreate();
@@ -359,11 +359,9 @@ void Initialize(int numThreads) {
     freeMem->start, freeMem->size);
 }
 
-void Threadend(int alg, void* statistics) {
+void Threadend(int alg) {
 	RttMonEnter();
 	threadsLeft[alg]--;
-	if (threadsLeft[alg] == 0)
-		MyMemStats(alg, statistics);
 	RttMonLeave();
 }
 
