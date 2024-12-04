@@ -1,51 +1,38 @@
 #!/bin/bash
 
+if [[ ! -e "results" ]]; then
+    mkdir results
+fi
 
-echo "Test Constant Iterations but Varying Threads" > results.txt
-echo "--------------------------------------------------------" >> results.txt
+run_test() {
+    local numThreads=$1
+    local numIterations=$2
+    local output_file=$3
+    echo "***** numThreads=$numThreads, numIterations=$numIterations *****" > "$output_file"
+    echo "" >> "$output_file"
+    echo "" >> "$output_file"
+    ./mem-management-sim "$numThreads" "$numIterations" >> "$output_file"
+	if [[ $? -ne 0 ]]; then
+        echo "Error: mem-management-sim failed for numThreads=$numThreads, numIterations=$numIterations" >> "$output_file"
+    fi
+}
 
-numIterations=100
+NUM_ITERATIONS=1000
+NUM_THREADS=5
 
+echo "Starting tests with constant iterations but varying threads"
 for numThreads in {1..10}; do
-	echo "**********************************************" >> results.txt
-	echo "Running simulations with numThreads=$numThreads" >> results.txt
-	echo "**********************************************" >> results.txt
-	echo "" >> results.txt
-	for run in {1..3}
-	do
-		echo "Run $run, numThreads=$numThreads, numIterations=$numIterations"
-		echo "***** Run $run, numThreads=$numThreads, numIterations=$numIterations *****" >> results.txt
-		./mem-management-sim $numThreads $numIterations >> results.txt
-		echo "" >> results.txt
-
-	done
+	run_test "$numThreads" "$NUM_ITERATIONS" \
+	"results/const_iter_threads_${numThreads}_iterations_${NUM_ITERATIONS}.txt" &
 done
 
-echo "------------------" >> results.txt
-echo >> results.txt
-echo >> results.txt
-echo >> results.txt
 
 
-echo "Test Constant Threads but Varying Iterations" > results.txt
-echo "--------------------------------------------------------" >> results.txt
-
-num_threads=5
-
+echo "Starting tests with constant threads but varying iterations"
 for num_iterations in {1000..10000..1000}; do
-	echo "*****************************************************" >> results.txt
-	echo "Running simulations with num_iterations=$num_iterations" >> results.txt
-	echo "*****************************************************" >> results.txt
-	echo "" >> results.txt
-	for run in {1..3}
-	do
-		echo "Run $run, num_threads=$num_threads, num_iterations=$num_iterations"
-		echo "***** Run $run, num_threads=$num_threads, num_iterations=$num_iterations *****" >> results.txt
-		./mem-management-sim $num_threads $num_iterations >> results.txt
-		echo "" >> results.txt
-
-	done
+	run_test "$NUM_THREADS" "$num_iterations" \
+	"results/const_thread_threads_${NUM_THREADS}_iterations_${num_iterations}.txt" &
 done
 
-echo "------------------" >> results.txt
-echo >> results.txt
+wait
+echo "Tests complete."
