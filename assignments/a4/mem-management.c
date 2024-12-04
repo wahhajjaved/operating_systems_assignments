@@ -23,12 +23,26 @@ struct _BF{
     Stats stat;
 }BF;
 
+int numFfWaitingThreads; /*protected by monitor*/
+void increment_ffwaiting_threads(size_t size) {
+    numFfWaitingThreads++;
+	printf("size %lx: numFfWaitingThreads incremented: %d\n", size, numFfWaitingThreads);
+    if (numFfWaitingThreads >= threadsLeft[0])
+        errx(1, "FF Deadlocked.\n");
+}
+
+int numBfWaitingThreads; /*protected by monitor*/
+void increment_bfwaiting_threads(size_t size) {
+    numBfWaitingThreads++;
+	printf("size %lx: numBfWaitingThreads incremented: %d\n", size, numBfWaitingThreads);
+    if (numBfWaitingThreads >= threadsLeft[0])
+        errx(1, "BF Deadlocked.\n");
+}
+
 
 void *FfMalloc(size_t size) {
     MemorySpace *firstFit=NULL;
     MemorySpace *freeBlock, *allocaBlock;
-
-    int wait= 0; /*wait flag*/
 
     if (size == 0) return NULL;
     RttMonEnter(); /* critical section*/
@@ -49,10 +63,12 @@ void *FfMalloc(size_t size) {
     }
     /* no fit found, wait until Free() and then try again */
     while (firstFit == NULL) {
-        errx(1, "FfMalloc: no freea block\n");
-        wait = 1;
+        printf("FfMalloc: no freea block for size = %lx\n", size);
+		increment_ffwaiting_threads(size);
         RttMonWait(FFMemAvail);
-
+		numFfWaitingThreads--;
+		printf("size %lx: numFfWaitingThreads decremented: %d\n", size, numFfWaitingThreads);
+		
         freeBlock = ListFirst(FF.freeMem);
         FF.stat.numSearchedNodesAllocation++;
 
@@ -64,12 +80,7 @@ void *FfMalloc(size_t size) {
             freeBlock = ListNext(FF.freeMem);
             FF.stat.numSearchedNodesAllocation++;
         }
-    /* If still no fit was found, signal the next waiting thread */
-		if (firstFit == NULL)
-			RttMonSignal(FFMemAvail);
-           /* RttMonLeave();*/
-            /*return NULL;*/
-    }
+       }
 
     /* allocate and initialize the MemorySpace struct for
         allocated memory */
@@ -87,8 +98,6 @@ void *FfMalloc(size_t size) {
         firstFit->size -= size;
     }
 
-    if (wait)
-        RttMonSignal(FFMemAvail);
 
     RttMonLeave();
     FF.stat.numAllocations++;
@@ -100,7 +109,6 @@ void *FfMalloc(size_t size) {
 void *BfMalloc(size_t size) {
     MemorySpace *bestFit, *freeBlock, *allocaBlock;
 
-    int wait= 0; /*wait flag*/
 
     if (size == 0) return NULL;
     RttMonEnter(); /* critical section*/
@@ -120,11 +128,13 @@ void *BfMalloc(size_t size) {
     }
 
     /* no fit found, wait until Free() and then try again */
-    while (bestFit == NULL) {
-        errx(1, "BFMalloc: no free block\n");
-        wait = 1;
+    while (bestFit == NULL) { 
+		printf("BfMalloc: no freea block for size = %lx\n", size);
+		increment_bfwaiting_threads(size);
         RttMonWait(BFMemAvail);
-
+		numBfWaitingThreads--;
+		printf("size %lx: numBfWaitingThreads decremented: %d\n", size, numBfWaitingThreads);
+	
         freeBlock = ListFirst(BF.freeMem);
         BF.stat.numSearchedNodesAllocation++;
 
@@ -137,9 +147,6 @@ void *BfMalloc(size_t size) {
             freeBlock = ListNext(BF.freeMem);
             BF.stat.numSearchedNodesAllocation++;
         }
-        /* If no fit was found, signal the next waiting */
-        if (bestFit != NULL)
-            RttMonSignal(BFMemAvail);
     }
     /* allocate and initialize the MemorySpace struct for the memory */
     allocaBlock = malloc(sizeof(MemorySpace));
@@ -164,7 +171,6 @@ void *BfMalloc(size_t size) {
         bestFit->size -= size;
     }
 
-    if (wait) RttMonSignal(BFMemAvail);
 
     RttMonLeave();
     BF.stat.numAllocations++;

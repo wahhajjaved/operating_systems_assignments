@@ -6,7 +6,7 @@
 #include <mem-management.h>
 #include <RttMutex.h>
 
-#define STKSIZE 262144
+#define STKSIZE 4194304 
 /* Limits of the simulation */
 #define MAX_THREADS    10
 #define MAX_ITERATIONS 10000
