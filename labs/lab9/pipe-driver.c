@@ -1,9 +1,15 @@
 /*
  * vfifofum.c - implementation of a character based FIFO device driver
  * for CMPT 332 Lab 9 in 2023
- * NAME, NSID, Student Number
+ * Wahhaj Javed, muj975, 11135711
  *
  */
+/*
+sudo insmod pipe-driver.ko
+cat /proc/devices | grep vfifofum //to get MAJOR_NUMBER
+sudo mknod /dev/vfifofum0 c <MAJOR_NUMBER> 0  //write end
+sudo mknod /dev/vfifofum1 c <MAJOR_NUMBER> 1  //read end
+*/
 
 #include <linux/atomic.h>
 #include <linux/cdev.h>
