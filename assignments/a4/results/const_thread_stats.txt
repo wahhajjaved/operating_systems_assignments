@@ -1,0 +1,213 @@
+***** numThreads=5, numIterations=1000 *****
+
+FF: numAllocations: 1000
+numDeallocations: 502
+numSearchedNodesAllocation: 34393
+numSearchedNodesDeallocation: 14055
+numAllocatedSegments: 498
+numUnallocatedSegments: 107
+FF Allocated Segments - Mean: 68298.15, Median: 66199.00, Min: 1, Max: 239087
+FF Unallocated Segments - Mean: 2925280.42, Median: 6555.00, Min: 1, Max: 1970171361
+
+BF: numAllocations: 1000
+numDeallocations: 502
+numSearchedNodesAllocation: 59488
+numSearchedNodesDeallocation: 15836
+numAllocatedSegments: 498
+numUnallocatedSegments: 105
+BF Allocated Segments - Mean: 68298.15, Median: 66199.00, Min: 1, Max: 239087
+BF Unallocated Segments - Mean: 3085007.12, Median: 1884.00, Min: 2, Max: 1974517908
+
+***** numThreads=5, numIterations=2000 *****
+
+FF: numAllocations: 10000
+numDeallocations: 5000
+numSearchedNodesAllocation: 4225269
+numSearchedNodesDeallocation: 1665992
+numAllocatedSegments: 5000
+numUnallocatedSegments: 1347
+FF Allocated Segments - Mean: 67172.87, Median: 64737.50, Min: 1, Max: 254238
+FF Unallocated Segments - Mean: 1344928.94, Median: 6832.00, Min: 1, Max: 1797203618
+
+BF: numAllocations: 10000
+numDeallocations: 5000
+numSearchedNodesAllocation: 6513139
+numSearchedNodesDeallocation: 1668215
+numAllocatedSegments: 5000
+numUnallocatedSegments: 1278
+BF Allocated Segments - Mean: 67172.87, Median: 64737.50, Min: 1, Max: 254238
+BF Unallocated Segments - Mean: 1417542.48, Median: 2137.00, Min: 1, Max: 1804647143
+
+
+***** numThreads=5, numIterations=3000 *****
+
+FF: numAllocations: 15000
+numDeallocations: 7554
+numSearchedNodesAllocation: 9318126
+numSearchedNodesDeallocation: 3665194
+numAllocatedSegments: 7446
+numUnallocatedSegments: 1960
+FF Allocated Segments - Mean: 67676.52, Median: 65286.50, Min: 1, Max: 254238
+FF Unallocated Segments - Mean: 838553.20, Median: 5944.50, Min: 1, Max: 1624420287
+
+BF: numAllocations: 15000
+numDeallocations: 7554
+numSearchedNodesAllocation: 14371376
+numSearchedNodesDeallocation: 3740293
+numAllocatedSegments: 7446
+numUnallocatedSegments: 1801
+BF Allocated Segments - Mean: 67676.52, Median: 65286.50, Min: 1, Max: 254238
+BF Unallocated Segments - Mean: 912584.27, Median: 1438.00, Min: 1, Max: 1635123520
+
+
+***** numThreads=5, numIterations=4000 *****
+
+FF: numAllocations: 20000
+numDeallocations: 10060
+numSearchedNodesAllocation: 16341127
+numSearchedNodesDeallocation: 6368633
+numAllocatedSegments: 9940
+numUnallocatedSegments: 2562
+FF Allocated Segments - Mean: 68083.29, Median: 66068.50, Min: 1, Max: 256621
+FF Unallocated Segments - Mean: 574057.66, Median: 6019.00, Min: 4, Max: 1445232353
+
+BF: numAllocations: 20000
+numDeallocations: 10060
+numSearchedNodesAllocation: 25635309
+numSearchedNodesDeallocation: 6574732
+numAllocatedSegments: 9940
+numUnallocatedSegments: 2447
+BF Allocated Segments - Mean: 68083.29, Median: 66068.50, Min: 1, Max: 256621
+BF Unallocated Segments - Mean: 601036.26, Median: 1695.00, Min: 1, Max: 1458911400
+
+
+
+
+***** numThreads=5, numIterations=5000 *****
+
+FF: numAllocations: 25000
+numDeallocations: 12573
+numSearchedNodesAllocation: 26002628
+numSearchedNodesDeallocation: 10428045
+numAllocatedSegments: 12427
+numUnallocatedSegments: 3239
+FF Allocated Segments - Mean: 67937.63, Median: 65549.00, Min: 1, Max: 257206
+FF Unallocated Segments - Mean: 402353.41, Median: 6040.00, Min: 2, Max: 1271981786
+
+BF: numAllocations: 25000
+numDeallocations: 12573
+numSearchedNodesAllocation: 38830046
+numSearchedNodesDeallocation: 10089442
+numAllocatedSegments: 12427
+numUnallocatedSegments: 2977
+BF Allocated Segments - Mean: 67937.63, Median: 65549.00, Min: 1, Max: 257206
+BF Unallocated Segments - Mean: 437763.76, Median: 1801.00, Min: 2, Max: 1288032409
+
+
+***** numThreads=5, numIterations=6000 *****
+
+FF: numAllocations: 30000
+numDeallocations: 15029
+numSearchedNodesAllocation: 36778374
+numSearchedNodesDeallocation: 14531960
+numAllocatedSegments: 14971
+numUnallocatedSegments: 3896
+FF Allocated Segments - Mean: 67568.77, Median: 65521.00, Min: 1, Max: 256621
+FF Unallocated Segments - Mean: 291558.40, Median: 5817.00, Min: 1, Max: 1098011842
+
+BF: numAllocations: 30000
+numDeallocations: 15029
+numSearchedNodesAllocation: 56158734
+numSearchedNodesDeallocation: 14542629
+numAllocatedSegments: 14971
+numUnallocatedSegments: 3617
+BF Allocated Segments - Mean: 67568.77, Median: 65521.00, Min: 1, Max: 256621
+BF Unallocated Segments - Mean: 314047.97, Median: 1428.00, Min: 3, Max: 1120425279
+
+
+***** numThreads=5, numIterations=7000 *****
+
+FF: numAllocations: 35000
+numDeallocations: 17559
+numSearchedNodesAllocation: 51602745
+numSearchedNodesDeallocation: 20551876
+numAllocatedSegments: 17441
+numUnallocatedSegments: 4524
+FF Allocated Segments - Mean: 68134.66, Median: 66440.00, Min: 1, Max: 257206
+FF Unallocated Segments - Mean: 212013.06, Median: 6180.50, Min: 1, Max: 913810271
+
+BF: numAllocations: 35000
+numDeallocations: 17559
+numSearchedNodesAllocation: 77204465
+numSearchedNodesDeallocation: 19962217
+numAllocatedSegments: 17441
+numUnallocatedSegments: 4262
+BF Allocated Segments - Mean: 68134.66, Median: 66440.00, Min: 1, Max: 257206
+BF Unallocated Segments - Mean: 225046.24, Median: 1718.00, Min: 2, Max: 939007065
+
+
+***** numThreads=5, numIterations=8000 *****
+
+FF: numAllocations: 40000
+numDeallocations: 20034
+numSearchedNodesAllocation: 65952995
+numSearchedNodesDeallocation: 26137436
+numAllocatedSegments: 19966
+numUnallocatedSegments: 5221
+FF Allocated Segments - Mean: 67705.80, Median: 65285.50, Min: 1, Max: 258017
+FF Unallocated Segments - Mean: 152397.94, Median: 6004.00, Min: 1, Max: 743999247
+
+BF: numAllocations: 40000
+numDeallocations: 20034
+numSearchedNodesAllocation: 98970438
+numSearchedNodesDeallocation: 25374442
+numAllocatedSegments: 19966
+numUnallocatedSegments: 4737
+BF Allocated Segments - Mean: 67705.80, Median: 65285.50, Min: 1, Max: 258017
+BF Unallocated Segments - Mean: 167969.10, Median: 1732.00, Min: 1, Max: 774247118
+
+
+
+
+***** numThreads=5, numIterations=9000 *****
+
+FF: numAllocations: 45000
+numDeallocations: 22557
+numSearchedNodesAllocation: 83959074
+numSearchedNodesDeallocation: 33341324
+numAllocatedSegments: 22443
+numUnallocatedSegments: 5871
+FF Allocated Segments - Mean: 67783.46, Median: 65876.00, Min: 1, Max: 257206
+FF Unallocated Segments - Mean: 106663.18, Median: 6095.00, Min: 1, Max: 568149492
+
+BF: numAllocations: 45000
+numDeallocations: 22557
+numSearchedNodesAllocation: 126849184
+numSearchedNodesDeallocation: 32790682
+numAllocatedSegments: 22443
+numUnallocatedSegments: 5368
+BF Allocated Segments - Mean: 67783.46, Median: 65876.00, Min: 1, Max: 257206
+BF Unallocated Segments - Mean: 116657.88, Median: 1573.50, Min: 4, Max: 601394371
+
+
+
+
+***** numThreads=5, numIterations=1000 *****
+
+FF: numAllocations: 50000
+numDeallocations: 25054
+numSearchedNodesAllocation: 102319613
+numSearchedNodesDeallocation: 40596361
+numAllocatedSegments: 24946
+numUnallocatedSegments: 6506
+FF Allocated Segments - Mean: 67618.67, Median: 65844.00, Min: 1, Max: 267888
+FF Unallocated Segments - Mean: 70806.69, Median: 6042.50, Min: 1, Max: 396363980
+
+BF: numAllocations: 50000
+numDeallocations: 25054
+numSearchedNodesAllocation: 154773691
+numSearchedNodesDeallocation: 39958594
+numAllocatedSegments: 24946
+numUnallocatedSegments: 5980
+BF Allocated Segments - Mean: 67618.67, Median: 65844.00, Min: 1, Max: 267888
+BF Unallocated Segments - Mean: 77034.84, Median: 1765.00, Min: 2, Max: 433797305
