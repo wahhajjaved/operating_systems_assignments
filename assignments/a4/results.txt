@@ -1,0 +1,171 @@
+Test Constant Threads but Varying Iterations
+--------------------------------------------------------
+*****************************************************
+Running simulations with num_iterations=1000
+*****************************************************
+
+***** Run 1, num_threads=5, num_iterations=1000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 2, num_threads=5, num_iterations=1000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 3, num_threads=5, num_iterations=1000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+*****************************************************
+Running simulations with num_iterations=2000
+*****************************************************
+
+***** Run 1, num_threads=5, num_iterations=2000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 2, num_threads=5, num_iterations=2000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 3, num_threads=5, num_iterations=2000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+*****************************************************
+Running simulations with num_iterations=3000
+*****************************************************
+
+***** Run 1, num_threads=5, num_iterations=3000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 2, num_threads=5, num_iterations=3000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 3, num_threads=5, num_iterations=3000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+*****************************************************
+Running simulations with num_iterations=4000
+*****************************************************
+
+***** Run 1, num_threads=5, num_iterations=4000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
+
+***** Run 2, num_threads=5, num_iterations=4000 *****
+FF initialized: Free memory start=0x80000000, size=268435456
+BF initialized: Free memory start=0x80000000, size=268435456
+threadNo=0, algNo=0
+threadNo=0, algNo=1
+threadNo=1, algNo=0
+threadNo=1, algNo=1
+threadNo=2, algNo=0
+threadNo=2, algNo=1
+threadNo=3, algNo=0
+threadNo=3, algNo=1
+threadNo=4, algNo=0
+threadNo=4, algNo=1
