@@ -1,3 +1,20 @@
+Wahhaj Javed, muj975, 11135711
+Nakhba Mubashir, epl482, 11317060
+
+Assignmnet 4 report:
+
+Introduction:
+Memory managemnet is a critical part of a system's performance. This report
+focuses on evaluation the fragmentation and efficency of the two memory 
+allocation algorithms; first-fit(BF) and best-fit(BF). These algorithms are 
+simulated and analyzed through bash and python, with algorithm implemented in
+the C lannguage.
+
+FF algorithm allocates memory to the first available segment that satisfies
+the size requirement, whereas, BF algorithm searches thw whole list of 
+available memory segments for the smallest block to fit our request.
+
+Experiment Design/Design decision:
 The performance of a memory management algorithm can be judged by how fast it
 can allocate memory, how fast it can free it, how fragmented it leaves the
 memory. The memory is stored in two lists, one for used segments and one
@@ -65,7 +82,7 @@ increased fragmentation in both algorithms, but the fragmentation patterns
 differ. FF tends to produce fewer larger fragments, while BF creates more 
 smaller fragments.
 
-Conclusion
+Conclusion:
 FF performs better with fewer unallocated segments, but it results in larger 
 unallocated segments over time. BF requires more computation during allocation
 due to its exhaustive search. During allocation, BF results in more 
