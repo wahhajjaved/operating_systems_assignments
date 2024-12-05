@@ -28,7 +28,8 @@ static int major; /* our major number */
 #define BUFFERSIZE 100
 #define DEVICE_NAME "vfifofum"
 
-char buffer[BUFFERSIZE];
+static char driverBuffer[BUFFERSIZE];
+static int driverBufferLen;
 
 static struct class *cls;
 
@@ -76,7 +77,7 @@ static void __exit vfifofum_exit(void)
   pr_info("vfifofum shutdown\n");
 }
 
-static int vfifofum_open(struct inode *a, struct file *b)
+static int vfifofum_open(struct inode* a, struct file *b)
 {
   try_module_get(THIS_MODULE);
   return 0;
@@ -92,14 +93,28 @@ static int vfifofum_release(struct inode *a, struct file *b)
 
 static ssize_t vfifofum_read(struct file *file, char __user *buffer, size_t length, loff_t *offset)
 {
-  pr_alert("read not implmented!\n");
-  return -EINVAL;
+  int i;
+  int bytes_read = 0;
+
+  for(i = 0; i < driverBufferLen; i++) {
+    if (i > length) break; /*dont want to write beyond user provided buffer*/
+    put_user(driverBuffer[i], buffer++);
+    bytes_read++;
+  }
+    return bytes_read;
 }
 
 static ssize_t vfifofum_write(struct file *file, const char __user *buffer, size_t length, loff_t *offset)
 {
-  pr_alert("write not implmented!\n");
-  return -EINVAL;
+  int i;
+  int bytes_written = 0;
+
+  for(i = 0; i < length; i++) {
+    if (i > driverBufferLen) break; /*dont want to write beyond internal buffer*/
+    get_user(driverBuffer[i], buffer++);
+    bytes_written++;
+  }
+    return bytes_written;
 }
 
 module_init(vfifofum_init);
