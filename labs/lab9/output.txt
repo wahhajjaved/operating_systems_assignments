@@ -1,0 +1,24 @@
+@author Wahhaj Javed, muj975, 11135711
+@date 2024-12-05
+
+
+muj975@muj975vm:~/lab9$ make
+gcc -g -std=gnu90 -Wall -pedantic  -I. -o driver-PC.o -c driver-PC.c
+gcc -g -std=gnu90 -Wall -pedantic  -I. -o driver-PC driver-PC.o -lm
+make -C /lib/modules/5.4.0-195-generic/build M=/home/muj975/lab9 modules
+make[1]: Entering directory '/usr/src/linux-headers-5.4.0-195-generic'
+  CC [M]  /home/muj975/lab9/pipe-driver.o
+  Building modules, stage 2.
+  MODPOST 1 modules
+  CC [M]  /home/muj975/lab9/pipe-driver.mod.o
+  LD [M]  /home/muj975/lab9/pipe-driver.ko
+make[1]: Leaving directory '/usr/src/linux-headers-5.4.0-195-generic'
+muj975@muj975vm:~/lab9$ sudo insmod pipe-driver.ko
+muj975@muj975vm:~/lab9$ cat /proc/devices | grep vfifofum
+240 vfifofum
+muj975@muj975vm:~/lab9$ sudo mknod /dev/vfifofum0 c 240 0
+muj975@muj975vm:~/lab9$ sudo mknod /dev/vfifofum1 c 240 1
+muj975@muj975vm:~/lab9$ sudo chmod 666 /dev/vfifofum0 /dev/vfifofum1
+muj975@muj975vm:~/lab9$ sudo ./driver-PC
+test1: wrote a and read a. test1 passed.
+test2: wrote 2 and read 2. test2 passed.
