@@ -5,13 +5,13 @@ Assignmnet 4 report:
 
 Introduction:
 Memory managemnet is a critical part of a system's performance. This report
-focuses on evaluation the fragmentation and efficency of the two memory 
-allocation algorithms; first-fit(BF) and best-fit(BF). These algorithms are 
+focuses on evaluation the fragmentation and efficency of the two memory
+allocation algorithms; first-fit(BF) and best-fit(BF). These algorithms are
 simulated and analyzed through bash and python, with algorithm implemented in
 the C lannguage.
 
 FF algorithm allocates memory to the first available segment that satisfies
-the size requirement, whereas, BF algorithm searches thw whole list of 
+the size requirement, whereas, BF algorithm searches thw whole list of
 available memory segments for the smallest block to fit our request.
 
 Experiment Design/Design decision:
@@ -48,49 +48,67 @@ a deallocated memory segment should be fewer than FF.
 
 
 Analysis:
+
 Both FF and BF achieve the same number of allocations and deallocations across
 threads and iterations. As the number of iterations increases, the total number
-of allocations and deallocations grows linearly. For instance, doubling the 
-iterations from 100 to 200 resulted in 2,000 operations which is 2 times the
-number of operation of 100 iterations. BF searches more nodes for allocation
-compared to FF. For instance, in a scenario with 50 threads and 500 iterations,
-BF searched 12,000 nodes, whereas FF searched only 7,000. This is expected 
-because BF tries to find the smallest suitable node for each allocation, 
-requiring a more exhaustive search.
+of allocations and deallocations grows linearly. This is expected as we
+allocate once per iterations so the total number of allocations should equal
+numThreads x numIterations. Deallocations happen with a 50% chance on each
+iteration so totalDelocations should be approx. (numThreads x numIterations) /2,
+which they are.
 
-The mean size of allocated segments is nearly identical between the two 
-algorithms, typically around 1,024 bytes per segment in tests with 
-standard memory patterns. However, FF generally results in fewer unallocated 
-segments than BF. For example, in a test with 20 threads and 1,000 iterations,
-FF produced 150 unallocated segments, while BF produced 200. This suggests that
-FF might be better at avoiding fragmentation.
+Across all experiments, BF searched more nodes for when allocating than FF.
+This matches the predicted outcome.  The number of searched nodes when
+deallocating are similar between the two algorithms. This is expected because
+there is no special optimization applied the used memory list so both algorithms
+search this list identically.
 
-At low iteration counts (e.g.100 iterations) and thread counts (e.g.5 threads),
-FF has a higher mean unallocated segment size than BF. In one test, FF produced
-unallocated segments with an average size of 4,000 bytes, whereas BF produced 
-segments averaging 3,500 bytes. However, as iterations increase (e.g.1,000 
-iterations), BF produces more smaller unallocated segments. For instance, BF 
-create 300 unallocated segments averaging 1,200 bytes, while FF produces 180 
-segments averaging 2,000 bytes. This indicates that BF creates more 
-fragmentation over time due to it finding the smallest suitable block.
+The unallocated median segment size gives an idea of how big the holes are.
+FF on average generates larger sized holes whereas BF fills the memory
+with small holes that can't be used. The median segment size becomes smaller
+as the number of iterations increases for both algorithms. This makes sense.
+Allocating memory requires segmenting a hole therefore as more memory is
+allocated, more sements are created.
 
-As the number of threads grows, both FF and BF shows an increase in the number 
-of nodes searched during allocation and deallocation. For example, with 100 
-threads and 1,000 iterations, FF searched 20,000 nodes, while BF searched 
-30,000 nodes. Higher iteration counts (e.g., 2,000 iterations) lead to 
-increased fragmentation in both algorithms, but the fragmentation patterns 
-differ. FF tends to produce fewer larger fragments, while BF creates more 
+The median unallocated segment size for FF is at least 2.5 times bigger than for
+BF, at 1000 allocations. As the number of allocations increases, this gap
+increases with FF's median unallocated size becoming 4.1 times larger than BF
+at 15000 allocations. This indicates that BF creates more fragmentation over
+time due to it finding the smallest suitable block.
+
+As the number of threads grows, both FF and BF shows an increase in the number
+of nodes searched during allocation and deallocation. For example, with 100
+threads and 1,000 iterations, FF searched 20,000 nodes, while BF searched
+30,000 nodes. Higher iteration counts (e.g., 2,000 iterations) lead to
+increased fragmentation in both algorithms, but the fragmentation patterns
+differ. FF tends to produce fewer larger fragments, while BF creates more
 smaller fragments.
 
+
+
 Conclusion:
-FF performs better with fewer unallocated segments, but it results in larger 
-unallocated segments over time. BF requires more computation during allocation
-due to its exhaustive search. During allocation, BF results in more 
-fragmentation, but these fragments tend to be smaller. If speed and simplicity 
+FF performs better with about the same number of unallocated segments,
+but larger unallocated segments over time. BF requires more computation during
+allocation due to its exhaustive search. During allocation, BF results in more
+fragmentation, but these fragments tend to be smaller. If speed and simplicity
 are the priorities, FF is the better choice, as it searched 50% fewer node in
-many tests. However, if the goal is to minimize fragmentation, BF might be 
-preferable despite its higher computational overhead. 
+many tests. However, if the goal is to minimize fragmentation, BF might be
+preferable despite its higher computational overhead.
 
 
 
+
+
+
+
+The number of unallocated segments is high across the board for FF than BF.
+This is also the expected outcome as BF is an algorithm that trades speed
+for reduced fragmentation. BF vastly outperforms FF when it comes to
+fragmentation. This can be seen when looking at the median of the unallocated
+segment sizes and the largest unallocated segment.
+
+The unallocated median segment size gives an idea of how big the holes are.
+The memory starts as one large hole and ideally we want to maintain that
+situation. If the median is small, that means most holes are small in size
+and the rest of the memory is in the one big hole.
 
