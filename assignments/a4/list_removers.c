@@ -118,9 +118,9 @@ void *ListRemove(LIST *list){
     removeNode->next= aviableNode;
     aviableNode = removeNode;
 
-    if (listNum < (MIN_LISTS/2)){
+   /*  if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    }
+    } */
 
     return currItem;
 }
@@ -159,9 +159,9 @@ void ListFree(LIST *list, ITEMFREE itemFree){
     list->size=0;
     nodeNum--;
 
-    if (listNum < (MIN_LISTS/2)){
+   /*  if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    }
+    } */
 
 }
 
@@ -204,9 +204,9 @@ void *ListTrim(LIST *list){
     aviableNode = removeNode;
 
 
-    if (listNum < (MIN_LISTS/2)){
+    /* if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    }
+    } */
 
     return lastItem;
 
@@ -250,9 +250,9 @@ void ListConcat(LIST *list1, LIST *list2){
     list2->nextfreeList = aviableList;
     aviableList = list2;
 
-    if (listNum < (MIN_LISTS/2)){
+   /*  if (listNum < (MIN_LISTS/2)){
         Decrease_list_memory();
-    }
+    } */
 }
 
 

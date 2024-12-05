@@ -69,7 +69,8 @@ MemorySpace* moveBlockFreeToAllocated(LIST* freeList, LIST* usedList, size_t siz
 
 	if (curBlock->size == size) {
 		ListRemove(freeList);
-		ListPrepend(usedList, curBlock);
+		if(ListPrepend(usedList, curBlock) == -1)
+			exit(1);
 		return curBlock;
 	}
 	else {
@@ -81,7 +82,8 @@ MemorySpace* moveBlockFreeToAllocated(LIST* freeList, LIST* usedList, size_t siz
 		allocaBlock->size = size;
 		curBlock->start += size;
 		curBlock->size -= size;
-		ListPrepend(usedList, allocaBlock);
+		if(ListPrepend(usedList, allocaBlock) == -1)
+			exit(1);
 		return allocaBlock;
 	}
 }
@@ -107,14 +109,15 @@ void mergeMemory(LIST* freeList, MemorySpace* mem, Stats* stat) {
 		freeMemBefore = ListLast(freeList);
 	else
 		freeMemBefore = ListPrev(freeList);
-
+	/*cursor is on freeMemBefore after this point*/
 
 	/*
 	If both freeMemAfter and freeMemBefore are NULL that means the list is
 	empty and mem can simply be added in
 	*/
 	if (freeMemAfter == NULL && freeMemBefore == NULL) {
-		ListPrepend(freeList, mem);
+		if(ListPrepend(freeList, mem) == -1)
+			exit(1);
 	}
 
 	/*
@@ -130,7 +133,8 @@ void mergeMemory(LIST* freeList, MemorySpace* mem, Stats* stat) {
 			mem = freeMemBefore;
 		}
 		else {
-			ListAppend(freeList, mem);
+			if(ListAppend(freeList, mem) == -1)
+				exit(1);
 		}
 	}
 
@@ -148,7 +152,8 @@ void mergeMemory(LIST* freeList, MemorySpace* mem, Stats* stat) {
 			mem = freeMemAfter;
 		}
 		else {
-			ListPrepend(freeList, mem);
+			if(ListPrepend(freeList, mem) == -1)
+				exit(1);
 		}
 	}
 
@@ -164,6 +169,7 @@ void mergeMemory(LIST* freeList, MemorySpace* mem, Stats* stat) {
 			) {
 
 			freeMemBefore->size += mem->size + freeMemAfter->size;
+			ListNext(freeList); /*move cursor onto freeMemAfter*/
 			if(ListRemove(freeList) != freeMemAfter) {
 				printf(
 					"mergeMemory(): freeMemAfter was not removed from "
@@ -194,7 +200,8 @@ void mergeMemory(LIST* freeList, MemorySpace* mem, Stats* stat) {
 
 		/*insert mem in between freeMemBefore and freeMemAfter*/
 		else {
-			ListInsert(freeList, mem);
+			if(ListAdd(freeList, mem) == -1)
+				exit(1);
 		}
 	}
 

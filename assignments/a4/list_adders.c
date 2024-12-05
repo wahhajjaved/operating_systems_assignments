@@ -139,10 +139,13 @@ int ListAdd(LIST *list,void *item){
     if (aviableNode ==NULL){
         printf("ERROR: no aviabkle node");
         return -1;   }
-
-    if (nodeNum == MIN_NODES){
-        Increse_node_Memory();
+    if (nodeNum == MIN_NODES) {
+        printf("ERROR: Out of list nodes.\n");
+        return -1;
     }
+   /*  if (nodeNum == MIN_NODES){
+        Increse_node_Memory();
+    } */
     /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next;
@@ -187,9 +190,13 @@ int ListInsert(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-    if (nodeNum == MIN_NODES){
-        Increse_node_Memory();
+    if (nodeNum == MIN_NODES) {
+        printf("ERROR: Out of list nodes.\n");
+        return -1;
     }
+   /*  if (nodeNum == MIN_NODES){
+        Increse_node_Memory();
+    } */
 
     /*get an unused node  */
     newNode = aviableNode;
@@ -232,9 +239,13 @@ int ListAppend(LIST *list, void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-    if (nodeNum == MIN_NODES){
-        Increse_node_Memory();
+    if (nodeNum == MIN_NODES) {
+        printf("ERROR: Out of list nodes.\n");
+        return -1;
     }
+   /*  if (nodeNum == MIN_NODES){
+        Increse_node_Memory();
+    } */
 
     /*get an unused node  */
     newNode = aviableNode;
@@ -271,9 +282,13 @@ int ListPrepend(LIST *list,void *item){
         printf("ERROR: item is NULL");
         return -1;
     }
-    if (nodeNum == MIN_NODES){
-        Increse_node_Memory();
+    if (nodeNum == MIN_NODES) {
+        printf("ERROR: Out of list nodes.\n");
+        return -1;
     }
+   /*  if (nodeNum == MIN_NODES){
+        Increse_node_Memory();
+    } */
         /*get an unused node  */
     newNode = aviableNode;
     aviableNode = aviableNode-> next;
