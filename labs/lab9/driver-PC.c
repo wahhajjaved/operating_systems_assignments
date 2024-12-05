@@ -4,11 +4,14 @@
 
 /* write end /dev/vfifofum0  */
 /* read end  /dev/vfifofum1  */
+#include <fcntl.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <stdio.h>
+#include <err.h>
 
-int *readEnd;
-int *writeEnd;
+int readEnd;
+int writeEnd;
 
 void test1() {
     int buffSize, bytes_written, bytes_read;
@@ -34,7 +37,7 @@ void test1() {
             if (writeChars[i] != readChars[i]) {
                 printf(
                     "test1: characters at position %d are different. "
-                    "writeChars = %s, readChars = %d",
+                    "writeChars = %s, readChars = %s",
                     i, writeChars, readChars
                 );
             }
@@ -57,4 +60,6 @@ int main(int argc, char* argv[]) {
 
     close(readEnd);
     close(writeEnd);
+
+    return 0;
 }
