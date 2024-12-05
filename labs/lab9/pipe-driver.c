@@ -23,7 +23,13 @@ static ssize_t vfifofum_read(struct file *, char __user *, size_t, loff_t *);
 static ssize_t vfifofum_write(struct file *, const char __user *, size_t, loff_t *);
 
 static int major; /* our major number */
+#define WRITEEND 0
+#define READEND 1
+#define BUFFERSIZE 100
 #define DEVICE_NAME "vfifofum"
+
+char buffer[BUFFERSIZE];
+
 static struct class *cls;
 
 static struct file_operations vfifofum_fops = {
@@ -51,8 +57,9 @@ static int __init vfifofum_init(void)
 #else
     cls = class_create(THIS_MODULE, DEVICE_NAME);
 #endif
-    /* we will get assigned a major number, and will use 0 for the minor */
-    device_create(cls, NULL, MKDEV(major, 0), NULL, DEVICE_NAME);
+    device_create(cls, NULL, MKDEV(major, WRITEEND), NULL, DEVICE_NAME);
+    device_create(cls, NULL, MKDEV(major, READEND), NULL, DEVICE_NAME);
+
     pr_info("vfifofum created as /dev/%s\n", DEVICE_NAME);
 
     /* happy happy, joy joy */
@@ -69,14 +76,14 @@ static void __exit vfifofum_exit(void)
   pr_info("vfifofum shutdown\n");
 }
 
-static int vfifofum_open(struct inode *, struct file *)
+static int vfifofum_open(struct inode *a, struct file *b)
 {
   try_module_get(THIS_MODULE);
   return 0;
 }
 
 
-static int vfifofum_release(struct inode *, struct file *)
+static int vfifofum_release(struct inode *a, struct file *b)
 {
   module_put(THIS_MODULE);
   return 0;
