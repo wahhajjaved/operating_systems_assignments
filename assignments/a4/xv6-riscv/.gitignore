@@ -1,7 +1,0 @@
-_*
-fs.img
-kernel/kernel
-mkfs
-initcode.out
-initcode
-usys.S
