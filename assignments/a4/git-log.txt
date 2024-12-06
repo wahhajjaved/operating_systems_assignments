@@ -1,0 +1,388 @@
+@author Wahhaj Javed, muj975, 11135711
+@author Nakhba Mubashir, epl482, 11317060
+
+commit e46f2401d7e10bf8ba4ae2a2e6116286c32d0440
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Dec 5 18:56:39 2024 -0600
+
+    files moved into directories for submission
+
+commit 0fff5c22e00039bf56a3f9fb07adf94c132ac0ab
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Dec 5 18:56:14 2024 -0600
+
+    Added how to run instructions
+
+commit 6aa24a26b8252d7f94ff15609cd985d3ef7c69b4
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Dec 5 16:04:48 2024 -0600
+
+    Slight edits to report
+
+commit ed70f0a873411e7b8d1b6d5a1e30aa7ddab27903
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Dec 5 09:47:46 2024 -0600
+
+    added the introduction to report
+
+commit 5e72725247a4ec05a34812a38d8b83faecc2cabc
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Dec 5 09:27:12 2024 -0600
+
+    added the analysis to the report
+
+commit b5d4d84e0fc4f1f9c8c81af7156b1f768e770df7
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Wed Dec 4 23:24:52 2024 -0600
+
+    Data parsed
+
+commit 7ce4adaa056abcf3855c8d167fbd28be807be8e9
+Merge: d8c0a52 7509870
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Wed Dec 4 23:24:19 2024 -0600
+
+    Merge branch 'main' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67
+
+commit 7509870fc2cc0611149757741d7c5fea81a9de31
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Wed Dec 4 23:20:02 2024 -0600
+
+    Data parsed
+
+commit d8c0a52059becec694ef913bf7b5bf7b894d6145
+Merge: 90b62b5 1254c3e
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Wed Dec 4 21:53:23 2024 -0600
+
+    Merge branch 'main' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67
+
+commit 1254c3ee7d87a92e8bc657a6e8ae883eb00b1bfa
+Merge: 90b62b5 1124568
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Dec 4 19:21:43 2024 -0600
+
+    Merge branch 'wahhaj_assignments'
+
+commit 112456855006810720790d3ee3b3aa6e08dd75f9
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Dec 4 16:21:44 2024 -0600
+
+    run script parallelized. results calculated
+
+commit 8aa9bc01d602511341becfde10d5e9e1d22551b2
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Dec 4 15:51:49 2024 -0600
+
+    simulation parameters tuned so it doesn't deadlock
+
+commit e800ae9e4e79dc9c1e053d3a0efc1b34b00f2674
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Dec 3 23:44:31 2024 -0600
+
+    deadlock detection added
+
+commit e80619253dd42749c47e111c059a61525da2736b
+Merge: 094b622 5eefc95
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Tue Dec 3 21:33:34 2024 -0600
+
+    Merge branch 'wahhaj_assignments' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67 into wahhaj_assignments
+
+commit 5eefc95506f025d69eb6f5d56aede81c003394b9
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Tue Dec 3 21:33:08 2024 -0600
+
+    ready for simulation 1
+
+commit 094b622366fd3a85183ff0d9eb4c4b88f3544ca3
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sun Dec 1 23:48:06 2024 -0600
+
+    Added simulation for varying number of iterations
+
+commit 145ff7162fb7e356bd4465d91be5d39ac58019e9
+Merge: 2b98f71 07ffaab
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sun Dec 1 23:33:49 2024 -0600
+
+    Merge branch 'wahhaj_assignments' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67 into wahhaj_assignments
+
+commit 07ffaaba6e429bb76ad48a9d6093b4f94ad251a6
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Dec 1 23:33:25 2024 -0600
+
+    Output formatting improved
+
+commit 79ca9d265b4fd843a0dcc98f9ba18236f9c01ad8
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Dec 1 23:33:15 2024 -0600
+
+    Add increment for numAllocations and numDeallocations
+
+commit 2b98f71562d53a57a87ec6f24b4f1c04da2bb653
+Merge: 74bf640 4975e49
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sun Dec 1 23:18:46 2024 -0600
+
+    Merge branch 'wahhaj_assignments' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67 into wahhaj_assignments
+
+commit 4975e49cc2d9caaa25300ebdcd75fe8c9e12b2af
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Dec 1 23:18:38 2024 -0600
+
+    Added results of varying thread count
+
+commit 74bf6404a5f70c688cbece5fe460b356a018cdc3
+Merge: 89fc3c7 30c3c8a
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sun Dec 1 23:10:17 2024 -0600
+
+    Merge branch 'wahhaj_assignments' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67 into wahhaj_assignments
+
+commit 30c3c8ab5dad1531d8e10081c5b7b5ed9cc51371
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Dec 1 23:09:37 2024 -0600
+
+    Updated tracked statistics. mainp now prints out stats
+
+commit bf71db457ed59b80896e133b3b1f20ecf38a24e9
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Dec 1 18:14:49 2024 -0600
+
+    Increased nodes and removed sleep for faster testing
+
+commit 167ada2f09daf1998a2ae47c36bcfdc5c894d644
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Sun Dec 1 17:46:07 2024 -0600
+
+    Commented out Increse_node_Memory because it is buggy. MIN_NODES set to 5000 to compensate
+
+commit 90b62b5fa84ff10ee559847f1b2939d461547f65
+Merge: c65434b 89fc3c7
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 22:46:05 2024 -0600
+
+    Merge branch 'wahhaj_assignments'
+
+commit 89fc3c7348aa2212d02f274654a6dc0fedfaa5f8
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 22:45:23 2024 -0600
+
+    run script made for simulation with 100 iterations and 1-10 threads
+
+commit 31e6bd039efff340623874fcb70bc52047774726
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 22:21:33 2024 -0600
+
+    bash script for simulation made
+
+commit 04db8bc5f5b1018ab80647426b10c5a0ad38973a
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 20:06:14 2024 -0600
+
+    Performance report started
+
+commit 667e53759bfb7fa3e871ce211efcc2d70f7c4481
+Merge: 8e9cb77 c65434b
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 19:12:18 2024 -0600
+
+    Merge branch 'main' into wahhaj_assignments
+
+commit c65434b7d73c0caabde93c785e8529b866a11c78
+Merge: 4ac06bb 3abc5a1
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 19:12:03 2024 -0600
+
+    Merge branch 'nakhba_assignments'
+
+commit 4ac06bb974497d5344b82d3072958645d037aaf8
+Merge: 0951685 7c46237
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 19:10:42 2024 -0600
+
+    Merge branch 'main' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67
+
+commit 8e9cb7728c7a8d49006b0bca23b555ff70037248
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 19:09:29 2024 -0600
+
+    Added mechanism for exiting RtThread program because it wasn't exiting by default
+
+commit 6bf410484282f27896322559347cac0583f89f0a
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 18:42:04 2024 -0600
+
+    Deallocation bug fixed
+
+commit 3abc5a1846e9b7326f308fc538e2f4944365b927
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Nov 30 18:41:39 2024 -0600
+
+    added the test case
+
+commit 83d529efb4a4497fc03a17fe345d9897bd7b40d2
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Sat Nov 30 15:22:03 2024 -0600
+
+    FF refactored. FfFree bug still persists.
+
+commit 833fc7b1a688c3f28322758e38ded18da21968f1
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Sat Nov 30 13:02:37 2024 -0600
+
+    copied the design document and add the extfrag and int frag explaination
+
+commit e6c26eb14fbcc05acba880f429d66f4c27b34a46
+Merge: 520c38a 4944bf3
+Author: Wahhaj Javed <wahhajjaved@gmail.com>
+Date:   Fri Nov 29 19:23:30 2024 -0600
+
+    Merge branch 'wahhaj_assignments' of git.cs.usask.ca:cmpt332-fall2024/cmpt332-2024-group67 into wahhaj_assignments
+
+commit 4944bf3018dea58cdb9c222deb97f7dd648a7a3b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Fri Nov 29 19:23:09 2024 -0600
+
+    Refactoring in progress. FF code refactored.
+
+commit 5b31afcb322231a836b203fbd94c05e7cc89c737
+Merge: 7c46237 61a0e8b
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Fri Nov 29 12:36:21 2024 -0600
+
+    Merge branch 'nakhba_assignments'
+
+commit 61a0e8bef4c1ae4a89f29e26fcf5ea0169a48cbf
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Fri Nov 29 09:06:33 2024 -0600
+
+    wdited malloc test and main
+
+commit 684c882fbf72ea319b3de74ba9af6c06f67bbf20
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 21:35:55 2024 -0600
+
+    changed the monitor function to monitorsignal in ffmallloc
+
+commit b36fd84f7326529c87671fb72b3d1fc804340599
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 14:31:33 2024 -0600
+
+    fixeed errors like linking the proper structs to proper malloc and free
+
+commit ff168f48035a31dff8d945c1baa53b158aad7142
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 14:31:12 2024 -0600
+
+    fixeed errors like linking the proper structs to proper malloc and free
+
+commit 7c46237211ad625c71b1169a6962586d8214fed5
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Thu Nov 28 11:52:31 2024 -0600
+
+    Discussion of other data structures and rationale for using linked lists added
+
+commit 7ad64d841d5b44fe7e793dfade60eb08e7c3be35
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 09:49:08 2024 -0600
+
+    the core dump is fixed, some printstatements are commented for better viewing
+
+commit 6cb3c88a934816cc9a641f8bbbd518841f4a837a
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 09:48:04 2024 -0600
+
+    removed the print statement for invalid values, now it just handles without tell us
+
+commit 83b1887e53f313fef1c6351a2858bf7927a64f02
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 09:35:13 2024 -0600
+
+    the min list was too small, the increase the list size did not work properly for a1 so it gave problems now.
+
+commit c3bf3acc4ba28a8ed5c85b6729aebabed30ca6e1
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Thu Nov 28 08:39:29 2024 -0600
+
+    fixing the core dump, not done yet
+
+commit 2e5576cdbfecf7af8dcd3fd4aa47facbc5a72f94
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 21:45:36 2024 -0600
+
+    changed to smaller memory size to test
+
+commit c51499e52d179f87165e7484057c4197f961545e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 20:10:48 2024 -0600
+
+     for the time being i have the ff code in Bf to test
+
+commit ec2b4d1852ca5812fa7ae97b6d2853046f781337
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 19:37:44 2024 -0600
+
+    added the basic code to run FF algorithum, it have errors at this moment, but it comiples and is running
+
+commit da4d7d28a00c0d1970ca74b9f76bcd1ce5259e0f
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 27 13:57:49 2024 -0600
+
+    Added section on FF using List Views
+
+commit 6a1690f4706ee1ab86e19b09a82e537392aaa25c
+Author: Wahhaj Javed <muj975@usask.ca>
+Date:   Wed Nov 27 13:40:04 2024 -0600
+
+    Added time complexity analysis of FF using lists
+
+commit f97d0976041352b105cdd2274ca77508d40cbfd0
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 12:36:31 2024 -0600
+
+    added the basic mainp for running and compiling the functions
+
+commit 09414e74a795fd5fdbdef067de19f2686cfafded
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 12:25:32 2024 -0600
+
+     while compiling fixed errors like wrong variable names, spelling mistake and other similar errors
+
+commit 5ef769698b3e239764f20c3715713332fe6f692e
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 12:24:28 2024 -0600
+
+    added the makefile with the memory management, list and monitor
+
+commit f6b9b10c052ee2f7532bfa598513397fb320bad3
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Wed Nov 27 09:16:31 2024 -0600
+
+    implemented the free for FF
+
+commit 007220b681c5a923deff458e585a7c50c9678abe
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Nov 26 17:31:01 2024 -0600
+
+    added the stats to the FF AND BF structs
+
+commit 6e387e8aecd33c616f2343788affbcdffb80bca5
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Nov 26 14:48:45 2024 -0600
+
+     added the BF and FF alloate functions
+
+commit 9d418508fb8fb40f194dd3e879fbdbe2c891ffa3
+Merge: 83030ad ae4cd9b
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Nov 26 09:21:58 2024 -0600
+
+    Merge branch 'main' into nakhba_assignments
+
+commit ae4cd9bf0100a618e517935804c8cc163e3e3eed
+Author: Nakhba Mubashir <epl482@usask.ca>
+Date:   Tue Nov 26 09:20:12 2024 -0600
+
+    a4 start
