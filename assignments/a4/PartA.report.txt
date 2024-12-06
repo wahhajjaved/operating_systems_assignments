@@ -3,7 +3,23 @@ Nakhba Mubashir, epl482, 11317060
 
 Assignmnet 4 report:
 
+Two sets of simulations were run. In the first set, the number of iterations
+were held at 1000 and the number of threads were varied from 1 to 10. In the
+second set, the number of threads were held at 5 and the number of iterations
+went from 1000 to 10000 in 1000 increments. The raw results can be found inside
+the partA_results directory. The main files of interest are const_iter_stats.txt
+and const_thread_stats.txt which contains all results for each set. The
+results.xlsx spreadsheet document just has the data from the previous 2 files
+in a table format.
+
+The remaining files are just output from each run of the program, which has
+been combined in const_iter_stats.txt and const_thread_stats.txt to make them
+easier to parse. These files have been included to show the unprocessed output
+but aren't needed beyond that.
+
+
 Introduction:
+
 Memory managemnet is a critical part of a system's performance. This report
 focuses on evaluation the fragmentation and efficency of the two memory
 allocation algorithms; first-fit(BF) and best-fit(BF). These algorithms are
